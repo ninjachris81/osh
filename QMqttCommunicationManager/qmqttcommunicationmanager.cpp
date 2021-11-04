@@ -1,0 +1,82 @@
+#include "qmqttcommunicationmanager.h"
+
+#include "qmqttmessageconverter.h"
+
+#include "shared/mqtt_qt.h"
+
+#include <QStringListIterator>
+
+QMqttCommunicationManager::QMqttCommunicationManager(QObject *parent) : MqttCommunicationManagerBase (parent)
+{
+    connect(&m_mqttClient, &QMqttClient::connected, this, &MqttCommunicationManagerBase::mqttConnected);
+    connect(&m_mqttClient, &QMqttClient::disconnected, this, &MqttCommunicationManagerBase::mqttDisconnected);
+
+    connect(&m_mqttClient, &QMqttClient::errorChanged, this, &QMqttCommunicationManager::_onMqttError);
+    connect(&m_mqttClient, &QMqttClient::stateChanged, this, &QMqttCommunicationManager::_onMqttStateChanged);
+
+    m_messageConverter.setCommManager(this);
+}
+
+void QMqttCommunicationManager::_init(LocalConfig* config) {
+    qDebug() << Q_FUNC_INFO;
+
+    m_mqttClient.setHostname(config->getString(MQTT_HOST, "localhost"));
+    m_mqttClient.setPort(static_cast<quint16>(config->getInt(MQTT_PORT, 1883)));
+    m_mqttClient.setCleanSession(false);
+
+    m_mqttClient.connectToHost();
+}
+
+void QMqttCommunicationManager::_onMqttError(QMqttClient::ClientError error) {
+    qWarning() << Q_FUNC_INFO << error;
+}
+
+void QMqttCommunicationManager::_onMqttStateChanged(QMqttClient::ClientState state) {
+    qDebug() << Q_FUNC_INFO << state;
+}
+
+void QMqttCommunicationManager::subscribeChannels(QStringList topics) {
+    qDebug() << Q_FUNC_INFO << topics;
+
+    QStringListIterator it(topics);
+    while(it.hasNext()) {
+        QMqttSubscription* sub = m_mqttClient.subscribe(QMqttTopicFilter(buildPath(QStringList() << it.next() << MQTT_WILDCARD).join(MQTT_PATH_SEP)));
+        qDebug() << "Subscribed to" << sub->topic().filter();
+        m_subscriptions.append(sub);
+        connect(sub, &QMqttSubscription::messageReceived, this, &QMqttCommunicationManager::_onMqttMsgReceived);
+    }
+}
+
+void QMqttCommunicationManager::subscribeControllerChannels(QStringList controllers) {
+    qDebug() << Q_FUNC_INFO << controllers;
+
+    QStringListIterator it(controllers);
+    while(it.hasNext()) {
+        QMqttSubscription* sub = m_mqttClient.subscribe(QMqttTopicFilter(buildPath(QStringList() << MQTT_MESSAGE_TYPE_CO << it.next()).join(MQTT_PATH_SEP)));
+        qDebug() << "Subscribed to controller" << sub->topic().filter();
+        m_subscriptions.append(sub);
+        connect(sub, &QMqttSubscription::messageReceived, this, &QMqttCommunicationManager::_onMqttMsgReceived);
+    }
+}
+
+bool QMqttCommunicationManager::_sendMessage(MessageBase &message) {
+    qDebug() << Q_FUNC_INFO;
+
+    if (m_mqttClient.state()==QMqttClient::Connected) {
+        m_mqttClient.publish(m_messageConverter.getTopicName(message), MqttCommunicationManagerBase::serializePayload(message), 0, MqttCommunicationManagerBase::isRetainedMessage(message));
+        return true;
+    } else {
+        qWarning() << "Cannot publish" << m_mqttClient.state();
+        return false;
+    }
+}
+
+void QMqttCommunicationManager::_onMqttMsgReceived(QMqttMessage message) {
+    qDebug() << Q_FUNC_INFO << message.topic() << message.payload();
+
+    MessageBase* msg = m_messageConverter.getMessage(message);
+    if (msg != nullptr) {
+        handleReceivedMessage(msg);
+        msg->deleteLater();
+    }
+}
