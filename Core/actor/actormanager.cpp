@@ -1,8 +1,11 @@
 #include "actormanager.h"
 
-#include "actormessage.h"
-
 #include <QDebug>
+
+#include "actormessage.h"
+#include "value/valuemanager.h"
+#include "macros.h"
+
 
 QString ActorManager::MANAGER_NAME = QStringLiteral("ActorManager");
 
@@ -13,6 +16,8 @@ ActorManager::ActorManager(QObject *parent) : ManagerBase(parent)
 
 void ActorManager::init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
+
+    REQUIRE_MANAGER(ValueManager);
 }
 
 QString ActorManager::getName() {

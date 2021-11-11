@@ -1,20 +1,19 @@
-#ifndef ACTORMANAGER_H
-#define ACTORMANAGER_H
-
-#ifndef IS_OSH_CORE_SERVICE
-    #error Should use client version
-#endif
+#ifndef CLIENTACTORMANAGER_H
+#define CLIENTACTORMANAGER_H
 
 #include <QObject>
 
-#include "manager/managerbase.h"
-#include "actorbase.h"
+#include <QMap>
 
-class ActorManager : public ManagerBase
+#include "shared/actor_qt.h"
+#include "manager/managerbase.h"
+#include "actor/actorbase.h"
+
+class ClientActorManager : public ManagerBase
 {
     Q_OBJECT
 public:
-    explicit ActorManager(QObject *parent = nullptr);
+    explicit ClientActorManager(QObject *parent = nullptr);
 
     static QString MANAGER_NAME;
 
@@ -28,9 +27,13 @@ public:
 
     void registerActor(ActorBase* actor);
 
+private:
+    QMap<QString, ActorBase*> m_actors;
+
+
 signals:
 
 public slots:
 };
 
-#endif // ACTORMANAGER_H
+#endif // CLIENTACTORMANAGER_H

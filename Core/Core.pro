@@ -24,8 +24,12 @@ DEFINES += IS_OSH_CORE_SERVICE
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        actor/actorbase.cpp \
         actor/actormanager.cpp \
         actor/actormessage.cpp \
+        actor/audioplaybackactor.cpp \
+        actor/client/clientactormanager.cpp \
+        actor/digitalactor.cpp \
         communication/communicationmanagerbase.cpp \
         controller/controllermanager.cpp \
         controller/controllermessage.cpp \
@@ -45,6 +49,7 @@ SOURCES += \
         log/httplogforwarder.cpp \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
+        log/logmessage.cpp \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemanager.cpp \
         time/systemtimemessage.cpp \
@@ -72,8 +77,12 @@ SOURCES += \
         warn/systemwarningsmanager.cpp
 
 HEADERS += \
+        actor/actorbase.h \
         actor/actormanager.h \
         actor/actormessage.h \
+        actor/audioplaybackactor.h \
+        actor/client/clientactormanager.h \
+        actor/digitalactor.h \
         communication/communicationmanagerbase.h \
         controller/controllermanager.h \
         controller/controllermessage.h \
@@ -93,6 +102,7 @@ HEADERS += \
         log/httplogforwarder.h \
         log/logforwarderbase.h \
         log/logmanager.h \
+        log/logmessage.h \
         macros.h \
         shared/actor.h \
         shared/actor_qt.h \

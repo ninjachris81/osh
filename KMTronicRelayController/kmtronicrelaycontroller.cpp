@@ -31,12 +31,15 @@ void KMTronicRelayController::init() {
 }
 
 void KMTronicRelayController::switchStatus(quint8 relayIndex, bool status) {
+    qDebug() << Q_FUNC_INFO << relayIndex << status;
+
     if (m_serialClient->isConnected()) {
         QByteArray data;
         data.append('\xFF');
         data.append(static_cast<signed char>(relayIndex + 1));
         data.append(status ? '\x01' : '\x00');
-        m_serialClient->write(data, -1);
+        m_serialClient->writeSync(data, 500);
+        retrieveStatus();
     } else {
         m_warnManager->raiseWarning("Serial not connected");
     }
@@ -56,6 +59,7 @@ void KMTronicRelayController::onSerialConnected() {
     qDebug() << Q_FUNC_INFO;
 
     m_statusTimer.start();
+    Q_EMIT(controllerConnected());
 }
 
 void KMTronicRelayController::onSerialDisconnected() {
@@ -63,6 +67,7 @@ void KMTronicRelayController::onSerialDisconnected() {
 
     m_warnManager->raiseWarning("Relay connection disconnected");
     m_statusTimer.stop();
+    Q_EMIT(controllerDisconnected());
 }
 
 void KMTronicRelayController::onSerialDataReceived(QByteArray data) {

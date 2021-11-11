@@ -11,6 +11,7 @@
 #include "actor/actormessage.h"
 #include "controller/controllermessage.h"
 #include "controller/controllermanager.h"
+#include "log/logmessage.h"
 
 MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : CommunicationManagerBase(parent)
 {
@@ -25,6 +26,7 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, COMPACT, MQTT_MESSAGE_TYPE_ST, 0);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, COMPACT, MQTT_MESSAGE_TYPE_SW, 1);
     registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, JSON, MQTT_MESSAGE_TYPE_CO, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, TEXT_UTF8, MQTT_MESSAGE_TYPE_LO, 1);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
     qDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
@@ -74,6 +76,9 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         case MessageBase::MESSAGE_TYPE_CONTROLLER: {
             return new ControllerMessage(firstLevelPath.first(), rawValue);
         }
+        case MessageBase::MESSAGE_TYPE_LOG: {
+            return new LogMessage(firstLevelPath.first(), rawValue.toString());
+        }
         default:
             qWarning() << "Unknown message type" << levels;
             return nullptr;
@@ -100,7 +105,7 @@ QStringList MqttCommunicationManagerBase::buildPath(QStringList paths, bool addW
 void MqttCommunicationManagerBase::onMqttConnected() {
     qDebug() << Q_FUNC_INFO;
 
-    subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW);
+    subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
 
     ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_NAME);
     subscribeControllerChannels(controllerManager->controllerNames());
@@ -129,6 +134,8 @@ QVariant MqttCommunicationManagerBase::parsePayload(MessageBase::MESSAGE_TYPE me
         } else {
             return QVariant();
         }
+    case TEXT_UTF8:
+        return QString::fromUtf8(payload);
     default:
         qWarning() << "Unknown parsing type" << info.parsingType;
     }
@@ -182,6 +189,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     case MessageBase::MESSAGE_TYPE_CONTROLLER: {
         ControllerMessage* controllerMessage = static_cast<ControllerMessage*>(&message);
         return QJsonDocument::fromVariant(controllerMessage->data()).toJson();
+    }
+    case MessageBase::MESSAGE_TYPE_LOG: {
+        LogMessage* logMessage = static_cast<LogMessage*>(&message);
+        return logMessage->message().toUtf8();
     }
     default:
         qWarning() << "Unknown message type" << message.getMessageType();

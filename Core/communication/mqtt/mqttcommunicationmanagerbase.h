@@ -20,7 +20,8 @@ public:
     enum ParsingType {
         NONE,
         COMPACT,
-        JSON
+        JSON,
+        TEXT_UTF8
     };
 
     struct MessageTypeInfo {

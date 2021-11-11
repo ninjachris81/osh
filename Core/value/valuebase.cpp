@@ -42,12 +42,13 @@ void ValueBase::setRawValue(QVariant value) {
 }
 
 void ValueBase::updateValue(QVariant newValue) {
+    qDebug() << Q_FUNC_INFO << newValue;
     m_value = _updateValue(newValue);
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
 }
 
 QString ValueBase::getFullId(QString valueGroupId, QString valueId) {
-    return valueGroupId.append(VALUE_SEPARATOR).append(valueId);
+    return valueGroupId + VALUE_SEPARATOR + valueId;
 }
 
 qint64 ValueBase::lastUpdate() {

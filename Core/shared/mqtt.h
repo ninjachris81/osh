@@ -27,6 +27,9 @@
  *
  * Controller Structure:
  * MQTT_BASE_PATH / (message_type) / (controllerId)
+ *
+ * Log Structure
+ * MQTT_BASE_PATH / (message_type) / (deviceId)
 */
 
 
@@ -41,6 +44,7 @@
 #define MQTT_MESSAGE_TYPE_ST            "st"        // system time
 #define MQTT_MESSAGE_TYPE_SW            "sw"        // system warnings
 #define MQTT_MESSAGE_TYPE_CO            "co"        // controller
+#define MQTT_MESSAGE_TYPE_LO            "lo"        // log
 
 // devices
 

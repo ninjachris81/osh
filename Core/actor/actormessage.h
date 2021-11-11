@@ -19,6 +19,7 @@ public:
 
     QString actorGroupId();
     QString actorId();
+    QString fullId();
     ACTOR_CMDS cmd();
 
 protected:

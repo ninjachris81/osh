@@ -28,3 +28,7 @@ QString ActorMessage::actorId() {
 ACTOR_CMDS ActorMessage::cmd() {
     return m_cmd;
 }
+
+QString ActorMessage::fullId() {
+    return m_actorGroupId + VALUE_SEPARATOR + m_actorId;
+}

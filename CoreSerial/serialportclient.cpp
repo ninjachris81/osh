@@ -63,6 +63,16 @@ void SerialPortClient::write(QByteArray data, int responseTimeout) {
     }
 }
 
+void SerialPortClient::writeSync(QByteArray data, int responseTimeout) {
+    qDebug() << Q_FUNC_INFO << data.toHex();
+    m_serialPort.write(data);
+
+    if (responseTimeout > 0) {
+        m_serialPort.waitForBytesWritten(responseTimeout);
+    }
+}
+
+
 void SerialPortClient::writeLine(QByteArray data, int responseTimeout) {
     m_serialPort.write(data.append('\n'));
     if (responseTimeout > 0) {

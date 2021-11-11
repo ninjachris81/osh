@@ -26,6 +26,8 @@ protected:
     LocalConfig* m_config;
 
 signals:
+    void controllerConnected();
+    void controllerDisconnected();
 
 public slots:
 };
