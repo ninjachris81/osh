@@ -43,8 +43,11 @@ void ValueBase::setRawValue(QVariant value) {
 
 void ValueBase::updateValue(QVariant newValue) {
     qDebug() << Q_FUNC_INFO << newValue;
+
+    bool hasChanged = m_value == newValue;
     m_value = _updateValue(newValue);
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
+    if (hasChanged) Q_EMIT(valueChanged());
 }
 
 QString ValueBase::getFullId(QString valueGroupId, QString valueId) {
@@ -63,4 +66,5 @@ void ValueBase::invalidate() {
     qDebug() << Q_FUNC_INFO << fullId();
 
     m_value = QVariant();
+    Q_EMIT(invalidated());
 }

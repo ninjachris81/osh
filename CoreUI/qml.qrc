@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>DeviceDiscoveryView.qml</file>
+        <file>DashboardView.qml</file>
+    </qresource>
+</RCC>

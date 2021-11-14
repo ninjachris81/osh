@@ -24,11 +24,14 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg);
 
+    DatamodelBase* datamodel();
+
 private:
     DatamodelLoaderBase* m_datamodelLoader = nullptr;
     DatamodelBase* m_datamodel = nullptr;
 
 signals:
+    void datamodelChanged();
 
 public slots:
 };

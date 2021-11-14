@@ -5,36 +5,19 @@
 #include <QTimer>
 
 #include "manager/managerbase.h"
-#include "device/client/clientdevice.h"
-#include "communication/communicationmanagerbase.h"
+#include "device/devicediscoverymanagerbase.h"
 
-class ClientDeviceManager : public ManagerBase
+class ClientDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 {
     Q_OBJECT
 public:
-    explicit ClientDeviceManager(QObject *parent = nullptr);
-
-    static QString MANAGER_NAME;
-
-    QString getName();
+    explicit ClientDeviceDiscoveryManager(QObject *parent = nullptr);
 
     /*virtual*/ void init(LocalConfig* config);
 
     /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg);
-
-    ClientDevice *device();
-
-private:
-    QTimer m_ddTimer;
-    ClientDevice* m_device;
-    CommunicationManagerBase* m_commManager;
-
-private slots:
-    void startDDBroadcast();
-    void stopDDBroadcast();
-    void sendDDBroadcast();
 
 signals:
 

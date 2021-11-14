@@ -4,7 +4,7 @@
 
 #include "manager/managerbase.h"
 
-ManagerRegistration::ManagerRegistration(QObject *parent) : QObject(parent)
+ManagerRegistration::ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent) : QObject(parent), m_instanceRole(instanceRole)
 {
 
 }
@@ -50,4 +50,8 @@ void ManagerRegistration::init(LocalConfig* config) {
 
 QStringList ManagerRegistration::managerNames() {
     return m_managers.keys();
+}
+
+ManagerRegistration::INSTANCE_ROLE ManagerRegistration::instanceRole() {
+    return m_instanceRole;
 }

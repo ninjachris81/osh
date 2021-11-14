@@ -3,7 +3,7 @@
 #include <QDebug>
 
 #include "actor/actormessage.h"
-#include "value/client/clientvaluemanager.h"
+#include "value/client/valuemanagerclient.h"
 #include "macros.h"
 
 QString ClientActorManager::MANAGER_NAME = QStringLiteral("ClientActorManager");
@@ -16,7 +16,7 @@ ClientActorManager::ClientActorManager(QObject *parent) : ManagerBase(parent)
 void ClientActorManager::init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
 
-    REQUIRE_MANAGER(ClientValueManager);
+    REQUIRE_MANAGER(ValueManagerClient);
 }
 
 QString ClientActorManager::getName() {
@@ -37,7 +37,7 @@ void ClientActorManager::handleReceivedMessage(MessageBase* msg) {
 
         if (!actor->isAsync()) {        // only publish if value is set synchronously
             qDebug() << "Publish value";
-            getManager<ClientValueManager>(ClientValueManager::MANAGER_NAME)->publishValue(actor);
+            getManager<ValueManagerClient>(ValueManagerClient::MANAGER_NAME)->publishValue(actor);
         }
     } else {
         qWarning() << "Invalid actor" << actorMessage->fullId();

@@ -1,10 +1,11 @@
 #include "qmqttcommunicationmanager.h"
 
-#include "qmqttmessageconverter.h"
-
-#include "shared/mqtt_qt.h"
-
 #include <QStringListIterator>
+
+#include "qmqttmessageconverter.h"
+#include "device/devicediscoverymanagerbase.h"
+#include "shared/mqtt_qt.h"
+#include "macros.h"
 
 QMqttCommunicationManager::QMqttCommunicationManager(QObject *parent) : MqttCommunicationManagerBase (parent)
 {
@@ -20,11 +21,11 @@ QMqttCommunicationManager::QMqttCommunicationManager(QObject *parent) : MqttComm
 void QMqttCommunicationManager::_init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
 
+    REQUIRE_MANAGER(DeviceDiscoveryManagerBase);
+
     m_mqttClient.setHostname(config->getString(MQTT_HOST, "localhost"));
     m_mqttClient.setPort(static_cast<quint16>(config->getInt(MQTT_PORT, 1883)));
     m_mqttClient.setCleanSession(false);
-
-    m_mqttClient.connectToHost();
 }
 
 void QMqttCommunicationManager::_onMqttError(QMqttClient::ClientError error) {
@@ -79,4 +80,11 @@ void QMqttCommunicationManager::_onMqttMsgReceived(QMqttMessage message) {
         handleReceivedMessage(msg);
         msg->deleteLater();
     }
+}
+
+void QMqttCommunicationManager::_startConnect() {
+    qDebug() << Q_FUNC_INFO << m_mqttClient.hostname() << m_mqttClient.port();
+
+    m_mqttClient.setClientId(getManager<DeviceDiscoveryManagerBase>(DeviceDiscoveryManagerBase::MANAGER_NAME)->device()->id());
+    m_mqttClient.connectToHost();
 }

@@ -13,7 +13,14 @@ class ManagerRegistration : public QObject
 {
     Q_OBJECT
 public:
-    explicit ManagerRegistration(QObject *parent = nullptr);
+    enum INSTANCE_ROLE {
+        UNKNOWN,
+        SERVER,
+        CLIENT,
+        GUI
+    };
+
+    explicit ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent = nullptr);
 
     void registerManager(ManagerBase* manager);
 
@@ -23,8 +30,11 @@ public:
 
     QStringList managerNames();
 
+    INSTANCE_ROLE instanceRole();
+
 private:
     QMap<QString, ManagerBase*> m_managers;
+    INSTANCE_ROLE m_instanceRole;
 
 signals:
 

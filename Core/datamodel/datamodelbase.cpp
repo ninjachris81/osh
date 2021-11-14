@@ -5,6 +5,10 @@ DatamodelBase::DatamodelBase(QObject *parent) : QObject(parent)
 
 }
 
-QList<ValueBase*> DatamodelBase::values() {
+QMap<QString, ValueBase*> DatamodelBase::values() {
     return m_values;
+}
+
+QMap<QString, KnownDevice*> DatamodelBase::knownDevices() {
+    return m_knownDevices;
 }

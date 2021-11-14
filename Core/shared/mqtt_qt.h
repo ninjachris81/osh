@@ -17,5 +17,4 @@ static QString MQTT_MESSAGE_TYPES[] = {
     MQTT_MESSAGE_TYPE_CO
 };
 
-
 #endif // MQTT_QT_H

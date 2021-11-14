@@ -21,6 +21,7 @@ public:
 
     quint64 sendMessage(MessageBase &message);
     /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ void postInit();
 
     /*virtual*/ QString getName();
 
@@ -33,6 +34,7 @@ public:
 protected:
     bool m_isConnected = false;
     virtual void _init(LocalConfig* config) = 0;
+    virtual void _startConnect() = 0;
     virtual bool _sendMessage(MessageBase &message) = 0;
 
 signals:

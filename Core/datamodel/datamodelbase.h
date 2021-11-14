@@ -3,7 +3,8 @@
 
 #include <QObject>
 
-#include <QList>
+#include <QMap>
+#include "device/knowndevice.h"
 #include "value/valuegroup.h"
 #include "value/valuebase.h"
 
@@ -13,11 +14,13 @@ class DatamodelBase : public QObject
 public:
     explicit DatamodelBase(QObject *parent = nullptr);
 
-    QList<ValueBase*> values();
+    QMap<QString, ValueBase*> values();
+    QMap<QString, KnownDevice *> knownDevices();
 
 protected:
-    QList<ValueGroup*> m_valueGroups;
-    QList<ValueBase*> m_values;
+    QMap<QString, KnownDevice*> m_knownDevices;
+    QMap<QString, ValueGroup*> m_valueGroups;
+    QMap<QString, ValueBase*> m_values;
 
 signals:
 

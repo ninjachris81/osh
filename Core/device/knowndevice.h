@@ -3,18 +3,18 @@
 
 #include <QObject>
 
-#include "devicebase.h"
+#include "device/devicebase.h"
 
 class KnownDevice : public DeviceBase
 {
     Q_OBJECT
 public:
-    explicit KnownDevice(QString id, QString location, QObject *parent = nullptr);
+    explicit KnownDevice(QString id, QString name, QObject *parent = nullptr);
 
-    QString location();
+    QString name();
 
-private:
-    QString m_location;
+protected:
+    QString m_name;
 
 signals:
 

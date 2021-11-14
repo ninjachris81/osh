@@ -16,10 +16,10 @@ ClientSystemWarningsManager::ClientSystemWarningsManager(QObject *parent) : Mana
 void ClientSystemWarningsManager::init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
     REQUIRE_MANAGER(CommunicationManagerBase);
-    REQUIRE_MANAGER(ClientDeviceManager);
+    REQUIRE_MANAGER(ClientDeviceDiscoveryManager);
 
     m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_NAME);
-    m_clientDeviceManager = getManager<ClientDeviceManager>(ClientDeviceManager::MANAGER_NAME);
+    m_clientDeviceManager = getManager<ClientDeviceDiscoveryManager>(ClientDeviceDiscoveryManager::MANAGER_NAME);
 }
 
 QString ClientSystemWarningsManager::getName() {

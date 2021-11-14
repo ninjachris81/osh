@@ -6,6 +6,7 @@
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 #include "valuebase.h"
+#include "valuemessage.h"
 
 class ValueManagerBase : public ManagerBase
 {
@@ -13,7 +14,25 @@ class ValueManagerBase : public ManagerBase
 public:
     explicit ValueManagerBase(QObject *parent = nullptr);
 
+    static QString MANAGER_NAME;
+
+    /*virtual*/ QString getName();
+
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+
+    virtual void handleReceivedMessage(ValueMessage* msg) = 0;
+
     void publishValue(ValueBase* value);
+
+    void registerValue(ValueBase* value);
+
+protected:
+    ValueBase* getValue(QString fullId);
+    ValueBase* getValue(QString valueGroupId, QString valueId);
+
+    QMap<QString, ValueBase*> m_values;
 
 signals:
 

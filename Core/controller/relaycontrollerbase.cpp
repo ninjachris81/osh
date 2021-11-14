@@ -36,13 +36,13 @@ bool RelayControllerBase::relayStatus(quint8 relayIndex) {
 }
 
 void RelayControllerBase::bindActor(DigitalActor* actor, quint8 relayIndex) {
-    QObject::connect(actor, &DigitalActor::valueChanged, [this, relayIndex](bool status) {
-        switchStatus(relayIndex, status);
+    QObject::connect(actor, &DigitalActor::valueChanged, [this, actor, relayIndex]() {
+        switchStatus(relayIndex, actor->rawValue().toBool());
     });
     m_actorMappings.insert(relayIndex, actor);
 }
 
-void RelayControllerBase::bindValueManager(ClientValueManager* clientValueManager) {
+void RelayControllerBase::bindValueManager(ValueManagerClient* clientValueManager) {
     QObject::connect(this, &RelayControllerBase::relayStatusChanged, [this, clientValueManager](quint8 relayIndex) {
         clientValueManager->publishValue(m_actorMappings.value(relayIndex));
     });

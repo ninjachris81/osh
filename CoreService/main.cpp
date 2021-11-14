@@ -3,8 +3,8 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "device/devicediscoverymanager.h"
-#include "value/valuemanager.h"
+#include "device/server/devicediscoverymanagerserver.h"
+#include "value/server/valuemanagerserver.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/systemtimemanager.h"
@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
 
     LocalConfig config;
 
-    ManagerRegistration managerRegistration;
+    ManagerRegistration managerRegistration(ManagerRegistration::SERVER);
 
     QMqttCommunicationManager commManager;
-    DeviceDiscoveryManager deviceDiscoveryManager;
-    ValueManager valueManager;
+    DeviceDiscoveryManagerServer deviceDiscoveryManager;
+    ValueManagerServer valueManager;
     ControllerManager controllerManager;
-    ClientDeviceManager clientDeviceManager;
+    ClientDeviceDiscoveryManager clientDeviceManager;
     SystemtimeManager systimeManager;
     SystemWarningsManager syswarnManager;
     DatamodelManager datamodelManager;

@@ -1,9 +1,10 @@
 #include "datamodelmanager.h"
 
 #include <QDebug>
+
 #include "httpdatamodelloader.h"
 #include "testdatamodelloader.h"
-#include "value/valuemanager.h"
+#include "value/server/valuemanagerserver.h"
 
 #include "macros.h"
 
@@ -16,7 +17,7 @@ DatamodelManager::DatamodelManager(QObject *parent) : ManagerBase(parent)
 void DatamodelManager::init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
 
-    REQUIRE_MANAGER(ValueManager);
+    REQUIRE_MANAGER(ValueManagerBase);
 
     QString datamodelLoaderName = config->getString("datamodel.loader", TestDatamodelLoader::LOADER_TYPE_NAME);
 
@@ -34,11 +35,16 @@ void DatamodelManager::init(LocalConfig* config) {
 
     Q_ASSERT(m_datamodel != nullptr);
 
-    ValueManager* valueManager = getManager<ValueManager>(ValueManager::MANAGER_NAME);
+    qDebug() << "Datamodel loaded";
 
-    QListIterator<ValueBase*> it(m_datamodel->values());
+    Q_EMIT(datamodelChanged());
+
+    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_NAME);
+
+    QMapIterator<QString, ValueBase*> it(m_datamodel->values());
     while (it.hasNext()) {
-        valueManager->registerValue(it.next());
+        it.next();
+        valueManager->registerValue(it.value());
     }
 }
 
@@ -51,4 +57,8 @@ MessageBase::MESSAGE_TYPE DatamodelManager::getMessageType() {
 }
 
 void DatamodelManager::handleReceivedMessage(MessageBase* msg) {
+}
+
+DatamodelBase* DatamodelManager::datamodel() {
+    return m_datamodel;
 }

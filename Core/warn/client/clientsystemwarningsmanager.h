@@ -27,7 +27,7 @@ public:
 
 private:
     CommunicationManagerBase* m_commManager = nullptr;
-    ClientDeviceManager* m_clientDeviceManager = nullptr;
+    ClientDeviceDiscoveryManager* m_clientDeviceManager = nullptr;
 
 signals:
 

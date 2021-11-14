@@ -42,10 +42,12 @@ SOURCES += \
         datamodel/testdatamodelloader.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
-        device/devicediscoverymanager.cpp \
         communication/messagebase.cpp \
         communication/mqtt/mqttcommunicationmanagerbase.cpp \
+        device/devicediscoverymanagerbase.cpp \
+        device/devicediscoverymodelbridge.cpp \
         device/knowndevice.cpp \
+        device/server/devicediscoverymanagerserver.cpp \
         log/httplogforwarder.cpp \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
@@ -53,7 +55,7 @@ SOURCES += \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemanager.cpp \
         time/systemtimemessage.cpp \
-        value/client/clientvaluemanager.cpp \
+        value/client/valuemanagerclient.cpp \
         value/valuemanagerbase.cpp \
         value/valuemessage.cpp \
         config/localconfig.cpp \
@@ -71,7 +73,7 @@ SOURCES += \
         value/stringvalue.cpp \
         value/valuebase.cpp \
         value/valuegroup.cpp \
-        value/valuemanager.cpp \
+        value/server/valuemanagerserver.cpp \
         warn/client/clientsystemwarningsmanager.cpp \
         warn/systemwarningmessage.cpp \
         warn/systemwarningsmanager.cpp
@@ -95,10 +97,12 @@ HEADERS += \
         datamodel/testdatamodelloader.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
-        device/devicediscoverymanager.h \
         communication/messagebase.h \
         communication/mqtt/mqttcommunicationmanagerbase.h \
+        device/devicediscoverymanagerbase.h \
+        device/devicediscoverymodelbridge.h \
         device/knowndevice.h \
+        device/server/devicediscoverymanagerserver.h \
         log/httplogforwarder.h \
         log/logforwarderbase.h \
         log/logmanager.h \
@@ -114,7 +118,7 @@ HEADERS += \
         time/client/clientsystemtimemanager.h \
         time/systemtimemanager.h \
         time/systemtimemessage.h \
-        value/client/clientvaluemanager.h \
+        value/client/valuemanagerclient.h \
         value/valuemanagerbase.h \
         value/valuemessage.h \
         config/localconfig.h \
@@ -134,7 +138,7 @@ HEADERS += \
         value/stringvalue.h \
         value/valuebase.h \
         value/valuegroup.h \
-        value/valuemanager.h \
+        value/server/valuemanagerserver.h \
         warn/client/clientsystemwarningsmanager.h \
         warn/systemwarningmessage.h \
         warn/systemwarningsmanager.h

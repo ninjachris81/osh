@@ -54,6 +54,7 @@ private:
 
 signals:
     void valueChanged();
+    void invalidated();
 
 };
 

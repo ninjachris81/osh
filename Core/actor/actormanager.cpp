@@ -3,7 +3,7 @@
 #include <QDebug>
 
 #include "actormessage.h"
-#include "value/valuemanager.h"
+#include "value/valuemanagerbase.h"
 #include "macros.h"
 
 
@@ -17,7 +17,7 @@ ActorManager::ActorManager(QObject *parent) : ManagerBase(parent)
 void ActorManager::init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
 
-    REQUIRE_MANAGER(ValueManager);
+    REQUIRE_MANAGER(ValueManagerBase);
 }
 
 QString ActorManager::getName() {

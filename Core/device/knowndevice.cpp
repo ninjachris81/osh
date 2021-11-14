@@ -1,10 +1,10 @@
 #include "knowndevice.h"
 
-KnownDevice::KnownDevice(QString id, QString location, QObject *parent) : DeviceBase(id, parent), m_location(location)
+KnownDevice::KnownDevice(QString id, QString name, QObject *parent) : DeviceBase(id, parent), m_name(name)
 {
 
 }
 
-QString KnownDevice::location() {
-    return m_location;
+QString KnownDevice::name() {
+    return m_name;
 }

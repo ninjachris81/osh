@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ViewBase.qml</file>
+        <file>DebugTracer.qml</file>
+    </qresource>
+</RCC>

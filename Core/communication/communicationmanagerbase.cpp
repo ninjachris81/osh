@@ -4,6 +4,9 @@
 #include <QRandomGenerator64>
 #include <QDebug>
 
+#include "macros.h"
+#include "controller/controllermanager.h"
+
 QString CommunicationManagerBase::MANAGER_NAME = QStringLiteral("CommunicationManager");
 
 CommunicationManagerBase::CommunicationManagerBase(QObject *parent) : ManagerBase(parent)
@@ -19,16 +22,25 @@ CommunicationManagerBase::CommunicationManagerBase(QObject *parent) : ManagerBas
 void CommunicationManagerBase::init(LocalConfig* config) {
     qDebug() << Q_FUNC_INFO;
 
+    REQUIRE_MANAGER(ControllerManager);
+
     _init(config);
+}
+
+void CommunicationManagerBase::postInit() {
+    qDebug() << Q_FUNC_INFO;
 
     QStringListIterator it(managerRegistration()->managerNames());
     while(it.hasNext())  {
         ManagerBase* manager = managerRegistration()->getManager(it.next());
         MessageBase::MESSAGE_TYPE messageType = manager->getMessageType();
         if (messageType != MessageBase::MESSAGE_TYPE_UNKNOWN) {
+            qDebug() << "Register message type" << messageType << "for manager" << manager->getName();
             m_managerMessageTypes.insert(messageType, manager);
         }
     }
+
+    _startConnect();
 }
 
 QString CommunicationManagerBase::getName() {
@@ -62,5 +74,7 @@ MessageBase::MESSAGE_TYPE CommunicationManagerBase::getMessageType() {
 void CommunicationManagerBase::handleReceivedMessage(MessageBase* msg) {
     if (m_managerMessageTypes.contains(msg->getMessageType())) {
         m_managerMessageTypes.value(msg->getMessageType())->handleReceivedMessage(msg);
+    } else {
+        qWarning() << "No handlers for msg type" << msg->getMessageType();
     }
 }

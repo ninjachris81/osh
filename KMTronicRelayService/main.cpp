@@ -7,7 +7,7 @@
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
-#include "value/client/clientvaluemanager.h"
+#include "value/client/valuemanagerclient.h"
 #include "actor/client/clientactormanager.h"
 #include "actor/digitalactor.h"
 
@@ -17,14 +17,14 @@ int main(int argc, char *argv[])
 
     LocalConfig config;
 
-    ManagerRegistration managerRegistration;
+    ManagerRegistration managerRegistration(ManagerRegistration::CLIENT);
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceManager clientManager;
+    ClientDeviceDiscoveryManager clientManager;
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
-    ClientValueManager valueManager;
+    ValueManagerClient valueManager;
     ClientActorManager actorManager;
 
     managerRegistration.registerManager(&commManager);

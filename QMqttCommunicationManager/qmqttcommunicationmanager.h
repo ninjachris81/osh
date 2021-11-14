@@ -28,6 +28,7 @@ private:
 protected:
     /*virtual*/ void _init(LocalConfig *config);
     /*virtual*/ bool _sendMessage(MessageBase &message);
+    /*virtual*/ void _startConnect();
 
     /*virtual*/ void subscribeChannels(QStringList topics);
     /*virtual*/ void subscribeControllerChannels(QStringList controllers);

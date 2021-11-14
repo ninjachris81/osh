@@ -105,7 +105,20 @@ QStringList MqttCommunicationManagerBase::buildPath(QStringList paths, bool addW
 void MqttCommunicationManagerBase::onMqttConnected() {
     qDebug() << Q_FUNC_INFO;
 
-    subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
+    switch(managerRegistration()->instanceRole()) {
+    case ManagerRegistration::SERVER:
+        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
+        break;
+    case ManagerRegistration::CLIENT:
+        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+        break;
+    case ManagerRegistration::GUI:
+        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
+        break;
+    default:
+        qWarning() << "Unsupported instance role";
+        break;
+    }
 
     ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_NAME);
     subscribeControllerChannels(controllerManager->controllerNames());
