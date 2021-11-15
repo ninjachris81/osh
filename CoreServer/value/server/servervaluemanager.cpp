@@ -1,4 +1,4 @@
-#include "value/server/valuemanagerserver.h"
+#include "value/server/servervaluemanager.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -8,36 +8,36 @@
 
 #include "macros.h"
 
-ValueManagerServer::ValueManagerServer(QObject *parent) : ValueManagerBase(parent)
+ServerValueManager::ServerValueManager(QObject *parent) : ValueManagerBase(parent)
 {
-    connect(&m_valueCheckTimer, &QTimer::timeout, this, &ValueManagerServer::checkValues);
+    connect(&m_valueCheckTimer, &QTimer::timeout, this, &ServerValueManager::checkValues);
 }
 
-void ValueManagerServer::init(LocalConfig *config) {
+void ServerValueManager::init(LocalConfig *config) {
     REQUIRE_MANAGER(CommunicationManagerBase);
 
     m_valueCheckTimer.setInterval(config->getInt("value.checkInterval", 1000));
     m_valueCheckTimer.start();
 }
 
-void ValueManagerServer::handleReceivedMessage(ValueMessage* msg) {
+void ServerValueManager::handleReceivedMessage(ValueMessage* msg) {
     qDebug() << Q_FUNC_INFO;
 
     updateValue(msg->valueGroupId(), msg->valueId(), msg->rawValue());
 }
 
-void ValueManagerServer::updateValue(ValueBase* value, QVariant newValue) {
+void ServerValueManager::updateValue(ValueBase* value, QVariant newValue) {
     if (value != nullptr) {
         value->updateValue(newValue);
     }
 }
 
-void ValueManagerServer::updateValue(QString valueGroupId, QString valueId, QVariant newValue) {
+void ServerValueManager::updateValue(QString valueGroupId, QString valueId, QVariant newValue) {
     ValueBase* value = getValue(valueGroupId, valueId);
     updateValue(value, newValue);
 }
 
-void ValueManagerServer::checkValues() {
+void ServerValueManager::checkValues() {
     //qDebug() << Q_FUNC_INFO;
 
     QMapIterator<QString, ValueBase*> it(m_values);
@@ -50,7 +50,7 @@ void ValueManagerServer::checkValues() {
     }
 }
 
-void ValueManagerServer::invalidateValue(ValueBase* value) {
+void ServerValueManager::invalidateValue(ValueBase* value) {
     value->invalidate();
     publishValue(value);
 }

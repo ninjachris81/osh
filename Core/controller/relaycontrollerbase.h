@@ -9,7 +9,7 @@
 #include "controllermessage.h"
 
 #include "actor/digitalactor.h"
-#include "value/client/valuemanagerclient.h"
+#include "value/client/clientvaluemanager.h"
 
 class RelayControllerBase : public ControllerBase
 {
@@ -26,7 +26,7 @@ public:
     bool relayStatus(quint8 relayIndex);
 
     void bindActor(DigitalActor *actor, quint8 relayIndex);
-    void bindValueManager(ValueManagerClient* clientValueManager);
+    void bindValueManager(ClientValueManager* clientValueManager);
 
 protected:
     void setStatus(quint8 relayIndex, bool status);

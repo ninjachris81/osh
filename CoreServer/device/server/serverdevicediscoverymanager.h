@@ -1,5 +1,5 @@
-#ifndef DEVICEDISCOVERMANAGERSERVER_H
-#define DEVICEDISCOVERMANAGERSERVER_H
+#ifndef SERVERDEVICEDISCOVERMANAGER_H
+#define SERVERDEVICEDISCOVERMANAGER_H
 
 #include <QObject>
 
@@ -10,13 +10,13 @@
 
 #include "device/devicediscoverymanagerbase.h"
 #include "communication/messagebase.h"
-#include "device/devicediscoverymodelbridge.h"
+#include "device/server/devicediscoverymodelbridge.h"
 
-class DeviceDiscoveryManagerServer : public DeviceDiscoveryManagerBase
+class ServerDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 {
     Q_OBJECT
 public:
-    explicit DeviceDiscoveryManagerServer(QObject *parent = nullptr);
+    explicit ServerDeviceDiscoveryManager(QObject *parent = nullptr);
 
     /*virtual*/ void init(LocalConfig* config);
 
@@ -32,4 +32,4 @@ signals:
 public slots:
 };
 
-#endif // DEVICEDISCOVERMANAGERSERVER_H
+#endif // SERVERDEVICEDISCOVERMANAGER_H

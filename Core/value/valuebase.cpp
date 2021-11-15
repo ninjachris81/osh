@@ -44,8 +44,8 @@ void ValueBase::setRawValue(QVariant value) {
 void ValueBase::updateValue(QVariant newValue) {
     qDebug() << Q_FUNC_INFO << newValue;
 
-    bool hasChanged = m_value == newValue;
     m_value = _updateValue(newValue);
+    bool hasChanged = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
     if (hasChanged) Q_EMIT(valueChanged());
 }

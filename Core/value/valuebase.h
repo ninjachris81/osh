@@ -38,7 +38,7 @@ public:
     QString fullId();
     ValueGroup* valueGroup();
 
-    QVariant rawValue();
+    Q_INVOKABLE QVariant rawValue();
 
     qint64 lastUpdate();
     VALUE_TIMEOUT valueTimeout();

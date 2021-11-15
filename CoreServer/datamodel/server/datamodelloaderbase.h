@@ -2,7 +2,7 @@
 #define DATAMODELLOADERBASE_H
 
 #include <QObject>
-#include "datamodel/datamodelbase.h"
+#include "datamodel/server/datamodelbase.h"
 
 class DatamodelLoaderBase : public QObject
 {

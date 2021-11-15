@@ -3,13 +3,14 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "device/server/devicediscoverymanagerserver.h"
-#include "value/server/valuemanagerserver.h"
+#include "device/server/serverdevicediscoverymanager.h"
+#include "value/server/servervaluemanager.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
-#include "time/systemtimemanager.h"
+#include "time/server/systemtimemanager.h"
 #include "warn/systemwarningsmanager.h"
-#include "datamodel/datamodelmanager.h"
+#include "datamodel/server/datamodelmanager.h"
+#include "processor/server/modelprocessormanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,22 +23,22 @@ int main(int argc, char *argv[])
     ManagerRegistration managerRegistration(ManagerRegistration::SERVER);
 
     QMqttCommunicationManager commManager;
-    DeviceDiscoveryManagerServer deviceDiscoveryManager;
-    ValueManagerServer valueManager;
+    ServerDeviceDiscoveryManager deviceDiscoveryManager;
+    ServerValueManager valueManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientDeviceManager;
     SystemtimeManager systimeManager;
     SystemWarningsManager syswarnManager;
     DatamodelManager datamodelManager;
+    ModelProcessorManager modelProcessor;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&controllerManager);
-    managerRegistration.registerManager(&clientDeviceManager);
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&datamodelManager);
+    managerRegistration.registerManager(&modelProcessor);
 
     managerRegistration.init(&config);
 

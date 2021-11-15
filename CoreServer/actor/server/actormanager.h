@@ -8,7 +8,7 @@
 #include <QObject>
 
 #include "manager/managerbase.h"
-#include "actorbase.h"
+#include "actor/actorbase.h"
 
 class ActorManager : public ManagerBase
 {

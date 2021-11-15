@@ -4,7 +4,6 @@
 
 #include "communication/communicationmanagerbase.h"
 #include "device/devicediscoverymessage.h"
-#include "datamodel/datamodelmanager.h"
 
 #include "macros.h"
 #include "shared/device.h"

@@ -4,7 +4,7 @@
 
 #include "httpdatamodelloader.h"
 #include "testdatamodelloader.h"
-#include "value/server/valuemanagerserver.h"
+#include "value/server/servervaluemanager.h"
 
 #include "macros.h"
 
@@ -44,6 +44,7 @@ void DatamodelManager::init(LocalConfig* config) {
     QMapIterator<QString, ValueBase*> it(m_datamodel->values());
     while (it.hasNext()) {
         it.next();
+        qDebug() << "Register datamodel value" << it.key();
         valueManager->registerValue(it.value());
     }
 }

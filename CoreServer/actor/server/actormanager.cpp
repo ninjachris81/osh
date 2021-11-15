@@ -2,10 +2,9 @@
 
 #include <QDebug>
 
-#include "actormessage.h"
+#include "actor/actormessage.h"
 #include "value/valuemanagerbase.h"
 #include "macros.h"
-
 
 QString ActorManager::MANAGER_NAME = QStringLiteral("ActorManager");
 

@@ -25,7 +25,7 @@ public:
 
 private:
     QTimer m_ddTimer;
-    ClientDevice* m_device;
+    ClientDevice* m_device = nullptr;
     CommunicationManagerBase* m_commManager;
 
 private slots:

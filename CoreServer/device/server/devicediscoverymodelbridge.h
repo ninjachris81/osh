@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include "datamodel/datamodelmanager.h"
+#include "datamodel/server/datamodelmanager.h"
 #include "device/devicediscoverymanagerbase.h"
 #include "device/devicediscoverymessage.h"
 

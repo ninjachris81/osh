@@ -1,5 +1,5 @@
-#ifndef VALUEMANAGERSERVER_H
-#define VALUEMANAGERSERVER_H
+#ifndef SERVERVALUEMANAGER_H
+#define SERVERVALUEMANAGER_H
 
 #ifndef IS_OSH_CORE_SERVICE
     #error Should use client version
@@ -15,11 +15,11 @@
 #include <QTimer>
 #include <QMap>
 
-class ValueManagerServer : public ValueManagerBase
+class ServerValueManager : public ValueManagerBase
 {
     Q_OBJECT
 public:
-    explicit ValueManagerServer(QObject *parent = nullptr);
+    explicit ServerValueManager(QObject *parent = nullptr);
 
     /*virtual*/ void init(LocalConfig* config);
 
@@ -41,4 +41,4 @@ signals:
 public slots:
 };
 
-#endif // VALUEMANAGERSERVER_H
+#endif // SERVERVALUEMANAGER_H

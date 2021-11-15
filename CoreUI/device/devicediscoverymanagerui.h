@@ -7,7 +7,7 @@
 
 #include "device/devicebaseui.h"
 #include "device/devicediscoverymanagerbase.h"
-#include "device/devicediscoverymodelbridge.h"
+#include "device/server/devicediscoverymodelbridge.h"
 
 class DeviceDiscoveryManagerUI : public DeviceDiscoveryManagerBase
 {

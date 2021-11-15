@@ -7,7 +7,7 @@
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
-#include "value/client/valuemanagerclient.h"
+#include "value/client/clientvaluemanager.h"
 #include "actor/client/clientactormanager.h"
 #include "actor/digitalactor.h"
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     ClientDeviceDiscoveryManager clientManager;
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
-    ValueManagerClient valueManager;
+    ClientValueManager valueManager;
     ClientActorManager actorManager;
 
     managerRegistration.registerManager(&commManager);

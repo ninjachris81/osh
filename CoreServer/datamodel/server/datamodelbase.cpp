@@ -12,3 +12,7 @@ QMap<QString, ValueBase*> DatamodelBase::values() {
 QMap<QString, KnownDevice*> DatamodelBase::knownDevices() {
     return m_knownDevices;
 }
+
+QMap<QString, ProcessorTask*> DatamodelBase::processorTasks() {
+    return m_processorTasks;
+}

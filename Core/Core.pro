@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT      -= gui
+QT      += qml
 
 TARGET = Core
 TEMPLATE = lib
@@ -16,8 +17,6 @@ CONFIG += staticlib
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DEFINES += IS_OSH_CORE_SERVICE
-
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -25,7 +24,6 @@ DEFINES += IS_OSH_CORE_SERVICE
 
 SOURCES += \
         actor/actorbase.cpp \
-        actor/actormanager.cpp \
         actor/actormessage.cpp \
         actor/audioplaybackactor.cpp \
         actor/client/clientactormanager.cpp \
@@ -33,29 +31,20 @@ SOURCES += \
         communication/communicationmanagerbase.cpp \
         controller/controllermanager.cpp \
         controller/controllermessage.cpp \
-        datamodel/datamodelbase.cpp \
-        datamodel/datamodelloaderbase.cpp \
-        datamodel/datamodelmanager.cpp \
-        datamodel/dynamicdatamodel.cpp \
-        datamodel/httpdatamodelloader.cpp \
-        datamodel/testdatamodel.cpp \
-        datamodel/testdatamodelloader.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
         communication/messagebase.cpp \
         communication/mqtt/mqttcommunicationmanagerbase.cpp \
         device/devicediscoverymanagerbase.cpp \
-        device/devicediscoverymodelbridge.cpp \
         device/knowndevice.cpp \
-        device/server/devicediscoverymanagerserver.cpp \
         log/httplogforwarder.cpp \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
         log/logmessage.cpp \
         time/client/clientsystemtimemanager.cpp \
-        time/systemtimemanager.cpp \
         time/systemtimemessage.cpp \
-        value/client/valuemanagerclient.cpp \
+        value/client/clientvaluemanager.cpp \
+        value/longvalue.cpp \
         value/valuemanagerbase.cpp \
         value/valuemessage.cpp \
         config/localconfig.cpp \
@@ -73,14 +62,12 @@ SOURCES += \
         value/stringvalue.cpp \
         value/valuebase.cpp \
         value/valuegroup.cpp \
-        value/server/valuemanagerserver.cpp \
         warn/client/clientsystemwarningsmanager.cpp \
         warn/systemwarningmessage.cpp \
         warn/systemwarningsmanager.cpp
 
 HEADERS += \
         actor/actorbase.h \
-        actor/actormanager.h \
         actor/actormessage.h \
         actor/audioplaybackactor.h \
         actor/client/clientactormanager.h \
@@ -88,21 +75,12 @@ HEADERS += \
         communication/communicationmanagerbase.h \
         controller/controllermanager.h \
         controller/controllermessage.h \
-        datamodel/datamodelbase.h \
-        datamodel/datamodelloaderbase.h \
-        datamodel/datamodelmanager.h \
-        datamodel/dynamicdatamodel.h \
-        datamodel/httpdatamodelloader.h \
-        datamodel/testdatamodel.h \
-        datamodel/testdatamodelloader.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
         communication/messagebase.h \
         communication/mqtt/mqttcommunicationmanagerbase.h \
         device/devicediscoverymanagerbase.h \
-        device/devicediscoverymodelbridge.h \
         device/knowndevice.h \
-        device/server/devicediscoverymanagerserver.h \
         log/httplogforwarder.h \
         log/logforwarderbase.h \
         log/logmanager.h \
@@ -116,9 +94,9 @@ HEADERS += \
         shared/mqtt_qt.h \
         shared/time.h \
         time/client/clientsystemtimemanager.h \
-        time/systemtimemanager.h \
         time/systemtimemessage.h \
-        value/client/valuemanagerclient.h \
+        value/client/clientvaluemanager.h \
+        value/longvalue.h \
         value/valuemanagerbase.h \
         value/valuemessage.h \
         config/localconfig.h \
@@ -138,7 +116,6 @@ HEADERS += \
         value/stringvalue.h \
         value/valuebase.h \
         value/valuegroup.h \
-        value/server/valuemanagerserver.h \
         warn/client/clientsystemwarningsmanager.h \
         warn/systemwarningmessage.h \
         warn/systemwarningsmanager.h

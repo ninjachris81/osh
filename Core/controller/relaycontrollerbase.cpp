@@ -42,7 +42,7 @@ void RelayControllerBase::bindActor(DigitalActor* actor, quint8 relayIndex) {
     m_actorMappings.insert(relayIndex, actor);
 }
 
-void RelayControllerBase::bindValueManager(ValueManagerClient* clientValueManager) {
+void RelayControllerBase::bindValueManager(ClientValueManager* clientValueManager) {
     QObject::connect(this, &RelayControllerBase::relayStatusChanged, [this, clientValueManager](quint8 relayIndex) {
         clientValueManager->publishValue(m_actorMappings.value(relayIndex));
     });
