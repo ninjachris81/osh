@@ -11,7 +11,7 @@ HttpDataModelLoader::HttpDataModelLoader(QUrl url, QObject *parent) : DatamodelL
 }
 
 DatamodelBase* HttpDataModelLoader::load() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     return new DynamicDatamodel();
 }

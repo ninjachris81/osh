@@ -10,7 +10,7 @@ class EnumValue : public IntegerValue
 public:
     explicit EnumValue(ValueGroup *valueGroup, QString id, QObject *parent = nullptr);
 
-    /*virtual*/ QVariant _updateValue(QVariant newValue);
+    /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 
 signals:
 

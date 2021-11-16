@@ -7,19 +7,23 @@
 #include "value/valuemanagerbase.h"
 #include "value/valuegroup.h"
 
-QString EnvironmentValueManager::MANAGER_NAME = QStringLiteral("EnvironmentValueManager");
+QLatin1Literal EnvironmentValueManager::MANAGER_ID = QLatin1Literal("EnvironmentValueManager");
 
 EnvironmentValueManager::EnvironmentValueManager(QObject *parent) : ManagerBase(parent)
 {
     connect(&m_valueTimer, &QTimer::timeout, this, &EnvironmentValueManager::updateValues);
 }
 
+LogCat::LOGCAT EnvironmentValueManager::logCat() {
+    return LogCat::VALUE;
+}
+
 void EnvironmentValueManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ValueManagerBase);
 
-    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_NAME);
+    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
 
     ValueGroup* envGroup = new ValueGroup("env");
@@ -30,8 +34,8 @@ void EnvironmentValueManager::init(LocalConfig* config) {
     m_valueTimer.start(1000);
 }
 
-QString EnvironmentValueManager::getName() {
-    return MANAGER_NAME;
+QString EnvironmentValueManager::id() {
+    return MANAGER_ID;
 }
 
 MessageBase::MESSAGE_TYPE EnvironmentValueManager::getMessageType() {

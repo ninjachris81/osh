@@ -10,7 +10,7 @@ class IntegerValue : public ValueBase
 public:
     explicit IntegerValue(ValueGroup *valueGroup, QString id, QObject *parent = nullptr);
 
-    /*virtual*/ QVariant _updateValue(QVariant newValue);
+    /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 
 signals:
 

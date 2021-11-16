@@ -8,15 +8,19 @@ ProcessorTask::ProcessorTask(QString id, QString scriptCode, qint64 scheduleInte
 
 }
 
+LogCat::LOGCAT ProcessorTask::logCat() {
+    return LogCat::PROCESSOR;
+}
+
 void ProcessorTask::run(QJSEngine *engine) {
-    qDebug() << Q_FUNC_INFO << m_id;
+    iDebug() << Q_FUNC_INFO << m_id;
 
     QJSValue result = engine->evaluate(m_scriptCode);
 
     if (!result.isError()) {
-        qDebug() << "Result" << result.toVariant();
+        iDebug() << "Result" << result.toVariant();
     } else {
-        qWarning() << "Script execution error" << result.errorType();
+        iWarning() << "Script execution error" << result.errorType();
     }
 
     m_lastExecution = QDateTime::currentMSecsSinceEpoch();

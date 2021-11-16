@@ -13,11 +13,11 @@ public:
     explicit SystemWarningMessage(QString deviceId, QString msg, QObject *parent = nullptr);
     explicit SystemWarningMessage(ClientDevice* device, QString msg, QObject *parent = nullptr);
 
-    /*virtual*/ MESSAGE_TYPE getMessageType();
+    /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ QString getFirstLevelId();
+    /*virtual*/ QString getFirstLevelId() override;
 
-    /*virtual*/ QString getSecondLevelId();
+    /*virtual*/ QString getSecondLevelId() override;
 
     QString deviceId();
     QString msg();

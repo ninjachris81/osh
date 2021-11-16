@@ -14,7 +14,7 @@ RelayControllerBase::RelayControllerBase(ControllerManager *manager, QString id,
 
 void RelayControllerBase::setStatus(quint8 relayIndex, bool status) {
     if (m_relayStatus.at(relayIndex) != status) {
-        qDebug() << Q_FUNC_INFO << relayIndex << status;
+        iDebug() << Q_FUNC_INFO << relayIndex << status;
 
         m_relayStatus.setBit(relayIndex, status);
         Q_EMIT(relayStatusChanged(relayIndex));
@@ -22,7 +22,7 @@ void RelayControllerBase::setStatus(quint8 relayIndex, bool status) {
 }
 
 void RelayControllerBase::handleMessage(ControllerMessage *msg) {
-    qDebug() << Q_FUNC_INFO << msg->cmdType();
+    iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
 void RelayControllerBase::switchStatusAll(bool status) {

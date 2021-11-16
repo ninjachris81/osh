@@ -11,9 +11,9 @@ class ClientValueManager : public ValueManagerBase
 public:
     explicit ClientValueManager(QObject *parent = nullptr);
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ void handleReceivedMessage(ValueMessage* msg);
+    /*virtual*/ void handleReceivedMessage(ValueMessage* msg) override;
 
 signals:
 

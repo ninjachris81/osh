@@ -10,7 +10,7 @@ class StringValue : public ValueBase
 public:
     explicit StringValue(ValueGroup *valueGroup, QString id, QObject *parent = nullptr);
 
-    /*virtual*/ QVariant _updateValue(QVariant newValue);
+    /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 
 signals:
 

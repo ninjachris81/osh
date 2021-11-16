@@ -10,11 +10,11 @@ class LogMessage : public MessageBase
 public:
     explicit LogMessage(QString deviceId, QString message, QObject *parent = nullptr);
 
-    /*virtual*/ MESSAGE_TYPE getMessageType();
+    /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ QString getFirstLevelId();
+    /*virtual*/ QString getFirstLevelId() override;
 
-    /*virtual*/ QString getSecondLevelId();
+    /*virtual*/ QString getSecondLevelId() override;
 
     QString deviceId();
     QString message();

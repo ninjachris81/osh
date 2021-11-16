@@ -15,11 +15,13 @@ class DeviceDiscoveryManagerBase : public ManagerBase
 public:
     explicit DeviceDiscoveryManagerBase(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
-    /*virtual*/ QString getName();
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ QString id() override;
+
+    /*virtual*/ void init(LocalConfig* config) override;
 
     ClientDevice *device();
 

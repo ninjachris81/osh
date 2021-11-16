@@ -11,12 +11,15 @@
 #include "warn/systemwarningsmanager.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "processor/server/modelprocessormanager.h"
+#include "log/logmanager.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
     qDebug() << Q_FUNC_INFO;
+
+    //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndatamodel.*=true"));
 
     LocalConfig config;
 
@@ -30,6 +33,7 @@ int main(int argc, char *argv[])
     SystemWarningsManager syswarnManager;
     DatamodelManager datamodelManager;
     ModelProcessorManager modelProcessor;
+    LogManager logManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
@@ -39,6 +43,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&modelProcessor);
+    managerRegistration.registerManager(&logManager);
 
     managerRegistration.init(&config);
 

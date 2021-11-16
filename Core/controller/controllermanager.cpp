@@ -5,15 +5,19 @@
 #include "communication/communicationmanagerbase.h"
 #include "controllermessage.h"
 
-QString ControllerManager::MANAGER_NAME = QStringLiteral("ControllerManager");
+QLatin1Literal ControllerManager::MANAGER_ID = QLatin1Literal("ControllerManager");
 
 ControllerManager::ControllerManager(QObject *parent) : ManagerBase(parent)
 {
 
 }
 
+LogCat::LOGCAT ControllerManager::logCat() {
+    return LogCat::CONTROLLER;
+}
+
 void ControllerManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     QMapIterator<QString, ControllerBase*> it(m_controllers);
     while(it.hasNext()) {
@@ -23,7 +27,7 @@ void ControllerManager::init(LocalConfig* config) {
 }
 
 void ControllerManager::postInit() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     QMapIterator<QString, ControllerBase*> it(m_controllers);
     while(it.hasNext()) {
@@ -32,8 +36,8 @@ void ControllerManager::postInit() {
     }
 }
 
-QString ControllerManager::getName() {
-    return MANAGER_NAME;
+QString ControllerManager::id() {
+    return MANAGER_ID;
 }
 
 void ControllerManager::registerController(ControllerBase *controller) {
@@ -41,7 +45,7 @@ void ControllerManager::registerController(ControllerBase *controller) {
         qFatal("Must register controller BEFORE init of manager");
     }
 
-    qDebug() << Q_FUNC_INFO << controller->id();
+    iDebug() << Q_FUNC_INFO << controller->id();
 
     Q_ASSERT(!m_controllers.contains(controller->id()));
 
@@ -61,13 +65,13 @@ MessageBase::MESSAGE_TYPE ControllerManager::getMessageType() {
 }
 
 void ControllerManager::handleReceivedMessage(MessageBase* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     ControllerMessage* controllerMessage = static_cast<ControllerMessage*>(msg);
 
     if (m_controllers.contains(controllerMessage->controllerId())) {
         m_controllers.value(controllerMessage->controllerId())->handleMessage(controllerMessage);
     } else {
-        qWarning() << "Unknown controller" << controllerMessage->controllerId();
+        iWarning() << "Unknown controller" << controllerMessage->controllerId();
     }
 }

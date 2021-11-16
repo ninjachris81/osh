@@ -12,7 +12,7 @@ TestDatamodelLoader::TestDatamodelLoader(QObject *parent) : DatamodelLoaderBase(
 }
 
 DatamodelBase* TestDatamodelLoader::load() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
     return new TestDatamodel();
 }
 

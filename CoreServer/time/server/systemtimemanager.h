@@ -17,15 +17,17 @@ class SystemtimeManager : public ManagerBase
 public:
     explicit SystemtimeManager(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    /*virtual*/ QString getName();
+    /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+    /*virtual*/ QString id() override;
 
-    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
+
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
 private slots:
     void sendSystemtime();

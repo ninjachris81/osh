@@ -29,7 +29,7 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, TEXT_UTF8, MQTT_MESSAGE_TYPE_LO, 1);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
-    qDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
+    iDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
     Q_ASSERT(e.keyCount()-1 == m_messageTypes.count());        // -1 because of UNKNOWN
 }
 
@@ -45,7 +45,7 @@ void MqttCommunicationManagerBase::registerMessageType(MessageBase::MESSAGE_TYPE
 }
 
 MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteArray payload) {
-    qDebug() << Q_FUNC_INFO << levels << payload;
+    iDebug() << Q_FUNC_INFO << levels << payload;
 
     QStringList path = MqttCommunicationManagerBase::removeBasePath(levels);
     QStringList firstLevelPath = MqttCommunicationManagerBase::removeMessageTypePath(path);
@@ -55,7 +55,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
     if (info.mqttPathLevels == firstLevelPath.size()) {
         QVariant rawValue = parsePayload(messageType, payload);
 
-        qDebug() << Q_FUNC_INFO << messageType << rawValue << firstLevelPath;
+        iDebug() << Q_FUNC_INFO << messageType << rawValue << firstLevelPath;
 
         switch (messageType) {
         case MessageBase::MESSAGE_TYPE_VALUE: {
@@ -80,17 +80,17 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             return new LogMessage(firstLevelPath.first(), rawValue.toString());
         }
         default:
-            qWarning() << "Unknown message type" << levels;
+            iWarning() << "Unknown message type" << levels;
             return nullptr;
         }
     } else {
-        qWarning() << "Invalid path levels" << firstLevelPath.size() << "expected" << info.mqttPathLevels;
+        iWarning() << "Invalid path levels" << firstLevelPath.size() << "expected" << info.mqttPathLevels;
         return nullptr;
     }
 }
 
 QStringList MqttCommunicationManagerBase::buildPath(QStringList paths, bool addWildcard) {
-    //qDebug() << Q_FUNC_INFO << paths;
+    //iDebug() << Q_FUNC_INFO << paths;
 
     if (paths.first()!=MQTT_BASE_PATH) paths.prepend(MQTT_BASE_PATH);
 
@@ -103,7 +103,7 @@ QStringList MqttCommunicationManagerBase::buildPath(QStringList paths, bool addW
 }
 
 void MqttCommunicationManagerBase::onMqttConnected() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     switch(managerRegistration()->instanceRole()) {
     case ManagerRegistration::SERVER:
@@ -116,11 +116,11 @@ void MqttCommunicationManagerBase::onMqttConnected() {
         subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
         break;
     default:
-        qWarning() << "Unsupported instance role";
+        iWarning() << "Unsupported instance role";
         break;
     }
 
-    ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_NAME);
+    ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_ID);
     subscribeControllerChannels(controllerManager->controllerNames());
 }
 
@@ -138,7 +138,7 @@ QVariant MqttCommunicationManagerBase::parsePayload(MessageBase::MESSAGE_TYPE me
         if (payload.count()>=MQTT_MIN_MSG_SIZE) {
             return parseCompactPayload(payload.at(0), payload.mid(1));
         } else {
-            qWarning() << "Invalid compact msg size" << payload.size();
+            iWarning() << "Invalid compact msg size" << payload.size();
             return QVariant();
         }
     case JSON:
@@ -150,7 +150,7 @@ QVariant MqttCommunicationManagerBase::parsePayload(MessageBase::MESSAGE_TYPE me
     case TEXT_UTF8:
         return QString::fromUtf8(payload);
     default:
-        qWarning() << "Unknown parsing type" << info.parsingType;
+        iWarning() << "Unknown parsing type" << info.parsingType;
     }
 
     return QVariant();
@@ -171,7 +171,7 @@ QVariant MqttCommunicationManagerBase::parseCompactPayload(char typeId, QByteArr
     case MQTT_ID_INVALID:
         return QVariant();
     default:
-        qWarning() << "Invalid type id" << typeId;
+        iWarning() << "Invalid type id" << typeId;
         return QVariant();
     }
 }
@@ -181,7 +181,7 @@ QJsonDocument MqttCommunicationManagerBase::parseJSONPayload(QByteArray payload)
 }
 
 QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) {
-    qDebug() << Q_FUNC_INFO << message.getMessageType();
+    iDebug() << Q_FUNC_INFO << message.getMessageType();
 
     switch(message.getMessageType()) {
     case MessageBase::MESSAGE_TYPE_VALUE: {
@@ -208,12 +208,12 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         return logMessage->message().toUtf8();
     }
     default:
-        qWarning() << "Unknown message type" << message.getMessageType();
+        iWarning() << "Unknown message type" << message.getMessageType();
     }
 }
 
 QByteArray MqttCommunicationManagerBase::serializeCompactValue(QVariant value) {
-    qDebug() << Q_FUNC_INFO << value;
+    iDebug() << Q_FUNC_INFO << value;
 
     QByteArray returnData;
 
@@ -234,14 +234,14 @@ QByteArray MqttCommunicationManagerBase::serializeCompactValue(QVariant value) {
             returnData.append(MQTT_ID_BOOL);
             returnData.append(value.toBool()?"1":"0");
         } else {
-            qWarning() << "Cannot serialize" << value.typeName();
+            iWarning() << "Cannot serialize" << value.typeName();
         }
     } else {
         returnData.append(MQTT_ID_INVALID);
         returnData.append(MQTT_INVALID_PAYLOAD);
     }
 
-    qDebug() << "Payload" << returnData;
+    iDebug() << "Payload" << returnData;
     return returnData;
 }
 
@@ -273,7 +273,7 @@ MessageBase::MESSAGE_TYPE MqttCommunicationManagerBase::getMessageType(QString n
         }
     }
 
-    qWarning() << "Unknown message type" << name;
+    iWarning() << "Unknown message type" << name;
     return MessageBase::MESSAGE_TYPE_UNKNOWN;
 }
 

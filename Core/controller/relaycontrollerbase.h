@@ -21,7 +21,7 @@ public:
 
     void switchStatusAll(bool status);
 
-    /*virtual*/ void handleMessage(ControllerMessage *msg);
+    /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
     bool relayStatus(quint8 relayIndex);
 

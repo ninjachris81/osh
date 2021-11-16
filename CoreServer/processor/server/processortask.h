@@ -10,7 +10,9 @@ class ProcessorTask : public Identifyable
 {
     Q_OBJECT
 public:
-    explicit ProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval, QObject *parent = nullptr);
+    explicit ProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval = 0, QObject *parent = nullptr);
+
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
     void run(QJSEngine* engine);
 

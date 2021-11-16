@@ -12,11 +12,11 @@ class ValueMessage : public MessageBase
 public:
     explicit ValueMessage(QString valueGroupId, QString valueId, QVariant rawValue, QObject *parent = nullptr);
 
-    /*virtual*/ MESSAGE_TYPE getMessageType();
+    /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ QString getFirstLevelId();
+    /*virtual*/ QString getFirstLevelId() override;
 
-    /*virtual*/ QString getSecondLevelId();
+    /*virtual*/ QString getSecondLevelId() override;
 
 
     QString valueGroupId();

@@ -36,13 +36,13 @@ void ValueBase::setRawValue(QVariant value) {
 
         break;
     default:
-        qWarning() << "Unsupported data type" << value.typeName();
+        iWarning() << "Unsupported data type" << value.typeName();
         break;
     }
 }
 
 void ValueBase::updateValue(QVariant newValue) {
-    qDebug() << Q_FUNC_INFO << newValue;
+    iDebug() << Q_FUNC_INFO << newValue;
 
     m_value = _updateValue(newValue);
     bool hasChanged = m_value == newValue;
@@ -63,7 +63,7 @@ ValueBase::VALUE_TIMEOUT ValueBase::valueTimeout() {
 }
 
 void ValueBase::invalidate() {
-    qDebug() << Q_FUNC_INFO << fullId();
+    iDebug() << Q_FUNC_INFO << fullId();
 
     m_value = QVariant();
     Q_EMIT(invalidated());

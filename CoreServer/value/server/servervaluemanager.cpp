@@ -21,7 +21,7 @@ void ServerValueManager::init(LocalConfig *config) {
 }
 
 void ServerValueManager::handleReceivedMessage(ValueMessage* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     updateValue(msg->valueGroupId(), msg->valueId(), msg->rawValue());
 }
@@ -38,7 +38,7 @@ void ServerValueManager::updateValue(QString valueGroupId, QString valueId, QVar
 }
 
 void ServerValueManager::checkValues() {
-    //qDebug() << Q_FUNC_INFO;
+    //iDebug() << Q_FUNC_INFO;
 
     QMapIterator<QString, ValueBase*> it(m_values);
     while(it.hasNext()) {

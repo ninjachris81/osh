@@ -16,17 +16,19 @@ class ModelProcessorManager : public ManagerBase
 public:
     explicit ModelProcessorManager(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    /*virtual*/ void postInit();
+    /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ QString getName();
+    /*virtual*/ void postInit() override;
 
-    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+    /*virtual*/ QString id() override;
 
-    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
+
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
     void start();
 

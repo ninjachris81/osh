@@ -1,25 +1,31 @@
 #include "managerregistration.h"
 
 #include <QDebug>
+#include <QLoggingCategory>
 
 #include "manager/managerbase.h"
+#include "log/logmanager.h"
 
-ManagerRegistration::ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent) : QObject(parent), m_instanceRole(instanceRole)
+ManagerRegistration::ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent) : Identifyable ("ManagerRegistration", parent), m_instanceRole(instanceRole)
 {
 
 }
 
-void ManagerRegistration::registerManager(ManagerBase* manager) {
-    qDebug() << Q_FUNC_INFO << manager->getName();
+LogCat::LOGCAT ManagerRegistration::logCat() {
+    return LogCat::COMMON;
+}
 
-    Q_ASSERT(!m_managers.contains(manager->getName()));
+void ManagerRegistration::registerManager(ManagerBase* manager) {
+    iDebug() << Q_FUNC_INFO << manager->id();
+
+    Q_ASSERT(!m_managers.contains(manager->id()));
     manager->setManagerRegistration(this);
-    m_managers.insert(manager->getName(), manager);
+    m_managers.insert(manager->id(), manager);
 }
 
 ManagerBase* ManagerRegistration::getManager(QString name) {
     if (!m_managers.contains(name)) {
-        qWarning() << "Unknown manager" << name;
+        iWarning() << "Unknown manager" << name;
         return nullptr;
     }
     return m_managers.value(name);
@@ -27,17 +33,30 @@ ManagerBase* ManagerRegistration::getManager(QString name) {
 
 
 void ManagerRegistration::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     QMapIterator<QString, ManagerBase*> it(m_managers);
 
+    if (m_managers.contains(LogManager::MANAGER_ID)) {
+        LogManager* logManager = static_cast<LogManager*>(getManager(LogManager::MANAGER_ID));
+
+        while (it.hasNext()) {
+            it.next();
+
+            logManager->registerManager(it.value());
+        }
+    } else {
+        iWarning() << "No log manager defined";
+    }
+
+    it.toFront();
     while (it.hasNext()) {
         it.next();
 
         it.value()->init(config);
     }
 
-    qDebug() << "Post init";
+    iDebug() << "Post init";
 
     it.toFront();
 

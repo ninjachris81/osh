@@ -3,9 +3,11 @@
 
 #include <QObject>
 #include <QList>
+#include <QLoggingCategory>
 
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
+#include "shared/logging_categories_qt.h"
 
 class LogManager : public ManagerBase
 {
@@ -13,15 +15,22 @@ class LogManager : public ManagerBase
 public:
     explicit LogManager(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ QString getName();
+    /*virtual*/ QString id() override;
 
-    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
+
+    void registerManager(ManagerBase* manager);
+
+    static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+private:
+    QMap<QString, ManagerBase*> m_managers;
 
 signals:
 

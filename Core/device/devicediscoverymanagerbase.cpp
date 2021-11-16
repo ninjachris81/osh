@@ -8,26 +8,30 @@
 #include "macros.h"
 #include "shared/device.h"
 
-QString DeviceDiscoveryManagerBase::MANAGER_NAME = QStringLiteral("DeviceDiscoveryManager");
+QLatin1Literal DeviceDiscoveryManagerBase::MANAGER_ID = QLatin1Literal("DeviceDiscoveryManager");
 
 DeviceDiscoveryManagerBase::DeviceDiscoveryManagerBase(QObject *parent) : ManagerBase(parent)
 {
     connect(&m_ddTimer, &QTimer::timeout, this, &DeviceDiscoveryManagerBase::sendDDBroadcast);
 }
 
-QString DeviceDiscoveryManagerBase::getName() {
-    return MANAGER_NAME;
+LogCat::LOGCAT DeviceDiscoveryManagerBase::logCat() {
+    return LogCat::DEVICE;
+}
+
+QString DeviceDiscoveryManagerBase::id() {
+    return MANAGER_ID;
 }
 
 void DeviceDiscoveryManagerBase::init(LocalConfig *config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(CommunicationManagerBase);
 
     m_device = new ClientDevice(Identifyable::getDeviceSerialId(config));
     m_ddTimer.setInterval(config->getInt("dd.broadcastInterval", DEFAULT_DD_BROADCAST_INTERVAL));
 
-    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_NAME);
+    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
 
     connect(m_commManager, &CommunicationManagerBase::connected, this, &DeviceDiscoveryManagerBase::startDDBroadcast);
     connect(m_commManager, &CommunicationManagerBase::disconnected, this, &DeviceDiscoveryManagerBase::stopDDBroadcast);
@@ -38,7 +42,7 @@ ClientDevice* DeviceDiscoveryManagerBase::device() {
 }
 
 void DeviceDiscoveryManagerBase::startDDBroadcast() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     // send one directly
     sendDDBroadcast();
@@ -46,13 +50,13 @@ void DeviceDiscoveryManagerBase::startDDBroadcast() {
 }
 
 void DeviceDiscoveryManagerBase::stopDDBroadcast() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
     m_ddTimer.stop();
 }
 
 
 void DeviceDiscoveryManagerBase::sendDDBroadcast() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     DeviceDiscoveryMessage message(m_device->id());
     m_commManager->sendMessage(message);

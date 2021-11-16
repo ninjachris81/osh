@@ -6,12 +6,18 @@
 
 Identifyable::Identifyable(QString id, QObject *parent) : QObject(parent), m_id(id)
 {
-    Q_ASSERT(id != nullptr);
-    Q_ASSERT(!id.isEmpty());
 }
 
 QString Identifyable::id() {
     return m_id;
+}
+
+LogCat::LOGCAT  Identifyable::logCat() {
+    return LogCat::LOGCAT::COMMON;
+}
+
+QString Identifyable::logCatName() {
+    return LogCat::LOGGING_CATEGORIES[logCat()] + "." + id();
 }
 
 QString Identifyable::getDeviceSerialId(LocalConfig* config) {

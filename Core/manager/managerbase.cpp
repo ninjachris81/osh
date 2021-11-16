@@ -3,7 +3,7 @@
 #include "manager/managerregistration.h"
 
 
-ManagerBase::ManagerBase(QObject *parent) : QObject(parent)
+ManagerBase::ManagerBase(QObject *parent) : Identifyable("", parent)
 {
 
 }

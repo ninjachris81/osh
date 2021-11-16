@@ -7,6 +7,8 @@
 #include "config/localconfig.h"
 #include "controllermessage.h"
 
+#include "macros.h"
+
 class ControllerManager;    // fwddcl
 
 class ControllerBase : public Identifyable
@@ -16,6 +18,8 @@ public:
     explicit ControllerBase(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
     void setConfig(LocalConfig* config);
+
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
     virtual void init() = 0;
 

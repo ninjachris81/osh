@@ -6,7 +6,7 @@
 #include "value/client/clientvaluemanager.h"
 #include "macros.h"
 
-QString ClientActorManager::MANAGER_NAME = QStringLiteral("ClientActorManager");
+QLatin1Literal ClientActorManager::MANAGER_ID = QLatin1Literal("ClientActorManager");
 
 ClientActorManager::ClientActorManager(QObject *parent) : ManagerBase(parent)
 {
@@ -14,13 +14,13 @@ ClientActorManager::ClientActorManager(QObject *parent) : ManagerBase(parent)
 }
 
 void ClientActorManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ClientValueManager);
 }
 
-QString ClientActorManager::getName() {
-    return MANAGER_NAME;
+QString ClientActorManager::id() {
+    return MANAGER_ID;
 }
 
 MessageBase::MESSAGE_TYPE ClientActorManager::getMessageType() {
@@ -29,22 +29,22 @@ MessageBase::MESSAGE_TYPE ClientActorManager::getMessageType() {
 
 void ClientActorManager::handleReceivedMessage(MessageBase* msg) {
     ActorMessage* actorMessage = static_cast<ActorMessage*>(msg);
-    qDebug() << Q_FUNC_INFO << actorMessage->fullId() << actorMessage->cmd();
+    iDebug() << Q_FUNC_INFO << actorMessage->fullId() << actorMessage->cmd();
 
     if (m_actors.contains(actorMessage->fullId())) {
         ActorBase* actor = m_actors.value(actorMessage->fullId());
         actor->triggerCmd(actorMessage->cmd());
 
         if (!actor->isAsync()) {        // only publish if value is set synchronously
-            qDebug() << "Publish value";
-            getManager<ClientValueManager>(ClientValueManager::MANAGER_NAME)->publishValue(actor);
+            iDebug() << "Publish value";
+            getManager<ClientValueManager>(ClientValueManager::MANAGER_ID)->publishValue(actor);
         }
     } else {
-        qWarning() << "Invalid actor" << actorMessage->fullId();
+        iWarning() << "Invalid actor" << actorMessage->fullId();
     }
 }
 
 void ClientActorManager::registerActor(ActorBase* actor) {
-    qDebug() << Q_FUNC_INFO << actor->fullId();
+    iDebug() << Q_FUNC_INFO << actor->fullId();
     m_actors.insert(actor->fullId(), actor);
 }

@@ -10,7 +10,7 @@ class LongValue : public ValueBase
 public:
     explicit LongValue(ValueGroup *valueGroup, QString id, QObject *parent = nullptr);
 
-    /*virtual*/ QVariant _updateValue(QVariant newValue);
+    /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 
 signals:
 

@@ -4,8 +4,8 @@
 #include "processor/server/processortask.h"
 #include <QDebug>
 
-TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase(parent) {
-    qDebug() << Q_FUNC_INFO;
+TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", parent) {
+    iDebug() << Q_FUNC_INFO;
 
     ValueGroup* vg = new ValueGroup("relays");
     m_valueGroups.insert(vg->id(), vg);
@@ -18,6 +18,6 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase(parent) {
     KnownDevice* knownDevice = new KnownDevice("582645258", "GUI");
     m_knownDevices.insert(knownDevice->id(), knownDevice);
 
-    ProcessorTask* processorNode = new ProcessorTask("testprocess0", "rel0.rawValue()", 5000);
+    ProcessorTask* processorNode = new ProcessorTask("testprocess0", "rel0.rawValue()==undefined");
     m_processorTasks.insert(processorNode->id(), processorNode);
 }

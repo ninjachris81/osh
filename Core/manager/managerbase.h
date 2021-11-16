@@ -2,12 +2,15 @@
 #define MANAGERBASE_H
 
 #include <QObject>
+#include <QLoggingCategory>
 
 #include "config/localconfig.h"
 #include "manager/managerregistration.h"
 #include "communication/messagebase.h"
+#include "shared/logging_categories_qt.h"
+#include "identifyable.h"
 
-class ManagerBase : public QObject
+class ManagerBase : public Identifyable
 {
     Q_OBJECT
 public:
@@ -17,11 +20,11 @@ public:
 
     void setInitialized();
 
+    virtual QString id() = 0;
+
     virtual void init(LocalConfig* config) = 0;
 
     virtual void postInit() {}
-
-    virtual QString getName() = 0;
 
     virtual MessageBase::MESSAGE_TYPE getMessageType() = 0;
 
@@ -34,7 +37,7 @@ public:
     }
 
 private:
-    ManagerRegistration* m_managerRegistration;
+    ManagerRegistration *m_managerRegistration;
 
 protected:
     ManagerRegistration* managerRegistration();

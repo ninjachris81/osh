@@ -6,21 +6,25 @@
 #include "value/valuemanagerbase.h"
 #include "macros.h"
 
-QString ActorManager::MANAGER_NAME = QStringLiteral("ActorManager");
+QLatin1Literal ActorManager::MANAGER_ID = QLatin1Literal("ActorManager");
 
 ActorManager::ActorManager(QObject *parent) : ManagerBase(parent)
 {
 
 }
 
+LogCat::LOGCAT ActorManager::logCat() {
+    return LogCat::ACTOR;
+}
+
 void ActorManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ValueManagerBase);
 }
 
-QString ActorManager::getName() {
-    return MANAGER_NAME;
+QString ActorManager::id() {
+    return MANAGER_ID;
 }
 
 MessageBase::MESSAGE_TYPE ActorManager::getMessageType() {
@@ -28,7 +32,7 @@ MessageBase::MESSAGE_TYPE ActorManager::getMessageType() {
 }
 
 void ActorManager::handleReceivedMessage(MessageBase* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
     ActorMessage* actorMessage = static_cast<ActorMessage*>(msg);
 
     switch(actorMessage->cmd()) {

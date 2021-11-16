@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-QString SystemWarningsManager::MANAGER_NAME = QStringLiteral("SystemWarningsManager");
+QLatin1Literal SystemWarningsManager::MANAGER_ID = QLatin1Literal("SystemWarningsManager");
 
 SystemWarningsManager::SystemWarningsManager(QObject *parent) : ManagerBase(parent)
 {
@@ -10,11 +10,11 @@ SystemWarningsManager::SystemWarningsManager(QObject *parent) : ManagerBase(pare
 }
 
 void SystemWarningsManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 }
 
-QString SystemWarningsManager::getName() {
-    return MANAGER_NAME;
+QString SystemWarningsManager::id() {
+    return MANAGER_ID;
 }
 
 MessageBase::MESSAGE_TYPE SystemWarningsManager::getMessageType() {

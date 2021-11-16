@@ -8,14 +8,18 @@
 
 #include "macros.h"
 
-QString DatamodelManager::MANAGER_NAME = QStringLiteral("DatamodelManager");
+QLatin1Literal DatamodelManager::MANAGER_ID = QLatin1Literal("DatamodelManager");
 
 DatamodelManager::DatamodelManager(QObject *parent) : ManagerBase(parent)
 {
 }
 
+LogCat::LOGCAT DatamodelManager::logCat() {
+    return LogCat::DATAMODEL;
+}
+
 void DatamodelManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ValueManagerBase);
 
@@ -26,7 +30,7 @@ void DatamodelManager::init(LocalConfig* config) {
     } else if (datamodelLoaderName == TestDatamodelLoader::LOADER_TYPE_NAME) {
         m_datamodelLoader = new TestDatamodelLoader();
     } else {
-        qWarning() << "Unknown datamodel loader" << datamodelLoaderName;
+        iWarning() << "Unknown datamodel loader" << datamodelLoaderName;
     }
 
     Q_ASSERT(m_datamodelLoader != nullptr);
@@ -35,22 +39,22 @@ void DatamodelManager::init(LocalConfig* config) {
 
     Q_ASSERT(m_datamodel != nullptr);
 
-    qDebug() << "Datamodel loaded";
+    iDebug() << "Datamodel loaded";
 
     Q_EMIT(datamodelChanged());
 
-    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_NAME);
+    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
     QMapIterator<QString, ValueBase*> it(m_datamodel->values());
     while (it.hasNext()) {
         it.next();
-        qDebug() << "Register datamodel value" << it.key();
+        iDebug() << "Register datamodel value" << it.key();
         valueManager->registerValue(it.value());
     }
 }
 
-QString DatamodelManager::getName() {
-    return MANAGER_NAME;
+QString DatamodelManager::id() {
+    return MANAGER_ID;
 }
 
 MessageBase::MESSAGE_TYPE DatamodelManager::getMessageType() {

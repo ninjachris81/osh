@@ -11,9 +11,9 @@ KMTronicRelayController::KMTronicRelayController(ControllerManager *manager, QSt
 }
 
 void KMTronicRelayController::init() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
-    m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_NAME);
+    m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
 
@@ -31,7 +31,7 @@ void KMTronicRelayController::init() {
 }
 
 void KMTronicRelayController::switchStatus(quint8 relayIndex, bool status) {
-    qDebug() << Q_FUNC_INFO << relayIndex << status;
+    iDebug() << Q_FUNC_INFO << relayIndex << status;
 
     if (m_serialClient->isConnected()) {
         QByteArray data;
@@ -56,14 +56,14 @@ quint8 KMTronicRelayController::getRelayCount(RELAY_MODEL model) {
 }
 
 void KMTronicRelayController::onSerialConnected() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     m_statusTimer.start();
     Q_EMIT(controllerConnected());
 }
 
 void KMTronicRelayController::onSerialDisconnected() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     m_warnManager->raiseWarning("Relay connection disconnected");
     m_statusTimer.stop();
@@ -71,7 +71,7 @@ void KMTronicRelayController::onSerialDisconnected() {
 }
 
 void KMTronicRelayController::onSerialDataReceived(QByteArray data) {
-    qDebug() << Q_FUNC_INFO << data;
+    iDebug() << Q_FUNC_INFO << data;
 
     if (m_currentStatus == RETRIEVING_STATUS) {
         if (data.size() == m_relayCount) {
@@ -89,13 +89,13 @@ void KMTronicRelayController::onSerialDataReceived(QByteArray data) {
 
 void KMTronicRelayController::setSerialRelayStatus(RELAY_STATUS status) {
     if (m_currentStatus != status) {
-        //qDebug() << "New status" << status;
+        //iDebug() << "New status" << status;
         m_currentStatus = status;
     }
 }
 
 void KMTronicRelayController::retrieveStatus() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     if (m_currentStatus == RETRIEVING_STATUS) {
         m_warnManager->raiseWarning("No status from relay");

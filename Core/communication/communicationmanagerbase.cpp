@@ -7,7 +7,7 @@
 #include "macros.h"
 #include "controller/controllermanager.h"
 
-QString CommunicationManagerBase::MANAGER_NAME = QStringLiteral("CommunicationManager");
+QLatin1Literal CommunicationManagerBase::MANAGER_ID = QLatin1Literal("CommunicationManager");
 
 CommunicationManagerBase::CommunicationManagerBase(QObject *parent) : ManagerBase(parent)
 {
@@ -20,7 +20,7 @@ CommunicationManagerBase::CommunicationManagerBase(QObject *parent) : ManagerBas
 }
 
 void CommunicationManagerBase::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ControllerManager);
 
@@ -28,14 +28,14 @@ void CommunicationManagerBase::init(LocalConfig* config) {
 }
 
 void CommunicationManagerBase::postInit() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     QStringListIterator it(managerRegistration()->managerNames());
     while(it.hasNext())  {
         ManagerBase* manager = managerRegistration()->getManager(it.next());
         MessageBase::MESSAGE_TYPE messageType = manager->getMessageType();
         if (messageType != MessageBase::MESSAGE_TYPE_UNKNOWN) {
-            qDebug() << "Register message type" << messageType << "for manager" << manager->getName();
+            iDebug() << "Register message type" << messageType << "for manager" << manager->id();
             m_managerMessageTypes.insert(messageType, manager);
         }
     }
@@ -43,8 +43,12 @@ void CommunicationManagerBase::postInit() {
     _startConnect();
 }
 
-QString CommunicationManagerBase::getName() {
-    return MANAGER_NAME;
+QString CommunicationManagerBase::id() {
+    return MANAGER_ID;
+}
+
+LogCat::LOGCAT CommunicationManagerBase::logCat() {
+    return LogCat::COMMUNICATION;
 }
 
 quint64 CommunicationManagerBase::sendMessage(MessageBase &message) {
@@ -75,6 +79,6 @@ void CommunicationManagerBase::handleReceivedMessage(MessageBase* msg) {
     if (m_managerMessageTypes.contains(msg->getMessageType())) {
         m_managerMessageTypes.value(msg->getMessageType())->handleReceivedMessage(msg);
     } else {
-        qWarning() << "No handlers for msg type" << msg->getMessageType();
+        iWarning() << "No handlers for msg type" << msg->getMessageType();
     }
 }

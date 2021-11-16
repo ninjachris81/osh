@@ -10,11 +10,11 @@ class SystemtimeMessage : public MessageBase
 public:
     explicit SystemtimeMessage(qint64 ts, QObject *parent = nullptr);
 
-    /*virtual*/ MESSAGE_TYPE getMessageType();
+    /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ QString getFirstLevelId();
+    /*virtual*/ QString getFirstLevelId() override;
 
-    /*virtual*/ QString getSecondLevelId();
+    /*virtual*/ QString getSecondLevelId() override;
 
 
     qlonglong ts();

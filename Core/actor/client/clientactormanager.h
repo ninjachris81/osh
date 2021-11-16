@@ -15,11 +15,11 @@ class ClientActorManager : public ManagerBase
 public:
     explicit ClientActorManager(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
     /*virtual*/ void init(LocalConfig* config);
 
-    /*virtual*/ QString getName();
+    /*virtual*/ QString id();
 
     /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
 

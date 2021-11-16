@@ -7,6 +7,10 @@ ControllerBase::ControllerBase(ControllerManager *manager, QString id, QObject *
 
 }
 
+LogCat::LOGCAT ControllerBase::logCat() {
+    return LogCat::CONTROLLER;
+}
+
 void ControllerBase::setConfig(LocalConfig* config) {
     m_config = config;
 }

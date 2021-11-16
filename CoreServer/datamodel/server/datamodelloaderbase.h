@@ -4,11 +4,15 @@
 #include <QObject>
 #include "datamodel/server/datamodelbase.h"
 
-class DatamodelLoaderBase : public QObject
+#include "identifyable.h"
+
+class DatamodelLoaderBase : public Identifyable
 {
     Q_OBJECT
 public:
     explicit DatamodelLoaderBase(QObject *parent = nullptr);
+
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
     virtual DatamodelBase* load() = 0;
 

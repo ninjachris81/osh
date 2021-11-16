@@ -5,32 +5,36 @@
 #include "communication/communicationmanagerbase.h"
 #include "value/valuemessage.h"
 
-QString ValueManagerBase::MANAGER_NAME = QStringLiteral("ValueManager");
+QLatin1Literal ValueManagerBase::MANAGER_ID = QLatin1Literal("ValueManager");
 
 ValueManagerBase::ValueManagerBase(QObject *parent) : ManagerBase(parent)
 {
 
 }
 
-QString ValueManagerBase::getName() {
-    return MANAGER_NAME;
+QString ValueManagerBase::id() {
+    return MANAGER_ID;
+}
+
+LogCat::LOGCAT ValueManagerBase::logCat() {
+    return LogCat::VALUE;
 }
 
 void ValueManagerBase::publishValue(ValueBase* value) {
-    qDebug() << Q_FUNC_INFO << value->fullId();
+    iDebug() << Q_FUNC_INFO << value->fullId();
 
-    CommunicationManagerBase* commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_NAME);
+    CommunicationManagerBase* commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
     ValueMessage valueMessage(value->valueGroup()->id(), value->id(), value->rawValue());
     commManager->sendMessage(valueMessage);
 }
 
 void ValueManagerBase::registerValue(ValueBase* value) {
-    qDebug() << Q_FUNC_INFO << value->fullId();
+    iDebug() << Q_FUNC_INFO << value->fullId();
 
     if (!m_values.contains(value->fullId())) {
         m_values.insert(value->fullId(), value);
     } else {
-        qWarning() << "Value already registered" << value->fullId();
+        iWarning() << "Value already registered" << value->fullId();
     }
 }
 
@@ -47,7 +51,7 @@ MessageBase::MESSAGE_TYPE ValueManagerBase::getMessageType() {
 }
 
 void ValueManagerBase::handleReceivedMessage(MessageBase* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     ValueMessage* valueMessage = static_cast<ValueMessage*>(msg);
     handleReceivedMessage(valueMessage);

@@ -4,7 +4,7 @@
 #include "communication/communicationmanagerbase.h"
 #include "time/systemtimemessage.h"
 
-QString ClientSystemtimeManager::MANAGER_NAME = QStringLiteral("ClientSystemtimeManager");
+QLatin1Literal ClientSystemtimeManager::MANAGER_ID = QLatin1Literal("ClientSystemtimeManager");
 
 ClientSystemtimeManager::ClientSystemtimeManager(QObject *parent) : ManagerBase(parent)
 {
@@ -12,15 +12,15 @@ ClientSystemtimeManager::ClientSystemtimeManager(QObject *parent) : ManagerBase(
 }
 
 void ClientSystemtimeManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 }
 
-QString ClientSystemtimeManager::getName() {
-    return MANAGER_NAME;
+QString ClientSystemtimeManager::id() {
+    return MANAGER_ID;
 }
 
 void ClientSystemtimeManager::setSystemTime(qint64 ts) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
     // TODO
 }
 
@@ -29,7 +29,7 @@ MessageBase::MESSAGE_TYPE ClientSystemtimeManager::getMessageType() {
 }
 
 void ClientSystemtimeManager::handleReceivedMessage(MessageBase* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
     SystemtimeMessage* systimeMessage = static_cast<SystemtimeMessage*>(msg);
 
     setSystemTime(systimeMessage->ts());

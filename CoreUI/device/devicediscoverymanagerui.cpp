@@ -44,7 +44,7 @@ QList<QObject*> DeviceDiscoveryManagerUI::devices() {
 }
 
 void DeviceDiscoveryManagerUI::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     DeviceDiscoveryManagerBase::init(config);
 
@@ -56,7 +56,7 @@ MessageBase::MESSAGE_TYPE DeviceDiscoveryManagerUI::getMessageType() {
 }
 
 void DeviceDiscoveryManagerUI::handleReceivedMessage(MessageBase* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
     DeviceDiscoveryMessage* ddMessage = static_cast<DeviceDiscoveryMessage*>(msg);
 
     m_modelBridge->handleReceivedMessage(ddMessage);

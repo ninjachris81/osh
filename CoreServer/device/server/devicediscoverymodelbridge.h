@@ -8,11 +8,15 @@
 #include "device/devicediscoverymanagerbase.h"
 #include "device/devicediscoverymessage.h"
 
-class DeviceDiscoveryModelBridge : public QObject
+#include "identifyable.h"
+
+class DeviceDiscoveryModelBridge : public Identifyable
 {
     Q_OBJECT
 public:
     explicit DeviceDiscoveryModelBridge(DeviceDiscoveryManagerBase *parent = nullptr);
+
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
     void init(LocalConfig *config);
 

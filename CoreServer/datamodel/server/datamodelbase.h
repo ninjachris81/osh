@@ -10,11 +10,15 @@
 #include "value/valuebase.h"
 #include "processor/server/processortask.h"
 
-class DatamodelBase : public QObject
+#include "identifyable.h"
+
+class DatamodelBase : public Identifyable
 {
     Q_OBJECT
 public:
-    explicit DatamodelBase(QObject *parent = nullptr);
+    explicit DatamodelBase(QString id, QObject *parent = nullptr);
+
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
     QMap<QString, ValueBase*> values();
     QMap<QString, KnownDevice *> knownDevices();

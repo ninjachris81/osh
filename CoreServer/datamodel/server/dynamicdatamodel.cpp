@@ -1,6 +1,6 @@
 #include "dynamicdatamodel.h"
 
-DynamicDatamodel::DynamicDatamodel(QObject *parent) : DatamodelBase(parent)
+DynamicDatamodel::DynamicDatamodel(QObject *parent) : DatamodelBase("DynamicDatamodel", parent)
 {
 
 }

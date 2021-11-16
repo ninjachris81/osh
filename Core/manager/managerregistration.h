@@ -6,10 +6,11 @@
 #include <QMap>
 
 #include "config/localconfig.h"
+#include "identifyable.h"
 
 class ManagerBase;      // fwd decl
 
-class ManagerRegistration : public QObject
+class ManagerRegistration : public Identifyable
 {
     Q_OBJECT
 public:
@@ -21,6 +22,8 @@ public:
     };
 
     explicit ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent = nullptr);
+
+    /*virtual*/ LogCat::LOGCAT logCat() override;
 
     void registerManager(ManagerBase* manager);
 

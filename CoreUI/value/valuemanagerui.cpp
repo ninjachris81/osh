@@ -14,5 +14,5 @@ void ValueManagerUI::init(LocalConfig *config) {
 }
 
 void ValueManagerUI::handleReceivedMessage(ValueMessage* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 }

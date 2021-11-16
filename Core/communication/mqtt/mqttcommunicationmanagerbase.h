@@ -39,7 +39,7 @@ public:
 
     QVariant parsePayload(MessageBase::MESSAGE_TYPE messageType, QByteArray payload);
 
-    static QByteArray serializePayload(MessageBase &message);
+    QByteArray serializePayload(MessageBase &message);
 
     MessageBase::MESSAGE_TYPE getMessageType(QString name);
 
@@ -51,9 +51,9 @@ public:
     bool isRetainedMessage(MessageBase &message);
 
 private:
-    static QVariant parseCompactPayload(char typeId, QByteArray payload);
-    static QJsonDocument parseJSONPayload(QByteArray payload);
-    static QByteArray serializeCompactValue(QVariant value);
+    QVariant parseCompactPayload(char typeId, QByteArray payload);
+    QJsonDocument parseJSONPayload(QByteArray payload);
+    QByteArray serializeCompactValue(QVariant value);
 
 protected:
     QMap<MessageBase::MESSAGE_TYPE, MessageTypeInfo> m_messageTypes;

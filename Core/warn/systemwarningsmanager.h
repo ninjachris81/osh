@@ -15,15 +15,15 @@ class SystemWarningsManager : public ManagerBase
 public:
     explicit SystemWarningsManager(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ QString getName();
+    /*virtual*/ QString id() override;
 
-    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
 signals:
 

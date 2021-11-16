@@ -19,7 +19,7 @@ bool DigitalActor::cmdSupported(ACTOR_CMDS cmd) {
 }
 
 void DigitalActor::_triggerCmd(ACTOR_CMDS cmd) {
-    qDebug() << Q_FUNC_INFO << cmd;
+    iDebug() << Q_FUNC_INFO << cmd;
 
     switch(cmd) {
     case ACTOR_CMD_ON:
@@ -34,7 +34,7 @@ void DigitalActor::_triggerCmd(ACTOR_CMDS cmd) {
 }
 
 QVariant DigitalActor::_updateValue(QVariant newValue) {
-    qDebug() << Q_FUNC_INFO << newValue;
+    iDebug() << Q_FUNC_INFO << newValue;
 
     if (newValue.canConvert(QVariant::Bool)) {
         return QVariant::fromValue(newValue);

@@ -7,7 +7,7 @@
 #include "datamodel/server/datamodelmanager.h"
 #include "value/server/servervaluemanager.h"
 
-QString ModelProcessorManager::MANAGER_NAME = QStringLiteral("ModelProcessorManager");
+QLatin1Literal ModelProcessorManager::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
 
 
 ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(parent)
@@ -15,8 +15,12 @@ ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(pare
     connect(&m_scheduleTimer, &QTimer::timeout, this, &ModelProcessorManager::executeTasks);
 }
 
+LogCat::LOGCAT ModelProcessorManager::logCat() {
+    return LogCat::PROCESSOR;
+}
+
 void ModelProcessorManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(DatamodelManager);
     REQUIRE_MANAGER(ServerValueManager);
@@ -25,9 +29,9 @@ void ModelProcessorManager::init(LocalConfig* config) {
 }
 
 void ModelProcessorManager::postInit() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
-    DatamodelManager* dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_NAME);
+    DatamodelManager* dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
     m_processorTasks = dmManager->datamodel()->processorTasks();
 
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
@@ -37,15 +41,15 @@ void ModelProcessorManager::postInit() {
         it.next();
         QJSValue val = m_engine.newQObject(it.value());
 
-        qDebug() << "Injecting val" << it.key();
+        iDebug() << "Injecting val" << it.key();
         m_engine.globalObject().setProperty(it.value()->id(), val);
     }
 
     start();
 }
 
-QString ModelProcessorManager::getName() {
-    return MANAGER_NAME;
+QString ModelProcessorManager::id() {
+    return MANAGER_ID;
 }
 
 MessageBase::MESSAGE_TYPE ModelProcessorManager::getMessageType() {
@@ -56,13 +60,13 @@ void ModelProcessorManager::handleReceivedMessage(MessageBase* msg) {
 }
 
 void ModelProcessorManager::start() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     m_scheduleTimer.start();
 }
 
 void ModelProcessorManager::stop() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     m_scheduleTimer.stop();
 }

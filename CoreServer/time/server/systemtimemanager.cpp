@@ -7,31 +7,35 @@
 
 #include "macros.h"
 
-QString SystemtimeManager::MANAGER_NAME = QStringLiteral("SystemtimeManager");
+QLatin1Literal SystemtimeManager::MANAGER_ID = QLatin1Literal("SystemtimeManager");
 
 SystemtimeManager::SystemtimeManager(QObject *parent) : ManagerBase(parent)
 {
     connect(&m_bcTimer, &QTimer::timeout, this, &SystemtimeManager::sendSystemtime);
 }
 
+LogCat::LOGCAT SystemtimeManager::logCat() {
+    return LogCat::TIME;
+}
+
 void SystemtimeManager::init(LocalConfig* config) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(CommunicationManagerBase);
 
-    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_NAME);
+    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
     Q_ASSERT(m_commManager != nullptr);
 
     m_bcTimer.setInterval(config->getInt("time.bcInterval", DEFAULT_SYSTIME_BC_INTERVAL));
     m_bcTimer.start();
 }
 
-QString SystemtimeManager::getName() {
-    return MANAGER_NAME;
+QString SystemtimeManager::id() {
+    return MANAGER_ID;
 }
 
 void SystemtimeManager::sendSystemtime() {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 
     if (m_commManager->isConnected()) {
         SystemtimeMessage systimeMessage(QDateTime::currentSecsSinceEpoch());

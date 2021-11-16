@@ -1,8 +1,12 @@
 #include "datamodelbase.h"
 
-DatamodelBase::DatamodelBase(QObject *parent) : QObject(parent)
+DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id, parent)
 {
 
+}
+
+LogCat::LOGCAT DatamodelBase::logCat() {
+    return LogCat::DATAMODEL;
 }
 
 QMap<QString, ValueBase*> DatamodelBase::values() {

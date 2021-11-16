@@ -13,11 +13,11 @@ class ClientDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 public:
     explicit ClientDeviceDiscoveryManager(QObject *parent = nullptr);
 
-    /*virtual*/ void init(LocalConfig* config);
+    /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
 signals:
 

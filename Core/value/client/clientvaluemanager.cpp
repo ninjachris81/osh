@@ -17,5 +17,5 @@ void ClientValueManager::init(LocalConfig *config) {
 }
 
 void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {
-    qDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO;
 }

@@ -17,19 +17,21 @@ class CommunicationManagerBase : public ManagerBase
 public:
     explicit CommunicationManagerBase(QObject *parent = nullptr);
 
-    static QString MANAGER_NAME;
+    static QLatin1Literal MANAGER_ID;
 
     quint64 sendMessage(MessageBase &message);
-    /*virtual*/ void init(LocalConfig* config);
-    /*virtual*/ void postInit();
+    /*virtual*/ void init(LocalConfig* config) override;
+    /*virtual*/ void postInit() override;
 
-    /*virtual*/ QString getName();
+    /*virtual*/ QString id() final;
+
+    /*virtual*/ LogCat::LOGCAT logCat() final;
 
     bool isConnected();
 
-    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType();
+    /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ void handleReceivedMessage(MessageBase* msg);
+    /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
 protected:
     bool m_isConnected = false;
