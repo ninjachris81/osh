@@ -1,3 +1,3 @@
-[submodule "qmqtt"]
-	path = qmqtt
+[submodule "qtmqtt"]
+	path = qtmqtt
 	url = https://code.qt.io/qt/qtmqtt.git

@@ -11,13 +11,13 @@ SUBDIRS += \
     MCP23017InputController \
     MCP23017InputService \
     QMqttCommunicationManager \
-    qmqtt
+    qtmqtt
 
 CoreService.depends = Core CoreServer QMqttCommunicationManager
 CoreUI.depends = Core CoreServer QMqttCommunicationManager
 CoreServer.depends = Core
 
-QMqttCommunicationManager.depends = qmqtt Core
+QMqttCommunicationManager.depends = qtmqtt Core
 
 KMTronicRelayController.depends = Core CoreSerial
 KMTronicRelayService.depends = Core CoreSerial KMTronicRelayController QMqttCommunicationManager
