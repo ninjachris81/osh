@@ -1,0 +1,1 @@
+../Shared/start.sh CoreService
