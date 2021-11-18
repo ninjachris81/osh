@@ -2,14 +2,15 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "kmtronicrelaycontroller.h"
+#include "mcp23017inputcontroller.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
-#include "actor/client/clientactormanager.h"
+//#include "actor/client/clientactormanager.h"
 #include "actor/digitalactor.h"
+#include "value/booleanvalue.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +26,6 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
-    ClientActorManager actorManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -33,24 +33,23 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
-    managerRegistration.registerManager(&actorManager);
 
-    KMTronicRelayController relayController(&controllerManager, "rc0", KMTronicRelayController::USB_SERIAL_8PORT, KMTronicRelayController::getRelayCount(KMTronicRelayController::USB_SERIAL_8PORT));
-    controllerManager.registerController(&relayController);
+    MCP23017InputController inputController(&controllerManager, "ic0");
+    controllerManager.registerController(&inputController);
 
     managerRegistration.init(&config);
 
-    QList<ValueBase*> actors;
+    QList<ValueBase*> values;
+
     ValueGroup actorGroup(clientManager.device()->id());
-    for (quint8 i=0;i<KMTronicRelayController::getRelayCount(KMTronicRelayController::USB_SERIAL_8PORT);i++) {
-        qDebug() << "Init actor" << i;
-        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), true);
-        actors.append(actor);
-        relayController.bindActor(actor);
-        actorManager.registerActor(actor);
+    for (quint8 i=0;i<inputController.inputCount();i++) {
+        qDebug() << "Init value" << i;
+        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i));
+        values.append(value);
+        inputController.bindValue(value);
     }
 
-    relayController.bindValueManager(&valueManager, actors);
+    inputController.bindValueManager(&valueManager, values);
 
     return a.exec();
 }

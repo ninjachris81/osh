@@ -20,3 +20,7 @@ QMap<QString, KnownDevice*> DatamodelBase::knownDevices() {
 QMap<QString, ProcessorTask*> DatamodelBase::processorTasks() {
     return m_processorTasks;
 }
+
+QMap<QString, ActorBase*> DatamodelBase::actors() {
+    return m_actors;
+}

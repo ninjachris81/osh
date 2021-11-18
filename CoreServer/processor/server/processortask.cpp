@@ -19,11 +19,15 @@ void ProcessorTask::run(QJSEngine *engine) {
 
     if (!result.isError()) {
         iDebug() << "Result" << result.toVariant();
+        m_lastResult = result.toVariant();
     } else {
         iWarning() << "Script execution error" << result.errorType();
+        m_lastResult = QVariant();
     }
+    Q_EMIT(lastResultChanged());
 
     m_lastExecution = QDateTime::currentMSecsSinceEpoch();
+    Q_EMIT(lastExecutionChanged());
 }
 
 QString ProcessorTask::scriptCode() {
@@ -34,7 +38,10 @@ qint64 ProcessorTask::scheduleInterval() {
     return m_scheduleInterval;
 }
 
-
 qint64 ProcessorTask::lastExecution() {
     return m_lastExecution;
+}
+
+QVariant ProcessorTask::lastResult() {
+    return m_lastResult;
 }

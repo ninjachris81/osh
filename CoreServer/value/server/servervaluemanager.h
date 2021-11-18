@@ -25,13 +25,13 @@ public:
 
     /*virtual*/ void handleReceivedMessage(ValueMessage* msg);
 
-    void updateValue(ValueBase* value, QVariant newValue);
-    void updateValue(QString valueGroupId, QString valueId, QVariant newValue);
-
     void invalidateValue(ValueBase* value);
 
 protected:
     QTimer m_valueCheckTimer;
+
+    void valueReceived(ValueBase* value, QVariant newValue);
+    void valueReceived(QString valueGroupId, QString valueId, QVariant newValue);
 
 private slots:
     void checkValues();

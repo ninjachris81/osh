@@ -23,14 +23,15 @@ void DigitalActor::_triggerCmd(ACTOR_CMDS cmd) {
 
     switch(cmd) {
     case ACTOR_CMD_ON:
-        updateValue(true);
+        Q_EMIT(statusRequested(true));
         break;
     case ACTOR_CMD_OFF:
-        updateValue(false);
+        Q_EMIT(statusRequested(false));
+        break;
+    default:
+        iWarning() << "Cmd not supported" << cmd;
         break;
     }
-
-    Q_EMIT(valueChanged(rawValue().toBool()));
 }
 
 QVariant DigitalActor::_updateValue(QVariant newValue) {

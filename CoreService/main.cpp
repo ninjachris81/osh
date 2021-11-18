@@ -11,6 +11,7 @@
 #include "warn/systemwarningsmanager.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "processor/server/modelprocessormanager.h"
+#include "actor/server/actormanager.h"
 #include "log/logmanager.h"
 
 int main(int argc, char *argv[])
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
 
     qDebug() << Q_FUNC_INFO;
 
-    //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndatamodel.*=true"));
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nprocessor.*=true\ndatamodel.*=true"));
 
     LocalConfig config;
 
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
     DatamodelManager datamodelManager;
     ModelProcessorManager modelProcessor;
     LogManager logManager;
+    ActorManager actorManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
@@ -44,6 +46,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&modelProcessor);
     managerRegistration.registerManager(&logManager);
+    managerRegistration.registerManager(&actorManager);
 
     managerRegistration.init(&config);
 

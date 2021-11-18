@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, bool alwaysEmit, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 }
@@ -47,7 +47,7 @@ void ValueBase::updateValue(QVariant newValue) {
     m_value = _updateValue(newValue);
     bool hasChanged = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
-    if (hasChanged) Q_EMIT(valueChanged());
+    if (m_alwaysEmit || hasChanged) Q_EMIT(valueChanged());
 }
 
 QString ValueBase::getFullId(QString valueGroupId, QString valueId) {

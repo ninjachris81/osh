@@ -39,3 +39,7 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
 
     }
 }
+
+void ActorManager::registerActor(ActorBase* actor) {
+    m_actors.insert(actor->id(), actor);
+}

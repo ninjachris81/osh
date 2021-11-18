@@ -19,7 +19,7 @@ public:
         VALUE_TIMEOUT_LONG = 120000
     } m_valueTimeout = VALUE_TIMEOUT_NONE;
 
-    explicit ValueBase(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
+    explicit ValueBase(ValueGroup* valueGroup, QString id, bool alwaysEmit = true, QObject *parent = nullptr);
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 
@@ -51,6 +51,7 @@ private:
     ValueGroup* m_valueGroup;
     QVariant m_value;
     qint64 m_lastUpdate = 0;
+    bool m_alwaysEmit = true;
 
 signals:
     void valueChanged();

@@ -19,13 +19,17 @@ public:
     QString scriptCode();
     qint64 scheduleInterval();
     qint64 lastExecution();
+    QVariant lastResult();
 
 private:
     QString m_scriptCode;
     qint64 m_scheduleInterval;
     qint64 m_lastExecution = 0;
+    QVariant m_lastResult;
 
 signals:
+    void lastExecutionChanged();
+    void lastResultChanged();
 
 public slots:
 };

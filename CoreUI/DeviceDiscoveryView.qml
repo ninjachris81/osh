@@ -15,12 +15,11 @@ ViewBase {
         model: DeviceDiscoveryManager.devices
 
         onModelChanged: {
-            console.log("Model changed " + count)
+            console.log("DD model changed " + count)
         }
 
-        header: Item {
-            RowLayout {
-                anchors.fill: parent
+        header: RowLayout {
+                height: 30
 
                 Text {
                     Layout.preferredWidth: 300
@@ -40,7 +39,6 @@ ViewBase {
                 Text {
                     text: qsTr("Last Ping")
                 }
-            }
         }
 
         delegate: Item {
@@ -50,7 +48,7 @@ ViewBase {
             DebugTracer{}
 
             RowLayout {
-                anchors.fill: parent
+                height: 30
 
                 Text {
                     Layout.preferredWidth: 300

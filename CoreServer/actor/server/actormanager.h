@@ -1,7 +1,7 @@
 #ifndef ACTORMANAGER_H
 #define ACTORMANAGER_H
 
-#ifndef IS_OSH_CORE_SERVICE
+#if ! defined(IS_OSH_CORE_SERVICE) && ! defined(IS_OSH_UI)
     #error Should use client version
 #endif
 
@@ -29,6 +29,9 @@ public:
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
     void registerActor(ActorBase* actor);
+
+private:
+    QMap<QString, ActorBase*> m_actors;
 
 signals:
 

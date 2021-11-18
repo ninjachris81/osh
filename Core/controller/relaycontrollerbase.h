@@ -2,8 +2,7 @@
 #define RELAYCONTROLLERBASE_H
 
 #include <QObject>
-#include <QBitArray>
-#include <QMap>
+#include <QList>
 
 #include "controllerbase.h"
 #include "controllermessage.h"
@@ -25,18 +24,15 @@ public:
 
     bool relayStatus(quint8 relayIndex);
 
-    void bindActor(DigitalActor *actor, quint8 relayIndex);
-    void bindValueManager(ClientValueManager* clientValueManager);
+    /*virtual*/ quint8 bindActor(DigitalActor *actor);
 
 protected:
     void setStatus(quint8 relayIndex, bool status);
 
     quint8 m_relayCount = 0;
-    QBitArray m_relayStatus;
-    QMap<quint8, DigitalActor*> m_actorMappings;
+    QList<DigitalActor*> m_actorMappings;
 
 signals:
-    void relayStatusChanged(quint8 relayIndex);
 
 public slots:
 };

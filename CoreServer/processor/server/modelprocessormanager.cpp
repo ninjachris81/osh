@@ -4,7 +4,6 @@
 #include <QDateTime>
 
 #include "macros.h"
-#include "datamodel/server/datamodelmanager.h"
 #include "value/server/servervaluemanager.h"
 
 QLatin1Literal ModelProcessorManager::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
@@ -36,14 +35,9 @@ void ModelProcessorManager::postInit() {
 
     m_engine.installExtensions(QJSEngine::ConsoleExtension);
 
-    QMapIterator<QString, ValueBase*> it(dmManager->datamodel()->values());
-    while(it.hasNext()) {
-        it.next();
-        QJSValue val = m_engine.newQObject(it.value());
+    injectValues(dmManager);
 
-        iDebug() << "Injecting val" << it.key();
-        m_engine.globalObject().setProperty(it.value()->id(), val);
-    }
+    injectActors(dmManager);
 
     start();
 }
@@ -80,5 +74,40 @@ void ModelProcessorManager::executeTasks() {
         if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
             it.value()->run(&m_engine);
         }
+    }
+}
+
+void ModelProcessorManager::injectValue(ValueBase* value) {
+    QJSValue val = m_engine.newQObject(value);
+
+    QString fullId = "values_" + value->valueGroup()->id() + "_" + value->id();
+    iDebug() << "Injecting val" << value->fullId() << fullId;
+    m_engine.globalObject().setProperty(fullId, val);
+}
+
+void ModelProcessorManager::injectActor(ActorBase* actor) {
+    QJSValue val = m_engine.newQObject(actor);
+
+    QString fullId = "actors_" + actor->valueGroup()->id() + "_" + actor->id();
+    iDebug() << "Injecting actor" << actor->fullId() << fullId;
+    m_engine.globalObject().setProperty(fullId, val);
+
+    injectValue(actor);
+}
+
+void ModelProcessorManager::injectValues(DatamodelManager* dmManager) {
+    QMapIterator<QString, ValueBase*> it(dmManager->datamodel()->values());
+
+    while(it.hasNext()) {
+        it.next();
+        injectValue(it.value());
+    }
+}
+
+void ModelProcessorManager::injectActors(DatamodelManager* dmManager) {
+    QMapIterator<QString, ActorBase*> it(dmManager->datamodel()->actors());
+    while(it.hasNext()) {
+        it.next();
+        injectActor(it.value());
     }
 }

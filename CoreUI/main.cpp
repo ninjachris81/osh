@@ -7,6 +7,12 @@
 #include "controller/controllermanager.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "value/valuemanagerui.h"
+#include "actor/server/actormanager.h"
+#include "datamodel/datamodelmanagerui.h"
+
+#define QML_BASE_PACKAGE "OSH"
+#define QML_VERSION_MAJOR 1
+#define QML_VERSION_MINOR 0
 
 int main(int argc, char *argv[])
 {
@@ -21,20 +27,24 @@ int main(int argc, char *argv[])
     DeviceDiscoveryManagerUI deviceDiscoveryManager;
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    DatamodelManager datamodelManager;
+    DatamodelManagerUI datamodelManager;
     ValueManagerUI valueManager;
+    ActorManager actorManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
     managerRegistration.registerManager(&controllerManager);
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&actorManager);
 
     managerRegistration.init(&config);
 
     // register types
-    qmlRegisterType<DeviceBaseUI>("OSH", 1, 0, "Device");
-    qmlRegisterSingletonType<DeviceDiscoveryManagerUI>("OSH", 1, 0, "DeviceDiscoveryManager", &DeviceDiscoveryManagerUI::qmlInstance);
+
+    qmlRegisterType<DeviceBaseUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "Device");
+    qmlRegisterSingletonType<DeviceDiscoveryManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DeviceDiscoveryManager", &DeviceDiscoveryManagerUI::qmlInstance);
+    qmlRegisterSingletonType<DatamodelManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DatamodelManager", &DatamodelManagerUI::qmlInstance);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

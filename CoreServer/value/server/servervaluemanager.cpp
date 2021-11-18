@@ -23,20 +23,23 @@ void ServerValueManager::init(LocalConfig *config) {
 void ServerValueManager::handleReceivedMessage(ValueMessage* msg) {
     iDebug() << Q_FUNC_INFO;
 
-    updateValue(msg->valueGroupId(), msg->valueId(), msg->rawValue());
+    valueReceived(msg->valueGroupId(), msg->valueId(), msg->rawValue());
 }
 
-void ServerValueManager::updateValue(ValueBase* value, QVariant newValue) {
+void ServerValueManager::valueReceived(ValueBase* value, QVariant newValue) {
     if (value != nullptr) {
         value->updateValue(newValue);
     }
 }
 
-void ServerValueManager::updateValue(QString valueGroupId, QString valueId, QVariant newValue) {
+void ServerValueManager::valueReceived(QString valueGroupId, QString valueId, QVariant newValue) {
     ValueBase* value = getValue(valueGroupId, valueId);
-    updateValue(value, newValue);
+    valueReceived(value, newValue);
 }
 
+/*
+ * Check values for invalidation
+*/
 void ServerValueManager::checkValues() {
     //iDebug() << Q_FUNC_INFO;
 

@@ -32,6 +32,9 @@ private:
     DatamodelLoaderBase* m_datamodelLoader = nullptr;
     DatamodelBase* m_datamodel = nullptr;
 
+    void registerValues();
+    void registerActors();
+
 signals:
     void datamodelChanged();
 

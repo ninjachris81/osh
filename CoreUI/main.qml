@@ -24,6 +24,9 @@ Window {
         TabButton {
             text: qsTr("Device Explorer")
         }
+        TabButton {
+            text: qsTr("Task View")
+        }
     }
 
     StackLayout {
@@ -38,6 +41,10 @@ Window {
         }
 
         DeviceDiscoveryView {
+
+        }
+
+        TaskView {
 
         }
 

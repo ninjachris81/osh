@@ -14,3 +14,16 @@ LogCat::LOGCAT ControllerBase::logCat() {
 void ControllerBase::setConfig(LocalConfig* config) {
     m_config = config;
 }
+
+void ControllerBase::bindValueManager(ClientValueManager *clientValueManager, QList<ValueBase*> valueOrActors) {
+
+    QListIterator<ValueBase*> it(valueOrActors);
+    while(it.hasNext()) {
+        ValueBase* valOrActor = it.next();
+
+        QObject::connect(valOrActor, &ValueBase::valueChanged, [valOrActor, clientValueManager]() {
+            clientValueManager->publishValue(valOrActor);
+        });
+
+    }
+}

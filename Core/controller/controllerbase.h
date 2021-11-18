@@ -6,6 +6,8 @@
 #include "identifyable.h"
 #include "config/localconfig.h"
 #include "controllermessage.h"
+#include "value/client/clientvaluemanager.h"
+#include "actor/actorbase.h"
 
 #include "macros.h"
 
@@ -24,6 +26,10 @@ public:
     virtual void init() = 0;
 
     virtual void handleMessage(ControllerMessage *msg) = 0;
+
+    virtual void bindValueManager(ClientValueManager* clientValueManager, QList<ValueBase*> valueOrActors);
+    virtual quint8 bindActor(ActorBase *actor) { return 0; }
+    virtual quint8 bindValue(ValueBase *value) { return 0; }
 
 protected:
     ControllerManager *m_manager;

@@ -5,6 +5,7 @@
 #include "httpdatamodelloader.h"
 #include "testdatamodelloader.h"
 #include "value/server/servervaluemanager.h"
+#include "actor/server/actormanager.h"
 
 #include "macros.h"
 
@@ -22,6 +23,7 @@ void DatamodelManager::init(LocalConfig* config) {
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ValueManagerBase);
+    REQUIRE_MANAGER(ActorManager);
 
     QString datamodelLoaderName = config->getString("datamodel.loader", TestDatamodelLoader::LOADER_TYPE_NAME);
 
@@ -43,12 +45,32 @@ void DatamodelManager::init(LocalConfig* config) {
 
     Q_EMIT(datamodelChanged());
 
-    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+    registerValues();
 
+    registerActors();
+}
+
+void DatamodelManager::registerValues() {
+    // register values
+    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
     QMapIterator<QString, ValueBase*> it(m_datamodel->values());
     while (it.hasNext()) {
         it.next();
         iDebug() << "Register datamodel value" << it.key();
+        valueManager->registerValue(it.value());
+    }
+}
+
+void DatamodelManager::registerActors() {
+    // register actors
+    ActorManager* actorManager = getManager<ActorManager>(ActorManager::MANAGER_ID);
+    ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+
+    QMapIterator<QString, ActorBase*> it(m_datamodel->actors());
+    while(it.hasNext()) {
+        it.next();
+        iDebug() << "Register datamodel actor" << it.key();
+        actorManager->registerActor(it.value());
         valueManager->registerValue(it.value());
     }
 }

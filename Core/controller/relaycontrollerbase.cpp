@@ -5,20 +5,14 @@
 
 RelayControllerBase::RelayControllerBase(ControllerManager *manager, QString id, quint8 relayCount, QObject *parent) : ControllerBase(manager, id, parent), m_relayCount(relayCount)
 {
-    m_relayStatus = QBitArray(relayCount, false);
-
     connect(this, &RelayControllerBase::controllerConnected, [this] () {
         switchStatusAll(false);
     });
 }
 
 void RelayControllerBase::setStatus(quint8 relayIndex, bool status) {
-    if (m_relayStatus.at(relayIndex) != status) {
-        iDebug() << Q_FUNC_INFO << relayIndex << status;
-
-        m_relayStatus.setBit(relayIndex, status);
-        Q_EMIT(relayStatusChanged(relayIndex));
-    }
+    iDebug() << Q_FUNC_INFO << relayIndex << status;
+    m_actorMappings.value(relayIndex)->updateValue(status);
 }
 
 void RelayControllerBase::handleMessage(ControllerMessage *msg) {
@@ -32,18 +26,14 @@ void RelayControllerBase::switchStatusAll(bool status) {
 }
 
 bool RelayControllerBase::relayStatus(quint8 relayIndex) {
-    return m_relayStatus.at(relayIndex);
+    return m_actorMappings.at(relayIndex)->rawValue().toBool();
 }
 
-void RelayControllerBase::bindActor(DigitalActor* actor, quint8 relayIndex) {
-    QObject::connect(actor, &DigitalActor::valueChanged, [this, actor, relayIndex]() {
-        switchStatus(relayIndex, actor->rawValue().toBool());
+quint8 RelayControllerBase::bindActor(DigitalActor* actor) {
+    quint8 relayIndex = m_actorMappings.count();
+    m_actorMappings.append(actor);
+    QObject::connect(actor, &DigitalActor::statusRequested, [this, relayIndex](bool status) {
+        switchStatus(relayIndex, status);
     });
-    m_actorMappings.insert(relayIndex, actor);
-}
-
-void RelayControllerBase::bindValueManager(ClientValueManager* clientValueManager) {
-    QObject::connect(this, &RelayControllerBase::relayStatusChanged, [this, clientValueManager](quint8 relayIndex) {
-        clientValueManager->publishValue(m_actorMappings.value(relayIndex));
-    });
+    return relayIndex;
 }

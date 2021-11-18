@@ -33,6 +33,7 @@ SOURCES += \
         communication/communicationmanagerbase.cpp \
         controller/controllermanager.cpp \
         controller/controllermessage.cpp \
+        controller/digitalinputcontrollerbase.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
         communication/messagebase.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
         communication/communicationmanagerbase.h \
         controller/controllermanager.h \
         controller/controllermessage.h \
+        controller/digitalinputcontrollerbase.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
         communication/messagebase.h \

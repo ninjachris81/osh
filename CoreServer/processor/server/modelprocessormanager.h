@@ -9,6 +9,7 @@
 
 #include "manager/managerbase.h"
 #include "processor/server/processortask.h"
+#include "datamodel/server/datamodelmanager.h"
 
 class ModelProcessorManager : public ManagerBase
 {
@@ -38,6 +39,12 @@ private:
     QJSEngine m_engine;
     QMap<QString, ProcessorTask*> m_processorTasks;
     QTimer m_scheduleTimer;
+
+    void injectValues(DatamodelManager *dmManager);
+    void injectActors(DatamodelManager *dmManager);
+
+    void injectValue(ValueBase* value);
+    void injectActor(ActorBase* actor);
 
 private slots:
     void executeTasks();

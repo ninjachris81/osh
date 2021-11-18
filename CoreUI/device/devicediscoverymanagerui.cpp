@@ -24,7 +24,6 @@ QObject* DeviceDiscoveryManagerUI::qmlInstance(QQmlEngine *engine, QJSEngine *sc
     return m_instance;
 }
 
-
 QList<QObject*> DeviceDiscoveryManagerUI::devices() {
     m_devices.clear();
 

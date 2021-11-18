@@ -28,9 +28,9 @@ public:
 
     KMTronicRelayController(ControllerManager* manager, QString id, RELAY_MODEL model, quint8 relayCount, QObject *parent = nullptr);
 
-    /*virtual*/ void init();
+    /*virtual*/ void init() override;
 
-    /*virtual*/ void switchStatus(quint8 relayIndex, bool status);
+    /*virtual*/ void switchStatus(quint8 relayIndex, bool status) override;
 
     static quint8 getRelayCount(RELAY_MODEL model);
 
