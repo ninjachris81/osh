@@ -48,6 +48,7 @@ SOURCES += \
         time/systemtimemessage.cpp \
         value/client/clientvaluemanager.cpp \
         value/longvalue.cpp \
+        value/redundantvalue.cpp \
         value/valuemanagerbase.cpp \
         value/valuemessage.cpp \
         config/localconfig.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
         time/systemtimemessage.h \
         value/client/clientvaluemanager.h \
         value/longvalue.h \
+        value/redundantvalue.h \
         value/valuemanagerbase.h \
         value/valuemessage.h \
         config/localconfig.h \
