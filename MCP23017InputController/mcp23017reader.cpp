@@ -22,7 +22,8 @@ void MCP23017Reader::run() {
 
 bool MCP23017Reader::open() {
 #ifdef __linux__
-    mcp23017Setup (m_pinBase, m_addr);
+    wiringPiSetup();
+    mcp23017Setup(m_pinBase, m_addr);
 #endif
 
     m_states = new QBitArray(m_inputCount);
@@ -30,7 +31,7 @@ bool MCP23017Reader::open() {
     // setup pins
     for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
-        pinMode (m_pinBase + i, OUTPUT) ;
+        pinMode (m_pinBase + i, INPUT) ;
         pullUpDnControl ( m_pinBase + i, PUD_UP);
 #endif
     }
@@ -42,7 +43,7 @@ void MCP23017Reader::readStates() {
     while(true) {
         for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
-            bool state = digitalRead(m_pinBase + i);
+            bool state = digitalRead(m_pinBase + i) == HIGH;
 #else
             bool state = false;
 #endif
@@ -55,7 +56,7 @@ void MCP23017Reader::readStates() {
 
         firstRun = false;
 
-        QThread::sleep(100);
+        QThread::msleep(100);
     }
 }
 
