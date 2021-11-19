@@ -1,0 +1,14 @@
+dtoverlay=disable-bt
+
+dtoverlay=disable-wifi
+
+dtoverlay=hifiberry-dac
+#dtparam=audio=on
+
+dtparam=act_led_trigger=none
+dtparam=act_led_activelow=off
+
+disable_splash=1
+boot_delay=0
+
+initial_turbo=30

@@ -1,0 +1,4 @@
+systemd-analyze
+
+sudo apt-get install -y i2c-tools
+sudo i2cdetect -y 1

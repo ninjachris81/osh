@@ -1,0 +1,18 @@
+sudo systemctl disable hciuart.service
+sudo systemctl disable bluealsa.service
+sudo systemctl disable bluetooth.service
+
+sudo systemctl disable keyboard-setup.service
+sudo systemctl disable wpa_supplicant.service
+sudo systemctl disable triggerhappy.service
+
+sudo systemctl disable dphys-swapfile.service
+sudo systemctl disable apt-daily.service
+sudo systemctl disable apt-daily.timer
+sudo systemctl disable nfs-client.target
+sudo systemctl disable remote-fs.target
+sudo systemctl disable apt-daily-upgrade.timer
+sudo systemctl disable nfs-config.service
+
+
+enable i2c in raspi-config

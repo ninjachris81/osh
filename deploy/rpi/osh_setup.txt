@@ -1,0 +1,6 @@
+git clone https://github.com/ninjachris81/osh.git
+cd osh
+git submodule init
+cd qtmqtt
+git submodule update
+git checkout 5.11
