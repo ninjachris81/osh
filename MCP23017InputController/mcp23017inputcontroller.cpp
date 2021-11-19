@@ -16,7 +16,7 @@ void MCP23017InputController::init() {
 
     iDebug() << "MCP init" << pinBase << addr;
 
-    m_reader.init(inputCount(), pinBase, addr);
+    m_reader.init(inputCount(), addr, pinBase);
     m_reader.start();
 }
 
