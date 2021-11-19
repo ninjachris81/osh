@@ -10,7 +10,7 @@
 
 QLatin1Literal DeviceDiscoveryManagerBase::MANAGER_ID = QLatin1Literal("DeviceDiscoveryManager");
 
-DeviceDiscoveryManagerBase::DeviceDiscoveryManagerBase(QObject *parent) : ManagerBase(parent)
+DeviceDiscoveryManagerBase::DeviceDiscoveryManagerBase(QString serviceId, QObject *parent) : ManagerBase(parent), m_serviceId(serviceId)
 {
     connect(&m_ddTimer, &QTimer::timeout, this, &DeviceDiscoveryManagerBase::sendDDBroadcast);
 }
@@ -28,7 +28,7 @@ void DeviceDiscoveryManagerBase::init(LocalConfig *config) {
 
     REQUIRE_MANAGER(CommunicationManagerBase);
 
-    m_device = new ClientDevice(Identifyable::getDeviceSerialId(config));
+    m_device = new ClientDevice(Identifyable::getDeviceSerialId(config), m_serviceId);
     m_ddTimer.setInterval(config->getInt("dd.broadcastInterval", DEFAULT_DD_BROADCAST_INTERVAL));
 
     m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
@@ -58,6 +58,6 @@ void DeviceDiscoveryManagerBase::stopDDBroadcast() {
 void DeviceDiscoveryManagerBase::sendDDBroadcast() {
     iDebug() << Q_FUNC_INFO;
 
-    DeviceDiscoveryMessage message(m_device->id());
+    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId());
     m_commManager->sendMessage(message);
 }

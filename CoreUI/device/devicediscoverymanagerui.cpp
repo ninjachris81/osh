@@ -8,7 +8,7 @@
 
 DeviceDiscoveryManagerUI * DeviceDiscoveryManagerUI::m_instance = nullptr;
 
-DeviceDiscoveryManagerUI::DeviceDiscoveryManagerUI(QObject *parent) : DeviceDiscoveryManagerBase(parent)
+DeviceDiscoveryManagerUI::DeviceDiscoveryManagerUI(QString serviceId, QObject *parent) : DeviceDiscoveryManagerBase(serviceId, parent)
 {
     m_instance = this;
     m_modelBridge = new DeviceDiscoveryModelBridge(this);

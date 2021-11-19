@@ -23,12 +23,22 @@ ViewBase {
 
                 Text {
                     Layout.preferredWidth: 300
-                    text: qsTr("Name")
+                    text: qsTr("ID")
                 }
 
                 Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Serial")
+                    Layout.preferredWidth: 300
+                    text: qsTr("ServiceID")
+                }
+
+                Text {
+                    Layout.preferredWidth: 200
+                    text: qsTr("SessionId")
+                }
+
+                Text {
+                    Layout.preferredWidth: 200
+                    text: qsTr("Name")
                 }
 
                 Text {
@@ -50,23 +60,33 @@ ViewBase {
             RowLayout {
                 height: 30
 
-                Text {
-                    Layout.preferredWidth: 300
-                    text: modelData.name
-                }
 
                 Text {
-                    Layout.preferredWidth: 100
+                    Layout.preferredWidth: 300
                     text: modelData.id
                 }
 
                 Text {
-                    Layout.preferredWidth: 50
-                    text: modelData.isOnline ? "Yes" : "No"
+                    Layout.preferredWidth: 300
+                    text: modelData.serviceId
                 }
 
                 Text {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 200
+                    text: modelData.sessionId
+                }
+
+                Text {
+                    Layout.preferredWidth: 200
+                    text: modelData.name
+                }
+
+                Text {
+                    Layout.preferredWidth: 50
+                    text: modelData.isOnline
+                }
+
+                Text {
                     text: modelData.lastPing
                 }
             }

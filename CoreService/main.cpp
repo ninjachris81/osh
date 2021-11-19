@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     ManagerRegistration managerRegistration(ManagerRegistration::SERVER);
 
     QMqttCommunicationManager commManager;
-    ServerDeviceDiscoveryManager deviceDiscoveryManager;
+    ServerDeviceDiscoveryManager deviceDiscoveryManager("CoreServer");
     ServerValueManager valueManager;
     ControllerManager controllerManager;
     SystemtimeManager systimeManager;

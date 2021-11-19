@@ -85,6 +85,6 @@ void QMqttCommunicationManager::_onMqttMsgReceived(QMqttMessage message) {
 void QMqttCommunicationManager::_startConnect() {
     iDebug() << Q_FUNC_INFO << m_mqttClient.hostname() << m_mqttClient.port();
 
-    m_mqttClient.setClientId(getManager<DeviceDiscoveryManagerBase>(DeviceDiscoveryManagerBase::MANAGER_ID)->device()->id());
+    m_mqttClient.setClientId(getManager<DeviceDiscoveryManagerBase>(DeviceDiscoveryManagerBase::MANAGER_ID)->device()->sessionId());
     m_mqttClient.connectToHost();
 }

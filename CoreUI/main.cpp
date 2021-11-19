@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     ManagerRegistration managerRegistration(ManagerRegistration::GUI);
 
-    DeviceDiscoveryManagerUI deviceDiscoveryManager;
+    DeviceDiscoveryManagerUI deviceDiscoveryManager("CoreUI");
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     DatamodelManagerUI datamodelManager;

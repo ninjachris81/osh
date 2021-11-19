@@ -12,10 +12,13 @@ DeviceBaseUI::DeviceBaseUI(QObject *parent) : IdentifyableUI(parent)
     connect(m_device, &DeviceBase::isOnlineChanged, this, &DeviceBaseUI::isOnlineChanged);
 }
 
-qint64 DeviceBaseUI::lastPing() {
-    return m_device->lastPing();
+QString DeviceBaseUI::serviceId() {
+    return m_device->serviceId();
 }
 
+QString DeviceBaseUI::sessionId() {
+    return m_device->sessionId();
+}
 
 QString DeviceBaseUI::name() {
     if (m_device->inherits(KnownDevice::staticMetaObject.className())) {
@@ -23,6 +26,10 @@ QString DeviceBaseUI::name() {
     } else {
         return "Unknown device";
     }
+}
+
+qint64 DeviceBaseUI::lastPing() {
+    return m_device->lastPing();
 }
 
 bool DeviceBaseUI::isOnline() {

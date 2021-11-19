@@ -9,14 +9,17 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", p
     iDebug() << Q_FUNC_INFO;
 
 
-    KnownDevice* serverDevice = new KnownDevice("349785676", "Server");
+    KnownDevice* serverDevice = new KnownDevice("349785676", "CoreServer", "Server");
     m_knownDevices.insert(serverDevice->id(), serverDevice);
 
-    KnownDevice* guiDevice = new KnownDevice("582645258", "GUI");
+    KnownDevice* guiDevice = new KnownDevice("582645258", "CoreUI", "GUI");
     m_knownDevices.insert(guiDevice->id(), guiDevice);
 
-    KnownDevice* deviceNodeEG = new KnownDevice("66403375", "Node EG");
-    m_knownDevices.insert(deviceNodeEG->id(), deviceNodeEG);
+    KnownDevice* deviceNodeEGInputService = new KnownDevice("66403375", "InputService", "Node EG");
+    m_knownDevices.insert(deviceNodeEGInputService->sessionId(), deviceNodeEGInputService);
+
+    KnownDevice* deviceNodeEGRelayService = new KnownDevice("66403375", "RelayService", "Node EG");
+    m_knownDevices.insert(deviceNodeEGRelayService->sessionId(), deviceNodeEGRelayService);
 
     ValueGroup* nodeEGRelays = new ValueGroup("egRelays0");
     for (quint8 i = 0;i<8;i++) {

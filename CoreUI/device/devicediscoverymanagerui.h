@@ -14,7 +14,7 @@ class DeviceDiscoveryManagerUI : public DeviceDiscoveryManagerBase
     Q_OBJECT
     Q_DISABLE_COPY(DeviceDiscoveryManagerUI)
 public:
-    explicit DeviceDiscoveryManagerUI(QObject *parent = nullptr);
+    explicit DeviceDiscoveryManagerUI(QString serviceId, QObject *parent = nullptr);
 
     Q_PROPERTY(QList<QObject*> devices READ devices NOTIFY devicesChanged)
 

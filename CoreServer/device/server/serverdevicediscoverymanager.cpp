@@ -9,7 +9,7 @@
 
 #include "macros.h"
 
-ServerDeviceDiscoveryManager::ServerDeviceDiscoveryManager(QObject *parent) : DeviceDiscoveryManagerBase(parent)
+ServerDeviceDiscoveryManager::ServerDeviceDiscoveryManager(QString serviceId, QObject *parent) : DeviceDiscoveryManagerBase(serviceId, parent)
 {
     m_modelBridge = new DeviceDiscoveryModelBridge(this);
 }

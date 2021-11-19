@@ -17,7 +17,7 @@
  * MQTT_BASE_PATH / (message_type) / (actorGroupId) / (actorId)
  *
  * Device Discovery Structure:
- * MQTT_BASE_PATH / (message_type) / (deviceId)
+ * MQTT_BASE_PATH / (message_type) / (deviceId) / (serviceId)
  *
  * System Time Structure
  * MQTT_BASE_PATH / (message_type)

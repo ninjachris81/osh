@@ -13,7 +13,7 @@ class DeviceDiscoveryManagerBase : public ManagerBase
 {
     Q_OBJECT
 public:
-    explicit DeviceDiscoveryManagerBase(QObject *parent = nullptr);
+    explicit DeviceDiscoveryManagerBase(QString serviceId, QObject *parent = nullptr);
 
     static QLatin1Literal MANAGER_ID;
 
@@ -26,6 +26,7 @@ public:
     ClientDevice *device();
 
 private:
+    QString m_serviceId;
     QTimer m_ddTimer;
     ClientDevice* m_device = nullptr;
     CommunicationManagerBase* m_commManager;

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager;
+    ClientDeviceDiscoveryManager clientManager("InputService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;

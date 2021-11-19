@@ -23,10 +23,10 @@ void DeviceDiscoveryModelBridge::init(LocalConfig *config) {
     m_onlineCheckTimeout = config->getInt("dd.onlineCheckTimeout", DEFAULT_DD_ONLINE_CHECK_TIMEOUT);
 }
 
-DeviceBase *DeviceDiscoveryModelBridge::registerUnknownDevice(QString id) {
+DeviceBase *DeviceDiscoveryModelBridge::registerUnknownDevice(QString id, QString serviceId) {
     iDebug() << Q_FUNC_INFO << id;
 
-    DeviceBase* device = new DeviceBase(id);
+    DeviceBase* device = new DeviceBase(id, serviceId);
     m_unknownDevices.insert(id, device);
     Q_EMIT(unknownDevicesChanged());
     return device;
@@ -38,7 +38,7 @@ DeviceBase *DeviceDiscoveryModelBridge::handleReceivedMessage(DeviceDiscoveryMes
         device = m_datamodelManager->datamodel()->knownDevices().value(msg->deviceId());
     } else {
         if (!m_unknownDevices.contains(msg->deviceId())) {
-            device = registerUnknownDevice(msg->deviceId());
+            device = registerUnknownDevice(msg->deviceId(), msg->serviceId());
         } else {
             device = m_unknownDevices.value(msg->deviceId());
         }

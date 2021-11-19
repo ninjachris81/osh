@@ -10,7 +10,11 @@ class DeviceBase : public Identifyable
 {
     Q_OBJECT
 public:
-    explicit DeviceBase(QString id, QObject *parent = nullptr);
+    explicit DeviceBase(QString id, QString serviceId, QObject *parent = nullptr);
+
+    QString serviceId();
+
+    QString sessionId();
 
     void updatePing();
 
@@ -23,6 +27,7 @@ public:
 private:
     bool m_isOnline = false;
     qint64 m_lastPing = 0;
+    QString m_serviceId;
 
 signals:
     void lastPingChanged();

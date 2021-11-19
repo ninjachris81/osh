@@ -8,7 +8,7 @@ class ClientDevice : public DeviceBase
 {
     Q_OBJECT
 public:
-    explicit ClientDevice(QString id, QObject *parent = nullptr);
+    explicit ClientDevice(QString id, QString serviceId, QObject *parent = nullptr);
 
 signals:
 

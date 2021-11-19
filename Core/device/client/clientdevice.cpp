@@ -1,6 +1,6 @@
 #include "clientdevice.h"
 
-ClientDevice::ClientDevice(QString id, QObject *parent) : DeviceBase(id, parent)
+ClientDevice::ClientDevice(QString id, QString serviceId, QObject *parent) : DeviceBase(id, serviceId, parent)
 {
 
 }

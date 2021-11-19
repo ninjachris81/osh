@@ -4,7 +4,7 @@
 #include "device/devicediscoverymessage.h"
 #include "macros.h"
 
-ClientDeviceDiscoveryManager::ClientDeviceDiscoveryManager(QObject *parent) : DeviceDiscoveryManagerBase(parent)
+ClientDeviceDiscoveryManager::ClientDeviceDiscoveryManager(QString serviceId, QObject *parent) : DeviceDiscoveryManagerBase(serviceId, parent)
 {
 }
 

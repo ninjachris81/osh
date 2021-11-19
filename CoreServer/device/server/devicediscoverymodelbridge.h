@@ -20,7 +20,7 @@ public:
 
     void init(LocalConfig *config);
 
-    DeviceBase* registerUnknownDevice(QString id);
+    DeviceBase* registerUnknownDevice(QString id, QString serviceId);
 
     DeviceBase* handleReceivedMessage(DeviceDiscoveryMessage* msg);
 

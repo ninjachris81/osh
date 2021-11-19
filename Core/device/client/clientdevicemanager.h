@@ -11,7 +11,7 @@ class ClientDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 {
     Q_OBJECT
 public:
-    explicit ClientDeviceDiscoveryManager(QObject *parent = nullptr);
+    explicit ClientDeviceDiscoveryManager(QString serviceId, QObject *parent = nullptr);
 
     /*virtual*/ void init(LocalConfig* config) override;
 

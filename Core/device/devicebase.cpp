@@ -1,11 +1,11 @@
 #include "devicebase.h"
 
 #include <QDateTime>
+#include <QRandomGenerator64>
 
 #include "device/devicediscoverymanagerbase.h"
 
-DeviceBase::DeviceBase(QString id, QObject *parent) : Identifyable(id, parent) {
-
+DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : Identifyable(id, parent), m_serviceId(serviceId) {
 }
 
 void DeviceBase::updatePing() {
@@ -34,4 +34,12 @@ qint64 DeviceBase::lastPing() {
 
 bool DeviceBase::isOnline() {
     return m_isOnline;
+}
+
+QString DeviceBase::serviceId() {
+    return m_serviceId;
+}
+
+QString DeviceBase::sessionId() {
+    return m_id + "." + m_serviceId;
 }

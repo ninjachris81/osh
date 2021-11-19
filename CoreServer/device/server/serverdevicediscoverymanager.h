@@ -16,7 +16,7 @@ class ServerDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 {
     Q_OBJECT
 public:
-    explicit ServerDeviceDiscoveryManager(QObject *parent = nullptr);
+    explicit ServerDeviceDiscoveryManager(QString serviceId, QObject *parent = nullptr);
 
     /*virtual*/ void init(LocalConfig* config);
 

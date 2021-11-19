@@ -22,7 +22,7 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
 
     registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, COMPACT, MQTT_MESSAGE_TYPE_VA, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, true, COMPACT, MQTT_MESSAGE_TYPE_AC, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, NONE, MQTT_MESSAGE_TYPE_DD, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, NONE, MQTT_MESSAGE_TYPE_DD, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, COMPACT, MQTT_MESSAGE_TYPE_ST, 0);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, COMPACT, MQTT_MESSAGE_TYPE_SW, 1);
     registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, JSON, MQTT_MESSAGE_TYPE_CO, 1);
@@ -65,7 +65,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             return new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), static_cast<ACTOR_CMDS>(rawValue.toInt()));
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
-            return new DeviceDiscoveryMessage(firstLevelPath.first());
+            return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1));
         }
         case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
             return new SystemtimeMessage(rawValue.toLongLong());
