@@ -22,12 +22,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        mcp23017.cpp \
         mcp23017inputcontroller.cpp \
         mcp23017reader.cpp
 
 HEADERS += \
-        mcp23017.h \
         mcp23017inputcontroller.h \
         mcp23017reader.h
 unix {
@@ -48,3 +46,5 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core/release/Core.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core/debug/Core.lib
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../Core/libCore.a
+
+LIBS += -I/usr/local/include -L/usr/local/lib -lwiringPi

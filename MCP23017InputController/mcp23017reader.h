@@ -5,7 +5,10 @@
 #include <QThread>
 #include <QBitArray>
 
-#include "mcp23017.h"
+#ifdef __linux__
+#include <wiringPi.h>
+#include <mcp23017.h>
+#endif
 
 class MCP23017Reader : public QThread
 {
@@ -18,7 +21,6 @@ public:
     /*virtual*/ void run() override;
 
 private:
-    MCP23017* m_mcp = nullptr;
     quint8 m_inputCount = 0;
     int m_bus = 0;
     int m_addr = 0;

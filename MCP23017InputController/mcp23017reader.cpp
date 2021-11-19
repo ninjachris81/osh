@@ -21,32 +21,31 @@ void MCP23017Reader::run() {
 }
 
 bool MCP23017Reader::open() {
-    if (m_mcp != nullptr) {
-        close();
-        delete m_mcp;
+#ifdef __linux__
+    mcp23017Setup (bus, addr);
+#endif
+
+    m_states = new QBitArray(m_inputCount);
+
+    // setup pins
+    for (quint8 i=0;i<m_inputCount;i++) {
+#ifdef __linux__
+        pinMode (m_bus + i, OUTPUT) ;
+        pullUpDnControl ( m_bus + i, PUD_UP);
+#endif
     }
 
-    m_mcp = new MCP23017(m_bus, m_addr);
-
-    if (m_mcp->openI2C()) {
-        m_states = new QBitArray(m_inputCount);
-
-        // setup pins
-        for (quint8 i=0;i<m_inputCount;i++) {
-            m_mcp->pinMode(i, INPUT);
-            m_mcp->pullUp(i, HIGH);  // turn on a 100K pullup internally
-        }
-
-        return true;
-    } else {
-        return false;
-    }
+    return true;
 }
 
 void MCP23017Reader::readStates() {
     while(true) {
         for (quint8 i=0;i<m_inputCount;i++) {
-            bool state = m_mcp->digitalRead(i);
+#ifdef __linux__
+            bool state = digitalRead(i);
+#else
+            bool state = false;
+#endif
 
             if (firstRun || state != m_states->at(i)) {
                 m_states->setBit(i, state);
@@ -61,6 +60,4 @@ void MCP23017Reader::readStates() {
 }
 
 void MCP23017Reader::close() {
-    m_mcp->closeI2C();
-    delete m_mcp;
 }
