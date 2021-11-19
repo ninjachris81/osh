@@ -16,13 +16,13 @@ class MCP23017Reader : public QThread
 public:
     explicit MCP23017Reader(QObject *parent = nullptr);
 
-    void init(quint8 inputCount, int bus, int addr);
+    void init(quint8 inputCount, int addr, int pinBase = 64);
 
     /*virtual*/ void run() override;
 
 private:
     quint8 m_inputCount = 0;
-    int m_bus = 0;
+    int m_pinBase = 0;
     int m_addr = 0;
 
     QBitArray* m_states;

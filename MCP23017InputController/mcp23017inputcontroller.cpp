@@ -11,12 +11,12 @@ void MCP23017InputController::init() {
 
     DigitalInputControllerBase::init();
 
-    int bus = m_config->getInt(this, "mcp.bus", 1);
+    int pinBase = m_config->getInt(this, "mcp.pinBase", 64);
     int addr = m_config->getInt(this, "mcp.addr", 0x20);
 
-    iDebug() << "MCP init" << bus << addr;
+    iDebug() << "MCP init" << pinBase << addr;
 
-    m_reader.init(inputCount(), bus, addr);
+    m_reader.init(inputCount(), pinBase, addr);
     m_reader.start();
 }
 
