@@ -13,19 +13,23 @@ public:
 
     Q_PROPERTY(QList<QObject*> processorTasks READ processorTasks NOTIFY processorTasksChanged)
     Q_PROPERTY(QList<QObject*> values READ values NOTIFY valuesChanged)
+    Q_PROPERTY(QList<QObject*> actors READ actors NOTIFY actorsChanged)
 
     QList<QObject*> processorTasks();
     QList<QObject*> values();
+    QList<QObject*> actors();
 
 private:
     DatamodelBase* m_datamodel;
 
     QList<QObject*> m_processorTasks;
     QList<QObject*> m_values;
+    QList<QObject*> m_actors;
 
 signals:
     void processorTasksChanged();
     void valuesChanged();
+    void actorsChanged();
 
 public slots:
 };

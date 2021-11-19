@@ -7,6 +7,8 @@ RedundantValue::RedundantValue(ValueGroup *valueGroup, QString id, bool alwaysEm
 
 QVariant RedundantValue::_updateValue(QVariant newValue) {
     // TBD: disallow or update all?
+    qDebug() << "TODO";
+    return QVariant();
 }
 
 void RedundantValue::addNextValue(ValueBase* value) {

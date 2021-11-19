@@ -18,6 +18,7 @@ DEFINES += IS_OSH_UI
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        actor/actorbaseui.cpp \
         datamodel/datamodelbaseui.cpp \
         datamodel/datamodelmanagerui.cpp \
         device/devicebaseui.cpp \
@@ -84,6 +85,7 @@ else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/libQMqttCommunicationManager.a
 
 HEADERS += \
+    actor/actorbaseui.h \
     datamodel/datamodelbaseui.h \
     datamodel/datamodelmanagerui.h \
     device/devicebaseui.h \

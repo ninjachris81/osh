@@ -30,6 +30,9 @@ Window {
         TabButton {
             text: qsTr("Value View")
         }
+        TabButton {
+            text: qsTr("Actor View")
+        }
     }
 
     StackLayout {
@@ -52,6 +55,10 @@ Window {
         }
 
         ValueView {
+
+        }
+
+        ActorView {
 
         }
     }

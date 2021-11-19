@@ -4,6 +4,7 @@
 
 #include "processor/processortaskui.h"
 #include "value/valuebaseui.h"
+#include "actor/actorbaseui.h"
 
 DatamodelBaseUI::DatamodelBaseUI(QObject *parent) : IdentifyableUI(parent)
 {
@@ -32,4 +33,16 @@ QList<QObject*> DatamodelBaseUI::values() {
     }
 
     return m_values;
+}
+
+QList<QObject*> DatamodelBaseUI::actors() {
+    m_actors.clear();
+
+    QMapIterator<QString, ActorBase*> it(m_datamodel->actors());
+    while(it.hasNext()) {
+        it.next();
+        m_actors.append(new ActorBaseUI(it.value()));
+    }
+
+    return m_actors;
 }
