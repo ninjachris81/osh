@@ -1,5 +1,5 @@
-#ifndef _MCP23017_H
-#define _MCP23017_H
+#ifndef MCP23017_H
+#define MCP23017_H
 
 #include <cstddef>
 #include <cstdint>

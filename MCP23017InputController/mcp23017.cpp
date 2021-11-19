@@ -1,7 +1,7 @@
-#include <MCP23017.h>
+#include <mcp23017.h>
 
 
- MCP23017::MCP23017(int bus, int address) {
+MCP23017::MCP23017(int bus, int address) {
     kI2CBus = bus;           // I2C bus of Jetson (1 and 8 available on Xavier)
     kI2CAddress = address ; // Address of MCP23017; defaults to 0x20
     error = 0 ;
