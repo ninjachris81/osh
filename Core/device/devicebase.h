@@ -12,9 +12,9 @@ class DeviceBase : public Identifyable
 public:
     explicit DeviceBase(QString id, QString serviceId, QObject *parent = nullptr);
 
-    QString serviceId();
+    QString fullId();
 
-    QString sessionId();
+    QString serviceId();
 
     void updatePing();
 

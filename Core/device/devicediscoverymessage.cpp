@@ -1,8 +1,12 @@
 #include "devicediscoverymessage.h"
 
-DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString serviceId, QString deviceId, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId)
+DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId)
 {
 
+}
+
+QString DeviceDiscoveryMessage::fullId() {
+    return m_deviceId + "." + m_serviceId;
 }
 
 QString DeviceDiscoveryMessage::deviceId() {

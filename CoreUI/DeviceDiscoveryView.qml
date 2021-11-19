@@ -33,11 +33,6 @@ ViewBase {
 
                 Text {
                     Layout.preferredWidth: 200
-                    text: qsTr("SessionId")
-                }
-
-                Text {
-                    Layout.preferredWidth: 200
                     text: qsTr("Name")
                 }
 
@@ -69,11 +64,6 @@ ViewBase {
                 Text {
                     Layout.preferredWidth: 300
                     text: modelData.serviceId
-                }
-
-                Text {
-                    Layout.preferredWidth: 200
-                    text: modelData.sessionId
                 }
 
                 Text {

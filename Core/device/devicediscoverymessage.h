@@ -11,13 +11,15 @@ class DeviceDiscoveryMessage : public MessageBase
 {
     Q_OBJECT
 public:
-    explicit DeviceDiscoveryMessage(QString serviceId, QString sessionId, QObject *parent = nullptr);
+    explicit DeviceDiscoveryMessage(QString deviceId, QString serviceId, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
     /*virtual*/ QString getFirstLevelId() override;
 
     /*virtual*/ QString getSecondLevelId() override;
+
+    QString fullId();
 
     QString deviceId();
 

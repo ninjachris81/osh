@@ -27,20 +27,20 @@ DeviceBase *DeviceDiscoveryModelBridge::registerUnknownDevice(QString id, QStrin
     iDebug() << Q_FUNC_INFO << id;
 
     DeviceBase* device = new DeviceBase(id, serviceId);
-    m_unknownDevices.insert(id, device);
+    m_unknownDevices.insert(device->fullId(), device);
     Q_EMIT(unknownDevicesChanged());
     return device;
 }
 
 DeviceBase *DeviceDiscoveryModelBridge::handleReceivedMessage(DeviceDiscoveryMessage* msg) {
     DeviceBase* device;
-    if (m_datamodelManager->datamodel()->knownDevices().contains(msg->deviceId())) {
-        device = m_datamodelManager->datamodel()->knownDevices().value(msg->deviceId());
+    if (m_datamodelManager->datamodel()->knownDevices().contains(msg->fullId())) {
+        device = m_datamodelManager->datamodel()->knownDevices().value(msg->fullId());
     } else {
-        if (!m_unknownDevices.contains(msg->deviceId())) {
-            device = registerUnknownDevice(msg->deviceId(), msg->serviceId());
+        if (!m_unknownDevices.contains(msg->fullId())) {
+            device = registerUnknownDevice(msg->deviceId(), msg->fullId());
         } else {
-            device = m_unknownDevices.value(msg->deviceId());
+            device = m_unknownDevices.value(msg->fullId());
         }
     }
 

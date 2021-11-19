@@ -12,12 +12,12 @@ DeviceBaseUI::DeviceBaseUI(QObject *parent) : IdentifyableUI(parent)
     connect(m_device, &DeviceBase::isOnlineChanged, this, &DeviceBaseUI::isOnlineChanged);
 }
 
-QString DeviceBaseUI::serviceId() {
-    return m_device->serviceId();
+QString DeviceBaseUI::fullId() {
+    return m_device->fullId();
 }
 
-QString DeviceBaseUI::sessionId() {
-    return m_device->sessionId();
+QString DeviceBaseUI::serviceId() {
+    return m_device->serviceId();
 }
 
 QString DeviceBaseUI::name() {

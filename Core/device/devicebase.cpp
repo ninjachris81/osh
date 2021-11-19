@@ -36,10 +36,10 @@ bool DeviceBase::isOnline() {
     return m_isOnline;
 }
 
-QString DeviceBase::serviceId() {
-    return m_serviceId;
+QString DeviceBase::fullId() {
+    return m_id + "." + m_serviceId;
 }
 
-QString DeviceBase::sessionId() {
-    return m_id + "." + m_serviceId;
+QString DeviceBase::serviceId() {
+    return m_serviceId;
 }
