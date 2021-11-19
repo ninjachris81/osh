@@ -43,7 +43,7 @@ void MCP23017Reader::readStates() {
     while(true) {
         for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
-            bool state = digitalRead(m_pinBase + i) == HIGH;
+            bool state = digitalRead(m_pinBase + i) == LOW;
 #else
             bool state = false;
 #endif
