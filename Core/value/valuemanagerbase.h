@@ -34,7 +34,7 @@ protected:
     ValueBase* getValue(QString fullId);
     ValueBase* getValue(QString valueGroupId, QString valueId);
 
-    QMap<QString, ValueBase*> m_values;
+    QMap<QString, ValueBase*> m_knownValues;
 
 signals:
 

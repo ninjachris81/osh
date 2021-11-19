@@ -35,13 +35,13 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
 
-    KMTronicRelayController relayController(&controllerManager, "rc0", KMTronicRelayController::USB_SERIAL_8PORT, KMTronicRelayController::getRelayCount(KMTronicRelayController::USB_SERIAL_8PORT));
+    KMTronicRelayController relayController(&controllerManager, "egRelays0", KMTronicRelayController::USB_SERIAL_8PORT, KMTronicRelayController::getRelayCount(KMTronicRelayController::USB_SERIAL_8PORT));
     controllerManager.registerController(&relayController);
 
     managerRegistration.init(&config);
 
     QList<ValueBase*> actors;
-    ValueGroup actorGroup(clientManager.device()->id());
+    ValueGroup actorGroup(relayController.id());
     for (quint8 i=0;i<KMTronicRelayController::getRelayCount(KMTronicRelayController::USB_SERIAL_8PORT);i++) {
         qDebug() << "Init actor" << i;
         DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), true);

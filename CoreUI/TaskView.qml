@@ -71,7 +71,7 @@ ViewBase {
 
                 Text {
                     Layout.preferredWidth: 100
-                    text: modelData.lastResult
+                    text: modelData.lastResult === undefined ? "Invalid" : modelData.lastResult
                 }
 
                 Text {

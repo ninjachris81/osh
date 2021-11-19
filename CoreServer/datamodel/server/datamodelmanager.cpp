@@ -53,6 +53,7 @@ void DatamodelManager::init(LocalConfig* config) {
 void DatamodelManager::registerValues() {
     // register values
     ValueManagerBase* valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+
     QMapIterator<QString, ValueBase*> it(m_datamodel->values());
     while (it.hasNext()) {
         it.next();

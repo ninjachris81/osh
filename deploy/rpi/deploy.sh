@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-function buildQMqtt {
-   echo "Building QMqtt in $PWD"
-   cd $OSH_ROOT/qmqtt
+# @see osh.pro
+
+function buildQtMqtt {
+   echo "Building QtMqtt in $PWD"
+   cd $OSH_ROOT/qtmqtt
    qmake
    make -j$MAKE_CORE_COUNT
    make install
@@ -12,15 +14,15 @@ function buildOSHLib {
     cd $OSH_ROOT/$1
     echo "Building lib in $PWD"
     qmake
-    #make -j$MAKE_CORE_COUNT
-    #make install
+    make -j$MAKE_CORE_COUNT
+    make install
 }
 
 function buildOSHTarget {
    cd $OSH_ROOT/$1
    echo "Building target in $PWD"
    qmake
-   #make -j$MAKE_CORE_COUNT
+   make -j$MAKE_CORE_COUNT
 }
 
 function printInfos {
@@ -57,11 +59,39 @@ case "$1" in
    CoreService		)
       BUILD_TARGET=$1
       printInfos
-      buildQMqtt
+      buildQtMqtt
       buildOSHLib "Core"
-      buildOSHLib "QMqttCommunicationManager"
       buildOSHLib "CoreServer"
-      buildOSHTarget "CoreService"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
+   CoreUI		)
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "CoreServer"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
+   KMTronicRelayService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "CoreSerial"
+      buildOSHLib "KMTronicRelayController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
+   MCP23017InputService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "MCP23017InputController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
       ;;
    *			)
       ;;

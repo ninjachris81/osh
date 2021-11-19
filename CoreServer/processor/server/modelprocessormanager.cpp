@@ -2,9 +2,11 @@
 
 #include <QDebug>
 #include <QDateTime>
+#include <QMetaEnum>
 
 #include "macros.h"
 #include "value/server/servervaluemanager.h"
+#include "shared/actor_qt.h"
 
 QLatin1Literal ModelProcessorManager::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
 
@@ -38,6 +40,8 @@ void ModelProcessorManager::postInit() {
     injectValues(dmManager);
 
     injectActors(dmManager);
+
+    injectConstants(dmManager);
 
     start();
 }
@@ -110,4 +114,17 @@ void ModelProcessorManager::injectActors(DatamodelManager* dmManager) {
         it.next();
         injectActor(it.value());
     }
+}
+
+void ModelProcessorManager::injectConstants(DatamodelManager *dmManager) {
+    QJSValue constants = m_engine.newObject();
+
+    QMetaEnum e = QMetaEnum::fromType<actor::ACTOR_CMDS>();
+    for (quint8 i=0;i<e.keyCount();i++) {
+        QString key = e.key(i);
+        iDebug() << "Injecting constant" << key;
+        constants.setProperty(key, QJSValue(e.value(i)));
+    }
+
+    m_engine.globalObject().setProperty("C", constants);
 }

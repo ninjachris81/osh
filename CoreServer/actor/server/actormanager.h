@@ -9,6 +9,7 @@
 
 #include "manager/managerbase.h"
 #include "actor/actorbase.h"
+#include "communication/communicationmanagerbase.h"
 
 class ActorManager : public ManagerBase
 {
@@ -30,8 +31,13 @@ public:
 
     void registerActor(ActorBase* actor);
 
+    void onCmdTriggered(ActorBase *actor, ACTOR_CMDS cmd);
+
 private:
     QMap<QString, ActorBase*> m_actors;
+    CommunicationManagerBase* m_commManager;
+
+private slots:
 
 signals:
 

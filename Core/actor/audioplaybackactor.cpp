@@ -5,7 +5,7 @@ AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, QObje
 
 }
 
-bool AudioPlaybackActor::cmdSupported(ACTOR_CMDS cmd) {
+bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
     case ACTOR_CMD_START:
     case ACTOR_CMD_STOP:
@@ -15,7 +15,7 @@ bool AudioPlaybackActor::cmdSupported(ACTOR_CMDS cmd) {
     }
 }
 
-void AudioPlaybackActor::_triggerCmd(ACTOR_CMDS cmd) {
+void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
     case ACTOR_CMD_ON:
         updateValue(true);

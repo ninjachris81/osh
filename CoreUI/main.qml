@@ -27,6 +27,9 @@ Window {
         TabButton {
             text: qsTr("Task View")
         }
+        TabButton {
+            text: qsTr("Value View")
+        }
     }
 
     StackLayout {
@@ -48,7 +51,9 @@ Window {
 
         }
 
+        ValueView {
 
+        }
     }
 
 

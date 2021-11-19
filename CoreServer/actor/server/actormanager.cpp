@@ -21,6 +21,9 @@ void ActorManager::init(LocalConfig* config) {
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ValueManagerBase);
+    REQUIRE_MANAGER(CommunicationManagerBase);
+
+    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
 }
 
 QString ActorManager::id() {
@@ -42,4 +45,14 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
 
 void ActorManager::registerActor(ActorBase* actor) {
     m_actors.insert(actor->id(), actor);
+    connect(actor, &ActorBase::cmdTriggered, this, [this, actor](ACTOR_CMDS cmd) {
+        this->onCmdTriggered(actor, cmd);
+    });
+}
+
+void ActorManager::onCmdTriggered(ActorBase* actor, ACTOR_CMDS cmd) {
+    iDebug() << Q_FUNC_INFO << cmd;
+
+    ActorMessage msg(actor->valueGroup()->id(), actor->id(), cmd);
+    m_commManager->sendMessage(msg);
 }

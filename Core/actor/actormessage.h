@@ -5,6 +5,8 @@
 #include "communication/messagebase.h"
 #include "shared/actor_qt.h"
 
+using namespace actor;
+
 class ActorMessage : public MessageBase
 {
     Q_OBJECT

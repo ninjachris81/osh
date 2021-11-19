@@ -12,7 +12,13 @@ void ActorBase::triggerCmd(ACTOR_CMDS cmd) {
 
     if (cmdSupported(cmd)) {
         _triggerCmd(cmd);
+        Q_EMIT(cmdTriggered(cmd));
     } else {
         iWarning() << "Cmd not supported" << cmd;
     }
+}
+
+void ActorBase::triggerCmd(int cmd) {
+    iDebug() << Q_FUNC_INFO << cmd;
+    triggerCmd(static_cast<ACTOR_CMDS>(cmd));
 }

@@ -21,7 +21,7 @@ void ProcessorTask::run(QJSEngine *engine) {
         iDebug() << "Result" << result.toVariant();
         m_lastResult = result.toVariant();
     } else {
-        iWarning() << "Script execution error" << result.errorType();
+        iWarning() << "Script execution error" << result.errorType() << result.toString();
         m_lastResult = QVariant();
     }
     Q_EMIT(lastResultChanged());

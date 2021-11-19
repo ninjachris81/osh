@@ -8,29 +8,37 @@
 TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", parent) {
     iDebug() << Q_FUNC_INFO;
 
-    ValueGroup* vg = new ValueGroup("test");
-    m_valueGroups.insert(vg->id(), vg);
 
-    BooleanValue* rel0 = new BooleanValue(vg, "somebool");
-    rel0->withValueTimeout(ValueBase::VALUE_TIMEOUT_SHORT);
-
-    m_values.insert(rel0->id(), rel0);
+    KnownDevice* serverDevice = new KnownDevice("349785676", "Server");
+    m_knownDevices.insert(serverDevice->id(), serverDevice);
 
     KnownDevice* guiDevice = new KnownDevice("582645258", "GUI");
     m_knownDevices.insert(guiDevice->id(), guiDevice);
 
-    KnownDevice* relay0Device = new KnownDevice("66403375", "KMTronic Relay 0");
-    m_knownDevices.insert(relay0Device->id(), relay0Device);
+    KnownDevice* deviceNodeEG = new KnownDevice("66403375", "Node EG");
+    m_knownDevices.insert(deviceNodeEG->id(), deviceNodeEG);
 
-    ValueGroup* kmTronicRelay = new ValueGroup("66403375");
+    ValueGroup* nodeEGRelays = new ValueGroup("egRelays0");
     for (quint8 i = 0;i<8;i++) {
-        DigitalActor* relayActor = new DigitalActor(kmTronicRelay, QString::number(i), true);
+        DigitalActor* relayActor = new DigitalActor(nodeEGRelays, QString::number(i), true);
+        relayActor->withValueTimeout(ValueBase::VALUE_TIMEOUT_MID);
         m_actors.insert(relayActor->id(), relayActor);
     }
 
-    //ProcessorTask* processorNode = new ProcessorTask("testprocess0", "values_test_somebool.rawValue()");
-    //m_processorTasks.insert(processorNode->id(), processorNode);
+    ValueGroup* nodeEGInputs = new ValueGroup("egInputs0");
+    for (quint8 i = 0;i<16;i++) {
+        BooleanValue* inputValue = new BooleanValue(nodeEGInputs, QString::number(i));
+        inputValue->withValueTimeout(ValueBase::VALUE_TIMEOUT_MID);
+        m_values.insert(inputValue->id(), inputValue);
+    }
 
-    ProcessorTask* processorNode2 = new ProcessorTask("testprocess1", "values_66403375_0.rawValue()");
+
+    ProcessorTask* processorNode1 = new ProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
+    m_processorTasks.insert(processorNode1->id(), processorNode1);
+
+    ProcessorTask* processorNode2 = new ProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
     m_processorTasks.insert(processorNode2->id(), processorNode2);
+
+    ProcessorTask* logicNode1 = new ProcessorTask("logicproc1", "if (values_egInputs0_0.isValid()) { var actual=values_egRelays0_0.rawValue(); var expected=values_egInputs0_0.rawValue(); if (actual!=expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF );} true; } else { false; }");
+    m_processorTasks.insert(logicNode1->id(), logicNode1);
 }

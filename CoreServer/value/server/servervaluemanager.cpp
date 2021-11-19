@@ -34,7 +34,11 @@ void ServerValueManager::valueReceived(ValueBase* value, QVariant newValue) {
 
 void ServerValueManager::valueReceived(QString valueGroupId, QString valueId, QVariant newValue) {
     ValueBase* value = getValue(valueGroupId, valueId);
-    valueReceived(value, newValue);
+    if (value != nullptr) {
+        valueReceived(value, newValue);
+    } else {
+        iWarning() << "Value not registered" << valueGroupId << valueId;
+    }
 }
 
 /*
@@ -43,7 +47,7 @@ void ServerValueManager::valueReceived(QString valueGroupId, QString valueId, QV
 void ServerValueManager::checkValues() {
     //iDebug() << Q_FUNC_INFO;
 
-    QMapIterator<QString, ValueBase*> it(m_values);
+    QMapIterator<QString, ValueBase*> it(m_knownValues);
     while(it.hasNext()) {
         it.next();
 
@@ -52,6 +56,7 @@ void ServerValueManager::checkValues() {
         }
     }
 }
+
 
 void ServerValueManager::invalidateValue(ValueBase* value) {
     value->invalidate();

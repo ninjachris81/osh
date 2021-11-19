@@ -15,6 +15,10 @@ public:
 
     /*virtual*/ void handleReceivedMessage(ValueMessage* msg);
 
+protected:
+    void valueReceived(ValueBase* value, QVariant newValue);
+    void valueReceived(QString valueGroupId, QString valueId, QVariant newValue);
+
 signals:
 
 public slots:

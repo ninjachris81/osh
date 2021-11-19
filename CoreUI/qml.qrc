@@ -4,5 +4,6 @@
         <file>DeviceDiscoveryView.qml</file>
         <file>DashboardView.qml</file>
         <file>TaskView.qml</file>
+        <file>ValueView.qml</file>
     </qresource>
 </RCC>

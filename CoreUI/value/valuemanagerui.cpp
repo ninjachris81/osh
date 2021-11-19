@@ -15,4 +15,17 @@ void ValueManagerUI::init(LocalConfig *config) {
 
 void ValueManagerUI::handleReceivedMessage(ValueMessage* msg) {
     iDebug() << Q_FUNC_INFO;
+
+    valueReceived(msg->valueGroupId(), msg->valueId(), msg->rawValue());
+}
+
+void ValueManagerUI::valueReceived(ValueBase* value, QVariant newValue) {
+    if (value != nullptr) {
+        value->updateValue(newValue);
+    }
+}
+
+void ValueManagerUI::valueReceived(QString valueGroupId, QString valueId, QVariant newValue) {
+    ValueBase* value = getValue(valueGroupId, valueId);
+    valueReceived(value, newValue);
 }

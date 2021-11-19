@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
 
     LocalConfig config;
 
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nvalue.*=true\ndatamodel.*=true\ncommunication.*=true"));
+
     ManagerRegistration managerRegistration(ManagerRegistration::GUI);
 
     DeviceDiscoveryManagerUI deviceDiscoveryManager;

@@ -7,6 +7,8 @@
 #include "value/valuegroup.h"
 #include "shared/actor_qt.h"
 
+using namespace actor;
+
 class ActorBase : public ValueBase
 {
     Q_OBJECT
@@ -14,10 +16,13 @@ public:
     explicit ActorBase(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
 
     void triggerCmd(ACTOR_CMDS cmd);
+    Q_INVOKABLE void triggerCmd(int cmd);
     virtual bool cmdSupported(ACTOR_CMDS cmd) = 0;
 
     virtual bool isAsync() = 0;
+
 signals:
+    void cmdTriggered(ACTOR_CMDS cmd);
 
 protected:
     virtual void _triggerCmd(ACTOR_CMDS cmd) = 0;

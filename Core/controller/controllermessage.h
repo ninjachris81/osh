@@ -7,6 +7,8 @@
 #include "communication/messagebase.h"
 #include "shared/controllercmdtypes_qt.h"
 
+using namespace controller;
+
 class ControllerMessage : public MessageBase
 {
     Q_OBJECT

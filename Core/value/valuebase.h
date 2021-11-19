@@ -31,14 +31,14 @@ public:
 
     virtual QVariant _updateValue(QVariant newValue) = 0;
 
-    bool isValid() {
-        return m_value.isValid();
-    }
-
     QString fullId();
     ValueGroup* valueGroup();
 
     Q_INVOKABLE QVariant rawValue();
+
+    Q_INVOKABLE bool isValid() {
+        return m_value.isValid();
+    }
 
     qint64 lastUpdate();
     VALUE_TIMEOUT valueTimeout();

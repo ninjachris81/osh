@@ -9,15 +9,21 @@
 #include <QObject>
 #include <QVariant>
 
-enum ACTOR_CMDS {
-    ACTOR_CMD_UNKNOWN = ENUM_UNKNOWN,
-    ACTOR_CMD_ON = ACTOR_ON,
-    ACTOR_CMD_OFF = ACTOR_OFF,
-    ACTOR_CMD_UP = ACTOR_UP,
-    ACTOR_CMD_DOWN = ACTOR_DOWN,
-    ACTOR_CMD_START = ACTOR_START,
-    ACTOR_CMD_STOP = ACTOR_STOP
-};
+namespace actor {
+Q_NAMESPACE
+
+    enum ACTOR_CMDS {
+        ACTOR_CMD_UNKNOWN = ENUM_UNKNOWN,
+        ACTOR_CMD_ON = ACTOR_ON,
+        ACTOR_CMD_OFF = ACTOR_OFF,
+        ACTOR_CMD_UP = ACTOR_UP,
+        ACTOR_CMD_DOWN = ACTOR_DOWN,
+        ACTOR_CMD_START = ACTOR_START,
+        ACTOR_CMD_STOP = ACTOR_STOP
+    };
+
+    Q_ENUM_NS(ACTOR_CMDS);
+}
 
 
 #endif // ACTOR_QT_H

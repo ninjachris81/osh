@@ -5,6 +5,8 @@
 #include "logging_categories.h"
 
 namespace LogCat {
+Q_NAMESPACE
+
     static QString LOGGING_CATEGORIES[] = {
         LOGCAT_COMMON,
         LOGCAT_ACTOR,
@@ -32,6 +34,7 @@ namespace LogCat {
         PROCESSOR,
         DATAMODEL
     };
+    Q_ENUM_NS(LOGCAT)
 }
 
 

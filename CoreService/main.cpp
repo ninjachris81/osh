@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 
     qDebug() << Q_FUNC_INFO;
 
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nprocessor.*=true\ndatamodel.*=true"));
+    //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nprocessor.*=true\ndatamodel.*=true"));
+    QLoggingCategory::setFilterRules(QStringLiteral("device.*=false"));
 
     LocalConfig config;
 

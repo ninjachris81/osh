@@ -40,8 +40,11 @@ private:
     QMap<QString, ProcessorTask*> m_processorTasks;
     QTimer m_scheduleTimer;
 
+    QList<QJSValue> m_values;
+
     void injectValues(DatamodelManager *dmManager);
     void injectActors(DatamodelManager *dmManager);
+    void injectConstants(DatamodelManager *dmManager);
 
     void injectValue(ValueBase* value);
     void injectActor(ActorBase* actor);

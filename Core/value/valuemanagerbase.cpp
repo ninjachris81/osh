@@ -31,19 +31,24 @@ void ValueManagerBase::publishValue(ValueBase* value) {
 void ValueManagerBase::registerValue(ValueBase* value) {
     iDebug() << Q_FUNC_INFO << value->fullId();
 
-    if (!m_values.contains(value->fullId())) {
-        m_values.insert(value->fullId(), value);
+    if (!m_knownValues.contains(value->fullId())) {
+        m_knownValues.insert(value->fullId(), value);
     } else {
         iWarning() << "Value already registered" << value->fullId();
     }
 }
+
 
 ValueBase* ValueManagerBase::getValue(QString valueGroupId, QString valueId) {
     return getValue(ValueBase::getFullId(valueGroupId, valueId));
 }
 
 ValueBase* ValueManagerBase::getValue(QString fullId) {
-    return m_values.value(fullId);
+    if (m_knownValues.contains(fullId)) {
+        return m_knownValues.value(fullId);
+    } else {
+        return nullptr;
+    }
 }
 
 MessageBase::MESSAGE_TYPE ValueManagerBase::getMessageType() {

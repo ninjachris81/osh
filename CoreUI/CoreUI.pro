@@ -25,6 +25,7 @@ SOURCES += \
         identifyableui.cpp \
         main.cpp \
         processor/processortaskui.cpp \
+        value/valuebaseui.cpp \
         value/valuemanagerui.cpp
 
 RESOURCES += qml.qrc \
@@ -89,4 +90,5 @@ HEADERS += \
     device/devicediscoverymanagerui.h \
     identifyableui.h \
     processor/processortaskui.h \
+    value/valuebaseui.h \
     value/valuemanagerui.h

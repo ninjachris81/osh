@@ -30,8 +30,8 @@ public:
 
     virtual void handleReceivedMessage(MessageBase* msg) = 0;
 
-    template<class MANAGER_TYPE> MANAGER_TYPE* getManager(QString name) {
-        MANAGER_TYPE* returnVal = static_cast<MANAGER_TYPE*>(managerRegistration()->getManager(name));
+    template<class MANAGER_TYPE> MANAGER_TYPE* getManager(QString id) {
+        MANAGER_TYPE* returnVal = static_cast<MANAGER_TYPE*>(managerRegistration()->getManager(id));
         Q_ASSERT(returnVal != nullptr);
         return returnVal;
     }

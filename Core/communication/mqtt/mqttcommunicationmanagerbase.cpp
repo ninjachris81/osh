@@ -188,6 +188,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         ValueMessage* valueMessage = static_cast<ValueMessage*>(&message);
         return serializeCompactValue(valueMessage->rawValue());
     }
+    case MessageBase::MESSAGE_TYPE_ACTOR: {
+        ActorMessage* actorMessage = static_cast<ActorMessage*>(&message);
+        return serializeCompactValue(actorMessage->cmd());
+    }
     case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
         SystemtimeMessage* systimeMessage = static_cast<SystemtimeMessage*>(&message);
         return serializeCompactValue(systimeMessage->ts());
