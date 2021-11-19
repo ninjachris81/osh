@@ -22,7 +22,7 @@ void MCP23017Reader::run() {
 
 bool MCP23017Reader::open() {
 #ifdef __linux__
-    mcp23017Setup (bus, addr);
+    mcp23017Setup (m_bus, m_addr);
 #endif
 
     m_states = new QBitArray(m_inputCount);
