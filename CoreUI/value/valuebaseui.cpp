@@ -6,6 +6,7 @@ ValueBaseUI::ValueBaseUI(QObject *parent) : IdentifyableUI (parent)
     connect(m_value, &ValueBase::invalidated, this, &ValueBaseUI::isValidChanged);
     connect(m_value, &ValueBase::valueChanged, this, &ValueBaseUI::rawValueChanged);
     connect(m_value, &ValueBase::valueChanged, this, &ValueBaseUI::isValidChanged);
+    connect(m_value, &ValueBase::signalRateChanged, this, &ValueBaseUI::signalRateChanged);
 }
 
 QString ValueBaseUI::fullId() {
@@ -18,4 +19,8 @@ bool ValueBaseUI::isValid() {
 
 QVariant ValueBaseUI::rawValue() {
     return m_value->rawValue();
+}
+
+double ValueBaseUI::signalRate() {
+    return m_value->signalRate();
 }

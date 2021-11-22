@@ -14,10 +14,12 @@ public:
     Q_PROPERTY(QString fullId READ fullId NOTIFY fullIdChanged)
     Q_PROPERTY(bool isValid READ isValid NOTIFY isValidChanged)
     Q_PROPERTY(QVariant rawValue READ rawValue NOTIFY rawValueChanged)
+    Q_PROPERTY(double signalRate READ signalRate NOTIFY signalRateChanged)
 
     QString fullId();
     bool isValid();
     QVariant rawValue();
+    double signalRate();
 
 protected:
     ValueBase* m_value;
@@ -26,6 +28,7 @@ signals:
     void fullIdChanged();
     void isValidChanged();
     void rawValueChanged();
+    void signalRateChanged();
 
 public slots:
 };

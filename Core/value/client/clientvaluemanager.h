@@ -2,6 +2,8 @@
 #define CLIENTVALUEMANAGER_H
 
 #include <QObject>
+#include <QTimer>
+
 #include "value/valuemanagerbase.h"
 #include "communication/messagebase.h"
 
@@ -14,6 +16,14 @@ public:
     /*virtual*/ void init(LocalConfig* config) override;
 
     /*virtual*/ void handleReceivedMessage(ValueMessage* msg) override;
+
+    void registerValue(ValueBase* value) override;
+
+private:
+    QTimer m_maintenanceTimer;
+
+private slots:
+    void maintainValues();
 
 signals:
 

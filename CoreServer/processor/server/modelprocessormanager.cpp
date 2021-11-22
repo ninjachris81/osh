@@ -3,10 +3,13 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QMetaEnum>
+#include <QResource>
+#include <QQmlEngine>
 
 #include "macros.h"
 #include "value/server/servervaluemanager.h"
 #include "shared/actor_qt.h"
+#include "processor/server/commonscripts.h"
 
 QLatin1Literal ModelProcessorManager::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
 
@@ -27,6 +30,8 @@ void ModelProcessorManager::init(LocalConfig* config) {
     REQUIRE_MANAGER(ServerValueManager);
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
+
+    registerScript(new CommonScripts());
 }
 
 void ModelProcessorManager::postInit() {
@@ -35,13 +40,15 @@ void ModelProcessorManager::postInit() {
     DatamodelManager* dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
     m_processorTasks = dmManager->datamodel()->processorTasks();
 
-    m_engine.installExtensions(QJSEngine::ConsoleExtension);
+    m_engine.installExtensions(QJSEngine::AllExtensions);
 
     injectValues(dmManager);
 
     injectActors(dmManager);
 
-    injectConstants(dmManager);
+    injectConstants();
+
+    injectScripts();
 
     start();
 }
@@ -81,6 +88,16 @@ void ModelProcessorManager::executeTasks() {
     }
 }
 
+void ModelProcessorManager::registerScript(ScriptBase* script) {
+    iDebug() << Q_FUNC_INFO << script->id();
+
+    if (!m_scripts.contains(script->id())) {
+        m_scripts.insert(script->id(), script);
+    } else {
+        iWarning() << "Script name is already registered" << script->id();
+    }
+}
+
 void ModelProcessorManager::injectValue(ValueBase* value) {
     QJSValue val = m_engine.newQObject(value);
 
@@ -116,7 +133,7 @@ void ModelProcessorManager::injectActors(DatamodelManager* dmManager) {
     }
 }
 
-void ModelProcessorManager::injectConstants(DatamodelManager *dmManager) {
+void ModelProcessorManager::injectConstants() {
     QJSValue constants = m_engine.newObject();
 
     QMetaEnum e = QMetaEnum::fromType<actor::ACTOR_CMDS>();
@@ -127,4 +144,14 @@ void ModelProcessorManager::injectConstants(DatamodelManager *dmManager) {
     }
 
     m_engine.globalObject().setProperty("C", constants);
+}
+
+void ModelProcessorManager::injectScripts() {
+    QMapIterator<QString, ScriptBase*> it(m_scripts);
+    while (it.hasNext()) {
+        it.next();
+        iDebug() << "Injecting script" << it.key();
+        QJSValue script = m_engine.newQObject(it.value());
+        m_engine.globalObject().setProperty(it.key(), script);
+    }
 }

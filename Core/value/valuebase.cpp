@@ -44,6 +44,8 @@ void ValueBase::setRawValue(QVariant value) {
 void ValueBase::updateValue(QVariant newValue) {
     iDebug() << Q_FUNC_INFO << newValue;
 
+    m_currentSignalCount++;
+
     m_value = _updateValue(newValue);
     bool hasChanged = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
@@ -62,9 +64,49 @@ ValueBase::VALUE_TIMEOUT ValueBase::valueTimeout() {
     return m_valueTimeout;
 }
 
+int ValueBase::maintenanceInterval() {
+    if (m_valueTimeout == ValueBase::VALUE_TIMEOUT_NONE) {
+        return -1;
+    } else {
+        return m_valueTimeout / 2;
+    }
+}
+
+bool ValueBase::checkMaintenance() {
+    if (!m_value.isValid()) return false;
+    if (maintenanceInterval() <= 0) return false;
+    if (QDateTime::currentMSecsSinceEpoch() > m_lastMaintenance + maintenanceInterval()) {
+        m_lastMaintenance = QDateTime::currentMSecsSinceEpoch();
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void ValueBase::invalidate() {
     iDebug() << Q_FUNC_INFO << fullId();
 
     m_value = QVariant();
     Q_EMIT(invalidated());
+    updateSignalRate();
+}
+
+double ValueBase::signalRate() {
+    return m_signalRate;
+}
+
+void ValueBase::updateSignalRate() {
+    if (m_value.isValid()) {
+        m_signalCount++;
+        m_signalRate = 60 / (m_signalCount * 10) * m_currentSignalCount;
+        Q_EMIT(signalRateChanged());
+
+        if (m_signalCount >= 6) {
+            m_signalCount = 0;
+            m_currentSignalCount = 0;
+        }
+    } else {
+        m_signalRate = 0;
+        Q_EMIT(signalRateChanged());
+    }
 }

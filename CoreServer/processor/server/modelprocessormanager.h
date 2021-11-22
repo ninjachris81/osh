@@ -10,6 +10,7 @@
 #include "manager/managerbase.h"
 #include "processor/server/processortask.h"
 #include "datamodel/server/datamodelmanager.h"
+#include "processor/server/scriptbase.h"
 
 class ModelProcessorManager : public ManagerBase
 {
@@ -42,12 +43,17 @@ private:
 
     QList<QJSValue> m_values;
 
+    QMap<QString, ScriptBase*> m_scripts;
+
     void injectValues(DatamodelManager *dmManager);
     void injectActors(DatamodelManager *dmManager);
-    void injectConstants(DatamodelManager *dmManager);
+    void injectConstants();
+    void injectScripts();
 
     void injectValue(ValueBase* value);
     void injectActor(ActorBase* actor);
+
+    void registerScript(ScriptBase* script);
 
 private slots:
     void executeTasks();

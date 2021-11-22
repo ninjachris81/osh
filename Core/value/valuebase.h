@@ -43,7 +43,14 @@ public:
     qint64 lastUpdate();
     VALUE_TIMEOUT valueTimeout();
 
+    int maintenanceInterval();
+    bool checkMaintenance();
+
     void invalidate();
+
+    double signalRate();
+
+    void updateSignalRate();
 
 protected:
 
@@ -53,9 +60,16 @@ private:
     qint64 m_lastUpdate = 0;
     bool m_alwaysEmit = true;
 
+    qint64 m_lastMaintenance = 0;
+
+    double m_signalRate = 0;
+    quint8 m_signalCount = 0;
+    quint32 m_currentSignalCount = 0;
+
 signals:
     void valueChanged();
     void invalidated();
+    void signalRateChanged();
 
 };
 

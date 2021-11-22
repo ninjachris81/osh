@@ -9,7 +9,8 @@ QLatin1Literal ValueManagerBase::MANAGER_ID = QLatin1Literal("ValueManager");
 
 ValueManagerBase::ValueManagerBase(QObject *parent) : ManagerBase(parent)
 {
-
+    connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::updateSignalRates);
+    m_signalRateTimer.start(10000);
 }
 
 QString ValueManagerBase::id() {
@@ -60,4 +61,16 @@ void ValueManagerBase::handleReceivedMessage(MessageBase* msg) {
 
     ValueMessage* valueMessage = static_cast<ValueMessage*>(msg);
     handleReceivedMessage(valueMessage);
+}
+
+void ValueManagerBase::updateSignalRates() {
+    iDebug() << Q_FUNC_INFO;
+
+    QMapIterator<QString, ValueBase*> it(m_knownValues);
+
+    while(it.hasNext()) {
+        it.next();
+        it.value()->updateSignalRate();
+    }
+
 }

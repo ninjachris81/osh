@@ -20,10 +20,6 @@ void ControllerBase::bindValueManager(ClientValueManager *clientValueManager, QL
     QListIterator<ValueBase*> it(valueOrActors);
     while(it.hasNext()) {
         ValueBase* valOrActor = it.next();
-
-        QObject::connect(valOrActor, &ValueBase::valueChanged, [valOrActor, clientValueManager]() {
-            clientValueManager->publishValue(valOrActor);
-        });
-
+        clientValueManager->registerValue(valOrActor);
     }
 }

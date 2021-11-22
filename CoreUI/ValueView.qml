@@ -31,6 +31,11 @@ ViewBase {
                 }
 
                 Text {
+                    Layout.preferredWidth: 100
+                    text: qsTr("Signal Rate")
+                }
+
+                Text {
                     text: qsTr("Raw Value")
                 }
         }
@@ -52,6 +57,11 @@ ViewBase {
                 Text {
                     Layout.preferredWidth: 100
                     text: modelData.isValid
+                }
+
+                Text {
+                    Layout.preferredWidth: 100
+                    text: modelData.signalRate
                 }
 
                 Text {

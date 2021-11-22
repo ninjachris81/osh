@@ -42,6 +42,7 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", p
     ProcessorTask* processorNode2 = new ProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
     m_processorTasks.insert(processorNode2->id(), processorNode2);
 
-    ProcessorTask* logicNode1 = new ProcessorTask("logicproc1", "function ensureState(state) { var actual=values_egRelays0_0.rawValue(); var expected=values_egInputs0_0.rawValue(); if (actual!=expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF ); return expected; }} ensureState(values_egInputs0_0.isValid() ? values_egInputs0_0.rawValue() : false);");
+    ProcessorTask* logicNode1 = new ProcessorTask("logicproc1", "CommonScripts.ensureState(values_egInputs0_0, values_egInputs0_0, false, function(expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF )} );");
+    //ProcessorTask* logicNode1 = new ProcessorTask("logicproc1", "CommonScripts.test()");
     m_processorTasks.insert(logicNode1->id(), logicNode1);
 }

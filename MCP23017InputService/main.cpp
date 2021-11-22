@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     for (quint8 i=0;i<inputController.inputCount();i++) {
         qDebug() << "Init value" << i;
         BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i));
+        value->withValueTimeout(ValueBase::VALUE_TIMEOUT_MID);
         values.append(value);
         inputController.bindValue(value);
     }

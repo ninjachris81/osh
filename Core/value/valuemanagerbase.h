@@ -2,6 +2,7 @@
 #define VALUEMANAGERBASE_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
@@ -28,13 +29,19 @@ public:
 
     void publishValue(ValueBase* value);
 
-    void registerValue(ValueBase* value);
+    virtual void registerValue(ValueBase* value);
 
 protected:
     ValueBase* getValue(QString fullId);
     ValueBase* getValue(QString valueGroupId, QString valueId);
 
     QMap<QString, ValueBase*> m_knownValues;
+
+private:
+    QTimer m_signalRateTimer;
+
+private slots:
+    void updateSignalRates();
 
 signals:
 
