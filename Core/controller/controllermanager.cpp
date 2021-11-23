@@ -36,6 +36,16 @@ void ControllerManager::postInit() {
     }
 }
 
+void ControllerManager::start() {
+    iDebug() << Q_FUNC_INFO;
+
+    QMapIterator<QString, ControllerBase*> it(m_controllers);
+    while(it.hasNext()) {
+        it.next();
+        it.value()->start();
+    }
+}
+
 QString ControllerManager::id() {
     return MANAGER_ID;
 }

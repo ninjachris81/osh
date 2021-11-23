@@ -15,6 +15,8 @@ public:
 
     /*virtual*/ void init() override;
 
+    /*virtual*/ void start() override;
+
     /*virtual*/ quint8 inputCount() override;
 
 private slots:

@@ -2,3 +2,5 @@ sudo apt-get update
 sudo apt-get install git
 sudo apt-get install qt5-default qtdeclarative5-dev qtbase5-private-dev
 sudo apt-get install i2c-tools libi2c-dev
+
+sudo apt-get install libqt5serialport5 libqt5serialport5-dev

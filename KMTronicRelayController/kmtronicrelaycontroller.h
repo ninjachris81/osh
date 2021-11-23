@@ -30,6 +30,8 @@ public:
 
     /*virtual*/ void init() override;
 
+    /*virtual*/ void start() override;
+
     /*virtual*/ void switchStatus(quint8 relayIndex, bool status) override;
 
     static quint8 getRelayCount(RELAY_MODEL model);

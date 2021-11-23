@@ -30,6 +30,8 @@ public:
 
     void registerController(ControllerBase *controller);
 
+    void start();
+
     ControllerBase* getController(QString id);
 
     QStringList controllerNames();

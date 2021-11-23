@@ -26,6 +26,10 @@ void KMTronicRelayController::init() {
     connect(m_serialClient, &SerialPortClient::connected, this, &KMTronicRelayController::onSerialConnected);
     connect(m_serialClient, &SerialPortClient::disconnected, this, &KMTronicRelayController::onSerialDisconnected);
     connect(m_serialClient, &SerialPortClient::dataReceived, this, &KMTronicRelayController::onSerialDataReceived);
+}
+
+void KMTronicRelayController::start() {
+    iDebug() << Q_FUNC_INFO;
 
     m_serialClient->start();
 }

@@ -23,7 +23,7 @@ ViewBase {
 
                 Text {
                     Layout.preferredWidth: 300
-                    text: qsTr("ID")
+                    text: qsTr("DeviceID")
                 }
 
                 Text {

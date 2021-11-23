@@ -25,6 +25,8 @@ public:
 
     virtual void init() = 0;
 
+    virtual void start() = 0;
+
     virtual void handleMessage(ControllerMessage *msg) = 0;
 
     virtual void bindValueManager(ClientValueManager* clientValueManager, QList<ValueBase*> valueOrActors);
