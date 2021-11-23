@@ -52,5 +52,7 @@ int main(int argc, char *argv[])
 
     inputController.bindValueManager(&valueManager, values);
 
+    inputController.start();
+
     return a.exec();
 }
