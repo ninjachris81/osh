@@ -13,5 +13,6 @@
 #define ACTOR_DOWN  4
 #define ACTOR_START 5
 #define ACTOR_STOP  6
+#define ACTOR_PAUSE 7
 
 #endif // ACTOR_H

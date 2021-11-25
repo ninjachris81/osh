@@ -1,3 +1,6 @@
 [submodule "qtmqtt"]
 	path = qtmqtt
 	url = https://code.qt.io/qt/qtmqtt.git
+[submodule "WiringPi"]
+	path = WiringPi
+	url = https://github.com/WiringPi/WiringPi.git

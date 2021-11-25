@@ -1,0 +1,43 @@
+apt-get install gnupg pinentry-curses nginx aptly
+gpg --full-generate-key
+gpg --list-keys
+gpg --output apt_pub.gpg --armor --export (KEY_ID)
+gpg --send-keys (KEY_ID)
+
+password osh
+
+aptly repo create -distribution="stable" stable
+
+
+
+sudo mkdir -p /var/www-apt
+sudo cp apt_pub.gpg /var/www-apt/
+sudo nano /etc/nginx/sites-available/apt
+
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name rpi-apt.fritz-box;
+    root /var/www-apt;
+    allow all;
+    autoindex on;
+
+    # Full access for everybody for the stable debian repo
+    location /public {
+        root /home/pi/.aptly;
+        allow all;
+    }
+
+    # Allow access to the top level to be able to download the GPG key
+    location / {
+        allow all;
+    }
+}
+
+
+
+cd /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/apt .
+sudo systemctl restart nginx

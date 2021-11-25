@@ -6,5 +6,6 @@
         <file>TaskView.qml</file>
         <file>ValueView.qml</file>
         <file>ActorView.qml</file>
+        <file>SystemWarningsView.qml</file>
     </qresource>
 </RCC>

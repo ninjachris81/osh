@@ -1,6 +1,6 @@
 #include "commonscripts.h"
 
-CommonScripts::CommonScripts(QObject *parent) : ScriptBase("CommonScripts", parent)
+CommonScripts::CommonScripts(QJSEngine *engine, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine)
 {
 
 }
@@ -8,18 +8,25 @@ CommonScripts::CommonScripts(QObject *parent) : ScriptBase("CommonScripts", pare
 /*
  * Returns true if the function has been called
 */
-bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function) {
-    QVariant actual = actualValue->isValid() ? actualValue->rawValue() : actualInvalid;
-    QVariant expected = expectedValue->rawValue();
+bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant invalidValue, QJSValue function) {
+    iDebug() << Q_FUNC_INFO << actualValue << expectedValue;
+
+    QVariant actual = actualValue->isValid() ? actualValue->rawValue() : invalidValue;
+    QVariant expected = expectedValue->isValid() ?  expectedValue->rawValue() : invalidValue;
 
     if (actual != expected) {
         // call func
         if (function.isCallable()) {
-            function.call();
+            iDebug() << "Call function" << actual << expected;
+            QJSValueList paramList;
+            paramList << m_engine->toScriptValue(expected);
+            function.call(paramList);
             return true;
         } else {
             iWarning() << "Parameter is not a function" << function.toString();
         }
+    } else {
+        iDebug() << "Same value" << actual << expected;
     }
 
     return false;

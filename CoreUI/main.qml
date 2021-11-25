@@ -18,20 +18,22 @@ Window {
 
         height: 40
 
+        /*
         TabButton {
             text: qsTr("Dashboard")
         }
+        */
         TabButton {
             text: qsTr("Device Explorer")
         }
         TabButton {
-            text: qsTr("Task View")
+            text: qsTr("Tasks")
         }
         TabButton {
-            text: qsTr("Value View")
+            text: qsTr("Values")
         }
         TabButton {
-            text: qsTr("Actor View")
+            text: qsTr("Actors")
         }
     }
 
@@ -42,9 +44,11 @@ Window {
 
         currentIndex: bar.currentIndex
 
+        /*
         DashboardView {
 
         }
+        */
 
         DeviceDiscoveryView {
 

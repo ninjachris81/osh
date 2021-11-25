@@ -4,3 +4,7 @@ ScriptBase::ScriptBase(QString name, QObject *parent) : Identifyable(name, paren
 {
 
 }
+
+LogCat::LOGCAT ScriptBase::logCat() {
+    return LogCat::PROCESSOR;
+}

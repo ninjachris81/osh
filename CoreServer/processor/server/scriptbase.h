@@ -10,6 +10,8 @@ class ScriptBase : public Identifyable
 public:
     explicit ScriptBase(QString name, QObject *parent = nullptr);
 
+    LogCat::LOGCAT logCat();
+
 signals:
 
 public slots:

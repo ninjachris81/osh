@@ -31,7 +31,7 @@ void ModelProcessorManager::init(LocalConfig* config) {
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
 
-    registerScript(new CommonScripts());
+    registerScript(new CommonScripts(&m_engine));
 }
 
 void ModelProcessorManager::postInit() {
