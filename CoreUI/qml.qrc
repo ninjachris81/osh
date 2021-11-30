@@ -7,5 +7,6 @@
         <file>ValueView.qml</file>
         <file>ActorView.qml</file>
         <file>SystemWarningsView.qml</file>
+        <file>LiveLogView.qml</file>
     </qresource>
 </RCC>

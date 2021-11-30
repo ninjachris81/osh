@@ -22,8 +22,11 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
+    void enableSetTime(bool enable);
+
 private:
     void setSystemTime(qint64 ts);
+    bool m_enableSetTime = true;
 
 signals:
 

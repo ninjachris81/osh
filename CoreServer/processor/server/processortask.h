@@ -14,12 +14,15 @@ public:
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    void run(QJSEngine* engine);
+    QVariant run(QJSEngine* engine);
 
     QString scriptCode();
     qint64 scheduleInterval();
     qint64 lastExecution();
     QVariant lastResult();
+
+    void setLastResult(QVariant lastResult);
+    void setLastExecutionNow();
 
 private:
     QString m_scriptCode;

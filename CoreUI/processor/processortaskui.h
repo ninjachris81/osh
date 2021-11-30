@@ -22,6 +22,8 @@ public:
     qint64 lastExecution();
     QVariant lastResult();
 
+    void setLastResult(QVariant lastResult);
+
 private:
     ProcessorTask* m_processorTask;
 

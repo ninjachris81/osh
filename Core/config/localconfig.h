@@ -27,6 +27,9 @@ public:
     int getInt(QString key, int defaultValue);
     int getInt(Identifyable* entity, QString key, int defaultValue);
 
+    bool getBool(QString key, bool defaultValue);
+    bool getBool(Identifyable* entity, QString key, bool defaultValue);
+
     bool exists(QString key);
     bool exists(Identifyable* entity, QString key);
 

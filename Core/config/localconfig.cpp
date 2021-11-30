@@ -90,6 +90,22 @@ int LocalConfig::getInt(Identifyable* entity, QString key, int defaultValue) {
     return value;
 }
 
+bool LocalConfig::getBool(QString key, bool defaultValue) {
+    if (m_settings->contains(key)) {
+        return m_settings->value(key).toBool();
+    } else {
+        m_settings->setValue(key, defaultValue);
+        return defaultValue;
+    }
+}
+
+bool LocalConfig::getBool(Identifyable* entity, QString key, bool defaultValue) {
+    m_settings->beginGroup(entity->id());
+    bool value = getBool(key, defaultValue);
+    m_settings->endGroup();
+    return value;
+}
+
 bool LocalConfig::exists(QString key) {
     return m_settings->contains(key);
 }

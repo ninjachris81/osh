@@ -45,6 +45,9 @@ void ManagerRegistration::init(LocalConfig* config) {
 
             logManager->registerManager(it.value());
         }
+
+        iDebug() << "Priority init log manager";
+        logManager->init(config);           // init this one first
     } else {
         iWarning() << "No log manager defined";
     }
@@ -53,7 +56,9 @@ void ManagerRegistration::init(LocalConfig* config) {
     while (it.hasNext()) {
         it.next();
 
-        it.value()->init(config);
+        if (it.key() != LogManager::MANAGER_ID) {           // already initialized, see above
+            it.value()->init(config);
+        }
     }
 
     iDebug() << "Post init";

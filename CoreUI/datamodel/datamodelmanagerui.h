@@ -22,7 +22,7 @@ public:
     DatamodelBaseUI* datamodel();
 
 private:
-    static DatamodelManagerUI* m_instance;
+    static DatamodelManagerUI* m_qmlInstance;
     DatamodelBaseUI* m_datamodel = nullptr;
 
 signals:

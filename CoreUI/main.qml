@@ -35,6 +35,9 @@ Window {
         TabButton {
             text: qsTr("Actors")
         }
+        TabButton {
+            text: qsTr("Live Log")
+        }
     }
 
     StackLayout {
@@ -63,6 +66,10 @@ Window {
         }
 
         ActorView {
+
+        }
+
+        LiveLogView {
 
         }
     }

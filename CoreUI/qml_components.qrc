@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>ViewBase.qml</file>
         <file>DebugTracer.qml</file>
+        <file>ListViewBase.qml</file>
     </qresource>
 </RCC>

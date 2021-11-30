@@ -10,6 +10,7 @@
 #include "value/server/servervaluemanager.h"
 #include "shared/actor_qt.h"
 #include "processor/server/commonscripts.h"
+#include "processor/scriptresultmessage.h"
 
 QLatin1Literal ModelProcessorManager::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
 
@@ -28,6 +29,9 @@ void ModelProcessorManager::init(LocalConfig* config) {
 
     REQUIRE_MANAGER(DatamodelManager);
     REQUIRE_MANAGER(ServerValueManager);
+    REQUIRE_MANAGER(CommunicationManagerBase);
+
+    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
 
@@ -83,9 +87,15 @@ void ModelProcessorManager::executeTasks() {
         it.next();
 
         if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
-            it.value()->run(&m_engine);
+            QVariant result = it.value()->run(&m_engine);
+            publishScriptResult(it.key(), result);
         }
     }
+}
+
+void ModelProcessorManager::publishScriptResult(QString taskId, QVariant value) {
+    ScriptResultMessage srMessage(taskId, value);
+    m_commManager->sendMessage(srMessage);
 }
 
 void ModelProcessorManager::registerScript(ScriptBase* script) {

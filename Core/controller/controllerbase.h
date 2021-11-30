@@ -29,9 +29,9 @@ public:
 
     virtual void handleMessage(ControllerMessage *msg) = 0;
 
-    virtual void bindValueManager(ClientValueManager* clientValueManager, QList<ValueBase*> valueOrActors);
     virtual quint8 bindActor(ActorBase *actor) { return 0; }
     virtual quint8 bindValue(ValueBase *value) { return 0; }
+    virtual void bindValueManager(ClientValueManager* clientValueManager, QList<ValueBase*> valueOrActors);
 
 protected:
     ControllerManager *m_manager;

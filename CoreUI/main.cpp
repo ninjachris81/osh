@@ -9,6 +9,9 @@
 #include "value/valuemanagerui.h"
 #include "actor/server/actormanager.h"
 #include "datamodel/datamodelmanagerui.h"
+#include "processor/modelprocessormanagerui.h"
+#include "log/logmanagerui.h"
+#include "time/client/clientsystemtimemanager.h"
 
 #define QML_BASE_PACKAGE "OSH"
 #define QML_VERSION_MAJOR 1
@@ -32,6 +35,9 @@ int main(int argc, char *argv[])
     DatamodelManagerUI datamodelManager;
     ValueManagerUI valueManager;
     ActorManager actorManager;
+    ModelProcessorManagerUI modelProcessorManager;
+    LogManagerUI logManager;
+    ClientSystemtimeManager systimeManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
@@ -39,6 +45,9 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
+    managerRegistration.registerManager(&modelProcessorManager);
+    managerRegistration.registerManager(&logManager);
+    managerRegistration.registerManager(&systimeManager);
 
     managerRegistration.init(&config);
 
@@ -47,6 +56,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<DeviceBaseUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "Device");
     qmlRegisterSingletonType<DeviceDiscoveryManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DeviceDiscoveryManager", &DeviceDiscoveryManagerUI::qmlInstance);
     qmlRegisterSingletonType<DatamodelManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DatamodelManager", &DatamodelManagerUI::qmlInstance);
+    qmlRegisterSingletonType<ModelProcessorManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ModelProcessorManager", &ModelProcessorManagerUI::qmlInstance);
+    qmlRegisterSingletonType<LogManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "LogManager", &LogManagerUI::qmlInstance);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

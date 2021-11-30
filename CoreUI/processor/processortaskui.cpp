@@ -23,3 +23,8 @@ qint64 ProcessorTaskUI::lastExecution() {
 QVariant ProcessorTaskUI::lastResult() {
     return m_processorTask->lastResult();
 }
+
+void ProcessorTaskUI::setLastResult(QVariant lastResult) {
+    m_processorTask->setLastResult(lastResult);
+    m_processorTask->setLastExecutionNow();
+}

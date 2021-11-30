@@ -8,6 +8,8 @@
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 #include "shared/logging_categories_qt.h"
+#include "communication/communicationmanagerbase.h"
+#include "device/devicediscoverymanagerbase.h"
 
 class LogManager : public ManagerBase
 {
@@ -27,12 +29,26 @@ public:
 
     void registerManager(ManagerBase* manager);
 
+    void publishLog(QtMsgType type, QString msg);
+
     static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+    static QString msgTypeToString(QtMsgType type);
+
+    static QtMsgType stringToMsgType(QString type);
+
+    static LogManager* m_instance;
 
 private:
     QMap<QString, ManagerBase*> m_managers;
+    CommunicationManagerBase* m_commManager;
+    DeviceDiscoveryManagerBase* m_ddManager;
+
+protected:
+    QList<QtMsgType> m_typeFilter;
 
 signals:
+    void logMessage(QtMsgType type, QString deviceId, QString msg);
 
 public slots:
 };

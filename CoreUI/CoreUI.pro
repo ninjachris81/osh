@@ -24,7 +24,10 @@ SOURCES += \
         device/devicebaseui.cpp \
         device/devicediscoverymanagerui.cpp \
         identifyableui.cpp \
+        log/logentryui.cpp \
+        log/logmanagerui.cpp \
         main.cpp \
+        processor/modelprocessormanagerui.cpp \
         processor/processortaskui.cpp \
         value/valuebaseui.cpp \
         value/valuemanagerui.cpp
@@ -91,6 +94,9 @@ HEADERS += \
     device/devicebaseui.h \
     device/devicediscoverymanagerui.h \
     identifyableui.h \
+    log/logentryui.h \
+    log/logmanagerui.h \
+    processor/modelprocessormanagerui.h \
     processor/processortaskui.h \
     value/valuebaseui.h \
     value/valuemanagerui.h

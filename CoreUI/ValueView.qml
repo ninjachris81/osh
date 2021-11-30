@@ -7,7 +7,7 @@ import OSH 1.0
 ViewBase {
     id: root
 
-    ListView {
+    ListViewBase {
         id: taskListView
 
         anchors.fill: parent
@@ -17,58 +17,15 @@ ViewBase {
         onModelChanged: {
             console.log("Value model changed " + count)
         }
-        header: RowLayout {
-                height: 50
 
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Full ID")
-                }
+        listHeaders: ["Full ID", "Is Valid", "S/R", "Raw Value"]
+        listWidths: [100, 100, 100, -1]
 
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Is valid")
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Signal Rate")
-                }
-
-                Text {
-                    text: qsTr("Raw Value")
-                }
-        }
-
-        delegate: Item {
-            width: taskListView.width
-            height: 30
-
-            DebugTracer{}
-
-            RowLayout {
-                height: 30
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.fullId
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.isValid
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.signalRate
-                }
-
-                Text {
-                    text: modelData.rawValue === undefined ? "Invalid" : modelData.rawValue
-                }
-            }
-        }
-
+        listValues: [
+            function(rowIndex) { return model[rowIndex].fullId },
+            function(rowIndex) { return model[rowIndex].isValid },
+            function(rowIndex) { return model[rowIndex].signalRate },
+            function(rowIndex) { return model[rowIndex].rawValue === undefined ? "Invalid" : model[rowIndex].rawValue }
+        ]
     }
 }

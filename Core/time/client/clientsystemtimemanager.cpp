@@ -19,9 +19,16 @@ QString ClientSystemtimeManager::id() {
     return MANAGER_ID;
 }
 
+void ClientSystemtimeManager::enableSetTime(bool enable) {
+    m_enableSetTime = enable;
+}
+
 void ClientSystemtimeManager::setSystemTime(qint64 ts) {
     iDebug() << Q_FUNC_INFO;
     // TODO
+    if (m_enableSetTime) {
+
+    }
 }
 
 MessageBase::MESSAGE_TYPE ClientSystemtimeManager::getMessageType() {

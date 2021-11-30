@@ -18,6 +18,10 @@ public:
 
     Q_PROPERTY(QList<QObject*> devices READ devices NOTIFY devicesChanged)
 
+    Q_INVOKABLE DeviceBaseUI *getKnownDevice(QString fullId);
+
+    Q_INVOKABLE bool isKnownDevice(QString fullId);
+
     QList<QObject *> devices();
 
     /*virtual*/ void init(LocalConfig* config);
@@ -29,7 +33,7 @@ public:
     static QObject *qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
 
 private:
-    static DeviceDiscoveryManagerUI* m_instance;
+    static DeviceDiscoveryManagerUI* m_qmlInstance;
 
 protected:
     DeviceDiscoveryModelBridge* m_modelBridge;

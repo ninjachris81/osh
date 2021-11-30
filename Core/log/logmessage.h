@@ -8,7 +8,7 @@ class LogMessage : public MessageBase
 {
     Q_OBJECT
 public:
-    explicit LogMessage(QString deviceId, QString message, QObject *parent = nullptr);
+    explicit LogMessage(QString deviceId, QtMsgType logType, QString message, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
@@ -17,10 +17,12 @@ public:
     /*virtual*/ QString getSecondLevelId() override;
 
     QString deviceId();
+    QtMsgType logType();
     QString message();
 
 private:
     QString m_deviceId;
+    QtMsgType m_logType;
     QString m_message;
 
 signals:

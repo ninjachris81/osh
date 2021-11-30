@@ -11,6 +11,7 @@
 #include "processor/server/processortask.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "processor/server/scriptbase.h"
+#include "communication/communicationmanagerbase.h"
 
 class ModelProcessorManager : public ManagerBase
 {
@@ -45,6 +46,8 @@ private:
 
     QMap<QString, ScriptBase*> m_scripts;
 
+    CommunicationManagerBase* m_commManager;
+
     void injectValues(DatamodelManager *dmManager);
     void injectActors(DatamodelManager *dmManager);
     void injectConstants();
@@ -54,6 +57,8 @@ private:
     void injectActor(ActorBase* actor);
 
     void registerScript(ScriptBase* script);
+
+    void publishScriptResult(QString taskId, QVariant value);
 
 private slots:
     void executeTasks();

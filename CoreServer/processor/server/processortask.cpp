@@ -12,7 +12,7 @@ LogCat::LOGCAT ProcessorTask::logCat() {
     return LogCat::PROCESSOR;
 }
 
-void ProcessorTask::run(QJSEngine *engine) {
+QVariant ProcessorTask::run(QJSEngine *engine) {
     iDebug() << Q_FUNC_INFO << m_id;
 
     QJSValue result = engine->evaluate(m_scriptCode);
@@ -26,8 +26,9 @@ void ProcessorTask::run(QJSEngine *engine) {
     }
     Q_EMIT(lastResultChanged());
 
-    m_lastExecution = QDateTime::currentMSecsSinceEpoch();
-    Q_EMIT(lastExecutionChanged());
+    setLastExecutionNow();
+
+    return m_lastResult;
 }
 
 QString ProcessorTask::scriptCode() {
@@ -44,4 +45,14 @@ qint64 ProcessorTask::lastExecution() {
 
 QVariant ProcessorTask::lastResult() {
     return m_lastResult;
+}
+
+void ProcessorTask::setLastResult(QVariant lastResult) {
+    m_lastResult = lastResult;
+    Q_EMIT(lastResultChanged());
+}
+
+void ProcessorTask::setLastExecutionNow() {
+    m_lastExecution = QDateTime::currentMSecsSinceEpoch();
+    Q_EMIT(lastExecutionChanged());
 }

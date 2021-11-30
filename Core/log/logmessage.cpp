@@ -1,6 +1,7 @@
 #include "logmessage.h"
+#include "log/logmanager.h"
 
-LogMessage::LogMessage(QString deviceId, QString message, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_message(message)
+LogMessage::LogMessage(QString deviceId, QtMsgType logType, QString message, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_logType(logType), m_message(message)
 {
 
 }
@@ -14,11 +15,15 @@ QString LogMessage::getFirstLevelId() {
 }
 
 QString LogMessage::getSecondLevelId() {
-    return "";
+    return LogManager::msgTypeToString(m_logType);
 }
 
 QString LogMessage::deviceId() {
     return m_deviceId;
+}
+
+QtMsgType LogMessage::logType() {
+    return m_logType;
 }
 
 QString LogMessage::message() {

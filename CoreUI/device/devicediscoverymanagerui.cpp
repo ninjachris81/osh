@@ -6,11 +6,11 @@
 
 #include "datamodel/server/datamodelmanager.h"
 
-DeviceDiscoveryManagerUI * DeviceDiscoveryManagerUI::m_instance = nullptr;
+DeviceDiscoveryManagerUI * DeviceDiscoveryManagerUI::m_qmlInstance = nullptr;
 
 DeviceDiscoveryManagerUI::DeviceDiscoveryManagerUI(QString serviceId, QObject *parent) : DeviceDiscoveryManagerBase(serviceId, parent)
 {
-    m_instance = this;
+    m_qmlInstance = this;
     m_modelBridge = new DeviceDiscoveryModelBridge(this);
 
     connect(m_modelBridge, &DeviceDiscoveryModelBridge::unknownDevicesChanged, this, &DeviceDiscoveryManagerUI::devicesChanged);
@@ -21,7 +21,7 @@ QObject* DeviceDiscoveryManagerUI::qmlInstance(QQmlEngine *engine, QJSEngine *sc
     Q_UNUSED(engine);
     Q_UNUSED(scriptEngine);
 
-    return m_instance;
+    return m_qmlInstance;
 }
 
 QList<QObject*> DeviceDiscoveryManagerUI::devices() {
@@ -40,6 +40,18 @@ QList<QObject*> DeviceDiscoveryManagerUI::devices() {
     }
 
     return m_devices;
+}
+
+DeviceBaseUI* DeviceDiscoveryManagerUI::getKnownDevice(QString fullId) {
+    if (isKnownDevice(fullId)) {
+        return new DeviceBaseUI(m_modelBridge->knownDevices().value(fullId));
+    } else {
+        return nullptr;
+    }
+}
+
+bool DeviceDiscoveryManagerUI::isKnownDevice(QString fullId) {
+    return m_modelBridge->knownDevices().contains(fullId);
 }
 
 void DeviceDiscoveryManagerUI::init(LocalConfig* config) {

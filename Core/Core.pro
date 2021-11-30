@@ -34,6 +34,7 @@ SOURCES += \
         controller/controllermanager.cpp \
         controller/controllermessage.cpp \
         controller/digitalinputcontrollerbase.cpp \
+        controller/filegpiocontroller.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
         communication/messagebase.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
         log/logmessage.cpp \
+        processor/scriptresultmessage.cpp \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemessage.cpp \
         value/client/clientvaluemanager.cpp \
@@ -80,6 +82,7 @@ HEADERS += \
         controller/controllermanager.h \
         controller/controllermessage.h \
         controller/digitalinputcontrollerbase.h \
+        controller/filegpiocontroller.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
         communication/messagebase.h \
@@ -91,11 +94,13 @@ HEADERS += \
         log/logmanager.h \
         log/logmessage.h \
         macros.h \
+        processor/scriptresultmessage.h \
         shared/actor.h \
         shared/actor_qt.h \
         shared/controllercmdtypes.h \
         shared/controllercmdtypes_qt.h \
         shared/device.h \
+        shared/log.h \
         shared/logging_categories.h \
         shared/logging_categories_qt.h \
         shared/mqtt_qt.h \

@@ -7,7 +7,7 @@ import OSH 1.0
 ViewBase {
     id: root
 
-    ListView {
+    ListViewBase {
         id: taskListView
 
         anchors.fill: parent
@@ -17,68 +17,16 @@ ViewBase {
         onModelChanged: {
             console.log("Task model changed " + count)
         }
-        header: RowLayout {
-                height: 50
 
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Name")
-                }
+        listHeaders: ["Name", "Schedule Interval", "Last Execution", "Last Result", "Script Code"]
+        listWidths: [100, 100, 100, 100, -1]
 
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Schedule Interval")
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Last Execution")
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: qsTr("Last result")
-                }
-
-                Text {
-                    text: qsTr("Script Code")
-                }
-        }
-
-        delegate: Item {
-            width: taskListView.width
-            height: 30
-
-            DebugTracer{}
-
-            RowLayout {
-                height: 30
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.id
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.scheduleInterval
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.lastExecution
-                }
-
-                Text {
-                    Layout.preferredWidth: 100
-                    text: modelData.lastResult === undefined ? "Invalid" : modelData.lastResult
-                }
-
-                Text {
-                    text: modelData.scriptCode
-                }
-            }
-        }
-
+        listValues: [
+            function(rowIndex) { return model[rowIndex].id },
+            function(rowIndex) { return model[rowIndex].scheduleInterval === 0 ? "(default)" : model[rowIndex].scheduleInterval },
+            function(rowIndex) { return model[rowIndex].lastExecution },
+            function(rowIndex) { return model[rowIndex].lastResult === undefined ? "Invalid" : model[rowIndex].lastResult },
+            function(rowIndex) { return model[rowIndex].scriptCode },
+        ]
     }
 }

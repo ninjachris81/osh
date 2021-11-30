@@ -12,6 +12,8 @@
 #include "controller/controllermessage.h"
 #include "controller/controllermanager.h"
 #include "log/logmessage.h"
+#include "processor/scriptresultmessage.h"
+#include "log/logmanager.h"
 
 MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : CommunicationManagerBase(parent)
 {
@@ -26,7 +28,8 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, COMPACT, MQTT_MESSAGE_TYPE_ST, 0);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, COMPACT, MQTT_MESSAGE_TYPE_SW, 1);
     registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, JSON, MQTT_MESSAGE_TYPE_CO, 1);
-    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, TEXT_UTF8, MQTT_MESSAGE_TYPE_LO, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, TEXT_UTF8, MQTT_MESSAGE_TYPE_LO, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, COMPACT, MQTT_MESSAGE_TYPE_SR, 1);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
     iDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
@@ -77,7 +80,10 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             return new ControllerMessage(firstLevelPath.first(), rawValue);
         }
         case MessageBase::MESSAGE_TYPE_LOG: {
-            return new LogMessage(firstLevelPath.first(), rawValue.toString());
+            return new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), rawValue.toString());
+        }
+        case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
+            return new ScriptResultMessage(firstLevelPath.first(), rawValue);
         }
         default:
             iWarning() << "Unknown message type" << levels;
@@ -113,7 +119,7 @@ void MqttCommunicationManagerBase::onMqttConnected() {
         subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
         break;
     case ManagerRegistration::GUI:
-        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
+        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO);
         break;
     default:
         iWarning() << "Unsupported instance role";
@@ -210,6 +216,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     case MessageBase::MESSAGE_TYPE_LOG: {
         LogMessage* logMessage = static_cast<LogMessage*>(&message);
         return logMessage->message().toUtf8();
+    }
+    case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
+        ScriptResultMessage* scriptResultMessage = static_cast<ScriptResultMessage*>(&message);
+        return serializeCompactValue(scriptResultMessage->value());
     }
     default:
         iWarning() << "Unknown message type" << message.getMessageType();
