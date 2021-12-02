@@ -4,7 +4,7 @@
 #include "TaskManager.h"
 #include <LogHelper.h>
 
-TempControllerAHTx::TempControllerAHTx() : AbstractIntervalTask(TEMP_INTERVAL_MS) {
+TempControllerAHTx::TempControllerAHTx(String valueGroupTemp, String valueIdTemp, String valueGroupHum, String valueIdHum) : AbstractIntervalTask(TEMP_INTERVAL_MS), m_valueGroupTemp(valueGroupTemp), m_valueIdTemp(valueIdTemp), m_valueGroupHum(valueGroupHum), m_valueIdHum(valueIdHum) {
   
 }
 
@@ -20,6 +20,6 @@ void TempControllerAHTx::init() {
 
 void TempControllerAHTx::update() {
   aht.getEvent(&humidity, &temp);// populate temp and humidity objects with fresh data
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + "egTemps0" + String(MQTT_PATH_SEP) + String("0")), temp.temperature);
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + "egHums0" + String(MQTT_PATH_SEP) + String("0")), humidity.relative_humidity);
+  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupTemp + String(MQTT_PATH_SEP) + m_valueIdTemp), temp.temperature);
+  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupHum + String(MQTT_PATH_SEP) + m_valueIdHum), humidity.relative_humidity);
 }

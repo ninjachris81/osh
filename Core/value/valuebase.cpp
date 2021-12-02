@@ -65,7 +65,7 @@ ValueBase::VALUE_TIMEOUT ValueBase::valueTimeout() {
 }
 
 int ValueBase::maintenanceInterval() {
-    if (m_valueTimeout == ValueBase::VALUE_TIMEOUT_NONE) {
+    if (m_valueTimeout == ValueBase::VT_NONE) {
         return -1;
     } else {
         return m_valueTimeout / 2;

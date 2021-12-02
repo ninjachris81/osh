@@ -7,6 +7,7 @@
 #include "valuegroup.h"
 #include "identifyable.h"
 #include "shared/units_qt.h"
+#include "shared/value.h"
 
 using namespace unit;
 
@@ -16,11 +17,11 @@ Q_OBJECT
 
 public:
     enum VALUE_TIMEOUT {
-        VALUE_TIMEOUT_NONE,
-        VALUE_TIMEOUT_SHORT = 5000,
-        VALUE_TIMEOUT_MID = 30000,
-        VALUE_TIMEOUT_LONG = 120000
-    } m_valueTimeout = VALUE_TIMEOUT_NONE;
+        VT_NONE,
+        VT_SHORT = VALUE_TIMEOUT_SHORT,
+        VT_MID = VALUE_TIMEOUT_MID,
+        VT_LONG = VALUE_TIMEOUT_LONG
+    } m_valueTimeout = VT_NONE;
 
     explicit ValueBase(ValueGroup* valueGroup, QString id, UNIT_TYPE unitType = UT_UNKNOWN, bool alwaysEmit = true, QObject *parent = nullptr);
 

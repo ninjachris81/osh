@@ -107,6 +107,7 @@ HEADERS += \
         shared/time.h \
         shared/units.h \
         shared/units_qt.h \
+        shared/value.h \
         time/client/clientsystemtimemanager.h \
         time/systemtimemessage.h \
         value/client/clientvaluemanager.h \

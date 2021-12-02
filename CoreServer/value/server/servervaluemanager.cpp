@@ -51,7 +51,7 @@ void ServerValueManager::checkValues() {
     while(it.hasNext()) {
         it.next();
 
-        if (it.value()->isValid() && it.value()->valueTimeout() > ValueBase::VALUE_TIMEOUT_NONE && QDateTime::currentMSecsSinceEpoch() - it.value()->lastUpdate() > it.value()->valueTimeout()) {
+        if (it.value()->isValid() && it.value()->valueTimeout() > ValueBase::VT_NONE && QDateTime::currentMSecsSinceEpoch() - it.value()->lastUpdate() > it.value()->valueTimeout()) {
             invalidateValue((it.value()));
         }
     }

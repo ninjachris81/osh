@@ -1,0 +1,8 @@
+#ifndef VALUE_H
+#define VALUE_H
+
+#define VALUE_TIMEOUT_SHORT 5000
+#define VALUE_TIMEOUT_MID 30000
+#define VALUE_TIMEOUT_LONG 120000
+
+#endif // VALUE_H

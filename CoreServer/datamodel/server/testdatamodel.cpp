@@ -17,19 +17,25 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", p
 
     ValueGroup* nodeEGRelays = addValueGroup("egRelays0");
     for (quint8 i = 0;i<8;i++) {
-        addDigitalActor(nodeEGRelays, QString::number(i), true, ValueBase::VALUE_TIMEOUT_MID);
+        addDigitalActor(nodeEGRelays, QString::number(i), true, ValueBase::VT_MID);
     }
 
     ValueGroup* nodeEGInputs = addValueGroup("egInputs0");
     for (quint8 i = 0;i<16;i++) {
-        addBooleanValue(nodeEGInputs, QString::number(i), ValueBase::VALUE_TIMEOUT_MID);
+        addBooleanValue(nodeEGInputs, QString::number(i), ValueBase::VT_MID);
     }
 
-    ValueGroup* nodeEGTemps = addValueGroup("egTemps0");
-    addDoubleValue(nodeEGTemps, "0", UT_DEGREES, ValueBase::VALUE_TIMEOUT_MID);
+    ValueGroup* nodeTemps = addValueGroup("temps");
+    addDoubleValue(nodeTemps, "0", UT_DEGREES, ValueBase::VT_MID);
 
-    ValueGroup* nodeEGHums = addValueGroup("egHums0");
-    addDoubleValue(nodeEGHums, "0", UT_DEGREES, ValueBase::VALUE_TIMEOUT_MID);
+    ValueGroup* nodeHums = addValueGroup("hums");
+    addDoubleValue(nodeHums, "0", UT_DEGREES, ValueBase::VT_MID);
+
+    ValueGroup* nodePirs = addValueGroup("motions");
+    addBooleanValue(nodePirs, "0", ValueBase::VT_MID);
+
+    ValueGroup* nodeBrightnesses = addValueGroup("brightnesses");
+    addDoubleValue(nodeBrightnesses, "0", UT_PERCENT, ValueBase::VT_MID);
 
     addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
     addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");

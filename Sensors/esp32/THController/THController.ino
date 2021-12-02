@@ -1,8 +1,10 @@
 
 #include "ESPConfigurations.h"
 #include "MQTTController.h"
-#include "TempController_AHTx.h"
 #include "DeviceController.h"
+#include "TempController_AHTx.h"
+#include "MotionController_SR501.h"
+#include "BrightnessController_GL55x.h"
 #include <LogHelper.h>
 
 #if WIFI_OTA_SUPPORT
@@ -14,7 +16,9 @@ TaskManager taskManager;
 MQTTController mqttController;
 DeviceController deviceController(DEVICE_ID, SERVICE_ID);
 
-TempControllerAHTx tempController;
+TempControllerAHTx tempController("temps", "0", "hums", "0");
+MotionControllerSR501 motionController("motions", "0");
+BrightnessControllerGL55x brightnessController("brightnesses", "0");
 
 #if WIFI_OTA_SUPPORT
   OTAController otaController;
@@ -26,6 +30,8 @@ void setup() {
   taskManager.registerTask(&mqttController);
   taskManager.registerTask(&deviceController);
   taskManager.registerTask(&tempController);
+  taskManager.registerTask(&motionController);
+  taskManager.registerTask(&brightnessController);
 
 #if WIFI_OTA_SUPPORT
   taskManager.registerTask(&otaController);

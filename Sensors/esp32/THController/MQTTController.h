@@ -19,8 +19,10 @@ public:
 
   void update();
 
+  void publish(String path, bool value);
   void publish(String path, double value);
   void publish(String path, String value);
+  void publish(String path);
 
 private:
   WiFiClient espClient;

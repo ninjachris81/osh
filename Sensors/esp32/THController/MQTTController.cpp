@@ -43,6 +43,16 @@ void MQTTController::publish(String path, double value) {
   client.publish(path.c_str(), valueStr.c_str());
 }
 
+void MQTTController::publish(String path, bool value) {
+  String valueStr= String(MQTT_ID_BOOL) + (value ? String("1") : String("0"));
+  client.publish(path.c_str(), valueStr.c_str());
+}
+
 void MQTTController::publish(String path, String value) {
+  value=String(MQTT_ID_STRING) + value;
   client.publish(path.c_str(), value.c_str());
+}
+
+void MQTTController::publish(String path) {
+  client.publish(path.c_str(), "");
 }

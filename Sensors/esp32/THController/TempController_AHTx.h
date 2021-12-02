@@ -7,11 +7,11 @@
 #include "TaskIDs.h"
 //#include "MqttController.h"
 
-#define TEMP_INTERVAL_MS 2000
+#define TEMP_INTERVAL_MS 6000
 
 class TempControllerAHTx : public AbstractIntervalTask {
 public:
-  TempControllerAHTx();
+  TempControllerAHTx(String valueGroupTemp, String valueIdTemp, String valueGroupHum, String valueIdHum);
   ~TempControllerAHTx();
 
   void init();
@@ -21,6 +21,12 @@ public:
 private:
   Adafruit_AHTX0 aht;
   sensors_event_t humidity, temp;
+  
+  String m_valueGroupTemp;
+  String m_valueIdTemp;
+  
+  String m_valueGroupHum;
+  String m_valueIdHum;
 
 };
 
