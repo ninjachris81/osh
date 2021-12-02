@@ -1,6 +1,6 @@
 #include "booleanvalue.h"
 
-BooleanValue::BooleanValue(ValueGroup *valueGroup, QString id, QObject *parent) : ValueBase (valueGroup, id, parent)
+BooleanValue::BooleanValue(ValueGroup *valueGroup, QString id, QObject *parent) : ValueBase (valueGroup, id, UT_UNKNOWN, parent)
 {
 
 }

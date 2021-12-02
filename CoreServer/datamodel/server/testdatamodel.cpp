@@ -2,46 +2,36 @@
 
 #include "actor/digitalactor.h"
 #include "value/booleanvalue.h"
+#include "value/doublevalue.h"
 #include "processor/server/processortask.h"
 #include <QDebug>
 
 TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", parent) {
     iDebug() << Q_FUNC_INFO;
 
+    addKnownDevice("349785676", "CoreServer", "Server");
+    addKnownDevice("582645258", "CoreUI", "GUI");
+    addKnownDevice("66403375", "InputService", "Node EG Input");
+    addKnownDevice("66403375", "RelayService", "Node EG Relay");
+    addKnownDevice("00001", "THService1", "Sensor EG TH");
 
-    KnownDevice* serverDevice = new KnownDevice("349785676", "CoreServer", "Server");
-    m_knownDevices.insert(serverDevice->fullId(), serverDevice);
-
-    KnownDevice* guiDevice = new KnownDevice("582645258", "CoreUI", "GUI");
-    m_knownDevices.insert(guiDevice->fullId(), guiDevice);
-
-    KnownDevice* deviceNodeEGInputService = new KnownDevice("66403375", "InputService", "Node EG Input");
-    m_knownDevices.insert(deviceNodeEGInputService->fullId(), deviceNodeEGInputService);
-
-    KnownDevice* deviceNodeEGRelayService = new KnownDevice("66403375", "RelayService", "Node EG Relay");
-    m_knownDevices.insert(deviceNodeEGRelayService->fullId(), deviceNodeEGRelayService);
-
-    ValueGroup* nodeEGRelays = new ValueGroup("egRelays0");
+    ValueGroup* nodeEGRelays = addValueGroup("egRelays0");
     for (quint8 i = 0;i<8;i++) {
-        DigitalActor* relayActor = new DigitalActor(nodeEGRelays, QString::number(i), true);
-        relayActor->withValueTimeout(ValueBase::VALUE_TIMEOUT_MID);
-        m_actors.insert(relayActor->id(), relayActor);
+        addDigitalActor(nodeEGRelays, QString::number(i), true, ValueBase::VALUE_TIMEOUT_MID);
     }
 
-    ValueGroup* nodeEGInputs = new ValueGroup("egInputs0");
+    ValueGroup* nodeEGInputs = addValueGroup("egInputs0");
     for (quint8 i = 0;i<16;i++) {
-        BooleanValue* inputValue = new BooleanValue(nodeEGInputs, QString::number(i));
-        inputValue->withValueTimeout(ValueBase::VALUE_TIMEOUT_MID);
-        m_values.insert(inputValue->id(), inputValue);
+        addBooleanValue(nodeEGInputs, QString::number(i), ValueBase::VALUE_TIMEOUT_MID);
     }
 
+    ValueGroup* nodeEGTemps = addValueGroup("egTemps0");
+    addDoubleValue(nodeEGTemps, "0", UT_DEGREES, ValueBase::VALUE_TIMEOUT_MID);
 
-    ProcessorTask* processorNode1 = new ProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
-    m_processorTasks.insert(processorNode1->id(), processorNode1);
+    ValueGroup* nodeEGHums = addValueGroup("egHums0");
+    addDoubleValue(nodeEGHums, "0", UT_DEGREES, ValueBase::VALUE_TIMEOUT_MID);
 
-    ProcessorTask* processorNode2 = new ProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
-    m_processorTasks.insert(processorNode2->id(), processorNode2);
-
-    ProcessorTask* logicNode1 = new ProcessorTask("logicproc1", "CommonScripts.ensureState(values_egRelays0_0, values_egInputs0_0, false, function(expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF )} );");
-    m_processorTasks.insert(logicNode1->id(), logicNode1);
+    addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
+    addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
+    addProcessorTask("logicproc1", "CommonScripts.ensureState(values_egRelays0_0, values_egInputs0_0, false, function(expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF )} );");
 }

@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, bool alwaysEmit, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, bool alwaysEmit, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup), m_unitType(unitType), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 }
@@ -108,5 +108,18 @@ void ValueBase::updateSignalRate() {
     } else {
         m_signalRate = 0;
         Q_EMIT(signalRateChanged());
+    }
+}
+
+UNIT_TYPE ValueBase::unitType() {
+    return m_unitType;
+}
+
+QString ValueBase::unitTypeToSuffix(UNIT_TYPE unitType) {
+    switch(unitType) {
+    case UT_UNKNOWN: return "";
+    case UT_DEGREES: return "°";
+    case UT_PERCENT: return "%";
+    case UT_TIMESTAMP: return "";
     }
 }

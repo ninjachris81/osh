@@ -1,6 +1,6 @@
 #include "integervalue.h"
 
-IntegerValue::IntegerValue(ValueGroup *valueGroup, QString id, QObject *parent) : ValueBase(valueGroup, id, parent)
+IntegerValue::IntegerValue(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, QObject *parent) : ValueBase(valueGroup, id, unitType, parent)
 {
 
 }

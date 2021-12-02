@@ -4,6 +4,7 @@
 #include <QRandomGenerator64>
 
 #include "device/devicediscoverymanagerbase.h"
+#include "shared/device.h"
 
 DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : Identifyable(id, parent), m_serviceId(serviceId) {
 }
@@ -37,7 +38,7 @@ bool DeviceBase::isOnline() {
 }
 
 QString DeviceBase::fullId() {
-    return m_id + "." + m_serviceId;
+    return m_id + DEVICE_FULLID_SEP + m_serviceId;
 }
 
 QString DeviceBase::serviceId() {

@@ -15,11 +15,13 @@ public:
     Q_PROPERTY(bool isValid READ isValid NOTIFY isValidChanged)
     Q_PROPERTY(QVariant rawValue READ rawValue NOTIFY rawValueChanged)
     Q_PROPERTY(double signalRate READ signalRate NOTIFY signalRateChanged)
+    Q_PROPERTY(QString unitTypeSuffix READ unitTypeSuffix NOTIFY unitTypeSuffixChanged)
 
     QString fullId();
     bool isValid();
     QVariant rawValue();
     double signalRate();
+    QString unitTypeSuffix();
 
 protected:
     ValueBase* m_value;
@@ -29,6 +31,7 @@ signals:
     void isValidChanged();
     void rawValueChanged();
     void signalRateChanged();
+    void unitTypeSuffixChanged();
 
 public slots:
 };

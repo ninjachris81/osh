@@ -8,7 +8,7 @@ class LongValue : public ValueBase
 {
     Q_OBJECT
 public:
-    explicit LongValue(ValueGroup *valueGroup, QString id, QObject *parent = nullptr);
+    explicit LongValue(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, QObject *parent = nullptr);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 

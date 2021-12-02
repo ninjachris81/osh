@@ -27,7 +27,7 @@ void EnvironmentValueManager::init(LocalConfig* config) {
 
 
     ValueGroup* envGroup = new ValueGroup("env");
-    m_systemTime = new LongValue(envGroup, "unixtime_sec");
+    m_systemTime = new LongValue(envGroup, "unixtime_sec", UT_TIMESTAMP);
 
     valueManager->registerValue(m_systemTime);
 

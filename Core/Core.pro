@@ -105,6 +105,8 @@ HEADERS += \
         shared/logging_categories_qt.h \
         shared/mqtt_qt.h \
         shared/time.h \
+        shared/units.h \
+        shared/units_qt.h \
         time/client/clientsystemtimemanager.h \
         time/systemtimemessage.h \
         value/client/clientvaluemanager.h \

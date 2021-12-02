@@ -1,6 +1,6 @@
 #include "doublevalue.h"
 
-DoubleValue::DoubleValue(ValueGroup *valueGroup, QString id, QObject *parent) : ValueBase(valueGroup, id, parent)
+DoubleValue::DoubleValue(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, QObject *parent) : ValueBase(valueGroup, id, unitType, parent)
 {
 
 }

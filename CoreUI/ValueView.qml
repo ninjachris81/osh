@@ -18,14 +18,14 @@ ViewBase {
             console.log("Value model changed " + count)
         }
 
-        listHeaders: ["Full ID", "Is Valid", "S/R", "Raw Value"]
+        listHeaders: ["Full ID", "Is Valid", "S/R", "Value"]
         listWidths: [100, 100, 100, -1]
 
         listValues: [
             function(rowIndex) { return model[rowIndex].fullId },
             function(rowIndex) { return model[rowIndex].isValid },
             function(rowIndex) { return model[rowIndex].signalRate },
-            function(rowIndex) { return model[rowIndex].rawValue === undefined ? "Invalid" : model[rowIndex].rawValue }
+            function(rowIndex) { return model[rowIndex].rawValue === undefined ? "Invalid" : model[rowIndex].rawValue + " " + model[rowIndex].unitTypeSuffix }
         ]
     }
 }

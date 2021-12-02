@@ -24,3 +24,7 @@ QVariant ValueBaseUI::rawValue() {
 double ValueBaseUI::signalRate() {
     return m_value->signalRate();
 }
+
+QString ValueBaseUI::unitTypeSuffix() {
+    return ValueBase::unitTypeToSuffix(m_value->unitType());
+}
