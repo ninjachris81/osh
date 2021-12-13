@@ -4,8 +4,9 @@
 #include <QObject>
 #include "identifyableui.h"
 #include "value/valuebase.h"
+#include "visualitembase.h"
 
-class ValueBaseUI : public IdentifyableUI
+class ValueBaseUI : public VisualItemBase
 {
     Q_OBJECT
 public:

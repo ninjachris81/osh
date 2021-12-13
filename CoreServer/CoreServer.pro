@@ -36,6 +36,7 @@ SOURCES += \
         device/server/serverdevicediscoverymanager.cpp \
     processor/server/commonscripts.cpp \
     processor/server/scriptbase.cpp \
+    simulator/server/simulatorbase.cpp \
         time/server/systemtimemanager.cpp \
         value/server/environmentvaluemanager.cpp \
         value/server/servervaluemanager.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
         device/server/serverdevicediscoverymanager.h \
     processor/server/commonscripts.h \
     processor/server/scriptbase.h \
+    simulator/server/simulatorbase.h \
         time/server/systemtimemanager.h \
         value/server/environmentvaluemanager.h \
         value/server/servervaluemanager.h \

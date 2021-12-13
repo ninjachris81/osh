@@ -19,6 +19,7 @@ DEFINES += IS_OSH_UI
 
 SOURCES += \
         actor/actorbaseui.cpp \
+        connectoritembase.cpp \
         datamodel/datamodelbaseui.cpp \
         datamodel/datamodelmanagerui.cpp \
         device/devicebaseui.cpp \
@@ -30,16 +31,20 @@ SOURCES += \
         processor/modelprocessormanagerui.cpp \
         processor/processortaskui.cpp \
         value/valuebaseui.cpp \
-        value/valuemanagerui.cpp
+        value/valuemanagerui.cpp \
+        visualitembase.cpp
 
 RESOURCES += qml.qrc \
+    images.qrc \
+    js.qrc \
     qml_components.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH += qml
+QML2_IMPORT_PATH += qml
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH =
+QML_DESIGNER_IMPORT_PATH += qml
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -89,6 +94,7 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/libQMqttComm
 
 HEADERS += \
     actor/actorbaseui.h \
+    connectoritembase.h \
     datamodel/datamodelbaseui.h \
     datamodel/datamodelmanagerui.h \
     device/devicebaseui.h \
@@ -99,4 +105,5 @@ HEADERS += \
     processor/modelprocessormanagerui.h \
     processor/processortaskui.h \
     value/valuebaseui.h \
-    value/valuemanagerui.h
+    value/valuemanagerui.h \
+    visualitembase.h

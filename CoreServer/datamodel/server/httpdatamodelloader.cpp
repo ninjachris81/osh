@@ -19,3 +19,9 @@ DatamodelBase* HttpDataModelLoader::load() {
 QString HttpDataModelLoader::typeName() {
     return LOADER_TYPE_NAME;
 }
+
+
+bool HttpDataModelLoader::save(DatamodelBase* datamodel) {
+    // TODO
+    return true;
+}

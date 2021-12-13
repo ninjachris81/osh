@@ -35,6 +35,9 @@ private:
     void registerValues();
     void registerActors();
 
+private slots:
+    void onDatamodelChanged();
+
 signals:
     void datamodelChanged();
 

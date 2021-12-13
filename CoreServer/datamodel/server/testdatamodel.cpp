@@ -37,6 +37,9 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", p
     ValueGroup* nodeBrightnesses = addValueGroup("brightnesses");
     addDoubleValue(nodeBrightnesses, "0", UT_PERCENT, ValueBase::VT_MID);
 
+    ValueGroup* nodeAlarms = addValueGroup("alarms");
+    addDigitalActor(nodeAlarms, "0", true, ValueBase::VT_MID);
+
     addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
     addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
     addProcessorTask("logicproc1", "CommonScripts.ensureState(values_egRelays0_0, values_egInputs0_0, false, function(expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF )} );");

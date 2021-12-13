@@ -1,6 +1,6 @@
 #include "valuebaseui.h"
 
-ValueBaseUI::ValueBaseUI(QObject *parent) : IdentifyableUI (parent)
+ValueBaseUI::ValueBaseUI(QObject *parent) : VisualItemBase (parent)
 {
     m_value = static_cast<ValueBase*>(parent);
     connect(m_value, &ValueBase::invalidated, this, &ValueBaseUI::isValidChanged);

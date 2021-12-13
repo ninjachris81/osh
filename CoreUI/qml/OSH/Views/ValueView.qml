@@ -3,6 +3,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import OSH 1.0
+import OSH.Components 1.0
+import OSH.js 1.0
 
 ViewBase {
     id: root
@@ -25,7 +27,7 @@ ViewBase {
             function(rowIndex) { return model[rowIndex].fullId },
             function(rowIndex) { return model[rowIndex].isValid },
             function(rowIndex) { return model[rowIndex].signalRate },
-            function(rowIndex) { return model[rowIndex].rawValue === undefined ? "Invalid" : model[rowIndex].rawValue + " " + model[rowIndex].unitTypeSuffix }
+            function(rowIndex) { return Commons.formatValue(model[rowIndex]) }
         ]
     }
 }

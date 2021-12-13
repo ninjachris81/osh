@@ -47,6 +47,7 @@ protected:
     QMap<QString, ProcessorTask*> m_processorTasks;
 
 signals:
+    void datamodelContentChanged();
 
 public slots:
 };

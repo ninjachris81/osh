@@ -12,9 +12,11 @@ public:
 
     static QString LOADER_TYPE_NAME;
 
-    /*virtual*/ DatamodelBase* load();
+    /*virtual*/ DatamodelBase* load() override;
 
-    /*virtual*/ QString typeName();
+    /*virtual*/ bool save(DatamodelBase* datamodel) override;
+
+    /*virtual*/ QString typeName() override;
 
 signals:
 

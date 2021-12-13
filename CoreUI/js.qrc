@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/OSH/js/commons.js</file>
+        <file>qml/OSH/js/qmldir</file>
+        <file>qml/OSH/js/gfx.js</file>
+    </qresource>
+</RCC>

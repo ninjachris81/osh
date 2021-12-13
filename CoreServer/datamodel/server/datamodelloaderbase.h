@@ -16,6 +16,8 @@ public:
 
     virtual DatamodelBase* load() = 0;
 
+    virtual bool save(DatamodelBase* datamodel) = 0;
+
     virtual QString typeName() = 0;
 
 signals:

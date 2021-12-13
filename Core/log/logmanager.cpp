@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <stdio.h>
 
 #include "communication/communicationmanagerbase.h"
 #include "log/logmessage.h"
@@ -104,4 +105,6 @@ void LogManager::messageHandler(QtMsgType type, const QMessageLogContext &contex
         fprintf(stdout, "F: [%s] (%s:%u, %s)\n", context.category, localMsg.constData(), context.line, context.function);
         abort();
     }
+
+    fflush(stdout);
 }

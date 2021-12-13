@@ -28,6 +28,7 @@ QMap<QString, ActorBase*> DatamodelBase::actors() {
 KnownDevice* DatamodelBase::addKnownDevice(QString id, QString serviceId, QString name) {
     KnownDevice* device = new KnownDevice(id, serviceId, name);
     m_knownDevices.insert(device->fullId(), device);
+    Q_EMIT(datamodelContentChanged());
     return device;
 }
 
@@ -39,6 +40,7 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     DigitalActor* actor = new DigitalActor(valueGroup, id, isAsync);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
     return actor;
 }
 
@@ -46,6 +48,7 @@ BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id,
     BooleanValue* value = new BooleanValue(valueGroup, id);
     value->withValueTimeout(timeout);
     m_values.insert(value->fullId(), value);
+    Q_EMIT(datamodelContentChanged());
     return value;
 }
 
@@ -53,12 +56,14 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, U
     DoubleValue* value = new DoubleValue(valueGroup, id, unitType);
     value->withValueTimeout(timeout);
     m_values.insert(value->fullId(), value);
+    Q_EMIT(datamodelContentChanged());
     return value;
 }
 
 ProcessorTask* DatamodelBase::addProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval) {
     ProcessorTask* processorNode = new ProcessorTask(id, scriptCode, scheduleInterval);
     m_processorTasks.insert(processorNode->id(), processorNode);
+    Q_EMIT(datamodelContentChanged());
     return processorNode;
 }
 

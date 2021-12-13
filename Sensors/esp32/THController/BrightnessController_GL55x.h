@@ -2,7 +2,6 @@
 #define BRIGHTNESSCONTROLLER_GL55x_H
 
 #include <AbstractIntervalTask.h>
-#include "BehaviorProperty.h"
 
 #include "TaskIDs.h"
 //#include "MqttController.h"

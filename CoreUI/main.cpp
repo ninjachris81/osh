@@ -12,6 +12,7 @@
 #include "processor/modelprocessormanagerui.h"
 #include "log/logmanagerui.h"
 #include "time/client/clientsystemtimemanager.h"
+#include "connectoritembase.h"
 
 #define QML_BASE_PACKAGE "OSH"
 #define QML_VERSION_MAJOR 1
@@ -57,10 +58,18 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<DeviceDiscoveryManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DeviceDiscoveryManager", &DeviceDiscoveryManagerUI::qmlInstance);
     qmlRegisterSingletonType<DatamodelManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DatamodelManager", &DatamodelManagerUI::qmlInstance);
     qmlRegisterSingletonType<ModelProcessorManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ModelProcessorManager", &ModelProcessorManagerUI::qmlInstance);
+    qmlRegisterSingletonType<ValueManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ValueManager", &ValueManagerUI::qmlInstance);
     qmlRegisterSingletonType<LogManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "LogManager", &LogManagerUI::qmlInstance);
 
+    qmlRegisterType<ConnectorItemBase>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ConnectorItem");
+    qmlRegisterUncreatableMetaObject(unit::staticMetaObject, QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "UNIT_TYPE", "Enums cannot be instantiated");
+    qRegisterMetaType<unit::UNIT_TYPE>("unit::UNIT_TYPE");
+
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+
+    engine.addImportPath(":/qml");
+
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

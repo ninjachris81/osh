@@ -1,0 +1,8 @@
+ActorView           1.0 ActorView.qml
+DashboardView       1.0 DashboardView.qml
+DeviceDiscoveryView 1.0 DeviceDiscoveryView.qml
+LiveLogView         1.0 LiveLogView.qml
+SystemWarningsView  1.0 SystemWarningsView.qml
+TaskView            1.0 TaskView.qml
+ValueView           1.0 ValueView.qml
+VisualEditorView    1.0 VisualEditorView.qml

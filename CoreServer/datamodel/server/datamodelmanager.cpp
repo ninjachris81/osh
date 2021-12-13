@@ -43,6 +43,8 @@ void DatamodelManager::init(LocalConfig* config) {
 
     iDebug() << "Datamodel loaded";
 
+    connect(m_datamodel, &DatamodelBase::datamodelContentChanged, this, &DatamodelManager::onDatamodelChanged);
+
     Q_EMIT(datamodelChanged());
 
     registerValues();
@@ -73,6 +75,12 @@ void DatamodelManager::registerActors() {
         iDebug() << "Register datamodel actor" << it.key();
         actorManager->registerActor(it.value());
         valueManager->registerValue(it.value());
+    }
+}
+
+void DatamodelManager::onDatamodelChanged() {
+    if (!m_datamodelLoader->save(m_datamodel)) {
+        iWarning() << "Error while saving datamodel";
     }
 }
 

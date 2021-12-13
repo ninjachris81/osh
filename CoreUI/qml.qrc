@@ -1,12 +1,17 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>DeviceDiscoveryView.qml</file>
-        <file>DashboardView.qml</file>
-        <file>TaskView.qml</file>
-        <file>ValueView.qml</file>
-        <file>ActorView.qml</file>
-        <file>SystemWarningsView.qml</file>
-        <file>LiveLogView.qml</file>
+        <file>qml/main_admin.qml</file>
+        <file>qml/main_ui.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/OSH/Views/ActorView.qml</file>
+        <file>qml/OSH/Views/DashboardView.qml</file>
+        <file>qml/OSH/Views/DeviceDiscoveryView.qml</file>
+        <file>qml/OSH/Views/LiveLogView.qml</file>
+        <file>qml/OSH/Views/SystemWarningsView.qml</file>
+        <file>qml/OSH/Views/TaskView.qml</file>
+        <file>qml/OSH/Views/ValueView.qml</file>
+        <file>qml/OSH/Views/qmldir</file>
+        <file>qml/OSH/Views/VisualEditorView.qml</file>
+        <file>qml/qmldir</file>
     </qresource>
 </RCC>

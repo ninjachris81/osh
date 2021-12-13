@@ -19,7 +19,6 @@ Q_NAMESPACE
     };
 
     Q_ENUM_NS(UNIT_TYPE)
-
 }
 
 

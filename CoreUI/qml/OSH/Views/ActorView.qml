@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 import OSH 1.0
+import OSH.Components 1.0
 
 ViewBase {
     id: root

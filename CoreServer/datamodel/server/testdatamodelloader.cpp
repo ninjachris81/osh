@@ -19,3 +19,9 @@ DatamodelBase* TestDatamodelLoader::load() {
 QString TestDatamodelLoader::typeName() {
     return LOADER_TYPE_NAME;
 }
+
+
+bool TestDatamodelLoader::save(DatamodelBase* datamodel) {
+    // not supported
+    return false;
+}

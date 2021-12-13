@@ -1,7 +1,23 @@
 <RCC>
     <qresource prefix="/">
-        <file>ViewBase.qml</file>
-        <file>DebugTracer.qml</file>
-        <file>ListViewBase.qml</file>
+        <file>qml/OSH/Components/Visual/qmldir</file>
+        <file>qml/OSH/Components/Visual/VisualActionBar.qml</file>
+        <file>qml/OSH/Components/Visual/VisualActionButton.qml</file>
+        <file>qml/OSH/Components/Visual/VisualHouse.qml</file>
+        <file>qml/OSH/Components/Visual/VisualLight.qml</file>
+        <file>qml/OSH/Components/Visual/VisualPresence.qml</file>
+        <file>qml/OSH/Components/Visual/VisualRoom.qml</file>
+        <file>qml/OSH/Components/Visual/VisualShutter.qml</file>
+        <file>qml/OSH/Components/Visual/VisualTemp.qml</file>
+        <file>qml/OSH/Components/ItemBase.qml</file>
+        <file>qml/OSH/Components/ActorItem.qml</file>
+        <file>qml/OSH/Components/ConnectorBase.qml</file>
+        <file>qml/OSH/Components/DebugTracer.qml</file>
+        <file>qml/OSH/Components/ListViewBase.qml</file>
+        <file>qml/OSH/Components/TargetAnchor.qml</file>
+        <file>qml/OSH/Components/ValueItem.qml</file>
+        <file>qml/OSH/Components/ViewBase.qml</file>
+        <file>qml/OSH/Components/SourceAnchor.qml</file>
+        <file>qml/OSH/Components/qmldir</file>
     </qresource>
 </RCC>

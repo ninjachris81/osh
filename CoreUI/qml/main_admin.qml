@@ -3,11 +3,10 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-Window {
-    visible: true
-    width: 1920
-    height: 1080
-    title: qsTr("OSH Editor")
+import OSH.Views 1.0
+
+Item {
+    anchors.fill: parent
 
     TabBar {
         id: bar
@@ -23,6 +22,11 @@ Window {
             text: qsTr("Dashboard")
         }
         */
+
+
+        TabButton {
+            text: qsTr("Visual Editor")
+        }
         TabButton {
             text: qsTr("Device Explorer")
         }
@@ -52,6 +56,10 @@ Window {
 
         }
         */
+
+        VisualEditorView {
+
+        }
 
         DeviceDiscoveryView {
 

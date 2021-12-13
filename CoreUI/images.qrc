@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/icons/baseline_lightbulb_black_24dp.png</file>
+        <file>images/icons/baseline_system_update_alt_black_24dp.png</file>
+        <file>images/icons/baseline_person_black_24dp.png</file>
+        <file>images/icons/baseline_thermostat_black_24dp.png</file>
+    </qresource>
+</RCC>
