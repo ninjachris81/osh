@@ -22,7 +22,7 @@ VisualActionButton {
             color: "blue"
         }*/
 
-        anchors.bottomMargin: 6
+        anchors.bottomMargin: temp ? 6 : 0
     }
 
     Text {

@@ -7,8 +7,7 @@ import OSH.js 1.0
 VisualActionButton {
     id: root
 
-    property bool brightnessIsValid
-    property int brightness
+    signal requestCmd(var cmd)
 
     property bool shutterClosed: false
 
@@ -29,21 +28,11 @@ VisualActionButton {
         }*/
 
         rotation: shutterClosed ? 180 : 0
-        anchors.bottomMargin: 6
-    }
-
-    Text {
-        id: brightnessValue
-        text: Commons.addTypeSuffix(root.brightness, UNIT_TYPE.UT_PERCENT, brightnessIsValid)
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: brightnessIsValid ? 0 : 2
-        anchors.bottomMargin: 3
     }
 
     MouseArea {
         anchors.fill: parent
 
-        onClicked: root.shutterClosed = !root.shutterClosed
+        onClicked: root.requestCmd(shutterClosed ? ACTOR_CMDS.ACTOR_CMD_UP : ACTOR_CMDS.ACTOR_CMD_DOWN)
     }
 }

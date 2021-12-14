@@ -1,8 +1,15 @@
-VisualActionBar     1.0 VisualActionBar.qml
-VisualActionButton  1.0 VisualActionButton.qml
-VisualHouse         1.0 VisualHouse.qml
-VisualLight         1.0 VisualLight.qml
-VisualPresence      1.0 VisualPresence.qml
-VisualRoom          1.0 VisualRoom.qml
-VisualShutter       1.0 VisualShutter.qml
-VisualTemp          1.0 VisualTemp.qml
+VisualActionBar         1.0 VisualActionBar.qml
+VisualActionButton      1.0 VisualActionButton.qml
+VisualHouse             1.0 VisualHouse.qml
+VisualLight             1.0 VisualLight.qml
+VisualPresence          1.0 VisualPresence.qml
+VisualRoom              1.0 VisualRoom.qml
+VisualShutter           1.0 VisualShutter.qml
+VisualTemp              1.0 VisualTemp.qml
+VisualMenuButton        1.0 VisualMenuButton.qml
+VisualStatusBar         1.0 VisualStatusBar.qml
+VisualClock             1.0 VisualClock.qml
+VisualFloorMenu         1.0 VisualFloorMenu.qml
+VisualFloorMenuButton   1.0 VisualFloorMenuButton.qml
+
+singleton VisualStateManager      1.0 VisualStateManager.qml

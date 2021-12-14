@@ -1,15 +1,16 @@
+var invalidValue = "";
 
 function formatValue(v) {
-    return v.rawValue === undefined ? qsTr("INV") : v.rawValue + " " + v.unitTypeSuffix
+    return v.rawValue === undefined ? invalidValue : v.rawValue + " " + v.unitTypeSuffix
 }
 
 function addTypeSuffix(rawValue, unitTypeSuffix, isValid) {
-    if (!isValid) return qsTr("INV");
+    if (!isValid) return invalidValue;
     return rawValue + " " + ValueManager.unitTypeToSuffix(unitTypeSuffix)
 }
 
 function isInv(rawValue) {
-    return rawValue === qsTr("INV");
+    return rawValue === invalidValue;
 }
 
 function searchValueIndex(id) {

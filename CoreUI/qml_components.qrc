@@ -19,5 +19,11 @@
         <file>qml/OSH/Components/ViewBase.qml</file>
         <file>qml/OSH/Components/SourceAnchor.qml</file>
         <file>qml/OSH/Components/qmldir</file>
+        <file>qml/OSH/Components/Visual/VisualMenuButton.qml</file>
+        <file>qml/OSH/Components/Visual/VisualStatusBar.qml</file>
+        <file>qml/OSH/Components/Visual/VisualClock.qml</file>
+        <file>qml/OSH/Components/Visual/VisualFloorMenu.qml</file>
+        <file>qml/OSH/Components/Visual/VisualFloorMenuButton.qml</file>
+        <file>qml/OSH/Components/Visual/VisualStateManager.qml</file>
     </qresource>
 </RCC>

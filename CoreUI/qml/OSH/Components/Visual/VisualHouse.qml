@@ -10,7 +10,7 @@ Rectangle {
     border.width: 2
 
     color: "gray"
-    opacity: 0.5
+    //opacity: 0.5
 
     layer.enabled: true
     layer.effect: DropShadow {

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/ui/main_ui.qml</file>
+        <file>qml/ui/Floor1.qml</file>
+        <file>qml/ui/Floor2.qml</file>
+        <file>qml/ui/Floor0.qml</file>
+        <file>qml/ui/Floor3.qml</file>
+    </qresource>
+</RCC>

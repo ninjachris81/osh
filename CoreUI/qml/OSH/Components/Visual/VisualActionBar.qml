@@ -7,29 +7,37 @@ import "."
 Rectangle {
     id: root
 
+    signal requestLight(var cmd)
+    property bool hasLight: true
     property alias lightIsValid: light.isValid
     property alias lightOn: light.lightOn
 
-    property alias brightnessIsValid: shutter.brightnessIsValid
-    property alias brightness: shutter.brightness
+    property bool hasBrightness: true
+    property alias brightnessIsValid: light.brightnessIsValid
+    property alias brightness: light.brightness
 
+    signal requestShutter(var cmd)
+    property bool hasShutter: true
     property alias shutterIsValid: shutter.isValid
     property alias shutterClosed: shutter.shutterClosed
 
+    property bool hasPresence: true
     property alias presenceIsValid: presence.isValid
     property alias presenceActive: presence.presenceActive
 
+    property bool hasTemp: true
     property alias tempIsValid: temp.isValid
     property alias temp: temp.temp
 
     property alias gridColumns: gridLayout.columns
+    readonly property int buttonWidth: 50
 
     //border.color: "white"
     //border.width: 2
 
-    readonly property int maxColumns: 4
+    readonly property int buttonCount: (hasLight ? 1 : 0) + (hasShutter ? 1 : 0) + (hasPresence ? 1 : 0) + (hasTemp ? 1 : 0)
 
-    width: gridColumns === 2 ? 2 * 50 : maxColumns * 50
+    width: Math.min(gridColumns, buttonCount) * buttonWidth
     height: 50
 
     color: "transparent"
@@ -37,27 +45,33 @@ Rectangle {
     GridLayout {
         id: gridLayout
         anchors.fill: parent
+        columns: 4
 
         VisualLight {
             id: light
+            visible: root.hasLight
             Layout.alignment: Qt.AlignCenter
+            onRequestCmd: root.requestLight(cmd)
         }
 
         VisualShutter {
             id: shutter
+            visible: root.hasShutter
             Layout.alignment: Qt.AlignCenter
+            onRequestCmd: root.requestShutter(cmd)
         }
 
         VisualPresence {
             id: presence
+            visible: root.hasPresence
             Layout.alignment: Qt.AlignCenter
         }
 
         VisualTemp {
             id: temp
+            visible: root.hasTemp
             Layout.alignment: Qt.AlignCenter
         }
-
     }
 
 }

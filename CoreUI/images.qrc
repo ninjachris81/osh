@@ -4,5 +4,19 @@
         <file>images/icons/baseline_system_update_alt_black_24dp.png</file>
         <file>images/icons/baseline_person_black_24dp.png</file>
         <file>images/icons/baseline_thermostat_black_24dp.png</file>
+        <file>images/icons/baseline_menu_black_24dp.png</file>
+        <file>images/icons/big/baseline_menu_black_48dp.png</file>
+        <file>images/icons/big/baseline_error_outline_black_48dp.png</file>
+        <file>images/icons/baseline_error_outline_black_24dp.png</file>
+        <file>images/icons/big/baseline_notifications_none_black_48dp.png</file>
+        <file>images/icons/baseline_notifications_none_black_24dp.png</file>
+        <file>images/icons/big/baseline_storage_black_48dp.png</file>
+        <file>images/icons/baseline_storage_black_24dp.png</file>
+        <file>images/icons/big/baseline_format_line_spacing_black_48dp.png</file>
+        <file>images/icons/baseline_format_line_spacing_black_24dp.png</file>
+        <file>images/icons/big/baseline_auto_awesome_motion_black_48dp.png</file>
+        <file>images/icons/baseline_auto_awesome_motion_black_24dp.png</file>
+        <file>images/icons/big/baseline_get_app_black_48dp.png</file>
+        <file>images/icons/big/baseline_compress_black_48dp.png</file>
     </qresource>
 </RCC>

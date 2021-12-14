@@ -12,22 +12,29 @@ Item {
 
     property alias gridColumns: actionBar.gridColumns
 
+    signal requestLight(var cmd)
+    property alias hasLight: actionBar.hasShutter
     property alias lightIsValid: actionBar.lightIsValid
     property alias lightOn: actionBar.lightOn
 
+    signal requestShutter(var cmd)
+    property alias hasShutter: actionBar.hasShutter
     property alias shutterIsValid: actionBar.shutterIsValid
     property alias shutterClosed: actionBar.shutterClosed
 
+    property alias hasBrightness: actionBar.hasBrightness
     property alias brightnessIsValid: actionBar.brightnessIsValid
     property alias brightness: actionBar.brightness
 
+    property alias hasPresence: actionBar.hasPresence
     property alias presenceIsValid: actionBar.presenceIsValid
     property alias presenceActive: actionBar.presenceActive
 
+    property alias hasTemp: actionBar.hasTemp
     property alias tempIsValid: actionBar.tempIsValid
     property alias temp: actionBar.temp
 
-    property color roomColor: Qt.rgba(1, 1, 1, (brightness / 100))
+    property color roomColor: Qt.rgba(1, 1, 1, hasBrightness ? (brightness / 100) : 0.5)
 
     opacity: 0.8
 
@@ -88,6 +95,9 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 40
+
+            onRequestLight: root.requestLight(cmd)
+            onRequestShutter: root.requestShutter(cmd)
         }
 
         layer.enabled: true

@@ -7,3 +7,8 @@ ActorBaseUI::ActorBaseUI(QObject *parent) : ValueBaseUI(parent)
     m_value = static_cast<ActorBase*>(parent);
 
 }
+
+
+void ActorBaseUI::triggerCmd(actor::ACTOR_CMDS cmd) {
+    static_cast<ActorBase*>(m_value)->triggerCmd(cmd);
+}

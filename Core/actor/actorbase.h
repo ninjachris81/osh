@@ -16,7 +16,7 @@ public:
     explicit ActorBase(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
 
     void triggerCmd(ACTOR_CMDS cmd);
-    Q_INVOKABLE void triggerCmd(int cmd);
+    //Q_INVOKABLE void triggerCmd(int cmd);
     virtual bool cmdSupported(ACTOR_CMDS cmd) = 0;
 
     virtual bool isAsync() = 0;

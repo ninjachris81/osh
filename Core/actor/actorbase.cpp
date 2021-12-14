@@ -18,7 +18,9 @@ void ActorBase::triggerCmd(ACTOR_CMDS cmd) {
     }
 }
 
+/*
 void ActorBase::triggerCmd(int cmd) {
     iDebug() << Q_FUNC_INFO << cmd;
     triggerCmd(static_cast<ACTOR_CMDS>(cmd));
 }
+*/

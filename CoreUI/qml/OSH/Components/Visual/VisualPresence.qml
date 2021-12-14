@@ -44,6 +44,6 @@ VisualActionButton {
     MouseArea {
         anchors.fill: parent
 
-        onClicked: root.presenceActive = !root.presenceActive
+        //onClicked: root.presenceActive = !root.presenceActive
     }
 }

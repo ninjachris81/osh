@@ -23,10 +23,19 @@ Rectangle {
             easing.type: Easing.InSine
             duration: 250
         }
+
+        PauseAnimation {
+            duration: 500
+        }
+
         ColorAnimation {
             to: "black"
             duration: 250
             easing.type: Easing.OutSine
+        }
+
+        PauseAnimation {
+            duration: 500
         }
 
         loops: Animation.Infinite
