@@ -7,8 +7,8 @@ ActorBase::ActorBase(ValueGroup *valueGroup, QString id, QObject *parent) : Valu
 
 }
 
-void ActorBase::triggerCmd(ACTOR_CMDS cmd) {
-    iDebug() << Q_FUNC_INFO << cmd;
+void ActorBase::triggerCmd(ACTOR_CMDS cmd, QString reason) {
+    iDebug() << Q_FUNC_INFO << cmd << reason;
 
     if (cmdSupported(cmd)) {
         _triggerCmd(cmd);

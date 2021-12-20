@@ -33,7 +33,7 @@ void ClientActorManager::handleReceivedMessage(MessageBase* msg) {
 
     if (m_actors.contains(actorMessage->fullId())) {
         ActorBase* actor = m_actors.value(actorMessage->fullId());
-        actor->triggerCmd(actorMessage->cmd());
+        actor->triggerCmd(actorMessage->cmd(), "Message received");
 
         if (!actor->isAsync()) {        // only publish if value is set synchronously
             iDebug() << "Publish value";

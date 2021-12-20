@@ -53,6 +53,7 @@ public:
     void setCustomChannels(QStringList customChannels);
 
 private:
+    bool m_hasCustomChannels = false;
     QStringList m_customChannels;
     QVariant parseCompactPayload(char typeId, QByteArray payload);
     QJsonDocument parseJSONPayload(QByteArray payload);

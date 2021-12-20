@@ -49,6 +49,8 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
         QString lastTsInputKey = "lastTs_" + inputSensorFullId;
         QString lastValueInputKey = "lastValue_" + inputSensorFullId;
 
+        QString triggerReason;
+
         bool inputTriggered = false;
 
         if (inputSensor->isValid()) {
@@ -66,6 +68,8 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
             // toggle to OFF
             iDebug() << "Toggle off with grace period for motion sensor";
             expectedValue = false;
+
+            triggerReason = "Input trigger";
             m_localStorage->set(lastTsMotionSensorKey, 0);
             m_localStorage->set(lastTsInputKey, 0);
             m_localStorage->set(graceMotionSensorKey, QDateTime::currentMSecsSinceEpoch());
@@ -74,11 +78,13 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
             if (brightnessSensor->isValid() && brightnessSensor->rawValue().toInt() < brightnessThreshold) {
                 if (motionSensor->isValid() && motionSensor->rawValue().toBool() && (QDateTime::currentMSecsSinceEpoch() - m_localStorage->get(graceMotionSensorKey, 0).toULongLong() > motionSensorGracePeriodMs)) {
                     m_localStorage->set(lastTsMotionSensorKey, QDateTime::currentMSecsSinceEpoch());
+                    triggerReason = "Motion sensor";
                 }
             }
 
             if (inputSensor->isValid() && inputTriggered) {
                 m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+                triggerReason = "Input trigger";
             }
 
             quint64 lastContact = qMax(m_localStorage->get(lastTsMotionSensorKey, 0).toULongLong(), m_localStorage->get(lastTsInputKey, 0).toULongLong());
@@ -88,13 +94,14 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
             if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
                 expectedValue = true;
             } else if (inputSensor->isValid() && motionSensor->isValid()) {
+                triggerReason = "Default off";
                 expectedValue = false;
             }
         }
 
         // finally set the value
         if (actualValue != expectedValue && expectedValue.isValid()) {
-            lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF);
+            lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF, triggerReason);
         }
 
         return true;

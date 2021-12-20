@@ -111,22 +111,23 @@ QStringList MqttCommunicationManagerBase::buildPath(QStringList paths, bool addW
 void MqttCommunicationManagerBase::onMqttConnected() {
     iDebug() << Q_FUNC_INFO;
 
-    switch(managerRegistration()->instanceRole()) {
-    case ManagerRegistration::SERVER:
-        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
-        break;
-    case ManagerRegistration::CLIENT:
-        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
-        break;
-    case ManagerRegistration::GUI:
-        subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO);
-        break;
-    case ManagerRegistration::CUSTOM:
+    if (m_hasCustomChannels) {
         subscribeChannels(m_customChannels);
-        break;
-    default:
-        iWarning() << "Unsupported instance role";
-        break;
+    } else {
+        switch(managerRegistration()->instanceRole()) {
+        case ManagerRegistration::SERVER:
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
+            break;
+        case ManagerRegistration::CLIENT:
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+            break;
+        case ManagerRegistration::GUI:
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO);
+            break;
+        default:
+            iWarning() << "Unsupported instance role";
+            break;
+        }
     }
 
     ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_ID);
@@ -320,4 +321,5 @@ bool MqttCommunicationManagerBase::isRetainedMessage(MessageBase &message) {
 
 void MqttCommunicationManagerBase::setCustomChannels(QStringList customChannels) {
     m_customChannels = customChannels;
+    m_hasCustomChannels = true;
 }

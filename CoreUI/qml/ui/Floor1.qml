@@ -58,12 +58,12 @@ Item {
 
         onRequestLight: {
             console.info("Request Light " + cmd)
-            DatamodelManager.datamodel.actors[lightIndex].triggerCmd(cmd)
+            DatamodelManager.datamodel.actors[lightIndex].triggerCmd(cmd, "Clicked UI")
         }
 
         onRequestShutter: {
             console.info("Request Light" + cmd)
-            DatamodelManager.datamodel.actors[shutterIndex].triggerCmd(cmd)
+            DatamodelManager.datamodel.actors[shutterIndex].triggerCmd(cmd, "Clicked UI")
         }
 
         Component.onCompleted: {

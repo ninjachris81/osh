@@ -13,7 +13,7 @@ class ActorBaseUI : public ValueBaseUI
 public:
     explicit ActorBaseUI(QObject *parent = nullptr);
 
-    Q_INVOKABLE void triggerCmd(actor::ACTOR_CMDS cmd);
+    Q_INVOKABLE void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
 
 signals:
 
