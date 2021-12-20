@@ -12,6 +12,7 @@
 #include "datamodel/server/datamodelmanager.h"
 #include "processor/server/scriptbase.h"
 #include "communication/communicationmanagerbase.h"
+#include "processor/server/localstorage.h"
 
 class ModelProcessorManager : public ManagerBase
 {
@@ -19,7 +20,7 @@ class ModelProcessorManager : public ManagerBase
 public:
     explicit ModelProcessorManager(QObject *parent = nullptr);
 
-    static QLatin1Literal MANAGER_ID;
+    static QLatin1String MANAGER_ID;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -46,12 +47,17 @@ private:
 
     QMap<QString, ScriptBase*> m_scripts;
 
+    LocalStorage m_localStorage;
+
     CommunicationManagerBase* m_commManager;
+    DatamodelManager* m_dmManager;
+    bool m_isFirstRun = true;
 
     void injectValues(DatamodelManager *dmManager);
     void injectActors(DatamodelManager *dmManager);
     void injectConstants();
     void injectScripts();
+    void injectLocalStorage();
 
     void injectValue(ValueBase* value);
     void injectActor(ActorBase* actor);

@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-QLatin1Literal SystemWarningsManager::MANAGER_ID = QLatin1Literal("SystemWarningsManager");
+QLatin1String SystemWarningsManager::MANAGER_ID = QLatin1String("SystemWarningsManager");
 
 SystemWarningsManager::SystemWarningsManager(QObject *parent) : ManagerBase(parent)
 {

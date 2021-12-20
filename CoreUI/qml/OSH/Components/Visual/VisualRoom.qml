@@ -11,6 +11,7 @@ Item {
     //DebugTracer {}
 
     property alias gridColumns: actionBar.gridColumns
+    property alias actionBar: actionBar
 
     signal requestLight(var cmd)
     property alias hasLight: actionBar.hasShutter
@@ -33,6 +34,10 @@ Item {
     property alias hasTemp: actionBar.hasTemp
     property alias tempIsValid: actionBar.tempIsValid
     property alias temp: actionBar.temp
+
+    property alias hasHumidity: actionBar.hasHumidity
+    property alias humidityIsValid: actionBar.humidityIsValid
+    property alias humidity: actionBar.humidity
 
     property color roomColor: Qt.rgba(1, 1, 1, hasBrightness ? (brightness / 100) : 0.5)
 

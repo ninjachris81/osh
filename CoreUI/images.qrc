@@ -18,5 +18,10 @@
         <file>images/icons/baseline_auto_awesome_motion_black_24dp.png</file>
         <file>images/icons/big/baseline_get_app_black_48dp.png</file>
         <file>images/icons/big/baseline_compress_black_48dp.png</file>
+        <file>images/icons/baseline_water_drop_black_24dp.png</file>
+        <file>images/icons/big/baseline_water_drop_black_48dp.png</file>
+        <file>images/icons/18_toilet-512_6285.png</file>
+        <file>images/icons/baseline_yard_black_24dp.png</file>
+        <file>images/icons/baseline_opacity_black_24dp.png</file>
     </qresource>
 </RCC>

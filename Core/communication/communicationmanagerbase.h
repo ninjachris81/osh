@@ -17,7 +17,7 @@ class CommunicationManagerBase : public ManagerBase
 public:
     explicit CommunicationManagerBase(QObject *parent = nullptr);
 
-    static QLatin1Literal MANAGER_ID;
+    static QLatin1String MANAGER_ID;
 
     quint64 sendMessage(MessageBase &message);
     /*virtual*/ void init(LocalConfig* config) override;

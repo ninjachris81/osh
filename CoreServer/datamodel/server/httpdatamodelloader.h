@@ -9,18 +9,19 @@ class HttpDataModelLoader : public DatamodelLoaderBase
 {
     Q_OBJECT
 public:
-    explicit HttpDataModelLoader(QUrl url, QObject *parent = nullptr);
+    explicit HttpDataModelLoader(QUrl url, int requestTimeoutMs = 5000, QObject *parent = nullptr);
 
     static QString LOADER_TYPE_NAME;
 
     /*virtual*/ DatamodelBase* load() override;
 
-    /*virtual*/ bool save(DatamodelBase* datamodel) override;
+    /*virtual*/ void save(DatamodelBase* datamodel) override;
 
     /*virtual*/ QString typeName() override;
 
 private:
     QUrl m_url;
+    int m_requestTimeoutMs;
 
 signals:
 

@@ -14,7 +14,7 @@ public:
 
     /*virtual*/ DatamodelBase* load() override;
 
-    /*virtual*/ bool save(DatamodelBase* datamodel) override;
+    /*virtual*/ void save(DatamodelBase* datamodel) override;
 
     /*virtual*/ QString typeName() override;
 

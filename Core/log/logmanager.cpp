@@ -9,7 +9,7 @@
 #include "log/logmessage.h"
 #include "shared/log.h"
 
-QLatin1Literal LogManager::MANAGER_ID = QLatin1Literal("LogManager");
+QLatin1String LogManager::MANAGER_ID = QLatin1String("LogManager");
 
 LogManager* LogManager::m_instance = nullptr;
 

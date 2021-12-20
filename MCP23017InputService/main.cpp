@@ -11,6 +11,7 @@
 //#include "actor/client/clientactormanager.h"
 #include "actor/digitalactor.h"
 #include "value/booleanvalue.h"
+#include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,8 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
+
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);

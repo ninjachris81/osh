@@ -13,7 +13,7 @@ class EnvironmentValueManager : public ManagerBase
 public:
     explicit EnvironmentValueManager(QObject *parent = nullptr);
 
-    static QLatin1Literal MANAGER_ID;
+    static QLatin1String MANAGER_ID;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 

@@ -7,7 +7,7 @@
 #include "macros.h"
 #include "controller/controllermanager.h"
 
-QLatin1Literal CommunicationManagerBase::MANAGER_ID = QLatin1Literal("CommunicationManager");
+QLatin1String CommunicationManagerBase::MANAGER_ID = QLatin1String("CommunicationManager");
 
 CommunicationManagerBase::CommunicationManagerBase(QObject *parent) : ManagerBase(parent)
 {

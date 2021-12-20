@@ -50,7 +50,10 @@ public:
 
     bool isRetainedMessage(MessageBase &message);
 
+    void setCustomChannels(QStringList customChannels);
+
 private:
+    QStringList m_customChannels;
     QVariant parseCompactPayload(char typeId, QByteArray payload);
     QJsonDocument parseJSONPayload(QByteArray payload);
     QByteArray serializeCompactValue(QVariant value);

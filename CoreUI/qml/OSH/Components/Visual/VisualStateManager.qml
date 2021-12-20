@@ -6,6 +6,6 @@ QtObject {
 
     readonly property var floorNames: [qsTr("Keller"), qsTr("EG"), qsTr("OG"), qsTr("Dach")]
     readonly property string currentFloorName: floorNames[currentFloor]
-    property int currentFloor: 2
+    property int currentFloor: 0
 
 }

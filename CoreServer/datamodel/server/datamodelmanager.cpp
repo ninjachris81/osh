@@ -6,13 +6,15 @@
 #include "testdatamodelloader.h"
 #include "value/server/servervaluemanager.h"
 #include "actor/server/actormanager.h"
+#include "datamodel/server/emptydatamodel.h"
 
 #include "macros.h"
 
-QLatin1Literal DatamodelManager::MANAGER_ID = QLatin1Literal("DatamodelManager");
+QLatin1String DatamodelManager::MANAGER_ID = QLatin1String("DatamodelManager");
 
 DatamodelManager::DatamodelManager(QObject *parent) : ManagerBase(parent)
 {
+    m_datamodel = new EmptyDatamodel();
 }
 
 LogCat::LOGCAT DatamodelManager::logCat() {
@@ -37,13 +39,16 @@ void DatamodelManager::init(LocalConfig* config) {
 
     Q_ASSERT(m_datamodelLoader != nullptr);
 
-    m_datamodel = m_datamodelLoader->load();
+    connect(m_datamodelLoader, &DatamodelLoaderBase::saved, this, &DatamodelManager::onDatamodelSaved);
+    connect(m_datamodelLoader, &DatamodelLoaderBase::error, this, &DatamodelManager::onDatamodelError);
 
+    delete m_datamodel;
+    m_datamodel = m_datamodelLoader->load();
     Q_ASSERT(m_datamodel != nullptr);
 
-    iDebug() << "Datamodel loaded";
+    m_isLoaded = true;
 
-    connect(m_datamodel, &DatamodelBase::datamodelContentChanged, this, &DatamodelManager::onDatamodelChanged);
+    iDebug() << "Datamodel loaded";
 
     Q_EMIT(datamodelChanged());
 
@@ -78,12 +83,6 @@ void DatamodelManager::registerActors() {
     }
 }
 
-void DatamodelManager::onDatamodelChanged() {
-    if (!m_datamodelLoader->save(m_datamodel)) {
-        iWarning() << "Error while saving datamodel";
-    }
-}
-
 QString DatamodelManager::id() {
     return MANAGER_ID;
 }
@@ -98,3 +97,16 @@ void DatamodelManager::handleReceivedMessage(MessageBase* msg) {
 DatamodelBase* DatamodelManager::datamodel() {
     return m_datamodel;
 }
+
+bool DatamodelManager::isLoaded() {
+    return m_isLoaded;
+}
+
+void DatamodelManager::onDatamodelSaved() {
+    iDebug() << "Datamodel saved";
+}
+
+void DatamodelManager::onDatamodelError(QString desc) {
+    iWarning() << "Error while saving datamodel" << desc;
+}
+

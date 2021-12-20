@@ -36,7 +36,7 @@ public:
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, bool isAsync, ValueBase::VALUE_TIMEOUT timeout);
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, UNIT_TYPE unitType, ValueBase::VALUE_TIMEOUT timeout);
-    ProcessorTask* addProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval = 0);
+    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval = 0);
 
 protected:
     QMap<QString, KnownDevice*> m_knownDevices;

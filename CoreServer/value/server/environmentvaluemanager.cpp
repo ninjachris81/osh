@@ -7,7 +7,7 @@
 #include "value/valuemanagerbase.h"
 #include "value/valuegroup.h"
 
-QLatin1Literal EnvironmentValueManager::MANAGER_ID = QLatin1Literal("EnvironmentValueManager");
+QLatin1String EnvironmentValueManager::MANAGER_ID = QLatin1String("EnvironmentValueManager");
 
 EnvironmentValueManager::EnvironmentValueManager(QObject *parent) : ManagerBase(parent)
 {

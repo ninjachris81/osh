@@ -21,7 +21,6 @@ QString TestDatamodelLoader::typeName() {
 }
 
 
-bool TestDatamodelLoader::save(DatamodelBase* datamodel) {
-    // not supported
-    return false;
+void TestDatamodelLoader::save(DatamodelBase* datamodel) {
+    Q_EMIT(error("Not supported"));
 }

@@ -121,5 +121,6 @@ QString ValueBase::unitTypeToSuffix(UNIT_TYPE unitType) {
     case UT_DEGREES: return "°";
     case UT_PERCENT: return "%";
     case UT_TIMESTAMP: return "";
+    case UT_LITER_PER_MIN: return "l/min";
     }
 }

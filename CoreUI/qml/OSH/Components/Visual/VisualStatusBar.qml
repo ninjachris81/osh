@@ -44,7 +44,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: 200
+            width: 160
 
             MouseArea {
                 anchors.fill: parent

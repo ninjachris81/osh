@@ -25,5 +25,8 @@
         <file>qml/OSH/Components/Visual/VisualFloorMenu.qml</file>
         <file>qml/OSH/Components/Visual/VisualFloorMenuButton.qml</file>
         <file>qml/OSH/Components/Visual/VisualStateManager.qml</file>
+        <file>qml/OSH/Components/Visual/VisualMainMenu.qml</file>
+        <file>qml/OSH/Components/Visual/VisualWater.qml</file>
+        <file>qml/OSH/Components/Visual/VisualHumidity.qml</file>
     </qresource>
 </RCC>

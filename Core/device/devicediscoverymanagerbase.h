@@ -15,7 +15,7 @@ class DeviceDiscoveryManagerBase : public ManagerBase
 public:
     explicit DeviceDiscoveryManagerBase(QString serviceId, QObject *parent = nullptr);
 
-    static QLatin1Literal MANAGER_ID;
+    static QLatin1String MANAGER_ID;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 

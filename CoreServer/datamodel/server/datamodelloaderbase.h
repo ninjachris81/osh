@@ -16,11 +16,13 @@ public:
 
     virtual DatamodelBase* load() = 0;
 
-    virtual bool save(DatamodelBase* datamodel) = 0;
+    virtual void save(DatamodelBase* datamodel) = 0;
 
     virtual QString typeName() = 0;
 
 signals:
+    void saved();
+    void error(QString desc);
 
 public slots:
 };

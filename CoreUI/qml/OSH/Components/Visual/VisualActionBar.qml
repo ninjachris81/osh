@@ -7,6 +7,8 @@ import "."
 Rectangle {
     id: root
 
+    property alias gridLayout: gridLayout
+
     signal requestLight(var cmd)
     property bool hasLight: true
     property alias lightIsValid: light.isValid
@@ -29,13 +31,17 @@ Rectangle {
     property alias tempIsValid: temp.isValid
     property alias temp: temp.temp
 
+    property bool hasHumidity: hasTemp
+    property alias humidityIsValid: humidity.isValid
+    property alias humidity: humidity.humidity
+
     property alias gridColumns: gridLayout.columns
     readonly property int buttonWidth: 50
 
     //border.color: "white"
     //border.width: 2
 
-    readonly property int buttonCount: (hasLight ? 1 : 0) + (hasShutter ? 1 : 0) + (hasPresence ? 1 : 0) + (hasTemp ? 1 : 0)
+    property int buttonCount: (hasLight ? 1 : 0) + (hasShutter ? 1 : 0) + (hasPresence ? 1 : 0) + (hasTemp ? 1 : 0) + (hasHumidity ? 1 : 0)
 
     width: Math.min(gridColumns, buttonCount) * buttonWidth
     height: 50
@@ -45,7 +51,7 @@ Rectangle {
     GridLayout {
         id: gridLayout
         anchors.fill: parent
-        columns: 4
+        columns: buttonCount
 
         VisualLight {
             id: light
@@ -70,6 +76,12 @@ Rectangle {
         VisualTemp {
             id: temp
             visible: root.hasTemp
+            Layout.alignment: Qt.AlignCenter
+        }
+
+        VisualHumidity {
+            id: humidity
+            visible: root.hasHumidity
             Layout.alignment: Qt.AlignCenter
         }
     }

@@ -10,6 +10,10 @@ class DynamicDatamodel : public DatamodelBase
 public:
     explicit DynamicDatamodel(QObject *parent = nullptr);
 
+    QByteArray serialize();
+
+    void deserialize(QByteArray data);
+
 signals:
 
 public slots:

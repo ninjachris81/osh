@@ -4,3 +4,13 @@ DynamicDatamodel::DynamicDatamodel(QObject *parent) : DatamodelBase("DynamicData
 {
 
 }
+
+QByteArray DynamicDatamodel::serialize() {
+    QByteArray data;
+
+    return data;
+}
+
+void DynamicDatamodel::deserialize(QByteArray data) {
+
+}

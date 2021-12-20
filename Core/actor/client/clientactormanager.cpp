@@ -6,7 +6,7 @@
 #include "value/client/clientvaluemanager.h"
 #include "macros.h"
 
-QLatin1Literal ClientActorManager::MANAGER_ID = QLatin1Literal("ClientActorManager");
+QLatin1String ClientActorManager::MANAGER_ID = QLatin1String("ClientActorManager");
 
 ClientActorManager::ClientActorManager(QObject *parent) : ManagerBase(parent)
 {

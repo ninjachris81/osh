@@ -121,6 +121,9 @@ void MqttCommunicationManagerBase::onMqttConnected() {
     case ManagerRegistration::GUI:
         subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO);
         break;
+    case ManagerRegistration::CUSTOM:
+        subscribeChannels(m_customChannels);
+        break;
     default:
         iWarning() << "Unsupported instance role";
         break;
@@ -313,4 +316,8 @@ QStringList MqttCommunicationManagerBase::removeMessageTypePath(QStringList path
 bool MqttCommunicationManagerBase::isRetainedMessage(MessageBase &message) {
     MessageTypeInfo info = m_messageTypes.value(message.getMessageType());
     return info.isRetained;
+}
+
+void MqttCommunicationManagerBase::setCustomChannels(QStringList customChannels) {
+    m_customChannels = customChannels;
 }

@@ -8,7 +8,7 @@
 #include "macros.h"
 #include "shared/device.h"
 
-QLatin1Literal DeviceDiscoveryManagerBase::MANAGER_ID = QLatin1Literal("DeviceDiscoveryManager");
+QLatin1String DeviceDiscoveryManagerBase::MANAGER_ID = QLatin1String("DeviceDiscoveryManager");
 
 DeviceDiscoveryManagerBase::DeviceDiscoveryManagerBase(QString serviceId, QObject *parent) : ManagerBase(parent), m_serviceId(serviceId)
 {

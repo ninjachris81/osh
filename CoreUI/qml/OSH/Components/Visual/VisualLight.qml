@@ -13,6 +13,8 @@ VisualActionButton {
     property bool brightnessIsValid
     property int brightness
 
+    markAsInvalid: !isValid || !brightnessIsValid
+
     color: lightOn ? "black" : "white"
 
     Image {

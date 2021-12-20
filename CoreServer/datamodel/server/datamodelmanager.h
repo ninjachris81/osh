@@ -14,7 +14,7 @@ class DatamodelManager : public ManagerBase
 public:
     explicit DatamodelManager(QObject *parent = nullptr);
 
-    static QLatin1Literal MANAGER_ID;
+    static QLatin1String MANAGER_ID;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -28,7 +28,10 @@ public:
 
     DatamodelBase* datamodel();
 
+    bool isLoaded();
+
 private:
+    bool m_isLoaded = false;
     DatamodelLoaderBase* m_datamodelLoader = nullptr;
     DatamodelBase* m_datamodel = nullptr;
 
@@ -36,7 +39,8 @@ private:
     void registerActors();
 
 private slots:
-    void onDatamodelChanged();
+    void onDatamodelSaved();
+    void onDatamodelError(QString desc);
 
 signals:
     void datamodelChanged();

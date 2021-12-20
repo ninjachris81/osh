@@ -4,7 +4,7 @@
 #include "communication/communicationmanagerbase.h"
 #include "time/systemtimemessage.h"
 
-QLatin1Literal ClientSystemtimeManager::MANAGER_ID = QLatin1Literal("ClientSystemtimeManager");
+QLatin1String ClientSystemtimeManager::MANAGER_ID = QLatin1String("ClientSystemtimeManager");
 
 ClientSystemtimeManager::ClientSystemtimeManager(QObject *parent) : ManagerBase(parent)
 {

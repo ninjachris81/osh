@@ -18,7 +18,7 @@ public:
 
     Q_PROPERTY(QList<QObject*> processorTasks READ processorTasks NOTIFY processorTasksChanged)
 
-    static QLatin1Literal MANAGER_ID;
+    static QLatin1String MANAGER_ID;
 
     /*virtual*/ QString id() override;
 

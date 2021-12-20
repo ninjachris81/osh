@@ -6,7 +6,7 @@
 
 #include "macros.h"
 
-QLatin1Literal ClientSystemWarningsManager::MANAGER_ID = QLatin1Literal("ClientSystemWarningsManager");
+QLatin1String ClientSystemWarningsManager::MANAGER_ID = QLatin1String("ClientSystemWarningsManager");
 
 ClientSystemWarningsManager::ClientSystemWarningsManager(QObject *parent) : ManagerBase(parent)
 {

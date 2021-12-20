@@ -4,7 +4,7 @@ Item {
     id: root
 
     height: 50
-    width: 160
+    width: 120
 
     Text {
         id: timeLabel

@@ -29,7 +29,7 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", p
     addDoubleValue(nodeTemps, "0", UT_DEGREES, ValueBase::VT_MID);
 
     ValueGroup* nodeHums = addValueGroup("hums");
-    addDoubleValue(nodeHums, "0", UT_DEGREES, ValueBase::VT_MID);
+    addDoubleValue(nodeHums, "0", UT_PERCENT, ValueBase::VT_MID);
 
     ValueGroup* nodePirs = addValueGroup("motions");
     addBooleanValue(nodePirs, "0", ValueBase::VT_MID);
@@ -40,7 +40,14 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", p
     ValueGroup* nodeAlarms = addValueGroup("alarms");
     addDigitalActor(nodeAlarms, "0", true, ValueBase::VT_MID);
 
-    addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
-    addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
-    addProcessorTask("logicproc1", "CommonScripts.ensureState(values_egRelays0_0, values_egInputs0_0, false, function(expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF )} );");
+    ValueGroup* nodeWaterFlows = addValueGroup("waterFlows");
+    addDoubleValue(nodeWaterFlows, "toilet", UT_LITER_PER_MIN, ValueBase::VT_MID);
+    addDoubleValue(nodeWaterFlows, "cold", UT_LITER_PER_MIN, ValueBase::VT_MID);
+    addDoubleValue(nodeWaterFlows, "warm", UT_LITER_PER_MIN, ValueBase::VT_MID);
+    addDoubleValue(nodeWaterFlows, "garden", UT_LITER_PER_MIN, ValueBase::VT_MID);
+
+    addProcessorTask("Test123", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('egRelays0.0', 'egInputs0.0', 'motions.0', 'brightnesses.0', 30, 20000, 5000)");
+    //addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
+    //addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");
+    //addProcessorTask("logicproc1", "CommonScripts.ensureState(values_egRelays0_0, values_egInputs0_0, false, function(expected) {values_egRelays0_0.triggerCmd(expected ? C.ACTOR_CMD_ON : C.ACTOR_CMD_OFF )} );");
 }

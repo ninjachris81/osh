@@ -18,7 +18,8 @@ public:
         UNKNOWN,
         SERVER,
         CLIENT,
-        GUI
+        GUI,
+        CUSTOM
     };
 
     explicit ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent = nullptr);

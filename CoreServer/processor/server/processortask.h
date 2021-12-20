@@ -10,7 +10,13 @@ class ProcessorTask : public Identifyable
 {
     Q_OBJECT
 public:
-    explicit ProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval = 0, QObject *parent = nullptr);
+    enum ProcessorTaskType {
+        PTT_INTERVAL = 0,
+        PTT_ONLY_ONCE = 1,
+        PTT_TRIGGER = 2
+    };
+
+    explicit ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval = 0, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -18,6 +24,8 @@ public:
 
     QString scriptCode();
     qint64 scheduleInterval();
+    ProcessorTaskType taskType();
+
     qint64 lastExecution();
     QVariant lastResult();
 
@@ -27,6 +35,8 @@ public:
 private:
     QString m_scriptCode;
     qint64 m_scheduleInterval;
+    ProcessorTaskType m_processorTaskType = PTT_INTERVAL;
+
     qint64 m_lastExecution = 0;
     QVariant m_lastResult;
 

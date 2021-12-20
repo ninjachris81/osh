@@ -12,7 +12,7 @@
 #include "processor/server/commonscripts.h"
 #include "processor/scriptresultmessage.h"
 
-QLatin1Literal ModelProcessorManager::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
+QLatin1String ModelProcessorManager::MANAGER_ID = QLatin1String("ModelProcessorManager");
 
 
 ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(parent)
@@ -35,22 +35,25 @@ void ModelProcessorManager::init(LocalConfig* config) {
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
 
-    registerScript(new CommonScripts(&m_engine));
+    m_dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
 }
 
 void ModelProcessorManager::postInit() {
     iDebug() << Q_FUNC_INFO;
 
-    DatamodelManager* dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
-    m_processorTasks = dmManager->datamodel()->processorTasks();
+    registerScript(new CommonScripts(&m_engine, m_dmManager->datamodel(), &m_localStorage));
+
+    m_processorTasks = m_dmManager->datamodel()->processorTasks();
 
     m_engine.installExtensions(QJSEngine::AllExtensions);
 
-    injectValues(dmManager);
+    injectValues(m_dmManager);
 
-    injectActors(dmManager);
+    injectActors(m_dmManager);
 
     injectConstants();
+
+    injectLocalStorage();
 
     injectScripts();
 
@@ -86,11 +89,26 @@ void ModelProcessorManager::executeTasks() {
     while(it.hasNext()) {
         it.next();
 
-        if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
-            QVariant result = it.value()->run(&m_engine);
-            publishScriptResult(it.key(), result);
+        switch(it.value()->taskType()) {
+        case ProcessorTask::PTT_INTERVAL:
+            if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
+                QVariant result = it.value()->run(&m_engine);
+                publishScriptResult(it.key(), result);
+            }
+            break;
+        case ProcessorTask::PTT_ONLY_ONCE:
+            if (m_isFirstRun) {
+                QVariant result = it.value()->run(&m_engine);
+                publishScriptResult(it.key(), result);
+            }
+            break;
+        case ProcessorTask::PTT_TRIGGER:
+            // will triggered externally
+            break;
         }
     }
+
+    m_isFirstRun = false;
 }
 
 void ModelProcessorManager::publishScriptResult(QString taskId, QVariant value) {
@@ -127,6 +145,8 @@ void ModelProcessorManager::injectActor(ActorBase* actor) {
 }
 
 void ModelProcessorManager::injectValues(DatamodelManager* dmManager) {
+    iDebug() << Q_FUNC_INFO;
+
     QMapIterator<QString, ValueBase*> it(dmManager->datamodel()->values());
 
     while(it.hasNext()) {
@@ -136,6 +156,8 @@ void ModelProcessorManager::injectValues(DatamodelManager* dmManager) {
 }
 
 void ModelProcessorManager::injectActors(DatamodelManager* dmManager) {
+    iDebug() << Q_FUNC_INFO;
+
     QMapIterator<QString, ActorBase*> it(dmManager->datamodel()->actors());
     while(it.hasNext()) {
         it.next();
@@ -144,6 +166,8 @@ void ModelProcessorManager::injectActors(DatamodelManager* dmManager) {
 }
 
 void ModelProcessorManager::injectConstants() {
+    iDebug() << Q_FUNC_INFO;
+
     QJSValue constants = m_engine.newObject();
 
     QMetaEnum e = QMetaEnum::fromType<actor::ACTOR_CMDS>();
@@ -157,6 +181,8 @@ void ModelProcessorManager::injectConstants() {
 }
 
 void ModelProcessorManager::injectScripts() {
+    iDebug() << Q_FUNC_INFO;
+
     QMapIterator<QString, ScriptBase*> it(m_scripts);
     while (it.hasNext()) {
         it.next();
@@ -164,4 +190,11 @@ void ModelProcessorManager::injectScripts() {
         QJSValue script = m_engine.newQObject(it.value());
         m_engine.globalObject().setProperty(it.key(), script);
     }
+}
+
+void ModelProcessorManager::injectLocalStorage() {
+    iDebug() << Q_FUNC_INFO;
+
+    QJSValue localStorage = m_engine.newQObject(&m_localStorage);
+    m_engine.globalObject().setProperty("LocalStorage", localStorage);
 }

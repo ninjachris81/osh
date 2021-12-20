@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-ProcessorTask::ProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval, QObject *parent) : Identifyable(id, parent), m_scriptCode(scriptCode), m_scheduleInterval(scheduleInterval)
+ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval, QObject *parent) : Identifyable(id, parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_scheduleInterval(scheduleInterval)
 {
 
 }
@@ -37,6 +37,10 @@ QString ProcessorTask::scriptCode() {
 
 qint64 ProcessorTask::scheduleInterval() {
     return m_scheduleInterval;
+}
+
+ProcessorTask::ProcessorTaskType ProcessorTask::taskType() {
+    return m_processorTaskType;
 }
 
 qint64 ProcessorTask::lastExecution() {

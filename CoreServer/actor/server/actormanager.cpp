@@ -6,7 +6,7 @@
 #include "value/valuemanagerbase.h"
 #include "macros.h"
 
-QLatin1Literal ActorManager::MANAGER_ID = QLatin1Literal("ActorManager");
+QLatin1String ActorManager::MANAGER_ID = QLatin1String("ActorManager");
 
 ActorManager::ActorManager(QObject *parent) : ManagerBase(parent)
 {

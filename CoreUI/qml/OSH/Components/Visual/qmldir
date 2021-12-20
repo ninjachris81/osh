@@ -11,5 +11,8 @@ VisualStatusBar         1.0 VisualStatusBar.qml
 VisualClock             1.0 VisualClock.qml
 VisualFloorMenu         1.0 VisualFloorMenu.qml
 VisualFloorMenuButton   1.0 VisualFloorMenuButton.qml
+VisualMainMenu          1.0 VisualMainMenu.qml
+VisualWater             1.0 VisualWater.qml
+VisualHumidity          1.0 VisualHumidity.qml
 
 singleton VisualStateManager      1.0 VisualStateManager.qml

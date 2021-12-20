@@ -60,8 +60,8 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, U
     return value;
 }
 
-ProcessorTask* DatamodelBase::addProcessorTask(QString id, QString scriptCode, qint64 scheduleInterval) {
-    ProcessorTask* processorNode = new ProcessorTask(id, scriptCode, scheduleInterval);
+ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval) {
+    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, scheduleInterval);
     m_processorTasks.insert(processorNode->id(), processorNode);
     Q_EMIT(datamodelContentChanged());
     return processorNode;

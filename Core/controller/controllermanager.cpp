@@ -5,7 +5,7 @@
 #include "communication/communicationmanagerbase.h"
 #include "controllermessage.h"
 
-QLatin1Literal ControllerManager::MANAGER_ID = QLatin1Literal("ControllerManager");
+QLatin1String ControllerManager::MANAGER_ID = QLatin1String("ControllerManager");
 
 ControllerManager::ControllerManager(QObject *parent) : ManagerBase(parent)
 {

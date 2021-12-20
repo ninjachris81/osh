@@ -30,11 +30,13 @@ SOURCES += \
         datamodel/server/datamodelloaderbase.cpp \
         datamodel/server/datamodelmanager.cpp \
         datamodel/server/dynamicdatamodel.cpp \
+    datamodel/server/emptydatamodel.cpp \
         datamodel/server/httpdatamodelloader.cpp \
         datamodel/server/testdatamodel.cpp \
         datamodel/server/testdatamodelloader.cpp \
         device/server/serverdevicediscoverymanager.cpp \
     processor/server/commonscripts.cpp \
+    processor/server/localstorage.cpp \
     processor/server/scriptbase.cpp \
     simulator/server/simulatorbase.cpp \
         time/server/systemtimemanager.cpp \
@@ -50,11 +52,13 @@ HEADERS += \
         datamodel/server/datamodelloaderbase.h \
         datamodel/server/datamodelmanager.h \
         datamodel/server/dynamicdatamodel.h \
+    datamodel/server/emptydatamodel.h \
         datamodel/server/httpdatamodelloader.h \
         datamodel/server/testdatamodel.h \
         datamodel/server/testdatamodelloader.h \
         device/server/serverdevicediscoverymanager.h \
     processor/server/commonscripts.h \
+    processor/server/localstorage.h \
     processor/server/scriptbase.h \
     simulator/server/simulatorbase.h \
         time/server/systemtimemanager.h \

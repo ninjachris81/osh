@@ -28,11 +28,6 @@ Item {
         id: floor
         name: qsTr("Flur")
 
-        readonly property int lightIndex: Commons.searchActorIndex("egRelays0.0")
-        readonly property int brightnessIndex: Commons.searchValueIndex("brightnesses.0")
-        readonly property int presenceActiveIndex: Commons.searchValueIndex("motions.0")
-        readonly property int tempIndex: Commons.searchValueIndex("temps.0")
-
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 20
         anchors.left: mainFloor.right
@@ -40,8 +35,12 @@ Item {
         width: 800
         height: 170
 
+        readonly property int lightIndex: Commons.searchActorIndex("egRelays0.0")
+        readonly property int brightnessIndex: Commons.searchValueIndex("brightnesses.0")
+        readonly property int presenceActiveIndex: Commons.searchValueIndex("motions.0")
+        readonly property int tempIndex: Commons.searchValueIndex("temps.0")
+
         onRequestLight: {
-            console.info("Request Light " + cmd)
             DatamodelManager.datamodel.actors[lightIndex].triggerCmd(cmd)
         }
 

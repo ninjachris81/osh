@@ -37,7 +37,7 @@ void ServerValueManager::valueReceived(QString valueGroupId, QString valueId, QV
     if (value != nullptr) {
         valueReceived(value, newValue);
     } else {
-        iWarning() << "Value not registered" << valueGroupId << valueId;
+        iWarning() << " Value not registered" << valueGroupId << valueId;
     }
 }
 

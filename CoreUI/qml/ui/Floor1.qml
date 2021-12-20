@@ -36,7 +36,6 @@ Item {
         height: 170
 
         hasShutter: false
-        hasBrightness: false
     }
 
     VisualRoom {
@@ -55,6 +54,7 @@ Item {
         readonly property int shutterIndex: Commons.searchActorIndex("egRelays0.1")
         readonly property int presenceActiveIndex: Commons.searchValueIndex("motions.0")
         readonly property int tempIndex: Commons.searchValueIndex("temps.0")
+        readonly property int humidityIndex: Commons.searchValueIndex("hums.0")
 
         onRequestLight: {
             console.info("Request Light " + cmd)
@@ -81,6 +81,9 @@ Item {
 
             tempIsValid = Qt.binding(function() { return DatamodelManager.datamodel.values[tempIndex].isValid })
             temp = Qt.binding(function() { return Commons.formatValue(DatamodelManager.datamodel.values[tempIndex]) })
+
+            humidityIsValid = Qt.binding(function() { return DatamodelManager.datamodel.values[humidityIndex].isValid })
+            humidity = Qt.binding(function() { return Commons.formatValue(DatamodelManager.datamodel.values[humidityIndex]) })
         }
 
     }

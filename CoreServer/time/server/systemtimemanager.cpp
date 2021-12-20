@@ -7,7 +7,7 @@
 
 #include "macros.h"
 
-QLatin1Literal SystemtimeManager::MANAGER_ID = QLatin1Literal("SystemtimeManager");
+QLatin1String SystemtimeManager::MANAGER_ID = QLatin1String("SystemtimeManager");
 
 SystemtimeManager::SystemtimeManager(QObject *parent) : ManagerBase(parent)
 {

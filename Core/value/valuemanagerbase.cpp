@@ -5,7 +5,7 @@
 #include "communication/communicationmanagerbase.h"
 #include "value/valuemessage.h"
 
-QLatin1Literal ValueManagerBase::MANAGER_ID = QLatin1Literal("ValueManager");
+QLatin1String ValueManagerBase::MANAGER_ID = QLatin1String("ValueManager");
 
 ValueManagerBase::ValueManagerBase(QObject *parent) : ManagerBase(parent)
 {

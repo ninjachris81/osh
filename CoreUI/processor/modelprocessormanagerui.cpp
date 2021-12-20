@@ -1,7 +1,7 @@
 #include "modelprocessormanagerui.h"
 #include "processor/scriptresultmessage.h"
 
-QLatin1Literal ModelProcessorManagerUI::MANAGER_ID = QLatin1Literal("ModelProcessorManager");
+QLatin1String ModelProcessorManagerUI::MANAGER_ID = QLatin1String("ModelProcessorManager");
 ModelProcessorManagerUI * ModelProcessorManagerUI::m_qmlInstance = nullptr;
 
 ModelProcessorManagerUI::ModelProcessorManagerUI(QObject *parent) : ManagerBase(parent)

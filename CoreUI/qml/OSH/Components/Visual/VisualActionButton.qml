@@ -7,6 +7,7 @@ Rectangle {
     height: 50
 
     property bool isValid
+    property bool markAsInvalid: !isValid
 
     radius: 6
 

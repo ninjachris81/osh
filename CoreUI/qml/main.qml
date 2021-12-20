@@ -10,8 +10,8 @@ Window {
     Loader {
         anchors.fill: parent
 
-        source: "ui/main_ui.qml"
-        //source: "main_admin.qml"
+        //source: "ui/main_ui.qml"
+        source: "main_admin.qml"
     }
 
 }
