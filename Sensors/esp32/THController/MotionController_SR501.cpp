@@ -5,8 +5,9 @@
 #include <LogHelper.h>
 #include "Pins.h"
 #include "shared/value.h"
+#include "FlashController.h"
 
-MotionControllerSR501::MotionControllerSR501(String valueGroupStatus, String valueIdStatus) : AbstractIntervalTask(MOTION_INTERVAL_MS), m_valueGroupStatus(valueGroupStatus), m_valueIdStatus(valueIdStatus) {
+MotionControllerSR501::MotionControllerSR501(String valueGroupStatus) : AbstractIntervalTask(MOTION_INTERVAL_MS), m_valueGroupStatus(valueGroupStatus) {
   
 }
 
@@ -45,6 +46,6 @@ void MotionControllerSR501::onPropertyValueChange(uint8_t id, bool newValue, boo
 }
 
 void MotionControllerSR501::sendValue() {
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupStatus + String(MQTT_PATH_SEP) + m_valueIdStatus), m_status.getValue());
+  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupStatus + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), m_status.getValue());
   m_lastSend = millis();
 }

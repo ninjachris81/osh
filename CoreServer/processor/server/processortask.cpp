@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval, QObject *parent) : Identifyable(id, parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_scheduleInterval(scheduleInterval)
+ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, QObject *parent) : Identifyable(id, parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval)
 {
 
 }
@@ -15,20 +15,30 @@ LogCat::LOGCAT ProcessorTask::logCat() {
 QVariant ProcessorTask::run(QJSEngine *engine) {
     iDebug() << Q_FUNC_INFO << m_id;
 
-    QJSValue result = engine->evaluate(m_scriptCode);
+    if (checkRunCondition(engine)) {
+        QJSValue result = engine->evaluate(m_scriptCode);
 
-    if (!result.isError()) {
-        iDebug() << "Result" << result.toVariant();
-        m_lastResult = result.toVariant();
+        if (!result.isError()) {
+            iDebug() << "Result" << result.toVariant();
+            m_lastResult = result.toVariant();
+        } else {
+            iWarning() << "Script execution error" << result.errorType() << result.property("message").toString() << "Line" << result.property("lineNumber").toInt();
+            m_lastResult = QVariant();
+        }
+        Q_EMIT(lastResultChanged());
+
+        setLastExecutionNow();
+
+        return m_lastResult;
     } else {
-        iWarning() << "Script execution error" << result.errorType() << result.property("message").toString() << "Line" << result.property("lineNumber").toInt();
-        m_lastResult = QVariant();
+        iDebug() << "Run condition negative";
+        return false;
     }
-    Q_EMIT(lastResultChanged());
+}
 
-    setLastExecutionNow();
-
-    return m_lastResult;
+bool ProcessorTask::checkRunCondition(QJSEngine *engine) {
+    if (m_runCondition.length() == 0) return true;
+    return engine->evaluate(m_runCondition).toBool();
 }
 
 QString ProcessorTask::scriptCode() {

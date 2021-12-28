@@ -8,7 +8,7 @@ class BooleanValue : public ValueBase
 {
     Q_OBJECT
 public:
-    explicit BooleanValue(ValueGroup *valueGroup, QString id, QObject *parent = nullptr);
+    explicit BooleanValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 

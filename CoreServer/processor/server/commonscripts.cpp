@@ -34,8 +34,8 @@ bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue
     return false;
 }
 
-bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs) {
-    if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId) && m_datamodel->values().contains(motionSensorFullId)) {
+bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs) {
+    if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId) && m_datamodel->values().contains(motionSensorFullId) && m_datamodel->values().contains(brightnessSensorFullId)) {
         ActorBase* lightActor = m_datamodel->actors().value(lightActorFullId);
         ValueBase* inputSensor = m_datamodel->values().value(inputSensorFullId);
         ValueBase* motionSensor = m_datamodel->values().value(motionSensorFullId);
@@ -94,7 +94,59 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
             if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
                 expectedValue = true;
             } else if (inputSensor->isValid() && motionSensor->isValid()) {
-                triggerReason = "Default off";
+                triggerReason = "Timeout";
+                expectedValue = false;
+            }
+        }
+
+        // finally set the value
+        if (actualValue != expectedValue && expectedValue.isValid()) {
+            lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF, triggerReason);
+        }
+
+        return true;
+    } else {
+        iWarning() << "Invalid parameters" << lightActorFullId << inputSensorFullId << motionSensorFullId << brightnessSensorFullId;
+        return false;
+    }
+}
+
+bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, quint64 triggerTimeoutMs) {
+    if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId)) {
+        ActorBase* lightActor = m_datamodel->actors().value(lightActorFullId);
+        ValueBase* inputSensor = m_datamodel->values().value(inputSensorFullId);
+
+        QVariant actualValue = lightActor->rawValue();
+        QVariant expectedValue;
+
+        QString lastTsInputKey = "lastTs_" + inputSensorFullId;
+        QString lastValueInputKey = "lastValue_" + inputSensorFullId;
+
+        bool inputTriggered = false;
+        QString triggerReason;
+
+        if (inputSensor->isValid()) {
+            QVariant lastValue = m_localStorage->get(lastValueInputKey);
+
+            if (inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
+                // toggle off / on
+                inputTriggered = true;
+                iDebug() << "Input sensor triggered";
+                triggerReason = "Input trigger";
+                expectedValue = !lightActor->rawValue().toBool();
+                m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+            }
+
+            m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
+        }
+
+        if (!inputTriggered) {
+            // check for timeout
+            quint64 lastContact = m_localStorage->get(lastTsInputKey, 0).toULongLong();
+            if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
+                expectedValue = true;
+            } else {
+                triggerReason = "Timeout";
                 expectedValue = false;
             }
         }

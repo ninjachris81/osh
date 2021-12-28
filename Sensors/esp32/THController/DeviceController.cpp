@@ -3,8 +3,9 @@
 #include "TaskIDs.h"
 #include "TaskManager.h"
 #include "shared/device.h"
+#include "FlashController.h"
 
-DeviceController::DeviceController(String id, String serviceId) : AbstractIntervalTask(DEFAULT_DD_BROADCAST_INTERVAL), m_id(id), m_serviceId(serviceId) {
+DeviceController::DeviceController(String deviceIdPrefix, String serviceIdPrefix) : AbstractIntervalTask(DEFAULT_DD_BROADCAST_INTERVAL), m_deviceIdPrefix(deviceIdPrefix), m_serviceIdPrefix(serviceIdPrefix) {
   
 }
 
@@ -15,5 +16,13 @@ void DeviceController::init() {
 }
 
 void DeviceController::update() {
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_DD + String(MQTT_PATH_SEP) + m_id + String(MQTT_PATH_SEP) + m_serviceId));
+  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_DD + String(MQTT_PATH_SEP) + getDeviceId() + String(MQTT_PATH_SEP) + getServiceId()));
+}
+
+String DeviceController::getDeviceId() {
+  return m_deviceIdPrefix + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex());
+}
+
+String DeviceController::getServiceId() {
+  return m_serviceIdPrefix + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex());
 }

@@ -18,7 +18,9 @@ public:
 
     Q_INVOKABLE bool ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function);
 
-    Q_INVOKABLE bool applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs);
+    Q_INVOKABLE bool applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs);
+
+    Q_INVOKABLE bool applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, quint64 triggerTimeoutMs);
 
 private:
     QJSEngine * m_engine;

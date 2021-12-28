@@ -21,6 +21,10 @@ QVariant ValueBaseUI::rawValue() {
     return m_value->rawValue();
 }
 
+VALUE_TYPE ValueBaseUI::valueType() {
+    return m_value->valueType();
+}
+
 double ValueBaseUI::signalRate() {
     return m_value->signalRate();
 }

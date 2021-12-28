@@ -13,7 +13,7 @@ class ActorBase : public ValueBase
 {
     Q_OBJECT
 public:
-    explicit ActorBase(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
+    explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     void triggerCmd(ACTOR_CMDS cmd, QString reason);
     //Q_INVOKABLE void triggerCmd(int cmd);

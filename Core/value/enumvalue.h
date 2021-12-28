@@ -8,7 +8,7 @@ class EnumValue : public IntegerValue
 {
     Q_OBJECT
 public:
-    explicit EnumValue(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, QObject *parent = nullptr);
+    explicit EnumValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 

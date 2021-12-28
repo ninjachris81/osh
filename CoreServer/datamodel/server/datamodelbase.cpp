@@ -25,6 +25,10 @@ QMap<QString, ActorBase*> DatamodelBase::actors() {
     return m_actors;
 }
 
+QMap<QString, KnownRoom*> DatamodelBase::knownRooms() {
+    return m_knownRooms;
+}
+
 KnownDevice* DatamodelBase::addKnownDevice(QString id, QString serviceId, QString name) {
     KnownDevice* device = new KnownDevice(id, serviceId, name);
     m_knownDevices.insert(device->fullId(), device);
@@ -36,34 +40,41 @@ ValueGroup* DatamodelBase::addValueGroup(QString id) {
     return new ValueGroup(id);
 }
 
-DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, bool isAsync, ValueBase::VALUE_TIMEOUT timeout) {
-    DigitalActor* actor = new DigitalActor(valueGroup, id, isAsync);
+DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout) {
+    DigitalActor* actor = new DigitalActor(valueGroup, id, valueType, isAsync);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());
     return actor;
 }
 
-BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id, ValueBase::VALUE_TIMEOUT timeout) {
-    BooleanValue* value = new BooleanValue(valueGroup, id);
+BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    BooleanValue* value = new BooleanValue(valueGroup, id, valueType);
     value->withValueTimeout(timeout);
     m_values.insert(value->fullId(), value);
     Q_EMIT(datamodelContentChanged());
     return value;
 }
 
-DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, UNIT_TYPE unitType, ValueBase::VALUE_TIMEOUT timeout) {
-    DoubleValue* value = new DoubleValue(valueGroup, id, unitType);
+DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    DoubleValue* value = new DoubleValue(valueGroup, id, valueType);
     value->withValueTimeout(timeout);
     m_values.insert(value->fullId(), value);
     Q_EMIT(datamodelContentChanged());
     return value;
 }
 
-ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval) {
-    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, scheduleInterval);
+ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval) {
+    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, runCondition, scheduleInterval);
     m_processorTasks.insert(processorNode->id(), processorNode);
     Q_EMIT(datamodelContentChanged());
     return processorNode;
 }
 
+KnownRoom* DatamodelBase::addKnownRoom(QString id, QString name) {
+    KnownRoom* knownRoom = new KnownRoom(id);
+    knownRoom->setName(name);
+    m_knownRooms.insert(knownRoom->id(), knownRoom);
+    Q_EMIT(datamodelContentChanged());
+    return knownRoom;
+}

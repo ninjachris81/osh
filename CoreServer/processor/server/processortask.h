@@ -16,7 +16,7 @@ public:
         PTT_TRIGGER = 2
     };
 
-    explicit ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval = 0, QObject *parent = nullptr);
+    explicit ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -34,11 +34,14 @@ public:
 
 private:
     QString m_scriptCode;
+    QString m_runCondition;
     qint64 m_scheduleInterval;
     ProcessorTaskType m_processorTaskType = PTT_INTERVAL;
 
     qint64 m_lastExecution = 0;
     QVariant m_lastResult;
+
+    bool checkRunCondition(QJSEngine *engine);
 
 signals:
     void lastExecutionChanged();

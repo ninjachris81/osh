@@ -9,7 +9,7 @@ class RedundantValue : public ValueBase
 {
     Q_OBJECT
 public:
-    explicit RedundantValue(ValueGroup* valueGroup, QString id, UNIT_TYPE unitType, bool alwaysEmit = true, QObject *parent = nullptr);
+    explicit RedundantValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 

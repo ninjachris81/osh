@@ -14,13 +14,10 @@ Item {
 
     VisualRoom {
         id: mainFloor
-        name: qsTr("HF")
+        knownRoomId: "basementFloor0"
 
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-
-        hasShutter: false
-        hasTemp: false
 
         width: 360
         height: 700
@@ -28,7 +25,7 @@ Item {
 
     VisualRoom {
         id: floor
-        name: qsTr("Flur")
+        knownRoomId: "basementFloor1"
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -110
@@ -38,66 +35,50 @@ Item {
         height: 150
 
         actionBar.anchors.verticalCenterOffset: 30
-
-        hasShutter: false
-        hasTemp: false
     }
 
     VisualRoom {
         id: l1
-        name: qsTr("L1")
+        knownRoomId: "storage1"
 
         anchors.right: mainFloor.right
         anchors.bottom: mainFloor.top
         anchors.top: parent.top
         anchors.left: parent.left
-
-        hasShutter: false
-        hasTemp: false
     }
 
     VisualRoom {
         id: l2
-        name: qsTr("L2")
+        knownRoomId: "storage2"
 
         anchors.left: l1.right
         anchors.right: floor.right
         anchors.bottom: floor.top
         anchors.top: parent.top
-
-        hasShutter: false
-        hasTemp: false
     }
 
     VisualRoom {
         id: l3
-        name: qsTr("L3")
+        knownRoomId: "storage3"
 
         anchors.left: wash.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.top: wash.top
-
-        hasShutter: false
-        hasTemp: false
     }
 
     VisualRoom {
         id: workshop
-        name: qsTr("Werkstatt")
+        knownRoomId: "workshop"
 
         anchors.left: floor.right
         anchors.right: parent.right
         anchors.bottom: l3.top
         anchors.top: parent.top
-
-        hasShutter: false
-        hasTemp: false
     }
 
     VisualRoom {
         id: wash
-        name: qsTr("Heizraum")
 
         anchors.bottom: parent.bottom
         anchors.top: floor.bottom
@@ -105,8 +86,7 @@ Item {
 
         width: 800
 
-        hasShutter: false
-        hasTemp: false
+        knownRoomId: "heatingRoom"
 
         ColumnLayout {
             id: waterGridLayout

@@ -40,6 +40,8 @@ VisualActionButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: brightnessIsValid ? 0 : 2
         anchors.bottomMargin: 3
+
+        color: lightOn ? "white" : "black"
     }
 
     MouseArea {

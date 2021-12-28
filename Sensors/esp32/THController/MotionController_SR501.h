@@ -11,7 +11,7 @@
 
 class MotionControllerSR501 : public AbstractIntervalTask, public Property<bool>::ValueChangeListener {
 public:
-  MotionControllerSR501(String valueGroupStatus, String valueIdStatus);
+  MotionControllerSR501(String valueGroupStatus);
   ~MotionControllerSR501();
 
   void init();
@@ -25,7 +25,6 @@ private:
 
   Property<bool> m_status;
   String m_valueGroupStatus;
-  String m_valueIdStatus;
   unsigned long m_lastSend = 0;
 
   uint8_t m_countsSec = 0;

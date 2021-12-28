@@ -54,6 +54,15 @@ int main(int argc, char *argv[])
 
     // register types
 
+    qmlRegisterUncreatableMetaObject(unit::staticMetaObject, QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "UNIT_TYPE", "Enums cannot be instantiated");
+    qRegisterMetaType<unit::UNIT_TYPE>("unit::UNIT_TYPE");
+
+    qmlRegisterUncreatableMetaObject(value::staticMetaObject, QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "VALUE_TYPE", "Enums cannot be instantiated");
+    qRegisterMetaType<value::VALUE_TYPE>("value::VALUE_TYPE");
+
+    qmlRegisterUncreatableMetaObject(actor::staticMetaObject, QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ACTOR_CMDS", "Enums cannot be instantiated");
+    qRegisterMetaType<actor::ACTOR_CMDS>("actor::ACTOR_CMDS");
+
     qmlRegisterType<DeviceBaseUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "Device");
     qmlRegisterSingletonType<DeviceDiscoveryManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DeviceDiscoveryManager", &DeviceDiscoveryManagerUI::qmlInstance);
     qmlRegisterSingletonType<DatamodelManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "DatamodelManager", &DatamodelManagerUI::qmlInstance);
@@ -62,12 +71,6 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<LogManagerUI>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "LogManager", &LogManagerUI::qmlInstance);
 
     qmlRegisterType<ConnectorItemBase>(QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ConnectorItem");
-
-    qmlRegisterUncreatableMetaObject(unit::staticMetaObject, QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "UNIT_TYPE", "Enums cannot be instantiated");
-    qRegisterMetaType<unit::UNIT_TYPE>("unit::UNIT_TYPE");
-
-    qmlRegisterUncreatableMetaObject(actor::staticMetaObject, QML_BASE_PACKAGE, QML_VERSION_MAJOR, QML_VERSION_MINOR, "ACTOR_CMDS", "Enums cannot be instantiated");
-    qRegisterMetaType<actor::ACTOR_CMDS>("actor::ACTOR_CMDS");
 
     QQmlApplicationEngine engine;
 

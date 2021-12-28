@@ -22,6 +22,7 @@ SOURCES += \
         connectoritembase.cpp \
         datamodel/datamodelbaseui.cpp \
         datamodel/datamodelmanagerui.cpp \
+        datamodel/server/meta/knownroomui.cpp \
         device/devicebaseui.cpp \
         device/devicediscoverymanagerui.cpp \
         identifyableui.cpp \
@@ -33,6 +34,23 @@ SOURCES += \
         value/valuebaseui.cpp \
         value/valuemanagerui.cpp \
         visualitembase.cpp
+
+HEADERS += \
+    actor/actorbaseui.h \
+    connectoritembase.h \
+    datamodel/datamodelbaseui.h \
+    datamodel/datamodelmanagerui.h \
+    datamodel/server/meta/knownroomui.h \
+    device/devicebaseui.h \
+    device/devicediscoverymanagerui.h \
+    identifyableui.h \
+    log/logentryui.h \
+    log/logmanagerui.h \
+    processor/modelprocessormanagerui.h \
+    processor/processortaskui.h \
+    value/valuebaseui.h \
+    value/valuemanagerui.h \
+    visualitembase.h
 
 RESOURCES += qml.qrc \
     images.qrc \
@@ -92,19 +110,3 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqt
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/release/QMqttCommunicationManager.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/debug/QMqttCommunicationManager.lib
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/libQMqttCommunicationManager.a
-
-HEADERS += \
-    actor/actorbaseui.h \
-    connectoritembase.h \
-    datamodel/datamodelbaseui.h \
-    datamodel/datamodelmanagerui.h \
-    device/devicebaseui.h \
-    device/devicediscoverymanagerui.h \
-    identifyableui.h \
-    log/logentryui.h \
-    log/logmanagerui.h \
-    processor/modelprocessormanagerui.h \
-    processor/processortaskui.h \
-    value/valuebaseui.h \
-    value/valuemanagerui.h \
-    visualitembase.h

@@ -5,8 +5,9 @@
 #include <LogHelper.h>
 #include "Pins.h"
 #include "shared/actor.h"
+#include "FlashController.h"
 
-SoundControllerPiezo::SoundControllerPiezo(String valueGroup, String valueId) : AbstractIntervalTask(SOUND_INTERVAL_MS), m_valueGroup(valueGroup), m_valueId(valueId) {
+SoundControllerPiezo::SoundControllerPiezo(String valueGroup) : AbstractIntervalTask(SOUND_INTERVAL_MS), m_valueGroup(valueGroup) {
   m_state.init(0, ACTOR_OFF);
   m_state.registerValueChangeListener(this);
 }
@@ -33,12 +34,12 @@ void SoundControllerPiezo::onMsgReceived(String topic, int value) {
 
 
 String SoundControllerPiezo::getTopics() {
-  return BUILD_PATH(MQTT_MESSAGE_TYPE_AC + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + m_valueId) + String(TOPIC_DELIMITER);
+  return BUILD_PATH(MQTT_MESSAGE_TYPE_AC + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())) + String(TOPIC_DELIMITER);
 }
 
 
 void SoundControllerPiezo::onPropertyValueChange(uint8_t id, int newValue, int oldValue) {
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + m_valueId), (int)newValue);
+  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), (int)newValue);
 
   if (newValue==ACTOR_ON) {
     LOG_PRINTLN(F("Play tone"));

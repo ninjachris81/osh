@@ -32,6 +32,7 @@ SOURCES += \
         datamodel/server/dynamicdatamodel.cpp \
     datamodel/server/emptydatamodel.cpp \
         datamodel/server/httpdatamodelloader.cpp \
+    datamodel/server/meta/knownroom.cpp \
         datamodel/server/testdatamodel.cpp \
         datamodel/server/testdatamodelloader.cpp \
         device/server/serverdevicediscoverymanager.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
         datamodel/server/dynamicdatamodel.h \
     datamodel/server/emptydatamodel.h \
         datamodel/server/httpdatamodelloader.h \
+    datamodel/server/meta/knownroom.h \
         datamodel/server/testdatamodel.h \
         datamodel/server/testdatamodelloader.h \
         device/server/serverdevicediscoverymanager.h \

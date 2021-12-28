@@ -2,18 +2,22 @@
 #include "config.h"
 #include "credentials.h"
 #include "ESPConfigurations.h"
-#include "shared/device.h"
 #include "shared/mqtt.h"
 #include <LogHelper.h>
+#include "DeviceController.h"
 
 MQTTController* MQTTController::m_instance = NULL;
 
-MQTTController::MQTTController() : AbstractTask() {
+MQTTController::MQTTController() : AbstractTask(), m_clientId("") {
   client.setClient(espClient);
   m_instance = this;
 }
 
 MQTTController::~MQTTController() {
+}
+
+void MQTTController::setClientId(String clientId) {
+  m_clientId = clientId;
 }
 
 void MQTTController::init() {
@@ -38,17 +42,20 @@ void MQTTController::update() {
 }
 
 void MQTTController::reconnect() {
-  if (!client.connected()) {
-     String client_id = String(DEVICE_ID) + String(DEVICE_FULLID_SEP) + String(SERVICE_ID);
-     if (client.connect(client_id.c_str())) {
-         LOG_PRINTLN(F("MQTT broker"));
-         for (uint8_t i=0;i<m_callbackHandlerCount;i++) m_callbackHandlers[i]->onConnected();
-         subscribeTopics();
-     } else {
-         LOG_PRINT(F("failed with state "));
-         LOG_PRINTLN(client.state());
-         delay(2000);
-     }
+  if (m_clientId.length() > 0) {
+    if (!client.connected()) {
+       if (client.connect(m_clientId.c_str())) {
+           LOG_PRINTLN(F("MQTT broker"));
+           for (uint8_t i=0;i<m_callbackHandlerCount;i++) m_callbackHandlers[i]->onConnected();
+           subscribeTopics();
+       } else {
+           LOG_PRINT(F("failed with state "));
+           LOG_PRINTLN(client.state());
+           delay(2000);
+       }
+    }
+  } else {
+    LOG_PRINTLN(F("Error: clientId not set!"));
   }
 }
 

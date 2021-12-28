@@ -35,6 +35,7 @@ public:
       virtual void onMsgReceived(String topic) {};      //invalid
   };
 
+  void setClientId(String clientId);
   
   void init();
 
@@ -56,6 +57,7 @@ private:
   WiFiClient espClient;
   PubSubClient client;
   static MQTTController* m_instance;
+  String m_clientId;
 
   void reconnect();
   void subscribeTopics();

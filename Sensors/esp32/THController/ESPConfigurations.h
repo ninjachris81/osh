@@ -7,8 +7,8 @@
 
 #if ACTIVE_CONFIG == CONFIG_ROOM_SENSOR
   #warning Room Sensor Configuration
-  #define DEVICE_ID "00001"
-  #define SERVICE_ID "THService1"
+  #define DEVICE_ID_PREFIX "00"
+  #define SERVICE_ID_PREFIX "SensorService_"
   #define WIFI_SSID WIFI_SSID_STALNET2
   #define WIFI_OTA_SUPPORT true
 #endif

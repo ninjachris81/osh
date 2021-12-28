@@ -13,12 +13,7 @@ Item {
 
     VisualRoom {
         id: mainFloor
-        name: qsTr("HF")
-
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-
-        hasShutter: false
+        knownRoomId: "mainFloor"
 
         width: 360
         height: 700
@@ -26,7 +21,7 @@ Item {
 
     VisualRoom {
         id: floor
-        name: qsTr("Flur")
+        knownRoomId: "ogFloor"
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 20
@@ -34,36 +29,11 @@ Item {
 
         width: 800
         height: 170
-
-        readonly property int lightIndex: Commons.searchActorIndex("egRelays0.0")
-        readonly property int brightnessIndex: Commons.searchValueIndex("brightnesses.0")
-        readonly property int presenceActiveIndex: Commons.searchValueIndex("motions.0")
-        readonly property int tempIndex: Commons.searchValueIndex("temps.0")
-
-        onRequestLight: {
-            DatamodelManager.datamodel.actors[lightIndex].triggerCmd(cmd, "Clicked UI")
-        }
-
-        Component.onCompleted: {
-            lightIsValid = Qt.binding(function() { return DatamodelManager.datamodel.actors[lightIndex].isValid })
-            lightOn = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.actors[lightIndex].rawValue, false) })
-
-            brightnessIsValid = Qt.binding(function() { return DatamodelManager.datamodel.values[brightnessIndex].isValid })
-            brightness = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[brightnessIndex].rawValue, 0) })
-
-            presenceIsValid = Qt.binding(function() { return DatamodelManager.datamodel.values[presenceActiveIndex].isValid })
-            presenceActive = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[presenceActiveIndex].rawValue, false) })
-
-            tempIsValid = Qt.binding(function() { return DatamodelManager.datamodel.values[tempIndex].isValid })
-            temp = Qt.binding(function() { return Commons.formatValue(DatamodelManager.datamodel.values[tempIndex]) })
-        }
-
-        hasShutter: false
     }
 
     VisualRoom {
         id: az
-        name: qsTr("AZ")
+        knownRoomId: "clothingRoom"
 
         anchors.left: floor.right
         anchors.right: parent.right
@@ -74,7 +44,7 @@ Item {
 
     VisualRoom {
         id: wz
-        name: qsTr("WZ")
+        knownRoomId: "livingRoom"
 
         anchors.right: sz.left
         anchors.bottom: sz.bottom
@@ -84,7 +54,7 @@ Item {
 
     VisualRoom {
         id: sz
-        name: qsTr("SZ")
+        knownRoomId: "sleepingRoom"
 
         anchors.right: parent.right
         anchors.bottom: az.top
@@ -95,7 +65,7 @@ Item {
 
     VisualRoom {
         id: bath
-        name: qsTr("Bad")
+        knownRoomId: "bathRoom"
 
         anchors.right: az.left
         anchors.bottom: az.bottom

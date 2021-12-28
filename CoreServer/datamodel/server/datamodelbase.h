@@ -15,6 +15,7 @@
 #include "shared/units_qt.h"
 
 #include "identifyable.h"
+#include "datamodel/server/meta/knownroom.h"
 
 using namespace unit;
 
@@ -30,19 +31,22 @@ public:
     QMap<QString, ValueBase*> values();
     QMap<QString, ActorBase*> actors();
     QMap<QString, ProcessorTask*> processorTasks();
+    QMap<QString, KnownRoom*> knownRooms();
 
     KnownDevice* addKnownDevice(QString id, QString serviceId, QString name);
     ValueGroup* addValueGroup(QString id);
-    DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, bool isAsync, ValueBase::VALUE_TIMEOUT timeout);
-    BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, ValueBase::VALUE_TIMEOUT timeout);
-    DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, UNIT_TYPE unitType, ValueBase::VALUE_TIMEOUT timeout);
-    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, qint64 scheduleInterval = 0);
+    DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout);
+    BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0);
+    KnownRoom* addKnownRoom(QString id, QString name);
 
 protected:
     QMap<QString, KnownDevice*> m_knownDevices;
     QMap<QString, ValueGroup*> m_valueGroups;
     QMap<QString, ValueBase*> m_values;
     QMap<QString, ActorBase*> m_actors;
+    QMap<QString, KnownRoom*> m_knownRooms;
 
     QMap<QString, ProcessorTask*> m_processorTasks;
 

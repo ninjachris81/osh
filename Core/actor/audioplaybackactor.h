@@ -9,7 +9,7 @@ class AudioPlaybackActor : public ActorBase
 {
     Q_OBJECT
 public:
-    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
+    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);
 

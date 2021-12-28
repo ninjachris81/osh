@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-ActorBase::ActorBase(ValueGroup *valueGroup, QString id, QObject *parent) : ValueBase (valueGroup, id, UT_UNKNOWN, parent)
+ActorBase::ActorBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ValueBase (valueGroup, id, valueType, UT_UNKNOWN, parent)
 {
 
 }

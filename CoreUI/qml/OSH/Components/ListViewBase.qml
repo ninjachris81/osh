@@ -14,6 +14,13 @@ ListView {
     headerPositioning: ListView.OverlayHeader
     snapMode: ListView.SnapToItem
 
+    ScrollBar.vertical: ScrollBar {
+        y: headerHeight
+        policy: ScrollBar.AlwaysOn
+    }
+
+    maximumFlickVelocity: 5000
+
     header: Rectangle {
         height: root.headerHeight
         anchors.left: parent.left
@@ -39,8 +46,9 @@ ListView {
 
     delegate: Item {
         height: root.headerHeight
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: root.width
+        //anchors.left: parent.left
+        //anchors.right: parent.right
 
         readonly property int rowIndex: index
 

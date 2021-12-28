@@ -13,7 +13,7 @@
 
 class SoundControllerPiezo : public AbstractIntervalTask, public MQTTController::MQTTEventCallbackHandler, public Property<int>::ValueChangeListener {
 public:
-  SoundControllerPiezo(String valueGroup, String valueId);
+  SoundControllerPiezo(String valueGroup);
   ~SoundControllerPiezo();
 
   void init();
@@ -28,7 +28,6 @@ public:
   
 private:
   String m_valueGroup;
-  String m_valueId;
 
   Property<int> m_state;
 };

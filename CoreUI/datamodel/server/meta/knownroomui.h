@@ -1,0 +1,34 @@
+#ifndef KNOWNROOMUI_H
+#define KNOWNROOMUI_H
+
+#include <QObject>
+#include "visualitembase.h"
+#include "datamodel/server/meta/knownroom.h"
+
+class KnownRoomUI : public VisualItemBase
+{
+    Q_OBJECT
+public:
+    explicit KnownRoomUI(QObject *parent = nullptr);
+
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QList<QObject*> values READ values NOTIFY valuesChanged)
+    Q_PROPERTY(QList<QObject*> actors READ actors NOTIFY actorsChanged)
+
+    QString name();
+    QList<QObject*> values();
+    QList<QObject*> actors();
+
+protected:
+    KnownRoom* m_knownRoom;
+    QList<QObject*> m_values;
+    QList<QObject*> m_actors;
+
+signals:
+    void nameChanged();
+    void valuesChanged();
+    void actorsChanged();
+
+};
+
+#endif // KNOWNROOMUI_H

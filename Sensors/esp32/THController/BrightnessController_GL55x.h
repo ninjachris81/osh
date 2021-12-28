@@ -10,7 +10,7 @@
 
 class BrightnessControllerGL55x : public AbstractIntervalTask {
 public:
-  BrightnessControllerGL55x(String valueGroup, String valueId);
+  BrightnessControllerGL55x(String valueGroup);
   ~BrightnessControllerGL55x();
 
   void init();
@@ -19,7 +19,6 @@ public:
   
 private:
   String m_valueGroup;
-  String m_valueId;
 };
 
 

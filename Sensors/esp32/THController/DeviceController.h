@@ -6,16 +6,20 @@
 
 class DeviceController : public AbstractIntervalTask {
 public:
-  DeviceController(String id, String serviceId);
+  DeviceController(String deviceIdPrefix, String serviceIdPrefix);
   ~DeviceController();
   
   void init();
 
   void update();
 
+  String getDeviceId();
+
+  String getServiceId();
+
 private:
-  String m_id;
-  String m_serviceId;
+  String m_deviceIdPrefix;
+  String m_serviceIdPrefix;
 
 };
 

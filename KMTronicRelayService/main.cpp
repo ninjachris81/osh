@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     ValueGroup actorGroup(relayController.id());
     for (quint8 i=0;i<KMTronicRelayController::getRelayCount(KMTronicRelayController::USB_SERIAL_8PORT);i++) {
         qDebug() << "Init actor" << i;
-        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), true);
+        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), VT_RELAY_LIGHT , true);
         actor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
         actors.append(actor);
         relayController.bindActor(actor);

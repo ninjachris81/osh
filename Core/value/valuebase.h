@@ -7,9 +7,10 @@
 #include "valuegroup.h"
 #include "identifyable.h"
 #include "shared/units_qt.h"
-#include "shared/value.h"
+#include "shared/value_qt.h"
 
 using namespace unit;
+using namespace value;
 
 class ValueBase : public Identifyable
 {
@@ -23,7 +24,7 @@ public:
         VT_LONG = VALUE_TIMEOUT_LONG
     } m_valueTimeout = VT_NONE;
 
-    explicit ValueBase(ValueGroup* valueGroup, QString id, UNIT_TYPE unitType = UT_UNKNOWN, bool alwaysEmit = true, QObject *parent = nullptr);
+    explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 
@@ -44,8 +45,11 @@ public:
         return m_value.isValid();
     }
 
+    VALUE_TYPE valueType();
     UNIT_TYPE unitType();
+
     static QString unitTypeToSuffix(UNIT_TYPE unitType);
+    static UNIT_TYPE valueTypeToUnitType(VALUE_TYPE valueType);
 
     qint64 lastUpdate();
     VALUE_TIMEOUT valueTimeout();
@@ -62,12 +66,11 @@ public:
 protected:
 
 private:
+    VALUE_TYPE m_valueType;
     ValueGroup* m_valueGroup;
     QVariant m_value;
     qint64 m_lastUpdate = 0;
     bool m_alwaysEmit = true;
-
-    UNIT_TYPE m_unitType = UT_UNKNOWN;
 
     qint64 m_lastMaintenance = 0;
 

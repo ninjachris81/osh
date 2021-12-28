@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, bool alwaysEmit, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup), m_unitType(unitType), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 }
@@ -111,8 +111,23 @@ void ValueBase::updateSignalRate() {
     }
 }
 
+VALUE_TYPE ValueBase::valueType() {
+    return m_valueType;
+}
+
 UNIT_TYPE ValueBase::unitType() {
-    return m_unitType;
+    return valueTypeToUnitType(m_valueType);
+}
+
+UNIT_TYPE ValueBase::valueTypeToUnitType(VALUE_TYPE valueType) {
+    switch(valueType) {
+    case VT_BRIGHTNESS: return UT_PERCENT;
+    case VT_TEMP: return UT_DEGREES;
+    case VT_HUMIDITY: return UT_PERCENT;
+    case VT_WATER_FLOW: return UT_LITER_PER_MIN;
+    case VT_TIMESTAMP: return UT_TIMESTAMP;
+    default: return UT_UNKNOWN;
+    }
 }
 
 QString ValueBase::unitTypeToSuffix(UNIT_TYPE unitType) {

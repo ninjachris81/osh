@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
 
-    MCP23017InputController inputController(&controllerManager, "egInputs0");
+    MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "egInputs0"));
     controllerManager.registerController(&inputController);
 
     managerRegistration.init(&config);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     ValueGroup actorGroup(inputController.id());
     for (quint8 i=0;i<inputController.inputCount();i++) {
         qDebug() << "Init value" << i;
-        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i));
+        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VT_SWITCH);
         value->withValueTimeout(ValueBase::VT_MID);
         values.append(value);
         inputController.bindValue(value);

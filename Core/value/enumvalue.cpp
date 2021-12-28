@@ -1,6 +1,6 @@
 #include "enumvalue.h"
 
-EnumValue::EnumValue(ValueGroup *valueGroup, QString id, UNIT_TYPE unitType, QObject *parent) : IntegerValue(valueGroup, id, unitType, parent)
+EnumValue::EnumValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : IntegerValue(valueGroup, id, valueType, parent)
 {
 
 }

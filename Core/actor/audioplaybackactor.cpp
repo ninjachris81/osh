@@ -1,6 +1,6 @@
 #include "audioplaybackactor.h"
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, QObject *parent) : ActorBase(valueGroup, id, parent)
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ActorBase(valueGroup, id, valueType, parent)
 {
 
 }
