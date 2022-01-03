@@ -3,7 +3,8 @@
 #include "MQTTController.h"
 #include "DeviceController.h"
 #include "TempController_AHTx.h"
-#include "MotionController_SR501.h"
+#include "MotionController.h"
+#include "MotionController_RCWL0516.h"
 #include "BrightnessController_GL55x.h"
 #include "SoundController_Piezo.h"
 #include "FlashController.h"
@@ -20,7 +21,7 @@ MQTTController mqttController;
 DeviceController deviceController(DEVICE_ID_PREFIX, SERVICE_ID_PREFIX);
 
 TempControllerAHTx tempController("temps", "hums");
-MotionControllerSR501 motionController("motions");
+MotionController motionController("motions");
 BrightnessControllerGL55x brightnessController("brightnesses");
 SoundControllerPiezo soundController("alarms");
 FlashController flashController;

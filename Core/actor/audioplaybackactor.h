@@ -19,7 +19,11 @@ public:
 
 protected:
     /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd);
+
 signals:
+    void startPlaybackRequested();
+    void stopPlaybackRequested();
+    void pausePlaybackRequested();
 
 public slots:
 };

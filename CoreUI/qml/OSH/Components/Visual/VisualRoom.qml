@@ -58,7 +58,18 @@ Item {
 
     onRequestLight: {
         console.info("Request Light " + cmd)
-        DatamodelManager.datamodel.actors[lightIndex].triggerCmd(cmd, "Clicked UI")
+
+        /*
+        var inputIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_SWITCH, _internal.knownRoom.values, DatamodelManager.datamodel.values);
+        if (inputIndex !== -1) {
+            var value = DatamodelManager.datamodel.values[inputIndex]
+            value.updateValue(true)
+            ValueManager.publishValue(value)
+            value.updateValue(false)
+            ValueManager.publishValue(value)
+        } else {
+            console.warn("No input switch found")
+        }*/
     }
 
     onRequestShutter: {

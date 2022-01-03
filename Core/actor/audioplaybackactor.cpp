@@ -20,12 +20,15 @@ void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
     case ACTOR_CMD_START:
         updateValue(true);
+        Q_EMIT(startPlaybackRequested());
         break;
     case ACTOR_CMD_PAUSE:
         updateValue(false);
+        Q_EMIT(pausePlaybackRequested());
         break;
     case ACTOR_CMD_STOP:
         updateValue(false);
+        Q_EMIT(stopPlaybackRequested());
         break;
     }
 }

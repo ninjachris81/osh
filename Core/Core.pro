@@ -31,6 +31,7 @@ SOURCES += \
         actor/client/clientactormanager.cpp \
         actor/digitalactor.cpp \
         communication/communicationmanagerbase.cpp \
+        controller/audiocontrollerbase.cpp \
         controller/controllermanager.cpp \
         controller/controllermessage.cpp \
         controller/digitalinputcontrollerbase.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
         actor/client/clientactormanager.h \
         actor/digitalactor.h \
         communication/communicationmanagerbase.h \
+        controller/audiocontrollerbase.h \
         controller/controllermanager.h \
         controller/controllermessage.h \
         controller/digitalinputcontrollerbase.h \

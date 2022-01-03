@@ -15,6 +15,9 @@ Item {
         id: mainFloor
         knownRoomId: "mainFloor"
 
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+
         width: 360
         height: 700
     }

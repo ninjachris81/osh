@@ -1,6 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    AudioController \
+    AudioService \
     Core \
     CoreSerial \
     CoreServer \
@@ -24,3 +26,6 @@ KMTronicRelayService.depends = Core CoreSerial KMTronicRelayController QMqttComm
 
 MCP23017InputController.depends = Core
 MCP23017InputService.depends = Core MCP23017InputController QMqttCommunicationManager
+
+AudioController.depends = Core
+AudioService.depends = Core AudioController QMqttCommunicationManager

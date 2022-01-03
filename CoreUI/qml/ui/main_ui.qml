@@ -41,32 +41,24 @@ Item {
                 }
 
                 Loader {
-                    //active: SwipeView.isCurrentItem || SwipeView.isNextItem || SwipeView.isPreviousItem
-                    active: SwipeView.isCurrentItem
                     sourceComponent: Floor3 {
                         Component.onCompleted: floorStackView.loadedComponents++
                     }
                 }
 
                 Loader {
-                    //active: SwipeView.isCurrentItem || SwipeView.isNextItem || SwipeView.isPreviousItem
-                    active: SwipeView.isCurrentItem
                     sourceComponent: Floor2 {
                         Component.onCompleted: floorStackView.loadedComponents++
                     }
                 }
 
                 Loader {
-                    //active: SwipeView.isCurrentItem || SwipeView.isNextItem || SwipeView.isPreviousItem
-                    active: SwipeView.isCurrentItem
                     sourceComponent: Floor1 {
                         Component.onCompleted: floorStackView.loadedComponents++
                     }
                 }
 
                 Loader {
-                    //active: SwipeView.isCurrentItem || SwipeView.isNextItem || SwipeView.isPreviousItem
-                    active: SwipeView.isCurrentItem
                     sourceComponent: Floor0 {
                         Component.onCompleted: floorStackView.loadedComponents++
                     }

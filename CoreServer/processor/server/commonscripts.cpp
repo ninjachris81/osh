@@ -56,7 +56,7 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
         if (inputSensor->isValid()) {
             QVariant lastValue = m_localStorage->get(lastValueInputKey);
 
-            if (inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
+            if (lastValue.isValid() && inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
                 inputTriggered = true;
                 iDebug() << "Input sensor triggered";
             }
@@ -127,17 +127,20 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
 
         if (inputSensor->isValid()) {
             QVariant lastValue = m_localStorage->get(lastValueInputKey);
+            m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
 
-            if (inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
+            if (lastValue.isValid() && inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
                 // toggle off / on
                 inputTriggered = true;
                 iDebug() << "Input sensor triggered";
                 triggerReason = "Input trigger";
-                expectedValue = !lightActor->rawValue().toBool();
+                expectedValue = !actualValue.toBool();
                 m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+                if (!expectedValue.toBool()) {
+                    // clear timer
+                    m_localStorage->set(lastTsInputKey, 0);
+                }
             }
-
-            m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
         }
 
         if (!inputTriggered) {
