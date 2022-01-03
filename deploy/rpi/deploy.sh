@@ -56,6 +56,15 @@ OSH_ROOT="$(dirname "$(cd .. && pwd)")"
 BUILD_TARGET="Unknown"
 
 case "$1" in
+   AudioService		)
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "AudioController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
    CoreService		)
       BUILD_TARGET=$1
       printInfos
