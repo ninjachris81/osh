@@ -32,3 +32,19 @@ QList<QObject*> KnownRoomUI::actors() {
 QString KnownRoomUI::name() {
     return m_knownRoom->name();
 }
+
+void KnownRoomUI::addValue(ValueBaseUI* value) {
+    if (m_knownRoom->values().contains(value->fullId())) return;
+
+    m_knownRoom->addValue(value->parent());
+    m_values.append(value);
+    Q_EMIT(valuesChanged());
+}
+
+void KnownRoomUI::addActor(ActorBaseUI* actor) {
+    if (m_knownRoom->actors().contains(actor->fullId())) return;
+
+    m_knownRoom->addActor(actor->parent());
+    m_actors.append(actor);
+    Q_EMIT(actorsChanged());
+}

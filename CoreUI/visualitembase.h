@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "identifyableui.h"
+#include "meta/itemmetainfo.h"
 
 class VisualItemBase : public IdentifyableUI
 {
@@ -12,20 +13,23 @@ public:
 
     Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
     Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
 
     int x();
     int y();
+    bool visible();
 
     void setX(int x);
     void setY(int y);
+    void setVisible(bool visible);
 
 protected:
-    int m_x = 0;
-    int m_y = 0;
+    ItemMetaInfo *m_metaInfos;
 
 signals:
     void xChanged();
     void yChanged();
+    void visibleChanged();
 
 };
 

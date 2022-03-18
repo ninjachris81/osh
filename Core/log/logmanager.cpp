@@ -53,8 +53,10 @@ void LogManager::handleReceivedMessage(MessageBase* msg) {
 
 void LogManager::publishLog(QtMsgType type, QString msg) {
     if (m_typeFilter.contains(type)) {
-        LogMessage logMsg(m_ddManager->device()->fullId(), type, msg);
-        m_commManager->sendMessage(logMsg);
+        if (m_ddManager->device() != nullptr) {
+            LogMessage logMsg(m_ddManager->device()->fullId(), type, msg);
+            m_commManager->sendMessage(logMsg);
+        }
     }
 }
 

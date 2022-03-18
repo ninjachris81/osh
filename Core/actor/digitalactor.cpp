@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+DigitalActor::DigitalActor() : ActorBase() {
+}
+
 DigitalActor::DigitalActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, QObject *parent) : ActorBase(valueGroup, id, valueType, parent), m_isAsync(isAsync)
 {
 

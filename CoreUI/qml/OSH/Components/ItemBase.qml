@@ -13,9 +13,18 @@ Rectangle {
         drag.target: parent
     }
 
-
     onRefChanged: {
         root.x = ref.x
         root.y = ref.y
+        root.visible = ref.visible
     }
+
+    onXChanged: {
+        ref.x = root.x
+    }
+
+    onYChanged: {
+        ref.y = root.y
+    }
+
 }

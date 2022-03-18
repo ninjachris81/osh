@@ -28,5 +28,10 @@
         <file>qml/OSH/Components/Visual/VisualMainMenu.qml</file>
         <file>qml/OSH/Components/Visual/VisualWater.qml</file>
         <file>qml/OSH/Components/Visual/VisualHumidity.qml</file>
+        <file>qml/OSH/Components/Simulator/qmldir</file>
+        <file>qml/OSH/Components/Simulator/SimulatorActionBar.qml</file>
+        <file>qml/OSH/Components/Simulator/SimulatorButton.qml</file>
+        <file>qml/OSH/Components/RoomDetailsDialog.qml</file>
+        <file>qml/OSH/Components/EditListViewBase.qml</file>
     </qresource>
 </RCC>

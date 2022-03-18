@@ -13,6 +13,8 @@ SUBDIRS += \
     MCP23017InputController \
     MCP23017InputService \
     QMqttCommunicationManager \
+    RS485RelayController \
+    RS485RelayService \
     qtmqtt
 
 CoreService.depends = Core CoreServer QMqttCommunicationManager
@@ -29,3 +31,6 @@ MCP23017InputService.depends = Core MCP23017InputController QMqttCommunicationMa
 
 AudioController.depends = Core
 AudioService.depends = Core AudioController QMqttCommunicationManager
+
+RS485RelayController.depends = Core CoreSerial
+RS485RelayService.depends = Core CoreSerial RS485RelayController QMqttCommunicationManager

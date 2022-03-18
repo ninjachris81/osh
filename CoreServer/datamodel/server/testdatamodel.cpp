@@ -6,7 +6,7 @@
 #include "processor/server/processortask.h"
 #include <QDebug>
 
-TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("TestDatamodel", parent) {
+TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", parent) {
     iDebug() << Q_FUNC_INFO;
 
     // DEVICES

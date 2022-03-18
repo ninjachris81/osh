@@ -4,14 +4,20 @@
 #include <QObject>
 
 #include "device/devicebase.h"
+#include "datamodel/serializationsupport.h"
 
 class KnownDevice : public DeviceBase
 {
     Q_OBJECT
 public:
+    KnownDevice();
     explicit KnownDevice(QString id, QString serviceId, QString name, QObject *parent = nullptr);
 
     QString name();
+
+    /*virtual*/ void serialize(QJsonObject &obj) override;
+
+    /*virtual*/ void deserialize(QJsonObject obj) override;
 
 protected:
     QString m_name;

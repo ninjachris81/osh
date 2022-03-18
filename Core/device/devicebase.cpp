@@ -6,7 +6,20 @@
 #include "device/devicediscoverymanagerbase.h"
 #include "shared/device.h"
 
-DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : Identifyable(id, parent), m_serviceId(serviceId) {
+DeviceBase::DeviceBase() : SerializableIdentifyable() {
+}
+
+DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : SerializableIdentifyable(id, parent), m_serviceId(serviceId) {
+}
+
+void DeviceBase::serialize(QJsonObject &obj) {
+    SerializableIdentifyable::serialize(obj);
+    obj.insert("serviceId", m_serviceId);
+}
+
+void DeviceBase::deserialize(QJsonObject obj) {
+    SerializableIdentifyable::deserialize(obj);
+    m_serviceId = obj.value("serviceId").toString();
 }
 
 void DeviceBase::updatePing() {
@@ -44,3 +57,4 @@ QString DeviceBase::fullId() {
 QString DeviceBase::serviceId() {
     return m_serviceId;
 }
+

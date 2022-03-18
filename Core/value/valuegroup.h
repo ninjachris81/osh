@@ -3,12 +3,13 @@
 
 #include <QObject>
 
-#include "identifyable.h"
+#include "serializableidentifyable.h"
 
-class ValueGroup : public Identifyable
+class ValueGroup : public SerializableIdentifyable
 {
     Q_OBJECT
 public:
+    ValueGroup();
     explicit ValueGroup(QString id, QObject *parent = nullptr);
 
 signals:

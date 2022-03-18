@@ -10,7 +10,8 @@
         <file>qml/OSH/Views/TaskView.qml</file>
         <file>qml/OSH/Views/ValueView.qml</file>
         <file>qml/OSH/Views/qmldir</file>
-        <file>qml/OSH/Views/VisualEditorView.qml</file>
+        <file>qml/OSH/Views/SimulatorView.qml</file>
         <file>qml/qmldir</file>
+        <file>qml/OSH/Views/DatamodelView.qml</file>
     </qresource>
 </RCC>

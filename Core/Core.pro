@@ -36,6 +36,7 @@ SOURCES += \
         controller/controllermessage.cpp \
         controller/digitalinputcontrollerbase.cpp \
         controller/filegpiocontroller.cpp \
+        datamodel/serializationsupport.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
         communication/messagebase.cpp \
@@ -46,7 +47,10 @@ SOURCES += \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
         log/logmessage.cpp \
+        meta/itemmetainfo.cpp \
+        meta/metainfosupport.cpp \
         processor/scriptresultmessage.cpp \
+        serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemessage.cpp \
         value/client/clientvaluemanager.cpp \
@@ -85,6 +89,7 @@ HEADERS += \
         controller/controllermessage.h \
         controller/digitalinputcontrollerbase.h \
         controller/filegpiocontroller.h \
+        datamodel/serializationsupport.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
         communication/messagebase.h \
@@ -96,7 +101,10 @@ HEADERS += \
         log/logmanager.h \
         log/logmessage.h \
         macros.h \
+        meta/itemmetainfo.h \
+        meta/metainfosupport.h \
         processor/scriptresultmessage.h \
+        serializableidentifyable.h \
         shared/actor.h \
         shared/actor_qt.h \
         shared/controllercmdtypes.h \

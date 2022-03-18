@@ -9,6 +9,10 @@ ValueBaseUI::ValueBaseUI(QObject *parent) : VisualItemBase (parent)
     connect(m_value, &ValueBase::signalRateChanged, this, &ValueBaseUI::signalRateChanged);
 }
 
+ValueBase* ValueBaseUI::parent() {
+    return m_value;
+}
+
 void ValueBaseUI::updateValue(QVariant newValue) {
     m_value->updateValue(newValue);
 }

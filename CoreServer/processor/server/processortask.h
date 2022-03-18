@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QJSEngine>
 
-#include "identifyable.h"
+#include "serializableidentifyable.h"
 
-class ProcessorTask : public Identifyable
+class ProcessorTask : public SerializableIdentifyable
 {
     Q_OBJECT
 public:
@@ -16,7 +16,13 @@ public:
         PTT_TRIGGER = 2
     };
 
+    ProcessorTask();
     explicit ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, QObject *parent = nullptr);
+
+    /*virtual*/ void serialize(QJsonObject &obj) override;
+
+    /*virtual*/ void deserialize(QJsonObject obj) override;
+
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 

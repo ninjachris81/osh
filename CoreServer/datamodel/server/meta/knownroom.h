@@ -2,15 +2,20 @@
 #define KNOWNROOM_H
 
 #include <QObject>
-#include "identifyable.h"
+#include "serializableidentifyable.h"
 #include "actor/actorbase.h"
 #include "value/valuebase.h"
 
-class KnownRoom : public Identifyable
+class KnownRoom : public SerializableIdentifyable
 {
     Q_OBJECT
 public:
+    KnownRoom();
     explicit KnownRoom(QString id, QObject *parent = nullptr);
+
+    /*virtual*/ void serialize(QJsonObject &obj) override;
+
+    /*virtual*/ void deserialize(QJsonObject obj) override;
 
     void setName(QString name);
     QString name();

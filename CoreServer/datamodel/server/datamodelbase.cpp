@@ -37,7 +37,10 @@ KnownDevice* DatamodelBase::addKnownDevice(QString id, QString serviceId, QStrin
 }
 
 ValueGroup* DatamodelBase::addValueGroup(QString id) {
-    return new ValueGroup(id);
+    ValueGroup* valueGroup = new ValueGroup(id);
+    m_valueGroups.insert(valueGroup->id(), valueGroup);
+    Q_EMIT(datamodelContentChanged());
+    return valueGroup;
 }
 
 DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout) {

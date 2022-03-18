@@ -25,13 +25,17 @@ void MotionController::update() {
 
   m_status.setValue(radarController.getStatus() || pirController.getStatus());
 
+  LOG_PRINT("Radar: ");
+  LOG_PRINTLN(radarController.getStatus());
+  LOG_PRINT("PIR: ");
+  LOG_PRINTLN(pirController.getStatus());
+
   if (millis() - m_lastSend > (VALUE_TIMEOUT_MID / 2)) {
     sendValue();
   }
 }
 
 void MotionController::onPropertyValueChange(uint8_t id, bool newValue, bool oldValue) {
-  LOG_PRINTLN(F("PIR changed"));
   sendValue();
 }
 

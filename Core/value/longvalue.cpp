@@ -1,5 +1,8 @@
 #include "longvalue.h"
 
+LongValue::LongValue() : ValueBase() {
+}
+
 LongValue::LongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ValueBase(valueGroup, id, valueType, parent)
 {
 

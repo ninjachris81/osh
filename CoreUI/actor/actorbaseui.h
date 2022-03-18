@@ -5,7 +5,7 @@
 #include "value/valuebaseui.h"
 
 #include "shared/actor_qt.h"
-
+#include "actor/actorbase.h"
 
 class ActorBaseUI : public ValueBaseUI
 {
@@ -13,7 +13,12 @@ class ActorBaseUI : public ValueBaseUI
 public:
     explicit ActorBaseUI(QObject *parent = nullptr);
 
+    ActorBase* parent();
+
     Q_INVOKABLE void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
+
+private:
+    ActorBase* m_actor;
 
 signals:
 

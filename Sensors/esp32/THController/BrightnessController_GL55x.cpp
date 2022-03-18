@@ -20,8 +20,5 @@ void BrightnessControllerGL55x::init() {
 
 void BrightnessControllerGL55x::update() {
   int v = analogRead(PIN_BRIGHTNESS_SENSOR);
-
-  LOG_PRINTLN(v);
-  
   taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), ((double) v / 4096 * 100));
 }

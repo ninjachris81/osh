@@ -19,6 +19,8 @@ public:
     Q_PROPERTY(double signalRate READ signalRate NOTIFY signalRateChanged)
     Q_PROPERTY(QString unitTypeSuffix READ unitTypeSuffix NOTIFY unitTypeSuffixChanged)
 
+    ValueBase* parent();
+
     Q_INVOKABLE void updateValue(QVariant newValue);
 
     QString fullId();

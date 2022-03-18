@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 
 import OSH 1.0
 import OSH.Components 1.0
+import OSH.Components.Simulator 1.0
 
 ViewBase {
     id: root
@@ -26,12 +27,24 @@ ViewBase {
         }
     }
 
+    SimulatorActionBar {
+        id: actionBar
+        anchors.left: parent.left
+        anchors.right: parent.right
+    }
+
+
     Flickable {
         id: flickable
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: actionBar.bottom
+        anchors.bottom: parent.bottom
 
         contentWidth: 6000
         contentHeight: 6000
+
+        clip: true
 
         boundsMovement: Flickable.StopAtBounds
         boundsBehavior: Flickable.StopAtBounds
@@ -48,31 +61,28 @@ ViewBase {
                 clearConnector()
             }
 
+            Repeater {
+                model: DatamodelManager.datamodel.values
 
-            ValueItem {
-                id: val0
-                ref: DatamodelManager.datamodel.values[0]
-                onStartDrag: createConnector(this)
-            }
-
-            ValueItem {
-                id: val1
-                x: 100
-
-                ref: DatamodelManager.datamodel.values[1]
-                onStartDrag: createConnector(this)
-            }
-
-            ActorItem {
-                id: act0
-                x: 30
-                y: 100
-                ref: DatamodelManager.datamodel.actors[0]
-
-                onAccepted: {
-                    console.log("Accepted")
-                    clearConnector()
+                ValueItem {
+                    ref: modelData  //DatamodelManager.datamodel.values[index]
+                    onStartDrag: createConnector(this)
                 }
+            }
+
+            Repeater {
+                model: DatamodelManager.datamodel.actors
+
+
+                ActorItem {
+                    ref: modelData //DatamodelManager.datamodel.actors[0]
+
+                    onAccepted: {
+                        console.log("Accepted")
+                        clearConnector()
+                    }
+                }
+
             }
         }
     }

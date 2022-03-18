@@ -23,5 +23,9 @@
         <file>images/icons/18_toilet-512_6285.png</file>
         <file>images/icons/baseline_yard_black_24dp.png</file>
         <file>images/icons/baseline_opacity_black_24dp.png</file>
+        <file>images/icons/baseline_save_black_24dp.png</file>
+        <file>images/icons/big/baseline_save_black_48dp.png</file>
+        <file>images/icons/baseline_add_black_24dp.png</file>
+        <file>images/icons/big/baseline_add_black_48dp.png</file>
     </qresource>
 </RCC>

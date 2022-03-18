@@ -16,6 +16,7 @@ public:
 
     void write(QByteArray data, int responseTimeout = -1);
     void writeSync(QByteArray data, int responseTimeout = -1);
+    QByteArray writeReadSync(QByteArray data, int readBytes = -1, int responseTimeout = -1);
     void writeLine(QByteArray data, int responseTimeout = -1);
 
     void setLineMode(bool lineMode);

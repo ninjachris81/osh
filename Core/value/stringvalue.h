@@ -8,6 +8,7 @@ class StringValue : public ValueBase
 {
     Q_OBJECT
 public:
+    StringValue();
     explicit StringValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;

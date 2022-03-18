@@ -3,9 +3,29 @@
 #include <QDebug>
 #include <QDateTime>
 
-ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, QObject *parent) : Identifyable(id, parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval)
+ProcessorTask::ProcessorTask() : SerializableIdentifyable() {
+
+}
+
+ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, QObject *parent) : SerializableIdentifyable(id, parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval)
 {
 
+}
+
+void ProcessorTask::serialize(QJsonObject &obj) {
+    SerializableIdentifyable::serialize(obj);
+    obj.insert("scriptCode", m_scriptCode);
+    obj.insert("runCondition", m_runCondition);
+    obj.insert("scheduleInterval", m_scheduleInterval);
+    obj.insert("processorTaskType", m_processorTaskType);
+}
+
+void ProcessorTask::deserialize(QJsonObject obj) {
+    SerializableIdentifyable::deserialize(obj);
+    m_scriptCode = obj.value("scriptCode").toString();
+    m_runCondition = obj.value("runCondition").toString();
+    m_scheduleInterval = obj.value("scheduleInterval").toVariant().toLongLong();
+    m_processorTaskType = (ProcessorTaskType) obj.value("m_processorTaskType").toInt();
 }
 
 LogCat::LOGCAT ProcessorTask::logCat() {

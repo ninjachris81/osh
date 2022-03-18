@@ -5,9 +5,30 @@
 #include <QDebug>
 #include <QDateTime>
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : Identifyable (id, parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase() : SerializableIdentifyable() {
+}
+
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id, parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
+}
+
+void ValueBase::serialize(QJsonObject &obj) {
+    SerializableIdentifyable::serialize(obj);
+    m_metaInfo.serialize(obj);
+
+    obj.insert("valueType", m_valueType);
+    obj.insert("alwaysEmit", m_alwaysEmit);
+    obj.insert("valueGroup", m_valueGroup->id());
+}
+
+void ValueBase::deserialize(QJsonObject obj) {
+    SerializableIdentifyable::deserialize(obj);
+    m_metaInfo.deserialize(obj);
+
+    m_valueType = (VALUE_TYPE) obj.value("valueType").toInt();
+    m_alwaysEmit = obj.value("alwaysEmit").toBool();
+
 }
 
 QString ValueBase::fullId() {
@@ -25,6 +46,10 @@ QVariant ValueBase::rawValue() {
 
 ValueGroup* ValueBase::valueGroup() {
     return m_valueGroup;
+}
+
+void ValueBase::setValueGroup(ValueGroup* valueGroup) {
+    m_valueGroup = valueGroup;
 }
 
 void ValueBase::setRawValue(QVariant value) {

@@ -30,6 +30,8 @@ public:
 
     bool isLoaded();
 
+    Q_INVOKABLE void save();
+
 private:
     bool m_isLoaded = false;
     DatamodelLoaderBase* m_datamodelLoader = nullptr;

@@ -72,6 +72,15 @@ void SerialPortClient::writeSync(QByteArray data, int responseTimeout) {
     }
 }
 
+QByteArray SerialPortClient::writeReadSync(QByteArray data, int readBytes, int responseTimeout) {
+    writeSync(data, responseTimeout);
+
+    if (readBytes == -1) {
+        return m_serialPort.readAll();
+    } else {
+        return m_serialPort.read(readBytes);
+    }
+}
 
 void SerialPortClient::writeLine(QByteArray data, int responseTimeout) {
     m_serialPort.write(data.append('\n'));
@@ -86,14 +95,15 @@ void SerialPortClient::setReadDatagramSize(quint8 size) {
 
 void SerialPortClient::handleReadyRead() {
     qDebug() << Q_FUNC_INFO << m_serialPort.bytesAvailable();
-    m_readTimer.stop();
 
     if (m_isLineMode) {
         while(m_serialPort.canReadLine()) {
+            m_readTimer.stop();
             Q_EMIT(lineReceived(m_serialPort.readLine()));
         }
     } else {
         if (m_readDatagramSize == 0 || m_serialPort.bytesAvailable() >= m_readDatagramSize) {
+            m_readTimer.stop();
             Q_EMIT(dataReceived(m_serialPort.readAll()));
         }
     }
@@ -101,6 +111,11 @@ void SerialPortClient::handleReadyRead() {
 
 void SerialPortClient::handleReadTimeout() {
     qWarning() << Q_FUNC_INFO;
+
+    QByteArray buff = m_serialPort.readAll();
+
+    qWarning() << "Obsolete data" << buff;
+
     startRestart();
 }
 

@@ -3,14 +3,20 @@
 
 #include <QObject>
 
-#include "identifyable.h"
+#include "serializableidentifyable.h"
 #include "shared/controllercmdtypes_qt.h"
+#include "datamodel/serializationsupport.h"
 
-class DeviceBase : public Identifyable
+class DeviceBase : public SerializableIdentifyable
 {
     Q_OBJECT
 public:
+    DeviceBase();
     explicit DeviceBase(QString id, QString serviceId, QObject *parent = nullptr);
+
+    /*virtual*/ void serialize(QJsonObject &obj) override;
+
+    /*virtual*/ void deserialize(QJsonObject obj) override;
 
     QString fullId();
 
@@ -24,10 +30,12 @@ public:
 
     bool isOnline();
 
+protected:
+    QString m_serviceId;
+
 private:
     bool m_isOnline = false;
     qint64 m_lastPing = 0;
-    QString m_serviceId;
 
 signals:
     void lastPingChanged();

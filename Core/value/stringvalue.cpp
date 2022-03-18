@@ -1,5 +1,8 @@
 #include "stringvalue.h"
 
+StringValue::StringValue() : ValueBase() {
+}
+
 StringValue::StringValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ValueBase(valueGroup, id, valueType, parent)
 {
 

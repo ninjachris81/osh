@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
+import OSH.Components 1.0
 import OSH.Views 1.0
 
 Item {
@@ -25,7 +26,10 @@ Item {
 
 
         TabButton {
-            text: qsTr("Visual Editor")
+            text: qsTr("Simulator")
+        }
+        TabButton {
+            text: qsTr("Data Model")
         }
         TabButton {
             text: qsTr("Device Explorer")
@@ -57,7 +61,11 @@ Item {
         }
         */
 
-        VisualEditorView {
+        SimulatorView {
+
+        }
+
+        DatamodelView {
 
         }
 

@@ -2,8 +2,9 @@
 
 #include <QDebug>
 
-#include "httpdatamodelloader.h"
-#include "testdatamodelloader.h"
+#include "datamodel/server/httpdatamodelloader.h"
+#include "datamodel/server/testdatamodelloader.h"
+#include "datamodel/server/filedatamodelloader.h"
 #include "value/server/servervaluemanager.h"
 #include "actor/server/actormanager.h"
 #include "datamodel/server/emptydatamodel.h"
@@ -31,6 +32,8 @@ void DatamodelManager::init(LocalConfig* config) {
 
     if (datamodelLoaderName == HttpDataModelLoader::LOADER_TYPE_NAME) {
         m_datamodelLoader = new HttpDataModelLoader(QUrl(config->getString("datamodel.url", "http://localhost/datamodel")));
+    } else if (datamodelLoaderName == FileDataModelLoader::LOADER_TYPE_NAME) {
+        m_datamodelLoader = new FileDataModelLoader(config->getString("datamodel.filePath", "datamodel.json"));
     } else if (datamodelLoaderName == TestDatamodelLoader::LOADER_TYPE_NAME) {
         m_datamodelLoader = new TestDatamodelLoader();
     } else {
@@ -110,3 +113,8 @@ void DatamodelManager::onDatamodelError(QString desc) {
     iWarning() << "Error while saving datamodel" << desc;
 }
 
+void DatamodelManager::save() {
+    iDebug() << Q_FUNC_INFO;
+
+    m_datamodelLoader->save(m_datamodel);
+}

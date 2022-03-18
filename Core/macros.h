@@ -10,5 +10,6 @@
 #define iDebug() qCDebug(QLoggingCategory(this->logCatName().toUtf8()))
 #define iInfo() qCInfo(QLoggingCategory(this->logCatName().toUtf8()))
 #define iWarning() qCWarning(QLoggingCategory(this->logCatName().toUtf8()))
+#define iCritical() qCCritical(QLoggingCategory(this->logCatName().toUtf8()))
 
 #endif // MACROS_H

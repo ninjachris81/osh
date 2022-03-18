@@ -1,5 +1,9 @@
 #include "valuegroup.h"
 
-ValueGroup::ValueGroup(QString id, QObject *parent) : Identifyable (id, parent)
+ValueGroup::ValueGroup() : SerializableIdentifyable() {
+
+}
+
+ValueGroup::ValueGroup(QString id, QObject *parent) : SerializableIdentifyable (id, parent)
 {
 }

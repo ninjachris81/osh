@@ -1,10 +1,36 @@
 #include "knownroom.h"
+#include <QJsonArray>
 
-KnownRoom::KnownRoom(QString id, QObject *parent) : Identifyable(id, parent)
+KnownRoom::KnownRoom() : SerializableIdentifyable() {
+}
+
+KnownRoom::KnownRoom(QString id, QObject *parent) : SerializableIdentifyable(id, parent)
 {
 
 }
+void KnownRoom::serialize(QJsonObject &obj) {
+    SerializableIdentifyable::serialize(obj);
 
+    obj.insert("name", m_name);
+
+    QJsonArray values;
+    for (QString valueId : m_values.keys()) {
+        values.append(valueId);
+    }
+    obj.insert("values", values);
+
+    QJsonArray actors;
+    for (QString actorId : m_actors.keys()) {
+        actors.append(actorId);
+    }
+    obj.insert("actors", actors);
+}
+
+void KnownRoom::deserialize(QJsonObject obj) {
+    SerializableIdentifyable::deserialize(obj);
+
+    m_name = obj.value("name").toString();
+}
 
 void KnownRoom::setName(QString name) {
     if (name == m_name) return;

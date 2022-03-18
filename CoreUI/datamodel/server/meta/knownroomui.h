@@ -4,6 +4,8 @@
 #include <QObject>
 #include "visualitembase.h"
 #include "datamodel/server/meta/knownroom.h"
+#include "value/valuebaseui.h"
+#include "actor/actorbaseui.h"
 
 class KnownRoomUI : public VisualItemBase
 {
@@ -14,6 +16,9 @@ public:
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QList<QObject*> values READ values NOTIFY valuesChanged)
     Q_PROPERTY(QList<QObject*> actors READ actors NOTIFY actorsChanged)
+
+    Q_INVOKABLE void addValue(ValueBaseUI* value);
+    Q_INVOKABLE void addActor(ActorBaseUI* actor);
 
     QString name();
     QList<QObject*> values();

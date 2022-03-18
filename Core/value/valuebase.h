@@ -5,14 +5,16 @@
 #include <QVariant>
 
 #include "valuegroup.h"
-#include "identifyable.h"
+#include "serializableidentifyable.h"
 #include "shared/units_qt.h"
 #include "shared/value_qt.h"
+#include "meta/itemmetainfo.h"
+#include "meta/metainfosupport.h"
 
 using namespace unit;
 using namespace value;
 
-class ValueBase : public Identifyable
+class ValueBase : public SerializableIdentifyable, public MetaInfoSupport
 {
 Q_OBJECT
 
@@ -24,7 +26,13 @@ public:
         VT_LONG = VALUE_TIMEOUT_LONG
     } m_valueTimeout = VT_NONE;
 
+    ValueBase();
     explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
+
+    /*virtual*/ void serialize(QJsonObject &obj) override;
+
+    /*virtual*/ void deserialize(QJsonObject obj) override;
+
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 
@@ -38,6 +46,7 @@ public:
 
     QString fullId();
     ValueGroup* valueGroup();
+    void setValueGroup(ValueGroup* valueGroup);
 
     Q_INVOKABLE QVariant rawValue();
 
@@ -62,8 +71,6 @@ public:
     double signalRate();
 
     void updateSignalRate();
-
-protected:
 
 private:
     VALUE_TYPE m_valueType;

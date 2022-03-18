@@ -10,7 +10,7 @@ ViewBase {
     id: root
 
     ListViewBase {
-        id: taskListView
+        id: valueListView
 
         anchors.fill: parent
 

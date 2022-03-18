@@ -11,6 +11,7 @@ class DigitalActor : public ActorBase
 {
     Q_OBJECT
 public:
+    DigitalActor();
     explicit DigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);

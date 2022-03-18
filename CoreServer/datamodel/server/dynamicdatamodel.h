@@ -2,7 +2,8 @@
 #define DYNAMICDATAMODEL_H
 
 #include <QObject>
-#include "datamodelbase.h"
+#include "datamodel/server/datamodelbase.h"
+#include "datamodel/serializationsupport.h"
 
 class DynamicDatamodel : public DatamodelBase
 {
@@ -13,6 +14,10 @@ public:
     QByteArray serialize();
 
     void deserialize(QByteArray data);
+
+private:
+    template <typename K, typename T> void serializeMap(QJsonObject &obj, QString name, QMap<K, T> map);
+    template <typename K, typename T, typename SETUP_FUNC> void deserializeMap(QJsonObject obj, QString name, QMap<K, T> &map, SETUP_FUNC setupFunc);
 
 signals:
 
