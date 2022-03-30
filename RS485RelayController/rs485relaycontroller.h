@@ -3,13 +3,11 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QModbusRtuSerialMaster>
 
 #include "controller/relaycontrollerbase.h"
 #include "serialportclient.h"
 #include "warn/client/clientsystemwarningsmanager.h"
-
-#define MODBUS_HEADER_LENGTH 3
-#define MODBUS_CRC_LENTH 2
 
 #define SERIAL_READ_TIMEOUT_MS 2000
 
@@ -42,18 +40,17 @@ public:
     void setSerialRelayStatus(RELAY_STATUS status);
 
 protected slots:
-    void onSerialConnected();
-    void onSerialDisconnected();
-    void onSerialDataReceived(QByteArray data);
+    void onStateChanged();
+    void onErrorOccurred();
+    void onDataReceived();
 
     void retrieveStatus();
 
 private:
     ClientSystemWarningsManager* m_warnManager;
+    QModbusRtuSerialMaster m_modbusClient;
     QTimer m_statusTimer;
-    SerialPortClient* m_serialClient;
-    uint8_t m_slaveId = 1;
-    uint8_t m_expectedDatagramSize;
+    int m_slaveId = 1;
 
 };
 

@@ -6,6 +6,7 @@
 
 QT       -= gui
 QT      += serialport
+QT      += serialbus
 
 TARGET = RS485RelayController
 TEMPLATE = lib
@@ -25,11 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    modbuscrc.cpp \
     rs485relaycontroller.cpp
 
 HEADERS += \
-        modbuscrc.h \
         rs485relaycontroller.h
 
 unix {

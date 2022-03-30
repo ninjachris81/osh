@@ -1,9 +1,9 @@
 #include "rs485relaycontroller.h"
 
 #include <QDebug>
+#include <QModbusDataUnit>
 
 #include "controller/controllermanager.h"
-#include "modbuscrc.h"
 
 RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, quint8 relayCount, QObject *parent) : RelayControllerBase(manager, id, relayCount, parent), m_model(model)
 {
@@ -18,44 +18,34 @@ void RS485RelayController::init() {
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
 
-    m_serialClient = new SerialPortClient(m_config->getString(this, "serial.port", "COM1"), QSerialPort::Baud9600);
-
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
-    m_expectedDatagramSize = (m_relayCount * 2) + MODBUS_HEADER_LENGTH + MODBUS_CRC_LENTH;
+    m_modbusClient.setConnectionParameter(QModbusDevice::SerialPortNameParameter, m_config->getString(this, "serial.port", "COM1"));
+    m_modbusClient.setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
+    m_modbusClient.setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud9600);
+    m_modbusClient.setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
+    m_modbusClient.setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
+    m_modbusClient.setTimeout(500);
+    m_modbusClient.setNumberOfRetries(1);
 
-    m_serialClient->setReadBufferSize(m_expectedDatagramSize);
-    m_serialClient->setReadDatagramSize(m_expectedDatagramSize);
-    m_serialClient->setLineMode(false);
-
-    connect(m_serialClient, &SerialPortClient::connected, this, &RS485RelayController::onSerialConnected);
-    connect(m_serialClient, &SerialPortClient::disconnected, this, &RS485RelayController::onSerialDisconnected);
-    connect(m_serialClient, &SerialPortClient::dataReceived, this, &RS485RelayController::onSerialDataReceived);
+    connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &RS485RelayController::onStateChanged);
+    connect(&m_modbusClient, &QModbusDevice::errorOccurred, this, &RS485RelayController::onErrorOccurred);
 }
 
 void RS485RelayController::start() {
     iDebug() << Q_FUNC_INFO;
 
-    m_serialClient->start();
+    m_modbusClient.connectDevice();
 }
 
 void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     iDebug() << Q_FUNC_INFO << relayIndex << status;
 
-    if (m_serialClient->isConnected()) {
-        QByteArray data;
+    if (m_modbusClient.state() == QModbusClient::ConnectedState) {
 
-        data.append((char) m_slaveId);
-        data.append((char) 0x06);
-        data.append((char) 0x00);
-        data.append(static_cast<signed char>(relayIndex + 1));
-        data.append(status ? '\x01' : '\x02');
-        data.append((char) 0x00);
-
-        ModbusCRC::appendCRC(data);
-
-        QByteArray readData = m_serialClient->writeReadSync(data, 8, 500);
-        qDebug() << "Write returned" << readData;
+        QModbusRequest req(QModbusRequest::WriteSingleRegister);
+        req.encodeData(quint16(relayIndex + 1), quint8(status ? '\x01' : '\x02'), quint8(0x00));
+        m_modbusClient.sendRawRequest(req, m_slaveId);
     } else {
         m_warnManager->raiseWarning("Serial not connected");
     }
@@ -71,14 +61,26 @@ quint8 RS485RelayController::getRelayCount(RELAY_MODEL model) {
     }
 }
 
-void RS485RelayController::onSerialConnected() {
+void RS485RelayController::onStateChanged() {
     iDebug() << Q_FUNC_INFO;
 
-    m_statusTimer.start();
-    Q_EMIT(controllerConnected());
+    switch(m_modbusClient.state()) {
+    case QModbusClient::ConnectedState:
+        m_statusTimer.start();
+        Q_EMIT(controllerConnected());
+        break;
+    case QModbusClient::UnconnectedState:
+        m_statusTimer.stop();
+        Q_EMIT(controllerDisconnected());
+        break;
+    default:
+        iDebug() << m_modbusClient.state();
+        break;
+    }
+
 }
 
-void RS485RelayController::onSerialDisconnected() {
+void RS485RelayController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO;
 
     m_warnManager->raiseWarning("Relay connection disconnected");
@@ -86,25 +88,30 @@ void RS485RelayController::onSerialDisconnected() {
     Q_EMIT(controllerDisconnected());
 }
 
-void RS485RelayController::onSerialDataReceived(QByteArray data) {
-    iDebug() << Q_FUNC_INFO << data;
+void RS485RelayController::onDataReceived() {
+    iDebug() << Q_FUNC_INFO;
 
-    if (m_currentStatus == RETRIEVING_STATUS) {
-        switch(m_model) {
-        case RS485_SERIAL_32PORT:
-            if (data.size() == m_expectedDatagramSize) {
-                setSerialRelayStatus(STATUS_RECEIVED);
-                for (quint8 i = 0;i<m_relayCount;i++) {
-                    setStatus(i, data.at(MODBUS_HEADER_LENGTH + (i * 2) + 1) == 0x01);
-                }
-            } else {
-                setSerialRelayStatus(STATUS_ERROR);
-                m_warnManager->raiseWarning("Invalid response size from relay" + QString::number(data.size()));
-            }
+    auto reply = qobject_cast<QModbusReply *>(sender());
+    if (!reply)
+        return;
 
-            break;
+    if (reply->error() == QModbusDevice::NoError) {
+        QModbusResponse response = reply->rawResult();
+
+        iDebug() << response.dataSize();
+
+        setSerialRelayStatus(STATUS_RECEIVED);
+
+        for (quint8 i = 0;i<m_relayCount;i++) {
+            setStatus(i, response.data().at((i * 2) + 2) == 0x01);
         }
+    } else if (reply->error() == QModbusDevice::ProtocolError) {
+        iWarning() << "Modbus error" << reply->error();
+    } else {
+        iWarning() << "Modbus error" << reply->error();
     }
+
+    reply->deleteLater();
 }
 
 void RS485RelayController::setSerialRelayStatus(RELAY_STATUS status) {
@@ -124,19 +131,12 @@ void RS485RelayController::retrieveStatus() {
     setSerialRelayStatus(RETRIEVING_STATUS);
 
     QByteArray data;
+    data.append((char) 0x00);
+    data.append((char) 0x20);
 
-    switch(m_model) {
-    case RS485_SERIAL_32PORT:
-        data.append((char) m_slaveId);
-        data.append((char) 0x03);
-        data.append((char) 0x00);
-        data.append((char) 0x01);
-        data.append((char) 0x00);
-        data.append((char) 0x20);
+    QModbusRequest req(QModbusRequest::ReadHoldingRegisters);
+    req.encodeData(quint16(0x0001), quint16(0x0020));
 
-        ModbusCRC::appendCRC(data);
-
-        m_serialClient->write(data, SERIAL_READ_TIMEOUT_MS);
-        break;
-    }
+    QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
+    connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
 }

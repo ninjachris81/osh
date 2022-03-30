@@ -1,5 +1,6 @@
 QT -= gui
 QT += mqtt serialport
+QT += serialbus
 
 
 CONFIG += c++11 console
