@@ -23,4 +23,3 @@ quint8 AudioControllerBase::bindActor(AudioPlaybackActor* actor) {
     });
     return audioInstanceIndex;
 }
-

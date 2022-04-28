@@ -40,6 +40,15 @@ ValueBase* ValueBase::withValueTimeout(VALUE_TIMEOUT timeout) {
     return this;
 }
 
+ValueBase* ValueBase::withPersist(bool persist) {
+    m_persist = persist;
+    return this;
+}
+
+bool ValueBase::persist() {
+    return m_persist;
+}
+
 QVariant ValueBase::rawValue() {
     return this->m_value;
 }
@@ -150,6 +159,7 @@ UNIT_TYPE ValueBase::valueTypeToUnitType(VALUE_TYPE valueType) {
     case VT_TEMP: return UT_DEGREES;
     case VT_HUMIDITY: return UT_PERCENT;
     case VT_WATER_FLOW: return UT_LITER_PER_MIN;
+    case VT_WATER_LEVEL: return UT_LITERS;
     case VT_TIMESTAMP: return UT_TIMESTAMP;
     default: return UT_UNKNOWN;
     }
@@ -162,5 +172,6 @@ QString ValueBase::unitTypeToSuffix(UNIT_TYPE unitType) {
     case UT_PERCENT: return "%";
     case UT_TIMESTAMP: return "";
     case UT_LITER_PER_MIN: return "l/min";
+    case UT_LITERS: return "l";
     }
 }

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += qml
+QT       += qml sql
 
 QT       -= gui
 
@@ -26,6 +26,7 @@ DEFINES += IS_OSH_CORE_SERVICE
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    database/databasemanager.cpp \
         datamodel/server/datamodelbase.cpp \
         datamodel/server/datamodelloaderbase.cpp \
         datamodel/server/datamodelmanager.cpp \
@@ -47,9 +48,10 @@ SOURCES += \
         device/server/devicediscoverymodelbridge.cpp \
         processor/server/modelprocessormanager.cpp \
         processor/server/processortask.cpp \
-        actor/server/actormanager.cpp \
+        actor/server/actormanager.cpp
 
 HEADERS += \
+    database/databasemanager.h \
         datamodel/server/datamodelbase.h \
         datamodel/server/datamodelloaderbase.h \
         datamodel/server/datamodelmanager.h \
@@ -71,7 +73,7 @@ HEADERS += \
         device/server/devicediscoverymodelbridge.h \
         processor/server/modelprocessormanager.h \
         processor/server/processortask.h \
-        actor/server/actormanager.h \
+        actor/server/actormanager.h
 
 unix {
     target.path = /usr/lib

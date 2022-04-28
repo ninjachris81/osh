@@ -101,35 +101,44 @@ Item {
             readonly property int waterFlowColdIndex: Commons.searchValueIndex("waterFlows.cold")
             readonly property int waterFlowToiletIndex: Commons.searchValueIndex("waterFlows.toilet")
 
+            readonly property int waterLevelGardenIndex: Commons.searchValueIndex("waterLevels.garden")
+            readonly property int waterLevelWarmIndex: Commons.searchValueIndex("waterLevels.warm")
+            readonly property int waterLevelColdIndex: Commons.searchValueIndex("waterLevels.cold")
+            readonly property int waterLevelToiletIndex: Commons.searchValueIndex("waterLevels.toilet")
+
             VisualWater {
-                id: waterFlowGarden
+                id: waterGarden
                 iconSource: GFX.icon("baseline_yard_black_24dp.png")
             }
             VisualWater {
-                id: waterFlowWarm
+                id: waterWarm
                 iconColor: "#88FF0000"
                 activeColor: "#44FF0000"
             }
             VisualWater {
-                id: waterFlowCold
+                id: waterCold
             }
             VisualWater {
-                id: waterFlowToilet
+                id: waterToilet
                 iconSource: GFX.icon("18_toilet-512_6285.png")
             }
 
             Component.onCompleted: {
-                waterFlowGarden.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowGardenIndex].isValid })
-                waterFlowGarden.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowGardenIndex].rawValue, 0) })
+                waterGarden.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowGardenIndex].isValid && DatamodelManager.datamodel.values[waterLevelGardenIndex].isValid })
+                waterGarden.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowGardenIndex].rawValue, 0) })
+                waterGarden.waterLevel = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterLevelGardenIndex].rawValue, 0) })
 
-                waterFlowWarm.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowWarmIndex].isValid })
-                waterFlowWarm.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowWarmIndex].rawValue, 0) })
+                waterWarm.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowWarmIndex].isValid && DatamodelManager.datamodel.values[waterLevelWarmIndex].isValid })
+                waterWarm.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowWarmIndex].rawValue, 0) })
+                waterWarm.waterLevel = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterLevelWarmIndex].rawValue, 0) })
 
-                waterFlowCold.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowColdIndex].isValid })
-                waterFlowCold.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowColdIndex].rawValue, 0) })
+                waterCold.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowColdIndex].isValid && DatamodelManager.datamodel.values[waterLevelColdIndex].isValid })
+                waterCold.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowColdIndex].rawValue, 0) })
+                waterCold.waterLevel = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterLevelColdIndex].rawValue, 0) })
 
-                waterFlowToilet.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowToiletIndex].isValid })
-                waterFlowToilet.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowToiletIndex].rawValue, 0) })
+                waterToilet.isValid = Qt.binding(function() { return DatamodelManager.datamodel.values[waterFlowToiletIndex].isValid && DatamodelManager.datamodel.values[waterLevelToiletIndex].isValid })
+                waterToilet.waterFlow = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterFlowToiletIndex].rawValue, 0) })
+                waterToilet.waterLevel = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[waterLevelToiletIndex].rawValue, 0) })
             }
         }
     }

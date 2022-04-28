@@ -8,6 +8,8 @@
 
 #include "macros.h"
 
+QLatin1String ServerValueManager::VALUE_PREFIX = QLatin1String("values");
+
 ServerValueManager::ServerValueManager(QObject *parent) : ValueManagerBase(parent)
 {
     connect(&m_valueCheckTimer, &QTimer::timeout, this, &ServerValueManager::checkValues);
@@ -15,6 +17,32 @@ ServerValueManager::ServerValueManager(QObject *parent) : ValueManagerBase(paren
 
 void ServerValueManager::init(LocalConfig *config) {
     REQUIRE_MANAGER(CommunicationManagerBase);
+    REQUIRE_MANAGER(DatabaseManager);
+
+    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
+    m_databaseManager = getManager<DatabaseManager>(DatabaseManager::MANAGER_ID);
+
+    connect(m_commManager, &CommunicationManagerBase::connected, this, [this] {
+
+        QMap<QString, QVariant> values = m_databaseManager->simpleList(VALUE_PREFIX);
+        QMapIterator<QString, QVariant> it(values);
+
+        while(it.hasNext()) {
+            it.next();
+
+            if (m_knownValues.contains(it.key())) {
+                iInfo() << "Publishing stored value" << it.key() << it.value();
+                ValueBase* value = m_knownValues.value(it.key());
+                value->updateValue(it.value());
+                publishValue(value);
+            } else {
+                iWarning() << "Value key" << it.key() << "is not a known value - removing it";
+                m_databaseManager->simpleRemove(VALUE_PREFIX, it.key());
+            }
+        }
+
+
+    });
 
     m_valueCheckTimer.setInterval(config->getInt("value.checkInterval", 1000));
     m_valueCheckTimer.start();
@@ -29,6 +57,9 @@ void ServerValueManager::handleReceivedMessage(ValueMessage* msg) {
 void ServerValueManager::valueReceived(ValueBase* value, QVariant newValue) {
     if (value != nullptr) {
         value->updateValue(newValue);
+        if (value->persist()) {
+            m_databaseManager->simpleSet(VALUE_PREFIX, value->fullId(), value->rawValue());
+        }
     }
 }
 

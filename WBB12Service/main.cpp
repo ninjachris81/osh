@@ -2,15 +2,14 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
+#include "wbb12controller.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
-//#include "actor/client/clientactormanager.h"
-#include "audiocontroller.h"
+#include "actor/client/clientactormanager.h"
 #include "actor/digitalactor.h"
-#include "value/booleanvalue.h"
 #include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
@@ -23,12 +22,13 @@ int main(int argc, char *argv[])
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager("AudioService");
+    ClientDeviceDiscoveryManager clientManager("RelayService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
+    ClientActorManager actorManager;
 
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -36,27 +36,29 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&actorManager);
 
-    AudioController audioController(&controllerManager, config.getString(&clientManager, "audioGroupId", "egAudio0"));
-    controllerManager.registerController(&audioController);
+    WBB12Controller wbb12Controller(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "wbb12"));
+    controllerManager.registerController(&wbb12Controller);
 
     managerRegistration.init(&config);
 
-    QList<ValueBase*> values;
-
-    ValueGroup actorGroup(audioController.id());
-    for (quint8 i=0;i<audioController.channelCount();i++) {
-        qDebug() << "Init value" << i;
-        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VT_SWITCH);
-        value->withValueTimeout(ValueBase::VT_MID);
-        values.append(value);
-        audioController.bindValue(value);
+    /*
+    QList<ValueBase*> actors;
+    ValueGroup actorGroup(relayController.id());
+    for (quint8 i=0;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT);i++) {
+        qDebug() << "Init actor" << i;
+        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), VT_RELAY_LIGHT , true);
+        actor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
+        actors.append(actor);
+        relayController.bindActor(actor);
+        actorManager.registerActor(actor);
     }
 
-    audioController.bindValueManager(&valueManager, values);
-    audioController.bindCommunicationManager(&commManager);
+    relayController.bindValueManager(&valueManager, actors);
+    */
 
-    audioController.start();
+    controllerManager.start();
 
     return a.exec();
 }

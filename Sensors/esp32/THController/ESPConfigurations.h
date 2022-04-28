@@ -17,6 +17,7 @@
   #define HAS_MOTION_CONTROLLER true
   #define HAS_BRIGHTNESS_CONTROLLER true
   #define HAS_SOUND_CONTROLLER true
+  #define HAS_FLOW_CONTROLLER false
   #define HAS_OTA_SUPPORT true
 #elif ACTIVE_CONFIG == CONFIG_WATER_SENSOR
   #warning Water Sensor Configuration
@@ -27,6 +28,7 @@
   #define HAS_TEMP_CONTROLLER false
   #define HAS_MOTION_CONTROLLER false
   #define HAS_BRIGHTNESS_CONTROLLER false
-  #define HAS_SOUND_CONTROLLER false
+  #define HAS_SOUND_CONTROLLER true
+  #define HAS_FLOW_CONTROLLER true
   #define HAS_OTA_SUPPORT true
 #endif

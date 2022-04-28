@@ -6,10 +6,7 @@
 #include <QModbusRtuSerialMaster>
 
 #include "controller/relaycontrollerbase.h"
-#include "serialportclient.h"
 #include "warn/client/clientsystemwarningsmanager.h"
-
-#define SERIAL_READ_TIMEOUT_MS 2000
 
 class RS485RelayController : public RelayControllerBase
 {

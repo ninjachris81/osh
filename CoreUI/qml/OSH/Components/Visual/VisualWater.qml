@@ -8,13 +8,16 @@ VisualActionButton {
     id: root
 
     property double waterFlow
-    property bool waterActive: isValid && waterFlow > 0.0
+    property bool waterFlowActive: isValid && waterFlow > 0.0
+
+    property double waterLevel
+
     property color iconColor: "#880000FF"
     property color activeColor: "#440000FF"
     property alias iconSource: icon.source
 
     SequentialAnimation on color {
-        running: waterActive
+        running: waterFlowActive
 
         ColorAnimation {
             to: activeColor
@@ -50,8 +53,8 @@ VisualActionButton {
     }
 
     Text {
-        id: waterFlowValue
-        text: Commons.addTypeSuffix(root.waterFlow, UNIT_TYPE.UT_LITER_PER_MIN, isValid)
+        id: waterValue
+        text: waterFlowActive ? Commons.addTypeSuffix(root.waterFlow, UNIT_TYPE.UT_LITER_PER_MIN, isValid) : Commons.addTypeSuffix(root.waterLevel, UNIT_TYPE.UT_LITERS, isValid)
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: !isValid ? 0 : 3

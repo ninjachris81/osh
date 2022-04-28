@@ -59,6 +59,14 @@ BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id,
     return value;
 }
 
+IntegerValue* DatamodelBase::addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    IntegerValue* value = new IntegerValue(valueGroup, id, valueType);
+    value->withValueTimeout(timeout);
+    m_values.insert(value->fullId(), value);
+    Q_EMIT(datamodelContentChanged());
+    return value;
+}
+
 DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
     DoubleValue* value = new DoubleValue(valueGroup, id, valueType);
     value->withValueTimeout(timeout);

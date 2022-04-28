@@ -26,6 +26,10 @@ public:
 
     virtual void postInit() {}
 
+    virtual bool isPriorityManager() {
+        return false;
+    }
+
     virtual MessageBase::MESSAGE_TYPE getMessageType() = 0;
 
     virtual void handleReceivedMessage(MessageBase* msg) = 0;

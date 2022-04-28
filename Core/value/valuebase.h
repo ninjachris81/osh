@@ -36,6 +36,10 @@ public:
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 
+    ValueBase* withPersist(bool persist);
+
+    bool persist();
+
     static QString getFullId(QString valueGroupId, QString valueId);
 
     void setRawValue(QVariant value);
@@ -78,6 +82,7 @@ private:
     QVariant m_value;
     qint64 m_lastUpdate = 0;
     bool m_alwaysEmit = true;
+    bool m_persist = false;
 
     qint64 m_lastMaintenance = 0;
 

@@ -11,5 +11,6 @@
 #define UNIT_TYPE_PERCENT       2
 #define UNIT_TYPE_TIMESTAMP     3
 #define UNIT_TYPE_LITER_PER_MIN 4
+#define UNIT_TYPE_LITER         5
 
 #endif // UNITS_H

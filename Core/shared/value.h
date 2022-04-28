@@ -18,7 +18,8 @@
 #define VALUE_TYPE_HUMIDITY     3
 #define VALUE_TYPE_MOTION       4
 #define VALUE_TYPE_WATER_FLOW   5
-#define VALUE_TYPE_TIMESTAMP    6
+#define VALUE_TYPE_WATER_LEVEL   6
+#define VALUE_TYPE_TIMESTAMP    7
 
 // actors
 #define VALUE_TYPE_RELAY_LIGHT  50

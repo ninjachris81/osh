@@ -13,6 +13,7 @@
 #include "processor/server/modelprocessormanager.h"
 #include "actor/server/actormanager.h"
 #include "log/logmanager.h"
+#include "database/databasemanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
     ModelProcessorManager modelProcessor;
     LogManager logManager;
     ActorManager actorManager;
+    DatabaseManager databaseManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
@@ -48,6 +50,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&modelProcessor);
     managerRegistration.registerManager(&logManager);
     managerRegistration.registerManager(&actorManager);
+    managerRegistration.registerManager(&databaseManager);
 
     managerRegistration.init(&config);
 

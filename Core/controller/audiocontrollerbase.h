@@ -25,6 +25,8 @@ public:
 signals:
 
 protected:
+    QString m_activateAmplGroupId = "";
+    QString m_activateAmplActorId = "";
     quint8 m_actorCount = 0;
     QList<AudioPlaybackActor*> m_actorMappings;
 

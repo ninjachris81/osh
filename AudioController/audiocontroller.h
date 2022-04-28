@@ -6,6 +6,7 @@
 #include <QProcess>
 #include "controller/audiocontrollerbase.h"
 #include "actor/audioplaybackactor.h"
+#include "communication/communicationmanagerbase.h"
 
 class AudioController : public AudioControllerBase
 {
@@ -23,12 +24,17 @@ public:
     void pausePlayback(quint8 channelIndex) override;
     void stopPlayback(quint8 channelIndex) override;
 
+    void bindCommunicationManager(CommunicationManagerBase *commManager);
+
 private:
     QProcess m_playbackProcess;
     QString m_playbackCmd;
     QString m_playbackFile;
 
+    CommunicationManagerBase* m_commManager;
+
 signals:
+    void requestActivation(QString amplGroupId, QString amplActorId, bool activate);
 
 protected:
     quint8 m_actorCount = 0;

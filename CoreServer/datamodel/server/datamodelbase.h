@@ -10,6 +10,7 @@
 #include "value/valuegroup.h"
 #include "value/valuebase.h"
 #include "value/doublevalue.h"
+#include "value/integervalue.h"
 #include "actor/digitalactor.h"
 #include "processor/server/processortask.h"
 #include "shared/units_qt.h"
@@ -37,6 +38,7 @@ public:
     ValueGroup* addValueGroup(QString id);
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout);
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0);
     KnownRoom* addKnownRoom(QString id, QString name);

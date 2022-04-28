@@ -206,10 +206,17 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "warm", VT_WATER_FLOW, ValueBase::VT_MID));
     heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "garden", VT_WATER_FLOW, ValueBase::VT_MID));
 
+    ValueGroup* nodeWaterLevels = addValueGroup("waterLevels");
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "toilet", VT_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "cold", VT_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "warm", VT_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "garden", VT_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+
     // basement
     addProcessorTask("basement.heatingRoom.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('basementRelays0.0', 'basementInputs0.0', 20000)");
     addProcessorTask("basement.workshop.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('basementRelays0.1', 'basementInputs0.1', 20000)");
 
+    /*
     // eg
     addProcessorTask("eg.kitchen.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('egRelays0.0', 'egInputs0.0', 'motions.20', 'brightnesses.20', 30, 20000, 5000)");
     addProcessorTask("eg.diningRoom.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('egRelays0.1', 'egInputs0.1', 'motions.21', 'brightnesses.21', 30, 20000, 5000)");
@@ -225,6 +232,7 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     addProcessorTask("og.livingRoom.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('ogRelays0.2', 'ogInputs0.2', 'motions.42', 'brightnesses.42', 30, 20000, 5000)");
     addProcessorTask("og.sleepingRoom.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('ogRelays0.3', 'ogInputs0.4', 'motions.43', 'brightnesses.43', 30, 20000, 5000)");
     addProcessorTask("og.bathFloor.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('ogRelays0.4', 'ogInputs0.4', 'motions.44', 'brightnesses.44', 30, 20000, 5000)");
+    */
 
     //addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
     //addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");

@@ -52,19 +52,30 @@ void ManagerRegistration::init(LocalConfig* config) {
         iWarning() << "No log manager defined";
     }
 
+    // first stage: init priority managers
     it.toFront();
     while (it.hasNext()) {
         it.next();
 
-        if (it.key() != LogManager::MANAGER_ID) {           // already initialized, see above
+        if (it.value()->isPriorityManager() && it.key() != LogManager::MANAGER_ID) {
             it.value()->init(config);
         }
     }
 
+    // 2nd stage: init non-priority managers
+    it.toFront();
+    while (it.hasNext()) {
+        it.next();
+
+        if (!it.value()->isPriorityManager() && it.key() != LogManager::MANAGER_ID) {
+            it.value()->init(config);
+        }
+    }
+
+    // last stage: post init
     iDebug() << "Post init";
 
     it.toFront();
-
     while (it.hasNext()) {
         it.next();
 

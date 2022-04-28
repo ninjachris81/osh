@@ -1,7 +1,7 @@
 #include "rs485relaycontroller.h"
 
 #include <QDebug>
-#include <QModbusDataUnit>
+#include <QSerialPort>
 
 #include "controller/controllermanager.h"
 

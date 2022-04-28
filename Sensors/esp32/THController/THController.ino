@@ -6,6 +6,8 @@
 #include "MQTTController.h"
 #include "DeviceController.h"
 #include "FlashController.h"
+#include <LogHelper.h>
+#include "shared/device.h"
 
 #if HAS_TEMP_CONTROLLER
   #include "TempController_AHTx.h"
@@ -20,8 +22,9 @@
 #if HAS_SOUND_CONTROLLER
   #include "SoundController_Piezo.h"
 #endif
-#include <LogHelper.h>
-#include "shared/device.h"
+#if HAS_FLOW_CONTROLLER
+  #include "FlowController_Reed.h"
+#endif
 
 #if HAS_OTA_SUPPORT
   #include "OTAController.h"
@@ -45,7 +48,9 @@ FlashController flashController;
 #if HAS_SOUND_CONTROLLER
   SoundControllerPiezo soundController("alarms");
 #endif
-
+#if HAS_FLOW_CONTROLLER
+  FlowControllerReed flowController("waterflows");
+#endif
 #if HAS_OTA_SUPPORT
   OTAController otaController;
 #endif
@@ -68,6 +73,9 @@ void setup() {
 #endif
 #if HAS_SOUND_CONTROLLER
   taskManager.registerTask(&soundController, SOUND_CONTROLLER);
+#endif
+#if HAS_FLOW_CONTROLLER
+  taskManager.registerTask(&flowController, FLOW_CONTROLLER);
 #endif
 
 #if HAS_OTA_SUPPORT

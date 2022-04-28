@@ -27,6 +27,10 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
+    /*virtual*/ bool isPriorityManager() override {
+        return true;
+    }
+
     void registerManager(ManagerBase* manager);
 
     void publishLog(QtMsgType type, QString msg);
