@@ -10,6 +10,8 @@ class OTAController : public AbstractIntervalTask {
 public:
   OTAController();
   ~OTAController();
+
+  void postInit(String hostname);
   
   void init();
 

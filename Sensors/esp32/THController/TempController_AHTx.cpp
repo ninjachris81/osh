@@ -13,14 +13,18 @@ TempControllerAHTx::~TempControllerAHTx() {
 }
 
 void TempControllerAHTx::init() {
-  if (! aht.begin()) {
-    LOG_PRINTLN(F("Could not find AHT"));
-    while (1) delay(10);
-  }
 }
 
 void TempControllerAHTx::update() {
-  aht.getEvent(&humidity, &temp);// populate temp and humidity objects with fresh data
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupTemp + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), temp.temperature);
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupHum + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), humidity.relative_humidity);
+    if (!isInitialized) {
+    if (!aht.begin()) {
+      LOG_PRINTLN(F("Could not find AHT"));
+    } else {
+      isInitialized = true;
+    }
+  } else {
+    aht.getEvent(&humidity, &temp);// populate temp and humidity objects with fresh data
+    taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupTemp + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), temp.temperature);
+    taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroupHum + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), humidity.relative_humidity);
+  }
 }

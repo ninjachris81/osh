@@ -1,5 +1,8 @@
 #include "OTAController.h"
 #include <LogHelper.h>
+#include "DeviceController.h"
+#include "TaskIDs.h"
+#include "TaskManager.h"
 
 OTAController::OTAController() : AbstractIntervalTask(OTA_INTERVAL_MS) {
   
@@ -36,8 +39,11 @@ void OTAController::init() {
       else if (error == OTA_END_ERROR) LOG_PRINTLN(F("End Failed"));
     });
 
-  ArduinoOTA.begin();
+}
 
+void OTAController::postInit(String hostname) {
+  ArduinoOTA.setHostname(hostname.c_str());
+  ArduinoOTA.begin();
 }
 
 void OTAController::update() {

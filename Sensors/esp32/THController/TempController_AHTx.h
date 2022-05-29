@@ -21,6 +21,7 @@ public:
 private:
   Adafruit_AHTX0 aht;
   sensors_event_t humidity, temp;
+  bool isInitialized = false;
   
   String m_valueGroupTemp;
   String m_valueGroupHum;

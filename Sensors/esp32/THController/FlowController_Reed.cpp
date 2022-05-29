@@ -17,41 +17,29 @@ volatile uint16_t counterValue3 = 0;
 volatile uint16_t counterValue4 = 0;
 
 void ICACHE_RAM_ATTR valueISR1() {
-  if (millis() - lastValue1 >= DEBOUNCE_MS) {
-    counterValue1++;
-    lastValue1 = millis();
-  }  
+  counterValue1++;
 }
 
 void ICACHE_RAM_ATTR valueISR2() {
-  if (millis() - lastValue2 >= DEBOUNCE_MS) {
-    counterValue2++;
-    lastValue2 = millis();
-  }  
+  counterValue2++;
 }
 
 void ICACHE_RAM_ATTR valueISR3() {
-  if (millis() - lastValue3 >= DEBOUNCE_MS) {
-    counterValue3++;
-    lastValue3 = millis();
-  }  
+  counterValue3++;
 }
 
 void ICACHE_RAM_ATTR valueISR4() {
-  if (millis() - lastValue4 >= DEBOUNCE_MS) {
-    counterValue4++;
-    lastValue4 = millis();
-  }
+  counterValue4++;
 }
 
 FlowControllerReed::FlowControllerReed(String valueGroupStatus) : AbstractIntervalTask(FLOW_UPDATE_INTERVAL_MS), m_valueGroupStatus(valueGroupStatus) {
 }
 
 void FlowControllerReed::init() {
-  pinMode(PIN_FLOW_REED_SENSOR_1, INPUT_PULLUP);
-  pinMode(PIN_FLOW_REED_SENSOR_2, INPUT_PULLUP);
-  pinMode(PIN_FLOW_REED_SENSOR_3, INPUT_PULLUP);
-  pinMode(PIN_FLOW_REED_SENSOR_4, INPUT_PULLUP);
+  pinMode(PIN_FLOW_REED_SENSOR_1, INPUT);
+  pinMode(PIN_FLOW_REED_SENSOR_2, INPUT);
+  pinMode(PIN_FLOW_REED_SENSOR_3, INPUT);
+  pinMode(PIN_FLOW_REED_SENSOR_4, INPUT);
   
   attachInterrupt(digitalPinToInterrupt(PIN_FLOW_REED_SENSOR_1), valueISR1, FALLING);
   attachInterrupt(digitalPinToInterrupt(PIN_FLOW_REED_SENSOR_2), valueISR2, FALLING);

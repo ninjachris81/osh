@@ -4,7 +4,9 @@
 #include "ESPConfigurations.h"
 #include "shared/mqtt.h"
 #include <LogHelper.h>
-#include "DeviceController.h"
+#include "LEDController.h"
+#include "TaskIDs.h"
+#include "TaskManager.h"
 
 MQTTController* MQTTController::m_instance = NULL;
 
@@ -21,7 +23,6 @@ void MQTTController::setClientId(String clientId) {
 }
 
 void MQTTController::init() {
-
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   while (WiFi.status() != WL_CONNECTED) {
      delay(500);
@@ -48,7 +49,9 @@ void MQTTController::reconnect() {
            LOG_PRINTLN(F("MQTT broker"));
            for (uint8_t i=0;i<m_callbackHandlerCount;i++) m_callbackHandlers[i]->onConnected();
            subscribeTopics();
+           taskManager->getTask<LEDController*>(LED_CONTROLLER)->setFlashFrequency(LED_FREQUENCY_OK);
        } else {
+           taskManager->getTask<LEDController*>(LED_CONTROLLER)->setFlashFrequency(LED_FREQUENCY_RECONNECT);
            LOG_PRINT(F("failed with state "));
            LOG_PRINTLN(client.state());
            delay(2000);

@@ -27,13 +27,22 @@ public:
   String getTopics();
 
   void onPropertyValueChange(uint8_t id, int newValue, int oldValue);
-  
+
 private:
   String m_valueGroup;
   unsigned long m_lastSend = 0;
   Property<int> m_state;
 
+  uint8_t m_intervalMs = 0;
+  unsigned long m_beepState = 0;
+  bool m_beepOn = false;
+
   void sendValue();
+
+  void setupBeep(uint8_t intervalMs);
+  void updateBeep();
+  void stopBeep();
+
 };
 
 
