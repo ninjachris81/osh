@@ -43,6 +43,7 @@
 // types
 #define MQTT_MESSAGE_TYPE_VA            "va"        // value
 #define MQTT_MESSAGE_TYPE_AC            "ac"        // actor
+#define MQTT_MESSAGE_TYPE_ACCO          "acco"      // actor config
 #define MQTT_MESSAGE_TYPE_DD            "dd"        // device discovery
 #define MQTT_MESSAGE_TYPE_ST            "st"        // system time
 #define MQTT_MESSAGE_TYPE_SW            "sw"        // system warnings
@@ -52,17 +53,20 @@
 
 // devices
 
-#define MQTT_MIN_MSG_SIZE 2
+//#define MQTT_MIN_MSG_SIZE 2
 
 // TYPES
-#define MQTT_ID_DOUBLE 'd'
-#define MQTT_ID_INTEGER 'i'
-#define MQTT_ID_STRING 's'
-#define MQTT_ID_BOOL 'b'
-#define MQTT_ID_LONG 'l'
-#define MQTT_ID_INVALID 'n'
+//#define MQTT_ID_DOUBLE 'd'
+//#define MQTT_ID_INTEGER 'i'
+//#define MQTT_ID_STRING 's'
+//#define MQTT_ID_BOOL 'b'
+//#define MQTT_ID_LONG 'l'
+//#define MQTT_ID_INVALID 'n'
 
-#define MQTT_INVALID_PAYLOAD ' '
+//#define MQTT_INVALID_PAYLOAD ' '
 
+#define MQTT_SINGLE_VALUE_ATTR "v"
+
+#define MQTT_JSON_MAX_LENGTH 256
 
 #endif // MQTT_H

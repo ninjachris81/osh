@@ -1,12 +1,13 @@
 #include "MQTTController.h"
 #include "config.h"
-#include "credentials.h"
 #include "ESPConfigurations.h"
 #include "shared/mqtt.h"
 #include <LogHelper.h>
 #include "LEDController.h"
+#include "DeviceController.h"
 #include "TaskIDs.h"
 #include "TaskManager.h"
+#include "shared/device.h"
 
 MQTTController* MQTTController::m_instance = NULL;
 
@@ -23,16 +24,14 @@ void MQTTController::setClientId(String clientId) {
 }
 
 void MQTTController::init() {
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-  while (WiFi.status() != WL_CONNECTED) {
-     delay(500);
-     LOG_PRINTLN(F("Connecting to WiFi.."));
-  }
-  LOG_PRINTLN(F("Connected to the WiFi network"));
-  
   //connecting to a mqtt broker
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(&MQTTController::callback);
+
+  DeviceController *deviceController = taskManager->getTask<DeviceController*>(DEVICE_CONTROLLER);
+  m_clientId = String(deviceController->getDeviceId()) + String(DEVICE_FULLID_SEP) + String(deviceController->getServiceId());
+  LOG_PRINT(F("Using MQTT ClientId "));
+  LOG_PRINTLN(m_clientId);
 }
 
 void MQTTController::update() {
@@ -104,33 +103,59 @@ void MQTTController::registerHandler(MQTTEventCallbackHandler* handler) {
   m_callbackHandlerCount++;
 }
 
-void MQTTController::publish(String path, double value) {
-  String valueStr= String(MQTT_ID_DOUBLE) + String(value, 2);
-  client.publish(path.c_str(), valueStr.c_str());
+void MQTTController::publishSingleValue(String path, double value) {
+  m_doc.clear();
+  m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  String output;
+  serializeJson(m_doc, output);
+  client.publish(path.c_str(), output.c_str());
 }
 
-void MQTTController::publish(String path, int value) {
-  String valueStr= String(MQTT_ID_INTEGER) + value;
-  client.publish(path.c_str(), valueStr.c_str());
+void MQTTController::publishSingleValue(String path, int value) {
+  m_doc.clear();
+  m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  String output;
+  serializeJson(m_doc, output);
+  client.publish(path.c_str(), output.c_str());
 }
 
-void MQTTController::publish(String path, long value) {
-  String valueStr= String(MQTT_ID_LONG) + value;
-  client.publish(path.c_str(), valueStr.c_str());
+void MQTTController::publishSingleValue(String path, long value) {
+  m_doc.clear();
+  m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  String output;
+  serializeJson(m_doc, output);
+  client.publish(path.c_str(), output.c_str());
 }
 
-void MQTTController::publish(String path, bool value) {
-  String valueStr= String(MQTT_ID_BOOL) + (value ? String("1") : String("0"));
-  client.publish(path.c_str(), valueStr.c_str());
+void MQTTController::publishSingleValue(String path, bool value) {
+  m_doc.clear();
+  m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  String output;
+  serializeJson(m_doc, output);
+  client.publish(path.c_str(), output.c_str());
 }
 
-void MQTTController::publish(String path, String value) {
-  value=String(MQTT_ID_STRING) + value;
-  client.publish(path.c_str(), value.c_str());
+void MQTTController::publishSingleValue(String path, String value) {
+  m_doc.clear();
+  m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  String output;
+  serializeJson(m_doc, output);
+  client.publish(path.c_str(), output.c_str());
 }
 
-void MQTTController::publish(String path) {
+void MQTTController::publishNull(String path) {
   client.publish(path.c_str(), "");
+}
+
+JsonObject MQTTController::newObject() {
+  m_doc.clear();
+  return m_doc.to<JsonObject>();
+}
+
+void MQTTController::publishObject(String path) {
+  String output;
+  serializeJson(m_doc, output);
+  client.publish(path.c_str(), output.c_str());
 }
 
 void MQTTController::callback(char* topic, byte* payload, unsigned int length) {
@@ -145,34 +170,47 @@ void MQTTController::handleCallback(char* topic, byte* payload, unsigned int len
   }
   String myValue = String(myBuffer);
 
-  LOG_PRINT(F("Message received "));
+  LOG_PRINT(F("Message length "));
+  LOG_PRINTLN(length);
   LOG_PRINTLN(myTopic);
+  LOG_PRINTLN(myValue);
 
-  if (myValue.length()>=MQTT_MIN_MSG_SIZE) {
+  if (myValue.length()<=MQTT_JSON_MAX_LENGTH) {
     for (uint8_t i=0;i<m_callbackHandlerCount;i++) {
       if (m_callbackHandlers[i]->getTopics().indexOf(myTopic) != -1) {
-        
-        switch(myValue.charAt(0)) {
-          case MQTT_ID_BOOL:
-            m_callbackHandlers[i]->onMsgReceived(myTopic, (myValue.charAt(1)=='1'));
-            break;
-          case MQTT_ID_INTEGER:
-            m_callbackHandlers[i]->onMsgReceived(myTopic, (int)myValue.substring(1).toInt());
-            break;
-          case MQTT_ID_LONG:
-            m_callbackHandlers[i]->onMsgReceived(myTopic, myValue.substring(1).toInt());
-            break;
-          case MQTT_ID_DOUBLE:
-            m_callbackHandlers[i]->onMsgReceived(myTopic, (double)myValue.substring(1).toFloat());
-            break;
-          case MQTT_ID_STRING:
-            m_callbackHandlers[i]->onMsgReceived(myTopic, myValue.substring(1));
-            break;
-          case MQTT_ID_INVALID:
-            m_callbackHandlers[i]->onMsgReceived(myTopic);
-            break;
+
+        DeserializationError error = deserializeJson(m_doc, myValue);
+        if (!error) {
+          serializeJsonPretty(m_doc, Serial);
+          
+          if (m_doc.containsKey(MQTT_SINGLE_VALUE_ATTR)) {
+            if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<int>()) {
+              LOG_PRINTLN(F("int"));
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<int>());
+            } else if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<signed long>()) {
+              LOG_PRINTLN(F("long"));
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<signed long>());
+            } else if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<double>()) {
+              LOG_PRINTLN(F("double"));
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<double>());
+            } else if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<bool>()) {
+              LOG_PRINTLN(F("bool"));
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<bool>());
+            } else {
+              LOG_PRINTLN(F("string"));
+              m_callbackHandlers[i]->onMsgReceived(myTopic, String(m_doc[MQTT_SINGLE_VALUE_ATTR].as<const char*>()));
+            }
+          } else {
+            LOG_PRINTLN(F("missing value attribute"));
+          }
+        } else {
+          LOG_PRINT(F("Message parse error "));
+          LOG_PRINTLN(error.f_str());
         }
       }
     }
+  } else {
+    LOG_PRINT(F("Message too big "));
+    LOG_PRINTLN(myValue.length());
   }
 }

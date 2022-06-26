@@ -12,6 +12,7 @@ class DeviceDiscoveryMessage : public MessageBase
     Q_OBJECT
 public:
     explicit DeviceDiscoveryMessage(QString deviceId, QString serviceId, QObject *parent = nullptr);
+    explicit DeviceDiscoveryMessage(QString deviceId, QString serviceId, QVariantMap deviceInfos, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
@@ -25,9 +26,12 @@ public:
 
     QString serviceId();
 
+    QVariantMap deviceInfos();
+
 protected:
     QString m_deviceId;
     QString m_serviceId;
+    QVariantMap m_deviceInfos;
 
 signals:
 

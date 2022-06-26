@@ -9,6 +9,6 @@
 
 #define DEFAULT_DD_ONLINE_CHECK_TIMEOUT 30000
 
-#define DEVICE_FULLID_SEP "."
+#define DEVICE_FULLID_SEP "-"
 
 #endif // DEVICE_H

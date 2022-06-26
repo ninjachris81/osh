@@ -17,27 +17,17 @@ class MqttCommunicationManagerBase : public CommunicationManagerBase
 {
     Q_OBJECT
 public:
-    enum ParsingType {
-        NONE,
-        COMPACT,
-        JSON,
-        TEXT_UTF8
-    };
-
     struct MessageTypeInfo {
         bool isRetained;
-        ParsingType parsingType;
         QString mqttTypePath;
         quint8 mqttPathLevels;
     };
 
     explicit MqttCommunicationManagerBase(QObject *parent = nullptr);
 
-    void registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, ParsingType parsingType, QString mqttTypePath, quint8 mqttPathLevels);
+    void registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels);
 
     MessageBase* getMessage(QStringList levels, QByteArray payload);
-
-    QVariant parsePayload(MessageBase::MESSAGE_TYPE messageType, QByteArray payload);
 
     QByteArray serializePayload(MessageBase &message);
 
@@ -55,9 +45,12 @@ public:
 private:
     bool m_hasCustomChannels = false;
     QStringList m_customChannels;
-    QVariant parseCompactPayload(char typeId, QByteArray payload);
-    QJsonDocument parseJSONPayload(QByteArray payload);
-    QByteArray serializeCompactValue(QVariant value);
+    //QVariant parseCompactPayload(char typeId, QByteArray payload);
+    QVariantMap parseJSONPayload(QByteArray payload);
+    QVariant parseSingleValue(QVariantMap value);
+    //QByteArray serializeCompactValue(QVariant value);
+    QByteArray serializeJSONValue(QVariantMap mapData);
+    QByteArray serializeSingleJSONValue(QVariant value);
 
 protected:
     QMap<MessageBase::MESSAGE_TYPE, MessageTypeInfo> m_messageTypes;

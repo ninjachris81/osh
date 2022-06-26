@@ -8,6 +8,7 @@
 #define LED_FREQUENCY_OK 0
 #define LED_FREQUENCY_INIT 1000
 #define LED_FREQUENCY_RECONNECT 500
+#define LED_FREQUENCY_MOTION 100
 
 class LEDController : public AbstractIntervalTask {
 public:

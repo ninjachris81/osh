@@ -32,6 +32,7 @@ void ModelProcessorManager::init(LocalConfig* config) {
     REQUIRE_MANAGER(CommunicationManagerBase);
 
     m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
+    m_valueManager = getManager<ServerValueManager>(ServerValueManager::MANAGER_ID);
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
 
@@ -41,7 +42,7 @@ void ModelProcessorManager::init(LocalConfig* config) {
 void ModelProcessorManager::postInit() {
     iDebug() << Q_FUNC_INFO;
 
-    registerScript(new CommonScripts(&m_engine, m_dmManager->datamodel(), &m_localStorage));
+    registerScript(new CommonScripts(&m_engine, m_dmManager->datamodel(), &m_localStorage, m_valueManager));
 
     m_processorTasks = m_dmManager->datamodel()->processorTasks();
 

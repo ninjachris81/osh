@@ -1,0 +1,5 @@
+apt-get install mosquitto
+
+sudo echo '\rbind_address 0.0.0.0\rallow_anonymous true' >> /etc/mosquitto/mosquitto.conf 
+
+service mosquitto restart

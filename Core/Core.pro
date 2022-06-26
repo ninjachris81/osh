@@ -26,10 +26,13 @@ DEFINES += IS_OSH_CORE_SERVICE
 
 SOURCES += \
         actor/actorbase.cpp \
+        actor/actorconfig.cpp \
+        actor/actorconfigmessage.cpp \
         actor/actormessage.cpp \
         actor/audioplaybackactor.cpp \
         actor/client/clientactormanager.cpp \
         actor/digitalactor.cpp \
+        actor/shutteractor.cpp \
         communication/communicationmanagerbase.cpp \
         controller/audiocontrollerbase.cpp \
         controller/controllermanager.cpp \
@@ -55,6 +58,7 @@ SOURCES += \
         time/systemtimemessage.cpp \
         value/client/clientvaluemanager.cpp \
         value/longvalue.cpp \
+        value/multivalue.cpp \
         value/redundantvalue.cpp \
         value/valuemanagerbase.cpp \
         value/valuemessage.cpp \
@@ -79,10 +83,13 @@ SOURCES += \
 
 HEADERS += \
         actor/actorbase.h \
+        actor/actorconfig.h \
+        actor/actorconfigmessage.h \
         actor/actormessage.h \
         actor/audioplaybackactor.h \
         actor/client/clientactormanager.h \
         actor/digitalactor.h \
+        actor/shutteractor.h \
         communication/communicationmanagerbase.h \
         controller/audiocontrollerbase.h \
         controller/controllermanager.h \
@@ -123,6 +130,7 @@ HEADERS += \
         time/systemtimemessage.h \
         value/client/clientvaluemanager.h \
         value/longvalue.h \
+        value/multivalue.h \
         value/redundantvalue.h \
         value/valuemanagerbase.h \
         value/valuemessage.h \

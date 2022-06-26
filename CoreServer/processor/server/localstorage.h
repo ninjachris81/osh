@@ -17,6 +17,8 @@ public:
 
     Q_INVOKABLE void set(QString key, QVariant value);
 
+    Q_INVOKABLE void unset(QString key);
+
 private:
     QMap<QString, QVariant> m_values;
 

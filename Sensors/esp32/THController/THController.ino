@@ -3,10 +3,11 @@
  */
 
 #include "ESPConfigurations.h"
-#include "MQTTController.h"
-#include "DeviceController.h"
 #include "FlashController.h"
+#include "DeviceController.h"
 #include "LEDController.h"
+#include "WifiController.h"
+#include "MQTTController.h"
 #include "OTAController.h"
 #include <LogHelper.h>
 #include "shared/device.h"
@@ -36,17 +37,18 @@
 
 TaskManager taskManager;
 
-MQTTController mqttController;
-DeviceController deviceController(DEVICE_ID_PREFIX, SERVICE_ID_PREFIX);
 FlashController flashController;
+DeviceController deviceController(DEVICE_ID_PREFIX, SERVICE_ID_PREFIX);
 LEDController ledController;
+WifiController wifiController;
+MQTTController mqttController;
 OTAController otaController;
 
 #if HAS_TEMP_CONTROLLER
   TempControllerAHTx tempController("temps", "hums");
 #endif
 #if HAS_MOTION_CONTROLLER
-  MotionController motionController("motions");
+  MotionController motionController("motions_pirs", "motions_radars");
 #endif
 #if HAS_BRIGHTNESS_CONTROLLER
   BrightnessControllerGL55x brightnessController("brightnesses");
@@ -58,7 +60,7 @@ OTAController otaController;
   FlowControllerReed flowController("waterflows");
 #endif
 #if HAS_RELAY_CONTROLLER
-  RelayControllerShutter relayController("shutters");
+  RelayControllerShutter relayController("shutters", "closeStates", "tiltStates");
 #endif
 #if HAS_REED_CONTROLLER
   ReedController reedController("reedContacts");
@@ -67,10 +69,13 @@ OTAController otaController;
 void setup() {
   LOG_INIT();
 
-  taskManager.registerTask(&mqttController, MQTT_CONTROLLER);
-  taskManager.registerTask(&deviceController, DEVICE_CONTROLLER);
+  taskManager.setDebugOutput(&Serial);
+
   taskManager.registerTask(&flashController, FLASH_CONTROLLER);
+  taskManager.registerTask(&deviceController, DEVICE_CONTROLLER);
   taskManager.registerTask(&ledController, LED_CONTROLLER);
+  taskManager.registerTask(&wifiController, WIFI_CONTROLLER);
+  taskManager.registerTask(&mqttController, MQTT_CONTROLLER);
   taskManager.registerTask(&otaController, OTA_CONTROLLER);
   
 #if HAS_TEMP_CONTROLLER
@@ -96,9 +101,6 @@ void setup() {
 #endif
 
   taskManager.init();
-
-  otaController.postInit(String(deviceController.getDeviceId()) + String(DEVICE_FULLID_SEP) + String(deviceController.getServiceId()));
-  mqttController.setClientId(String(deviceController.getDeviceId()) + String(DEVICE_FULLID_SEP) + String(deviceController.getServiceId()));
 }
 
 void loop() {

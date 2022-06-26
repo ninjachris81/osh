@@ -16,7 +16,7 @@ void DeviceController::init() {
 }
 
 void DeviceController::update() {
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publish(BUILD_PATH(MQTT_MESSAGE_TYPE_DD + String(MQTT_PATH_SEP) + getDeviceId() + String(MQTT_PATH_SEP) + getServiceId()));
+  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publishSingleValue(BUILD_PATH(MQTT_MESSAGE_TYPE_DD + String(MQTT_PATH_SEP) + getDeviceId() + String(MQTT_PATH_SEP) + getServiceId()), (long) millis());
 }
 
 String DeviceController::getDeviceId() {

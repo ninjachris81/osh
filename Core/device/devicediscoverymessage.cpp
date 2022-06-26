@@ -1,7 +1,15 @@
 #include "devicediscoverymessage.h"
 #include "shared/device.h"
+#include "shared/mqtt_qt.h"
+
+#include <QDateTime>
 
 DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId)
+{
+    m_deviceInfos.insert(MQTT_SINGLE_VALUE_ATTR, QDateTime::currentMSecsSinceEpoch());
+}
+
+DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, QVariantMap deviceInfos, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId), m_deviceInfos(deviceInfos)
 {
 
 }
@@ -28,4 +36,8 @@ QString DeviceDiscoveryMessage::getFirstLevelId() {
 
 QString DeviceDiscoveryMessage::getSecondLevelId() {
     return m_serviceId;
+}
+
+QVariantMap DeviceDiscoveryMessage::deviceInfos() {
+    return m_deviceInfos;
 }

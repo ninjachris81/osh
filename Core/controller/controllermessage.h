@@ -15,7 +15,7 @@ class ControllerMessage : public MessageBase
 public:
     CONTROLLER_CMD_TYPE m_cmdType = CCT_UNKNOWN;
 
-    explicit ControllerMessage(QString controllerId, QVariant data, QObject *parent = nullptr);
+    explicit ControllerMessage(QString controllerId, QVariantMap data, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
@@ -25,13 +25,13 @@ public:
 
     QString controllerId();
 
-    QVariant data();
+    QVariantMap data();
 
     CONTROLLER_CMD_TYPE cmdType();
 
 protected:
     QString m_controllerId;
-    QVariant m_data;
+    QVariantMap m_data;
 
 signals:
 

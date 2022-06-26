@@ -2,10 +2,10 @@
 
 #include <QDebug>
 
-ControllerMessage::ControllerMessage(QString controllerId, QVariant data, QObject *parent) : MessageBase(parent), m_controllerId(controllerId), m_data(data)
+ControllerMessage::ControllerMessage(QString controllerId, QVariantMap data, QObject *parent) : MessageBase(parent), m_controllerId(controllerId), m_data(data)
 {
-    if (m_data.toMap().contains(CONTROLLER_TYPE_ATTR)) {
-        m_cmdType = static_cast<CONTROLLER_CMD_TYPE>(m_data.toMap().value(CONTROLLER_TYPE_ATTR).toInt());
+    if (m_data.contains(CONTROLLER_TYPE_ATTR)) {
+        m_cmdType = static_cast<CONTROLLER_CMD_TYPE>(m_data.value(CONTROLLER_TYPE_ATTR).toInt());
     } else {
         qWarning() << "Invalid controller data" << m_data;
     }
@@ -27,7 +27,7 @@ QString ControllerMessage::controllerId() {
     return m_controllerId;
 }
 
-QVariant ControllerMessage::data() {
+QVariantMap ControllerMessage::data() {
     return m_data;
 }
 

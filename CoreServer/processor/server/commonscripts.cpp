@@ -2,7 +2,13 @@
 
 #include <QDateTime>
 
-CommonScripts::CommonScripts(QJSEngine *engine, DatamodelBase *datamodel, LocalStorage *localStorage, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine), m_datamodel(datamodel), m_localStorage(localStorage)
+QLatin1String CommonScripts::INTERVAL_OFF_DURATIONS = QLatin1String("interval_off_durations_");
+QLatin1String CommonScripts::INTERVAL_ON_DURATIONS = QLatin1String("interval_on_durations_");
+QLatin1String CommonScripts::INTERVAL_LAST_CHANGES = QLatin1String("interval_lastChanges_");
+QLatin1String CommonScripts::INTERVAL_STATES = QLatin1String("interval_states_");
+
+
+CommonScripts::CommonScripts(QJSEngine *engine, DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager)
 {
 
 }
@@ -164,4 +170,152 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
         iWarning() << "Invalid parameters" << lightActorFullId << inputSensorFullId;
         return false;
     }
+}
+
+bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFullId, QString tempValveActorFullId, int adjustIntervalMs, double fullDeltaThresholdTemp, int factorIntervalMs) {
+    if (m_datamodel->actors().contains(tempValveActorFullId)) {
+        QString valveKey = "temp_valve_" + tempValveActorFullId;
+        QString lastAdjustKey = "temp_valve_last_adj_" + tempValveActorFullId;
+        qlonglong lastAdjustMs = m_localStorage->get(lastAdjustKey, 0).toULongLong();
+        ActorBase* tempValve = m_datamodel->actors().value(tempValveActorFullId);
+
+        if (lastAdjustMs == 0 || QDateTime::currentMSecsSinceEpoch() - lastAdjustMs > adjustIntervalMs) {
+            if (m_datamodel->values().contains(tempFullId) && m_datamodel->values().contains(tempTargetFullId)) {
+                ValueBase* temp = m_datamodel->values().value(tempFullId);
+                ValueBase* targetTemp = m_datamodel->values().value(tempTargetFullId);
+
+                if (temp->isValid() && targetTemp->isValid()) {
+                    double deltaTemp = targetTemp->rawValue().toDouble() - temp->rawValue().toDouble();
+
+                    // positive delta: open valve
+                    if (deltaTemp > 0) {
+                        if (deltaTemp > fullDeltaThresholdTemp) {
+                            // always on, delta is too big
+                            if (!tempValve->rawValue().toBool()) {
+                                tempValve->triggerCmd(ACTOR_CMD_ON, "Always on");
+                            }
+                        } else {
+                            qlonglong offMs;
+                            qlonglong onMs;
+
+                            offMs = fullDeltaThresholdTemp - deltaTemp;
+                            onMs = fullDeltaThresholdTemp - offMs;
+
+                            setupInterval(valveKey, offMs * factorIntervalMs, onMs * factorIntervalMs, false);
+                        }
+                    } else {
+                        clearInterval(valveKey);
+                    }
+
+                    m_localStorage->set(lastAdjustKey, QDateTime::currentMSecsSinceEpoch());
+                    return true;
+                } else {
+                    clearInterval(valveKey);
+                    return false;
+                }
+            } else {
+                iWarning() << "Invalid parameters" << tempFullId << tempTargetFullId;
+                clearInterval(valveKey);
+                return false;
+            }
+
+            // ok, adjust
+            m_localStorage->set(lastAdjustKey, QDateTime::currentMSecsSinceEpoch());
+        } else {
+            // check interval
+            bool targetValveState = getIntervalState(valveKey);
+
+            if (tempValve->rawValue().toBool() != targetValveState) {
+                tempValve->triggerCmd(targetValveState ? ACTOR_CMD_ON : ACTOR_CMD_OFF, "Interval timeout");
+            }
+
+            return true;
+        }
+    } else {
+        iWarning() << "Invalid parameters" << tempValveActorFullId;
+        return false;
+    }
+}
+
+bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QString motionFullId) {
+    ValueBase* radarVal = m_datamodel->values().value(radarFullId);
+    ValueBase* pirVal = m_datamodel->values().value(pirFullId);
+    ValueBase* motionVal = m_datamodel->values().value(motionFullId);
+
+    if (radarVal->isValid() && radarVal->rawValue().toBool()) {
+        if (motionVal->updateValue(true)) {
+            publishValue(motionVal, true);
+        }
+    } else if (pirVal->isValid() && pirVal->rawValue().toBool()) {
+        if (motionVal->updateValue(true)) {
+            publishValue(motionVal, true);
+        }
+    } else {
+        if (motionVal->updateValue(false)) {
+            publishValue(motionVal, false);
+        }
+    }
+    return true;
+}
+
+void CommonScripts::publishValue(QString fullId, QVariant value) {
+    ValueBase* val = m_datamodel->values().value(fullId);
+    publishValue(val, value);
+}
+
+void CommonScripts::publishValue(ValueBase* val, QVariant value) {
+    val->updateValue(value);
+    m_valueManager->publishValue(val);
+}
+
+
+void CommonScripts::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {
+    if (durationOffMs > 0 && durationOnMs > 0) {
+        iDebug() << "Setup interval" << key << durationOffMs << durationOnMs << resetState;
+
+        m_localStorage->set(INTERVAL_OFF_DURATIONS + key, durationOffMs);
+        m_localStorage->set(INTERVAL_ON_DURATIONS + key, durationOnMs);
+        if (resetState) {
+            m_localStorage->set(INTERVAL_LAST_CHANGES + key, 0);
+            m_localStorage->set(INTERVAL_STATES + key, false);
+        }
+    } else {
+        iWarning() << "Invalid parameters" << durationOffMs << durationOnMs;
+    }
+}
+
+bool CommonScripts::getIntervalState(QString key) {
+    qulonglong durationOffMs = m_localStorage->get(INTERVAL_OFF_DURATIONS + key, 0).toULongLong();
+    qulonglong durationOnMs = m_localStorage->get(INTERVAL_ON_DURATIONS + key, 0).toULongLong();
+    qulonglong lastChangeMs = m_localStorage->get(INTERVAL_LAST_CHANGES + key, 0).toULongLong();
+    bool state = m_localStorage->get(INTERVAL_STATES + key, false).toBool();
+
+    if (state) {
+        // check if we have to switch off
+        if (QDateTime::currentMSecsSinceEpoch() - lastChangeMs >= durationOnMs) {
+            // ok, switch off
+            m_localStorage->set(INTERVAL_STATES + key, false);
+            state = false;
+            m_localStorage->set(INTERVAL_LAST_CHANGES + key, QDateTime::currentMSecsSinceEpoch());
+            iDebug() << "Interval switching to" << key << state;
+        }
+    } else {
+        // check if we have to switch on
+        if (QDateTime::currentMSecsSinceEpoch() - lastChangeMs >= durationOffMs) {
+            // ok, switch on
+            m_localStorage->set(INTERVAL_STATES + key, true);
+            state = true;
+            m_localStorage->set(INTERVAL_LAST_CHANGES + key, QDateTime::currentMSecsSinceEpoch());
+            iDebug() << "Interval switching to" << key << state;
+        }
+    }
+
+    return state;
+}
+
+void CommonScripts::clearInterval(QString key) {
+    m_localStorage->unset(INTERVAL_OFF_DURATIONS + key);
+    m_localStorage->unset(INTERVAL_ON_DURATIONS + key);
+    m_localStorage->unset(INTERVAL_LAST_CHANGES + key);
+    m_localStorage->unset(INTERVAL_STATES + key);
 }

@@ -11,6 +11,7 @@ class ValueMessage : public MessageBase
     Q_OBJECT
 public:
     explicit ValueMessage(QString valueGroupId, QString valueId, QVariant rawValue, QObject *parent = nullptr);
+    explicit ValueMessage(QString valueGroupId, QString valueId, QVariantMap value, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType() override;
 

@@ -9,6 +9,7 @@
 #include "time/systemtimemessage.h"
 #include "warn/systemwarningmessage.h"
 #include "actor/actormessage.h"
+#include "actor/actorconfigmessage.h"
 #include "controller/controllermessage.h"
 #include "controller/controllermanager.h"
 #include "log/logmessage.h"
@@ -22,25 +23,25 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     connect(this, &MqttCommunicationManagerBase::mqttConnected, this, &CommunicationManagerBase::connected);
     connect(this, &MqttCommunicationManagerBase::mqttDisconnected, this, &CommunicationManagerBase::disconnected);
 
-    registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, COMPACT, MQTT_MESSAGE_TYPE_VA, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, true, COMPACT, MQTT_MESSAGE_TYPE_AC, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, NONE, MQTT_MESSAGE_TYPE_DD, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, COMPACT, MQTT_MESSAGE_TYPE_ST, 0);
-    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, COMPACT, MQTT_MESSAGE_TYPE_SW, 1);
-    registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, JSON, MQTT_MESSAGE_TYPE_CO, 1);
-    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, TEXT_UTF8, MQTT_MESSAGE_TYPE_LO, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, COMPACT, MQTT_MESSAGE_TYPE_SR, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, true, MQTT_MESSAGE_TYPE_AC, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_ACCO, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, MQTT_MESSAGE_TYPE_CO, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, MQTT_MESSAGE_TYPE_SR, 1);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
     iDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
     Q_ASSERT(e.keyCount()-1 == m_messageTypes.count());        // -1 because of UNKNOWN
 }
 
-void MqttCommunicationManagerBase::registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, ParsingType parsingType, QString mqttTypePath, quint8 mqttPathLevels) {
+void MqttCommunicationManagerBase::registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels) {
     MessageTypeInfo info;
 
     info.isRetained = isRetained;
-    info.parsingType = parsingType;
     info.mqttTypePath = mqttTypePath;
     info.mqttPathLevels = mqttPathLevels;
 
@@ -56,34 +57,37 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
     MessageTypeInfo info = m_messageTypes.value(messageType);
 
     if (info.mqttPathLevels == firstLevelPath.size()) {
-        QVariant rawValue = parsePayload(messageType, payload);
+        QVariantMap value = parseJSONPayload(payload);
 
-        iDebug() << Q_FUNC_INFO << messageType << rawValue << firstLevelPath;
+        iDebug() << Q_FUNC_INFO << messageType << value << firstLevelPath;
 
         switch (messageType) {
         case MessageBase::MESSAGE_TYPE_VALUE: {
-            return new ValueMessage(firstLevelPath.first(), firstLevelPath.at(1), rawValue);
+            return new ValueMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         case MessageBase::MESSAGE_TYPE_ACTOR: {
-            return new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), static_cast<ACTOR_CMDS>(rawValue.toInt()));
+            return new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), static_cast<ACTOR_CMDS>(parseSingleValue(value).toInt()));
+        }
+        case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
+            //return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), rawValue);
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
-            return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1));
+            return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
-            return new SystemtimeMessage(rawValue.toLongLong());
+            return new SystemtimeMessage(parseSingleValue(value).toLongLong());
         }
         case MessageBase::MESSAGE_TYPE_SYSTEM_WARNING: {
-            return new SystemWarningMessage(firstLevelPath.first(), rawValue.toString());
+            return new SystemWarningMessage(firstLevelPath.first(), parseSingleValue(value).toString());
         }
         case MessageBase::MESSAGE_TYPE_CONTROLLER: {
-            return new ControllerMessage(firstLevelPath.first(), rawValue);
+            return new ControllerMessage(firstLevelPath.first(), value);
         }
         case MessageBase::MESSAGE_TYPE_LOG: {
-            return new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), rawValue.toString());
+            return new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), parseSingleValue(value).toString());
         }
         case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
-            return new ScriptResultMessage(firstLevelPath.first(), rawValue);
+            return new ScriptResultMessage(firstLevelPath.first(), value);
         }
         default:
             iWarning() << "Unknown message type" << levels;
@@ -138,34 +142,7 @@ void MqttCommunicationManagerBase::onMqttDisconnected() {
 
 }
 
-QVariant MqttCommunicationManagerBase::parsePayload(MessageBase::MESSAGE_TYPE messageType, QByteArray payload) {
-    MessageTypeInfo info = m_messageTypes.value(messageType);
-
-    switch(info.parsingType) {
-    case NONE:
-        return QVariant();
-    case COMPACT:
-        if (payload.count()>=MQTT_MIN_MSG_SIZE) {
-            return parseCompactPayload(payload.at(0), payload.mid(1));
-        } else {
-            iWarning() << "Invalid compact msg size" << payload.size();
-            return QVariant();
-        }
-    case JSON:
-        if (!payload.isEmpty()) {
-            return parseJSONPayload(payload);
-        } else {
-            return QVariant();
-        }
-    case TEXT_UTF8:
-        return QString::fromUtf8(payload);
-    default:
-        iWarning() << "Unknown parsing type" << info.parsingType;
-    }
-
-    return QVariant();
-}
-
+/*
 QVariant MqttCommunicationManagerBase::parseCompactPayload(char typeId, QByteArray payload) {
     switch(typeId) {
     case MQTT_ID_DOUBLE:
@@ -185,9 +162,27 @@ QVariant MqttCommunicationManagerBase::parseCompactPayload(char typeId, QByteArr
         return QVariant();
     }
 }
+*/
 
-QJsonDocument MqttCommunicationManagerBase::parseJSONPayload(QByteArray payload) {
-    return QJsonDocument::fromJson(payload);
+QVariantMap MqttCommunicationManagerBase::parseJSONPayload(QByteArray payload) {
+    QJsonDocument doc = QJsonDocument::fromJson(payload);
+    if (doc.isEmpty() || doc.isNull()) {
+        // ok, empty
+    } else if (doc.isObject()) {
+        return doc.object().toVariantMap();
+    } else {
+        iWarning() << "Invalid payload" << payload;
+    }
+
+    return QVariantMap();
+}
+
+QVariant MqttCommunicationManagerBase::parseSingleValue(QVariantMap value) {
+    if (value.contains(MQTT_SINGLE_VALUE_ATTR)) {
+        return value.value(MQTT_SINGLE_VALUE_ATTR);
+    } else {
+        iWarning() << "value attribute missing";
+    }
 }
 
 QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) {
@@ -196,40 +191,53 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     switch(message.getMessageType()) {
     case MessageBase::MESSAGE_TYPE_VALUE: {
         ValueMessage* valueMessage = static_cast<ValueMessage*>(&message);
-        return serializeCompactValue(valueMessage->rawValue());
+        return serializeSingleJSONValue(valueMessage->rawValue());
     }
     case MessageBase::MESSAGE_TYPE_ACTOR: {
         ActorMessage* actorMessage = static_cast<ActorMessage*>(&message);
-        return serializeCompactValue(actorMessage->cmd());
+        return serializeSingleJSONValue(actorMessage->cmd());
     }
     case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
         SystemtimeMessage* systimeMessage = static_cast<SystemtimeMessage*>(&message);
-        return serializeCompactValue(systimeMessage->ts());
+        return serializeSingleJSONValue(systimeMessage->ts());
     }
     case MessageBase::MESSAGE_TYPE_SYSTEM_WARNING: {
         SystemWarningMessage* syswarnMessage = static_cast<SystemWarningMessage*>(&message);
-        return serializeCompactValue(syswarnMessage->msg());
+        return serializeSingleJSONValue(syswarnMessage->msg());
     }
-    case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY:
-        // TODO
-        return QByteArray();
+    case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
+        DeviceDiscoveryMessage* ddMessage = static_cast<DeviceDiscoveryMessage*>(&message);
+        return serializeJSONValue(ddMessage->deviceInfos());
+    }
     case MessageBase::MESSAGE_TYPE_CONTROLLER: {
         ControllerMessage* controllerMessage = static_cast<ControllerMessage*>(&message);
-        return QJsonDocument::fromVariant(controllerMessage->data()).toJson();
+        return serializeSingleJSONValue(controllerMessage->data());
     }
     case MessageBase::MESSAGE_TYPE_LOG: {
         LogMessage* logMessage = static_cast<LogMessage*>(&message);
-        return logMessage->message().toUtf8();
+        return serializeSingleJSONValue(logMessage->message().toUtf8());
     }
     case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
         ScriptResultMessage* scriptResultMessage = static_cast<ScriptResultMessage*>(&message);
-        return serializeCompactValue(scriptResultMessage->value());
+        return serializeSingleJSONValue(scriptResultMessage->value());
     }
     default:
         iWarning() << "Unknown message type" << message.getMessageType();
     }
 }
 
+QByteArray MqttCommunicationManagerBase::serializeJSONValue(QVariantMap mapData) {
+    return QJsonDocument::fromVariant(mapData).toJson();
+}
+
+
+QByteArray MqttCommunicationManagerBase::serializeSingleJSONValue(QVariant value) {
+    QVariantMap mapData;
+    mapData.insert(MQTT_SINGLE_VALUE_ATTR, value);
+    return QJsonDocument::fromVariant(mapData).toJson();
+}
+
+/*
 QByteArray MqttCommunicationManagerBase::serializeCompactValue(QVariant value) {
     iDebug() << Q_FUNC_INFO << value;
 
@@ -262,6 +270,7 @@ QByteArray MqttCommunicationManagerBase::serializeCompactValue(QVariant value) {
     iDebug() << "Payload" << returnData;
     return returnData;
 }
+*/
 
 QStringList MqttCommunicationManagerBase::getTopicName(MessageBase &message) {
     QStringList path;

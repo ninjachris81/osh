@@ -17,3 +17,7 @@ QVariant LocalStorage::get(QString key, QVariant defaultValue) {
 void LocalStorage::set(QString key, QVariant value) {
     m_values.insert(key, value);
 }
+
+void LocalStorage::unset(QString key) {
+    m_values.remove(key);
+}

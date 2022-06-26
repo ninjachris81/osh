@@ -61,29 +61,17 @@ void ValueBase::setValueGroup(ValueGroup* valueGroup) {
     m_valueGroup = valueGroup;
 }
 
-void ValueBase::setRawValue(QVariant value) {
-    switch(value.type()) {
-    case QVariant::Int:
-    case QVariant::Double:
-    case QVariant::Bool:
-    case QVariant::String:
-
-        break;
-    default:
-        iWarning() << "Unsupported data type" << value.typeName();
-        break;
-    }
-}
-
-void ValueBase::updateValue(QVariant newValue) {
+bool ValueBase::updateValue(QVariant newValue) {
     iDebug() << Q_FUNC_INFO << newValue;
 
     m_currentSignalCount++;
 
+    bool isDifferent = m_value != newValue;
     m_value = _updateValue(newValue);
-    bool hasChanged = m_value == newValue;
+    //bool newValueApplied = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
-    if (m_alwaysEmit || hasChanged) Q_EMIT(valueChanged());
+    if (m_alwaysEmit || isDifferent) Q_EMIT(valueChanged());
+    return isDifferent;
 }
 
 QString ValueBase::getFullId(QString valueGroupId, QString valueId) {

@@ -1,0 +1,6 @@
+/etc/grafana/grafana.ini -> modify:
+
+[auth.anynomous]
+enabled = true
+
+org_role = Viewer

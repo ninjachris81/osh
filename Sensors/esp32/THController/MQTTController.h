@@ -7,6 +7,7 @@
 
 #include "shared/mqtt.h"
 #include "ESPConfigurations.h"
+#include <ArduinoJson.h>
 
 #define BUILD_PATH(subpath) MQTT_BASE_PATH + String(MQTT_PATH_SEP) + subpath
 
@@ -41,12 +42,14 @@ public:
 
   void update();
 
-  void publish(String path, bool value);
-  void publish(String path, int value);
-  void publish(String path, long value);
-  void publish(String path, double value);
-  void publish(String path, String value);
-  void publish(String path);
+  void publishSingleValue(String path, bool value);
+  void publishSingleValue(String path, int value);
+  void publishSingleValue(String path, long value);
+  void publishSingleValue(String path, double value);
+  void publishSingleValue(String path, String value);
+  JsonObject newObject();
+  void publishObject(String path);
+  void publishNull(String path);
 
   void registerHandler(MQTTEventCallbackHandler* handler);
 
@@ -58,6 +61,8 @@ private:
   PubSubClient client;
   static MQTTController* m_instance;
   String m_clientId;
+
+  StaticJsonDocument<MQTT_JSON_MAX_LENGTH> m_doc;
 
   void reconnect();
   void subscribeTopics();

@@ -42,9 +42,7 @@ public:
 
     static QString getFullId(QString valueGroupId, QString valueId);
 
-    void setRawValue(QVariant value);
-
-    void updateValue(QVariant newValue);
+    bool updateValue(QVariant newValue);
 
     virtual QVariant _updateValue(QVariant newValue) = 0;
 

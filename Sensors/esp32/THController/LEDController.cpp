@@ -4,7 +4,7 @@
 #include "TaskManager.h"
 #include <LogHelper.h>
 
-LEDController::LEDController() : AbstractIntervalTask(500) {
+LEDController::LEDController() : AbstractIntervalTask(100) {
 }
 
 void LEDController::init() {

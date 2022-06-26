@@ -15,4 +15,11 @@
 #define ACTOR_STOP  6
 #define ACTOR_PAUSE 7
 
+// specific ones
+#define ACTOR_SHUTTER_HALF_CLOSE        40      // half, but closed
+#define ACTOR_SHUTTER_HALF_OPEN         41      // half, but shutters open (see-thru)
+#define ACTOR_SHUTTER_FULL_OPEN         42      // full closed & shutters open (see-thru)
+#define ACTOR_SHUTTER_TURN_OPEN         43
+#define ACTOR_SHUTTER_TURN_CLOSE        44
+
 #endif // ACTOR_H

@@ -51,6 +51,28 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     return actor;
 }
 
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType);
+    actor->withValueTimeout(timeout);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    ShutterActor* actor = addShutterActor(valueGroupState, id, valueType, timeout);
+    IntegerValue *closeState = addIntegerValue(valueGroupCloseState, id, VALUE_TYPE::VT_SHUTTER_CLOSE_STATE, ValueBase::VALUE_TIMEOUT::VT_MID);
+    actor->setCloseState(closeState);
+    return actor;
+}
+
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, ValueGroup* valueGroupTiltState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    ShutterActor* actor = addShutterActor(valueGroupState, valueGroupCloseState, id, valueType, timeout);
+    IntegerValue *tiltState = addIntegerValue(valueGroupTiltState, id, VALUE_TYPE::VT_SHUTTER_TILT_STATE, ValueBase::VALUE_TIMEOUT::VT_MID);
+    actor->setTiltState(tiltState);
+    return actor;
+}
+
 BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
     BooleanValue* value = new BooleanValue(valueGroup, id, valueType);
     value->withValueTimeout(timeout);
