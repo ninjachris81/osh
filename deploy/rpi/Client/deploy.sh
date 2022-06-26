@@ -52,7 +52,7 @@ case $RPI_MODEL in
       ;;
 esac
 
-OSH_ROOT="$(dirname "$(cd .. && pwd)")"
+OSH_ROOT="$(dirname "$(cd ../.. && pwd)")"
 BUILD_TARGET="Unknown"
 
 case "$1" in
