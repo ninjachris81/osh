@@ -107,6 +107,7 @@ case "$1" in
       printInfos
       buildQtMqtt
       buildOSHLib "Core"
+      buildOSHLib "CoreSerial"
       buildOSHLib "RS485RelayController"
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
