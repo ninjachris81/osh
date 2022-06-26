@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT      -= gui
-QT      += qml
+#QT      += qml
 
 TARGET = Core
 TEMPLATE = lib
