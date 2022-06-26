@@ -1,0 +1,24 @@
+[Unit]
+Description=OSH RS485 Relay Service
+## make sure we only start the service after network is up
+Wants=network-online.target
+After=network.target
+
+[Service]
+## use 'Type=forking' if the service backgrounds itself
+## other values are Type=simple (default) and Type=oneshot
+#Type=forking
+Type=simple
+
+WorkingDirectory=/etc/osh/RS485RelayService
+
+## here we can set custom environment variables
+ExecStart=/etc/osh/RS485RelayService/start.sh
+ExecStop=/etc/osh/RS485RelayService/stop.sh
+
+# Useful during debugging; remove it once the service is working
+StandardOutput=file:/var/log/osh/RS485RelayService.log
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
