@@ -10,6 +10,7 @@ class ShutterActor : public ActorBase
 {
     Q_OBJECT
 public:
+    explicit ShutterActor();
     explicit ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);

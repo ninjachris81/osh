@@ -5,7 +5,7 @@
 ControllerMessage::ControllerMessage(QString controllerId, QVariantMap data, QObject *parent) : MessageBase(parent), m_controllerId(controllerId), m_data(data)
 {
     if (m_data.contains(CONTROLLER_TYPE_ATTR)) {
-        m_cmdType = static_cast<CONTROLLER_CMD_TYPE>(m_data.value(CONTROLLER_TYPE_ATTR).toInt());
+        m_cmdType = static_cast<ControllerBase::CONTROLLER_CMD_TYPE>(m_data.value(CONTROLLER_TYPE_ATTR).toInt());
     } else {
         qWarning() << "Invalid controller data" << m_data;
     }
@@ -31,6 +31,6 @@ QVariantMap ControllerMessage::data() {
     return m_data;
 }
 
-CONTROLLER_CMD_TYPE ControllerMessage::cmdType() {
+ControllerBase::CONTROLLER_CMD_TYPE ControllerMessage::cmdType() {
     return m_cmdType;
 }

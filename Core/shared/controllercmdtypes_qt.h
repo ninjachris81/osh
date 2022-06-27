@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "controllercmdtypes.h"
 
+/*
 namespace controller {
 Q_NAMESPACE
 
@@ -18,6 +19,6 @@ Q_NAMESPACE
     };
 
     Q_ENUM_NS(CONTROLLER_CMD_TYPE)
-}
+}*/
 
 #endif // CONTROLLERCMDTYPES_QT_H

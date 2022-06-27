@@ -72,7 +72,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             //return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), rawValue);
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
-            return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), parseSingleValue(value).toULongLong());
         }
         case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
             return new SystemtimeMessage(parseSingleValue(value).toLongLong());
@@ -207,7 +207,7 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     }
     case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
         DeviceDiscoveryMessage* ddMessage = static_cast<DeviceDiscoveryMessage*>(&message);
-        return serializeJSONValue(ddMessage->deviceInfos());
+        return serializeSingleJSONValue(ddMessage->upTime());
     }
     case MessageBase::MESSAGE_TYPE_CONTROLLER: {
         ControllerMessage* controllerMessage = static_cast<ControllerMessage*>(&message);

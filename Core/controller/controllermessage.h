@@ -4,16 +4,16 @@
 #include <QObject>
 #include <QJsonDocument>
 
+#include "controller/controllerbase.h"
 #include "communication/messagebase.h"
 #include "shared/controllercmdtypes_qt.h"
-
-using namespace controller;
 
 class ControllerMessage : public MessageBase
 {
     Q_OBJECT
 public:
-    CONTROLLER_CMD_TYPE m_cmdType = CCT_UNKNOWN;
+
+    ControllerBase::CONTROLLER_CMD_TYPE m_cmdType = ControllerBase::CCT_UNKNOWN;
 
     explicit ControllerMessage(QString controllerId, QVariantMap data, QObject *parent = nullptr);
 
@@ -27,7 +27,7 @@ public:
 
     QVariantMap data();
 
-    CONTROLLER_CMD_TYPE cmdType();
+    ControllerBase::CONTROLLER_CMD_TYPE cmdType();
 
 protected:
     QString m_controllerId;

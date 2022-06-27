@@ -17,6 +17,13 @@ public:
 #define NO_ERROR_ERROR_ACTIVE   0
 #define NO_ERROR_NO_ERROR       1
 
+#define OPERATING_MODE_AUTO     0
+#define OPERATING_MODE_HEATING  1
+#define OPERATING_MODE_COOLING  2
+#define OPERATING_MODE_SUMMER   3
+#define OPERATING_MODE_STANDBY  4
+#define OPERATING_MODE_2WEZ     5
+
     enum WBB12_Input_Registers {
         OUTSIDE_TEMP_1 = 0,
         OUTSIDE_TEMP_2 = 1,
@@ -73,21 +80,13 @@ public:
         ENERGY_COOLING_YESTERDAY = 6401,
         ENERGY_COOLING_MONTH = 6402,
         ENERGY_COOLING_YEAR = 6403,
-
     };
-
-#define OPERATING_MODE_AUTO     0
-#define OPERATING_MODE_HEATING  1
-#define OPERATING_MODE_COOLING  2
-#define OPERATING_MODE_SUMMER   3
-#define OPERATING_MODE_STANDBY  4
-#define OPERATING_MODE_2WEZ     5
+    Q_ENUM(WBB12_Input_Registers)
 
     enum WBB12_Holdings {
         OPERATING_MODE = 0,
-
-        PUMP_
     };
+    Q_ENUM(WBB12_Holdings)
 
 
     explicit WBB12Controller(ControllerManager* manager, QString id, QObject *parent = nullptr);

@@ -26,6 +26,8 @@ QString DeviceDiscoveryManagerBase::id() {
 void DeviceDiscoveryManagerBase::init(LocalConfig *config) {
     iDebug() << Q_FUNC_INFO;
 
+    m_startedTime = QDateTime::currentMSecsSinceEpoch();
+
     REQUIRE_MANAGER(CommunicationManagerBase);
 
     m_device = new ClientDevice(Identifyable::getDeviceSerialId(config), m_serviceId);
@@ -58,6 +60,6 @@ void DeviceDiscoveryManagerBase::stopDDBroadcast() {
 void DeviceDiscoveryManagerBase::sendDDBroadcast() {
     iDebug() << Q_FUNC_INFO;
 
-    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId());
+    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId(), QDateTime::currentMSecsSinceEpoch() - m_startedTime);
     m_commManager->sendMessage(message);
 }
