@@ -5,9 +5,7 @@
 
 #include "controller/controllermanager.h"
 
-WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject *parent)
-    : ControllerBase(manager, id)
-{
+WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
     connect(&m_statusTimer, &QTimer::timeout, this, &WBB12Controller::retrieveStatus);
 }
 

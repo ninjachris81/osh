@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMap>
 #include <QTimer>
+#include <QDateTime>
 
 #include "device/client/clientdevice.h"
 #include "manager/managerbase.h"
@@ -30,6 +31,7 @@ private:
     QTimer m_ddTimer;
     ClientDevice* m_device = nullptr;
     CommunicationManagerBase* m_commManager;
+    qint64 m_startedTime;
 
 private slots:
     void startDDBroadcast();

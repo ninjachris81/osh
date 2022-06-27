@@ -4,14 +4,8 @@
 
 #include <QDateTime>
 
-DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId)
+DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, quint64 upTime, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId), m_upTime(upTime)
 {
-    m_deviceInfos.insert(MQTT_SINGLE_VALUE_ATTR, QDateTime::currentMSecsSinceEpoch());
-}
-
-DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, QVariantMap deviceInfos, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId), m_deviceInfos(deviceInfos)
-{
-
 }
 
 QString DeviceDiscoveryMessage::fullId() {
@@ -38,6 +32,6 @@ QString DeviceDiscoveryMessage::getSecondLevelId() {
     return m_serviceId;
 }
 
-QVariantMap DeviceDiscoveryMessage::deviceInfos() {
-    return m_deviceInfos;
+quint64 DeviceDiscoveryMessage::upTime() {
+    return m_upTime;
 }
