@@ -80,12 +80,13 @@ public:
         ENERGY_COOLING_YESTERDAY = 6401,
         ENERGY_COOLING_MONTH = 6402,
         ENERGY_COOLING_YEAR = 6403,
-
     };
+    Q_ENUM(WBB12_Input_Registers)
 
     enum WBB12_Holdings {
         OPERATING_MODE = 0,
     };
+    Q_ENUM(WBB12_Holdings)
 
 
     explicit WBB12Controller(ControllerManager* manager, QString id, QObject *parent = nullptr);

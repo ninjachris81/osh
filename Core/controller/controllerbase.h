@@ -5,18 +5,25 @@
 
 #include "identifyable.h"
 #include "config/localconfig.h"
-#include "controllermessage.h"
 #include "value/client/clientvaluemanager.h"
 #include "actor/actorbase.h"
+#include "shared/controllercmdtypes_qt.h"
 
 #include "macros.h"
 
 class ControllerManager;    // fwddcl
+class ControllerMessage;    // fwddcl
 
 class ControllerBase : public Identifyable
 {
     Q_OBJECT
 public:
+    enum CONTROLLER_CMD_TYPE {
+        CCT_UNKNOWN = ENUM_UNKNOWN,
+        CCT_ENABLE = CONTROLLER_CMD_TYPE_ENABLE,
+    };
+    Q_ENUM(CONTROLLER_CMD_TYPE)
+
     explicit ControllerBase(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
     void setConfig(LocalConfig* config);

@@ -15,7 +15,7 @@ class ConnectorItemBase : public QQuickItem
     Q_PROPERTY(QPointF p4 READ p4 WRITE setP4 NOTIFY p4Changed)
 
     Q_PROPERTY(int segmentCount READ segmentCount WRITE setSegmentCount NOTIFY segmentCountChanged)
-    QML_ELEMENT
+    //QML_ELEMENT
 
 public:
     ConnectorItemBase(QQuickItem *parent = 0);

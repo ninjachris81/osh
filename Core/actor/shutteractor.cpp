@@ -1,5 +1,8 @@
 #include "shutteractor.h"
 
+ShutterActor::ShutterActor() : ActorBase() {
+}
+
 ShutterActor::ShutterActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent)
     : ActorBase(valueGroup, id, valueType, parent)
 {

@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 
+#include "actor/actorbase.h"
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
 #include "device/server/serverdevicediscoverymanager.h"
@@ -15,11 +16,27 @@
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
 
+#include "value/longvalue.h"
+#include "value/stringvalue.h"
+#include "actor/audioplaybackactor.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
     qDebug() << Q_FUNC_INFO;
+
+    KnownDevice test2;
+    ValueGroup wgewerg;
+    ShutterActor tewrg;
+    IntegerValue w2t234t;
+    DoubleValue w23t234t;
+    LongValue wergwe2134;
+    StringValue et14;
+    AudioPlaybackActor wge234;
+    DigitalActor ewherth;
+    BooleanValue eehe3;
+
 
     //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nprocessor.*=true\ndatamodel.*=true"));
     //QLoggingCategory::setFilterRules(QStringLiteral("device.*=false"));
