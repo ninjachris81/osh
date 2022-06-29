@@ -35,6 +35,8 @@ void RS485RelayController::init() {
 void RS485RelayController::start() {
     iDebug() << Q_FUNC_INFO;
 
+    iInfo() << "Connecting on" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
+
     m_modbusClient.connectDevice();
 }
 
@@ -81,7 +83,7 @@ void RS485RelayController::onStateChanged() {
 }
 
 void RS485RelayController::onErrorOccurred() {
-    iDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO << m_modbusClient.errorString();
 
     m_warnManager->raiseWarning("Relay connection disconnected");
     m_statusTimer.stop();
