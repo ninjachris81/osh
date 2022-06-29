@@ -66,25 +66,55 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             return new ValueMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         case MessageBase::MESSAGE_TYPE_ACTOR: {
-            return new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), static_cast<ACTOR_CMDS>(parseSingleValue(value).toInt()));
+            QVariant actorVal = parseSingleValue(value);
+            if (actorVal.isValid() && actorVal.canConvert(QVariant::Int)) {
+                return new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), static_cast<ACTOR_CMDS>(actorVal.toInt()));
+            } else {
+                iWarning() << "Invalid payload value" << value;
+                return nullptr;
+            }
         }
         case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
             //return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), rawValue);
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
-            return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), parseSingleValue(value).toULongLong());
+            QVariant ddVal = parseSingleValue(value);
+            if (ddVal.isValid() && ddVal.canConvert(QVariant::ULongLong)) {
+                return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong());
+            } else {
+                iWarning() << "Invalid payload value" << value;
+                return nullptr;
+            }
         }
         case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
-            return new SystemtimeMessage(parseSingleValue(value).toLongLong());
+            QVariant timeVal = parseSingleValue(value);
+            if (timeVal.isValid() && timeVal.canConvert(QVariant::LongLong)) {
+                return new SystemtimeMessage(timeVal.toLongLong());
+            } else {
+                iWarning() << "Invalid payload value" << value;
+                return nullptr;
+            }
         }
         case MessageBase::MESSAGE_TYPE_SYSTEM_WARNING: {
-            return new SystemWarningMessage(firstLevelPath.first(), parseSingleValue(value).toString());
+            QVariant swVal = parseSingleValue(value);
+            if (swVal.isValid() && swVal.canConvert(QVariant::String)) {
+                return new SystemWarningMessage(firstLevelPath.first(), swVal.toString());
+            } else {
+                iWarning() << "Invalid payload value" << value;
+                return nullptr;
+            }
         }
         case MessageBase::MESSAGE_TYPE_CONTROLLER: {
             return new ControllerMessage(firstLevelPath.first(), value);
         }
         case MessageBase::MESSAGE_TYPE_LOG: {
-            return new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), parseSingleValue(value).toString());
+            QVariant logVal = parseSingleValue(value);
+            if (logVal.isValid() && logVal.canConvert(QVariant::String)) {
+                return new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), logVal.toString());
+            } else {
+                iWarning() << "Invalid payload value" << value;
+                return nullptr;
+            }
         }
         case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
             return new ScriptResultMessage(firstLevelPath.first(), value);
@@ -182,6 +212,7 @@ QVariant MqttCommunicationManagerBase::parseSingleValue(QVariantMap value) {
         return value.value(MQTT_SINGLE_VALUE_ATTR);
     } else {
         iWarning() << "value attribute missing";
+        return QVariant();
     }
 }
 
