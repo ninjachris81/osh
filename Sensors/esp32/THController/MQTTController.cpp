@@ -8,6 +8,7 @@
 #include "TaskIDs.h"
 #include "TaskManager.h"
 #include "shared/device.h"
+#include "FlashController.h"
 
 MQTTController* MQTTController::m_instance = NULL;
 
@@ -156,6 +157,10 @@ void MQTTController::publishObject(String path) {
   String output;
   serializeJson(m_doc, output);
   client.publish(path.c_str(), output.c_str());
+}
+
+void MQTTController::publishWarn(String msg) {
+  publishSingleValue(BUILD_PATH(MQTT_MESSAGE_TYPE_SW + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), msg);
 }
 
 void MQTTController::callback(char* topic, byte* payload, unsigned int length) {

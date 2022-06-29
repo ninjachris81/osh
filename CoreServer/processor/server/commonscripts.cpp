@@ -258,6 +258,39 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
     return true;
 }
 
+bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
+    ActorBase* shutterActor = m_datamodel->actors().value(shutterFullId);
+    ValueBase* motionVal = m_datamodel->values().value(motionFullId);
+
+    int from = ((hourFrom * 60) + minuteFrom) * 60 * 1000;
+    int to = ((hourTo * 60) + minuteTo) * 60 * 1000;
+
+    if (to < from) {
+        to += 24 * 60 * 60 * 1000;
+    }
+    bool isDownTime = QTime::currentTime().msecsSinceStartOfDay() > from && QTime::currentTime().msecsSinceStartOfDay() < to;
+
+    if (shutterActor->isValid() && motionVal->isValid()) {
+        if (isDownTime) {
+            // down: check is motion active
+            if (!motionVal->rawValue().toBool() && shutterActor->rawValue().toInt() != ACTOR_CMDS::ACTOR_CMD_DOWN) {
+                shutterActor->triggerCmd(ACTOR_CMDS::ACTOR_CMD_DOWN, "applyShutterLogic");
+            } else {
+                iDebug() << "Room still active - pausing shutter actions";
+            }
+        } else {
+            // up: just time-based
+            if (shutterActor->rawValue().toInt() != ACTOR_CMDS::ACTOR_CMD_UP) {
+                shutterActor->triggerCmd(ACTOR_CMDS::ACTOR_CMD_UP, "applyShutterLogic");
+            }
+        }
+        return true;
+    } else {
+        iWarning() << "Invalid parameters" << shutterFullId << motionFullId;
+        return false;
+    }
+}
+
 void CommonScripts::publishValue(QString fullId, QVariant value) {
     ValueBase* val = m_datamodel->values().value(fullId);
     publishValue(val, value);

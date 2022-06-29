@@ -23,6 +23,7 @@ void DatabaseManager::init(LocalConfig* config) {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(config->getString("database.name", "database.db"));
     if (m_db.open()) {
+        iInfo() << "Opened database" << m_db.databaseName();
         m_db.exec("CREATE TABLE IF NOT EXISTS " + SIMPLE_STORAGE_TABLE + " (id TEXT PRIMARY KEY, value BLOB)");
     } else {
         iWarning() << "Failed to open database" << m_db.databaseName() << m_db.lastError();

@@ -27,6 +27,8 @@ public:
 
     Q_INVOKABLE bool applyMotionLogic(QString radarFullId, QString pirFullId, QString motionFullId);
 
+    Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
+
     static QLatin1String INTERVAL_OFF_DURATIONS;
     static QLatin1String INTERVAL_ON_DURATIONS;
     static QLatin1String INTERVAL_LAST_CHANGES;
