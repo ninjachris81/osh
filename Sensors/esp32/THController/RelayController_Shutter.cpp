@@ -39,6 +39,8 @@ void RelayControllerShutter::update() {
   // check send bc
   if (millis() - m_lastSend > (VALUE_TIMEOUT_MID / 2)) {
     sendState();
+    sendCloseState();
+    sendTiltState();
   }
 
   if (m_initializing) {

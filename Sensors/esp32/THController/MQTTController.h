@@ -50,6 +50,7 @@ public:
   JsonObject newObject();
   void publishObject(String path);
   void publishNull(String path);
+  void publishWarn(String msg);  
 
   void registerHandler(MQTTEventCallbackHandler* handler);
 

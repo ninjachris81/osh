@@ -16,6 +16,7 @@
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
 
+//  not sure why this block is needed to compile in 5.12
 #include "value/longvalue.h"
 #include "value/stringvalue.h"
 #include "actor/audioplaybackactor.h"
@@ -26,16 +27,17 @@ int main(int argc, char *argv[])
 
     qDebug() << Q_FUNC_INFO;
 
-    KnownDevice test2;
-    ValueGroup wgewerg;
-    ShutterActor tewrg;
-    IntegerValue w2t234t;
-    DoubleValue w23t234t;
-    LongValue wergwe2134;
-    StringValue et14;
-    AudioPlaybackActor wge234;
-    DigitalActor ewherth;
-    BooleanValue eehe3;
+    //  not sure why this block is needed to compile in 5.12
+    KnownDevice test1;
+    ValueGroup test2;
+    ShutterActor test3;
+    IntegerValue test4;
+    DoubleValue test5;
+    LongValue test6;
+    StringValue test7;
+    AudioPlaybackActor test8;
+    DigitalActor test9;
+    BooleanValue test10;
 
 
     //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nprocessor.*=true\ndatamodel.*=true"));
