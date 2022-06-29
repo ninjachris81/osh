@@ -120,7 +120,7 @@ double ValueBase::signalRate() {
 void ValueBase::updateSignalRate() {
     if (m_value.isValid()) {
         m_signalCount++;
-        m_signalRate = 60 / qMax(m_signalCount * 10, 1) * m_currentSignalCount;
+        m_signalRate = 60 / qMax(m_signalCount * 10, 1) * qMax(m_currentSignalCount, (quint32)1);
         Q_EMIT(signalRateChanged());
 
         if (m_signalCount >= 6) {
