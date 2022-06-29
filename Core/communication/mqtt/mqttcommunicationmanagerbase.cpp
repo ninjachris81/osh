@@ -254,6 +254,7 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     }
     default:
         iWarning() << "Unknown message type" << message.getMessageType();
+        return nullptr;
     }
 }
 

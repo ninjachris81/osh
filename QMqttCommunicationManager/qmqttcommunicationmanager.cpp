@@ -79,6 +79,8 @@ void QMqttCommunicationManager::_onMqttMsgReceived(QMqttMessage message) {
     if (msg != nullptr) {
         handleReceivedMessage(msg);
         msg->deleteLater();
+    } else {
+        iWarning() << "Received invalid message";
     }
 }
 
