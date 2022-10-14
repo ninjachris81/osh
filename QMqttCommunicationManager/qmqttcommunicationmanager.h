@@ -25,6 +25,8 @@ private:
 
     QList<QMqttSubscription*> m_subscriptions;
 
+    quint16 m_reconnectTimeoutMs;
+
 protected:
     /*virtual*/ void _init(LocalConfig *config);
     /*virtual*/ bool _sendMessage(MessageBase &message);
@@ -34,6 +36,7 @@ protected:
     /*virtual*/ void subscribeControllerChannels(QStringList controllers);
 
 protected slots:
+    void _onTryConnect();
     void _onMqttError(QMqttClient::ClientError error);
     void _onMqttStateChanged(QMqttClient::ClientState state);
 

@@ -41,9 +41,10 @@ private:
     QTimer m_signalRateTimer;
 
 private slots:
-    void updateSignalRates();
+    void onUpdateSignalRates();
 
 signals:
+    void updateSignalRates();
 
 public slots:
 };

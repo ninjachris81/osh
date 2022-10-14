@@ -1,6 +1,7 @@
 #include "valuebase.h"
 
 #include "shared/constants.h"
+#include "value/valuemanagerbase.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -11,6 +12,8 @@ ValueBase::ValueBase() : SerializableIdentifyable() {
 ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id, parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
+
+    connect(this, &ValueBase::updateSignalRate, this, &ValueBase::onUpdateSignalRate);
 }
 
 void ValueBase::serialize(QJsonObject &obj) {
@@ -110,14 +113,16 @@ void ValueBase::invalidate() {
 
     m_value = QVariant();
     Q_EMIT(invalidated());
-    updateSignalRate();
+    onUpdateSignalRate();
 }
 
 double ValueBase::signalRate() {
     return m_signalRate;
 }
 
-void ValueBase::updateSignalRate() {
+void ValueBase::onUpdateSignalRate() {
+    iDebug() << Q_FUNC_INFO;
+
     if (m_value.isValid()) {
         m_signalCount++;
         m_signalRate = 60 / qMax(m_signalCount * 10, 1) * qMax(m_currentSignalCount, (quint32)1);
@@ -131,6 +136,10 @@ void ValueBase::updateSignalRate() {
         m_signalRate = 0;
         Q_EMIT(signalRateChanged());
     }
+}
+
+void ValueBase::connectManager(ValueManagerBase* manager) {
+    connect(manager, &ValueManagerBase::updateSignalRates, this, &ValueBase::onUpdateSignalRate);
 }
 
 VALUE_TYPE ValueBase::valueType() {

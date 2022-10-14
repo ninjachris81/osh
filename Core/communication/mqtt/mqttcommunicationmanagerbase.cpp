@@ -169,6 +169,8 @@ void MqttCommunicationManagerBase::onMqttConnected() {
 }
 
 void MqttCommunicationManagerBase::onMqttDisconnected() {
+    iWarning() << Q_FUNC_INFO;
+
 
 }
 

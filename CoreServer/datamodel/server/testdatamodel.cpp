@@ -327,8 +327,10 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     //addProcessorTask("eg.tempValve.kitchen", ProcessorTask::PTT_INTERVAL, "CommonScripts.applyTempValveLogic('temps.20', 'targetTemps.20', 'tempValves.20', 30000)", "", 1000);
 
 
+    /*
     addProcessorTask("eg.motion.feg", ProcessorTask::PTT_INTERVAL, "CommonScripts.applyMotionLogic('motions_radars.24', 'motions_pirs.24', 'motions.24')", "", 500);
     addProcessorTask("eg.egFloor.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('lightRelays.4', 'switches.24', 'motions.24', 'brightnesses.24', 20, 20000, 5000)");
+    */
 
     /*
     // basement
@@ -351,6 +353,27 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     addProcessorTask("og.sleepingRoom.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('ogRelays0.3', 'ogInputs0.4', 'motions.43', 'brightnesses.43', 30, 20000, 5000)");
     addProcessorTask("og.bathFloor.light", ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchMotionLogic('ogRelays0.4', 'ogInputs0.4', 'motions.44', 'brightnesses.44', 30, 20000, 5000)");
     */
+
+
+    // eg
+    addProcessorTask("eg.kitchen.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.0', 'switches.20', 3600000)");
+    /*
+    addProcessorTask("eg.diningRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.1', 'switches.21', 3600000)");
+    addProcessorTask("eg.toilet.light",         ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.2', 'switches.22', 3600000)");
+    addProcessorTask("eg.mainFloor.light",      ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.3', 'switches.23', 3600000)");
+    addProcessorTask("eg.egFloor.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.4', 'switches.24', 3600000)");
+    addProcessorTask("eg.workingRoom.light",    ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.5', 'switches.25', 3600000)");
+    addProcessorTask("eg.supplyRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.6', 'switches.26', 3600000)");
+
+    // og
+    addProcessorTask("og.ogFloor.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.15', 'switches.40', 3600000)");
+    addProcessorTask("og.clothingRoom.light",   ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.16', 'switches.41', 3600000)");
+    addProcessorTask("og.livingRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.17', 'switches.42', 3600000)");
+    addProcessorTask("og.sleepingRoom.light",   ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.18', 'switches.44', 3600000)");
+    addProcessorTask("og.bathFloor.light",      ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.19', 'switches.44', 3600000)");
+    */
+
+
 
     //addProcessorTask("egRelays0", "values_egRelays0_0.rawValue()");
     //addProcessorTask("egInputs0", "values_egInputs0_0.rawValue()");

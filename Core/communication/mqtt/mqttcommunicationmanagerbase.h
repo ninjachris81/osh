@@ -12,6 +12,7 @@
 
 #define MQTT_HOST "mqtt.host"
 #define MQTT_PORT "mqtt.port"
+#define MQTT_RECONNECT_TIMEOUT "mqtt.reconnectTimeout"
 
 class MqttCommunicationManagerBase : public CommunicationManagerBase
 {

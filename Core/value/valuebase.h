@@ -14,6 +14,8 @@
 using namespace unit;
 using namespace value;
 
+class ValueManagerBase;
+
 class ValueBase : public SerializableIdentifyable, public MetaInfoSupport
 {
 Q_OBJECT
@@ -72,7 +74,10 @@ public:
 
     double signalRate();
 
-    void updateSignalRate();
+    void connectManager(ValueManagerBase* manager);
+
+private slots:
+    void onUpdateSignalRate();
 
 private:
     VALUE_TYPE m_valueType;
@@ -92,6 +97,8 @@ signals:
     void valueChanged();
     void invalidated();
     void signalRateChanged();
+
+    void updateSignalRate();
 
 };
 

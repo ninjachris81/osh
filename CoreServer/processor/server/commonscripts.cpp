@@ -132,10 +132,10 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
         QString triggerReason;
 
         if (inputSensor->isValid()) {
-            QVariant lastValue = m_localStorage->get(lastValueInputKey);
+            QVariant lastValue = m_localStorage->get(lastValueInputKey, false);
             m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
 
-            if (lastValue.isValid() && inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
+            if (inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
                 // toggle off / on
                 inputTriggered = true;
                 iDebug() << "Input sensor triggered";
@@ -147,23 +147,24 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
                     m_localStorage->set(lastTsInputKey, 0);
                 }
             }
-        }
 
-        if (!inputTriggered) {
-            // check for timeout
-            quint64 lastContact = m_localStorage->get(lastTsInputKey, 0).toULongLong();
-            if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
-                expectedValue = true;
-            } else {
-                triggerReason = "Timeout";
-                expectedValue = false;
+            if (!inputTriggered) {
+                // check for timeout
+                quint64 lastContact = m_localStorage->get(lastTsInputKey, 0).toULongLong();
+                if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
+                    expectedValue = true;
+                } else {
+                    triggerReason = "Timeout";
+                    expectedValue = false;
+                }
+            }
+
+            // finally set the value
+            if (actualValue != expectedValue && expectedValue.isValid()) {
+                lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF, triggerReason);
             }
         }
 
-        // finally set the value
-        if (actualValue != expectedValue && expectedValue.isValid()) {
-            lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF, triggerReason);
-        }
 
         return true;
     } else {
