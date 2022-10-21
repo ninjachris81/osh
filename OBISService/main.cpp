@@ -1,15 +1,16 @@
 #include <QCoreApplication>
+#include <QLoggingCategory>
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "wbb12controller.h"
+#include "obiscontroller.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
 #include "actor/client/clientactormanager.h"
-#include "actor/digitalactor.h"
+#include "value/doublevalue.h"
 #include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
@@ -18,17 +19,19 @@ int main(int argc, char *argv[])
 
     LocalConfig config;
 
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false"));
+
     ManagerRegistration managerRegistration(ManagerRegistration::CLIENT);
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager("WBB12Service");
+    ClientDeviceDiscoveryManager clientManager("OBISService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     ClientActorManager actorManager;
 
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -38,25 +41,21 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
 
-    WBB12Controller wbb12Controller(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "wbb12"));
-    controllerManager.registerController(&wbb12Controller);
+    OBISController obisController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "obis"));
+    controllerManager.registerController(&obisController);
 
     managerRegistration.init(&config);
 
-    /*
-    QList<ValueBase*> actors;
-    ValueGroup actorGroup(relayController.id());
-    for (quint8 i=0;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT);i++) {
-        qDebug() << "Init actor" << i;
-        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), VT_RELAY_LIGHT , true);
-        actor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
-        actors.append(actor);
-        relayController.bindActor(actor);
-        actorManager.registerActor(actor);
+    QList<ValueBase*> values;
+    ValueGroup valueGroup(obisController.id());
+    for (quint8 i=0;i<OBISController::SML_INDEX::COUNT;i++) {
+        DoubleValue* value = new DoubleValue(&valueGroup, QString::number(i), value::VT_ENERGY_CONSUMPTION_TIME);
+        value->withValueTimeout(ValueBase::VT_MID); // no need, as internal status update triggers maintainance
+        values.append(value);
+        obisController.bindValue(value);
     }
 
-    relayController.bindValueManager(&valueManager, actors);
-    */
+    obisController.bindValueManager(&valueManager, values);
 
     controllerManager.start();
 

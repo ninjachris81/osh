@@ -12,14 +12,16 @@
 #define VALUE_TIMEOUT_LONG 120000
 
 // values
-#define VALUE_TYPE_SWITCH       0
-#define VALUE_TYPE_BRIGHTNESS   1
-#define VALUE_TYPE_TEMP         2
-#define VALUE_TYPE_HUMIDITY     3
-#define VALUE_TYPE_MOTION       4
-#define VALUE_TYPE_WATER_FLOW   5
-#define VALUE_TYPE_WATER_LEVEL  6
-#define VALUE_TYPE_TIMESTAMP    7
+#define VALUE_TYPE_SWITCH           0
+#define VALUE_TYPE_BRIGHTNESS       1
+#define VALUE_TYPE_TEMP             2
+#define VALUE_TYPE_HUMIDITY         3
+#define VALUE_TYPE_MOTION           4
+#define VALUE_TYPE_WATER_FLOW       5
+#define VALUE_TYPE_WATER_LEVEL      6
+#define VALUE_TYPE_TIMESTAMP        7
+#define VALUE_TYPE_ENERGY_CONS      8
+#define VALUE_TYPE_ENERGY_CONS_TIME 9
 
 #define VALUE_TYPE_SHUTTER_CLOSE_STATE  30
 #define VALUE_TYPE_SHUTTER_TILT_STATE   31
