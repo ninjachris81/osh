@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #ifndef IS_OSH_CORE_SERVICE
     #error Should use client version
 #endif
@@ -12,7 +14,7 @@
 #include "communication/messagebase.h"
 #include "device/server/devicediscoverymodelbridge.h"
 
-class ServerDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
+class SHARED_LIB_EXPORT ServerDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 {
     Q_OBJECT
 public:

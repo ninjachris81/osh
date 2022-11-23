@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QList>
+
+#include "sharedlib.h"
+
 #include "value/valuebase.h"
 
-class RedundantValue : public ValueBase
+class SHARED_LIB_EXPORT RedundantValue : public ValueBase
 {
     Q_OBJECT
 public:

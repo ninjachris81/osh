@@ -2,9 +2,12 @@
 #define MULTIVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "valuebase.h"
 
-class MultiValue : public ValueBase
+class SHARED_LIB_EXPORT MultiValue : public ValueBase
 {
     Q_OBJECT
 public:

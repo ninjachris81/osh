@@ -3,10 +3,12 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 #include "value/valuebase.h"
 
-class ValueMessage : public MessageBase
+class SHARED_LIB_EXPORT ValueMessage : public MessageBase
 {
     Q_OBJECT
 public:

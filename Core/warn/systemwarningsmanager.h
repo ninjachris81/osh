@@ -7,9 +7,11 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 
-class SystemWarningsManager : public ManagerBase
+class SHARED_LIB_EXPORT SystemWarningsManager : public ManagerBase
 {
     Q_OBJECT
 public:

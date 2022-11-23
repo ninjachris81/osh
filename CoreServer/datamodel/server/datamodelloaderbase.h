@@ -2,11 +2,13 @@
 #define DATAMODELLOADERBASE_H
 
 #include <QObject>
-#include "datamodel/server/datamodelbase.h"
 
+#include "sharedlib.h"
+
+#include "datamodel/server/datamodelbase.h"
 #include "identifyable.h"
 
-class DatamodelLoaderBase : public QObject, public Identifyable
+class SHARED_LIB_EXPORT DatamodelLoaderBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

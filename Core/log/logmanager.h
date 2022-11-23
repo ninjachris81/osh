@@ -5,13 +5,15 @@
 #include <QList>
 #include <QLoggingCategory>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 #include "shared/logging_categories_qt.h"
 #include "communication/communicationmanagerbase.h"
 #include "device/devicediscoverymanagerbase.h"
 
-class LogManager : public ManagerBase
+class SHARED_LIB_EXPORT LogManager : public ManagerBase
 {
     Q_OBJECT
 public:

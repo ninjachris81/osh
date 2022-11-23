@@ -3,11 +3,13 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 /*
  * https://github.com/olliiiver/sml_parser
 */
 
-class SmlParser : public QObject
+class SHARED_LIB_EXPORT SmlParser : public QObject
 {
     Q_OBJECT
 public:

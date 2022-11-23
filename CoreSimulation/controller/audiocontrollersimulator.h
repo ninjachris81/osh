@@ -3,11 +3,14 @@
 
 #include <QObject>
 #include <QList>
+
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 #include "actor/audioplaybackactor.h"
 #include "controller/audiocontrollerbase.h"
 
-class AudioControllerSimulator : public AudioControllerBase
+class SHARED_LIB_EXPORT AudioControllerSimulator : public AudioControllerBase
 {
     Q_OBJECT
 public:

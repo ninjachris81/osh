@@ -3,11 +3,13 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "communication/communicationmanagerbase.h"
 #include "device/client/clientdevicemanager.h"
 
-class ClientSystemWarningsManager : public ManagerBase
+class SHARED_LIB_EXPORT ClientSystemWarningsManager : public ManagerBase
 {
     Q_OBJECT
 public:

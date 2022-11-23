@@ -2,9 +2,12 @@
 #define LOGMESSAGE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 
-class LogMessage : public MessageBase
+class SHARED_LIB_EXPORT LogMessage : public MessageBase
 {
     Q_OBJECT
 public:

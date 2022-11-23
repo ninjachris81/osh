@@ -2,9 +2,11 @@
 #define FILEGPIOCONTROLLER_H
 
 #include <QObject>
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 
-class FileGPIOController : public ControllerBase
+class SHARED_LIB_EXPORT FileGPIOController : public ControllerBase
 {
     Q_OBJECT
 public:

@@ -3,12 +3,14 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "config/localconfig.h"
 #include "shared/logging_categories_qt.h"
 
 #include "macros.h"
 
-class Identifyable
+class SHARED_LIB_EXPORT Identifyable
 {
 public:
     explicit Identifyable(QString id = "");

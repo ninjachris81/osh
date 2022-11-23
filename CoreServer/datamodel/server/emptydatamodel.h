@@ -3,9 +3,11 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "datamodel/server/datamodelbase.h"
 
-class EmptyDatamodel : public DatamodelBase
+class SHARED_LIB_EXPORT EmptyDatamodel : public DatamodelBase
 {
     Q_OBJECT
 public:

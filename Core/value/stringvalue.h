@@ -2,9 +2,12 @@
 #define STRINGVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "valuebase.h"
 
-class StringValue : public ValueBase
+class SHARED_LIB_EXPORT StringValue : public ValueBase
 {
     Q_OBJECT
 public:

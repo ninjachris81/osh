@@ -2,9 +2,12 @@
 #define FILEDATAMODELLOADER_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "datamodelloaderbase.h"
 
-class FileDataModelLoader : public DatamodelLoaderBase
+class SHARED_LIB_EXPORT FileDataModelLoader : public DatamodelLoaderBase
 {
     Q_OBJECT
 public:

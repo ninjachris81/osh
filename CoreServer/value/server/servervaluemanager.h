@@ -7,6 +7,8 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "value/valuegroup.h"
 #include "value/valuebase.h"
 #include "value/valuemanagerbase.h"
@@ -17,7 +19,7 @@
 #include <QTimer>
 #include <QMap>
 
-class ServerValueManager : public ValueManagerBase
+class SHARED_LIB_EXPORT ServerValueManager : public ValueManagerBase
 {
     Q_OBJECT
 public:

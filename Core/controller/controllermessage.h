@@ -4,11 +4,13 @@
 #include <QObject>
 #include <QJsonDocument>
 
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 #include "communication/messagebase.h"
 #include "shared/controllercmdtypes_qt.h"
 
-class ControllerMessage : public MessageBase
+class SHARED_LIB_EXPORT ControllerMessage : public MessageBase
 {
     Q_OBJECT
 public:

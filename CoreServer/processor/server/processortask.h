@@ -4,9 +4,11 @@
 #include <QObject>
 #include <QJSEngine>
 
+#include "sharedlib.h"
+
 #include "serializableidentifyable.h"
 
-class ProcessorTask : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT ProcessorTask : public QObject, public SerializableIdentifyable
 {
     Q_OBJECT
 public:

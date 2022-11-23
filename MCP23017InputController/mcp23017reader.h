@@ -5,12 +5,14 @@
 #include <QThread>
 #include <QBitArray>
 
+#include "sharedlib.h"
+
 #ifdef __linux__
 #include <wiringPi.h>
 #include <mcp23017.h>
 #endif
 
-class MCP23017Reader : public QThread
+class SHARED_LIB_EXPORT MCP23017Reader : public QThread
 {
     Q_OBJECT
 public:

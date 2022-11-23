@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "actor/actorbase.h"
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
@@ -18,7 +20,7 @@
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
 
-class Simulator : public QObject
+class SHARED_LIB_EXPORT Simulator : public QObject
 {
     Q_OBJECT
 public:

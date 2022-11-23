@@ -9,7 +9,9 @@ QT      -= gui
 
 TARGET = Core
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -126,6 +128,7 @@ HEADERS += \
         shared/units_qt.h \
         shared/value.h \
         shared/value_qt.h \
+        sharedlib.h \
         time/client/clientsystemtimemanager.h \
         time/systemtimemessage.h \
         value/client/clientvaluemanager.h \

@@ -4,11 +4,13 @@
 #include <QObject>
 #include <QSettings>
 
+#include "sharedlib.h"
+
 #define CONFIG_VERSION 1
 
 class Identifyable;     // fwddcl
 
-class LocalConfig : public QObject
+class SHARED_LIB_EXPORT LocalConfig : public QObject
 {
     Q_OBJECT
 public:

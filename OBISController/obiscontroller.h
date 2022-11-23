@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 #include "serialportclient.h"
 #include "warn/client/clientsystemwarningsmanager.h"
@@ -10,7 +12,7 @@
 #include "smlparser.h"
 #include "value/integervalue.h"
 
-class OBISController : public ControllerBase
+class SHARED_LIB_EXPORT OBISController : public ControllerBase
 {
     Q_OBJECT
 public:

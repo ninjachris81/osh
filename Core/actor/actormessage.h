@@ -2,12 +2,15 @@
 #define ACTORMESSAGE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 #include "shared/actor_qt.h"
 
 using namespace actor;
 
-class ActorMessage : public MessageBase
+class SHARED_LIB_EXPORT ActorMessage : public MessageBase
 {
     Q_OBJECT
 public:

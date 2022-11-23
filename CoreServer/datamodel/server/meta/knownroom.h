@@ -2,11 +2,14 @@
 #define KNOWNROOM_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "serializableidentifyable.h"
 #include "actor/actorbase.h"
 #include "value/valuebase.h"
 
-class KnownRoom : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT KnownRoom : public QObject, public SerializableIdentifyable
 {
     Q_OBJECT
 public:

@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QVariant>
 
+#include "sharedlib.h"
+
 #include "valuegroup.h"
 #include "serializableidentifyable.h"
 #include "shared/units_qt.h"
@@ -16,7 +18,7 @@ using namespace value;
 
 class ValueManagerBase;
 
-class ValueBase : public QObject, public SerializableIdentifyable, public MetaInfoSupport
+class SHARED_LIB_EXPORT ValueBase : public QObject, public SerializableIdentifyable, public MetaInfoSupport
 {
 Q_OBJECT
 

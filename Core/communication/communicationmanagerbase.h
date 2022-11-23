@@ -2,6 +2,8 @@
 #define COMMUNICATIONMANAGERBASE_H
 
 #include <QObject>
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "messagebase.h"
 #include "value/valuegroup.h"
@@ -11,7 +13,7 @@
 
 #define SEND_ERROR 0
 
-class CommunicationManagerBase : public ManagerBase
+class SHARED_LIB_EXPORT CommunicationManagerBase : public ManagerBase
 {
     Q_OBJECT
 public:

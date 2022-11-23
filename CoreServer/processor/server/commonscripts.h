@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QJSValue>
 #include <QJSEngine>
+
 #include "processor/server/scriptbase.h"
 #include "value/valuebase.h"
 #include "actor/actorbase.h"

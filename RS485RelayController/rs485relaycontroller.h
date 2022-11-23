@@ -5,10 +5,12 @@
 #include <QTimer>
 #include <QModbusRtuSerialMaster>
 
+#include "sharedlib.h"
+
 #include "controller/relaycontrollerbase.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 
-class RS485RelayController : public RelayControllerBase
+class SHARED_LIB_EXPORT RS485RelayController : public RelayControllerBase
 {
 Q_OBJECT
 

@@ -3,9 +3,11 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "actorbase.h"
 
-class AudioPlaybackActor : public ActorBase
+class SHARED_LIB_EXPORT AudioPlaybackActor : public ActorBase
 {
     Q_OBJECT
 public:

@@ -10,7 +10,9 @@ QT += serialbus
 
 TARGET = RS485RelayController
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 DEFINES += RS485RELAYCONTROLLER_LIBRARY
 
@@ -29,7 +31,8 @@ SOURCES += \
     rs485relaycontroller.cpp
 
 HEADERS += \
-        rs485relaycontroller.h
+        rs485relaycontroller.h \
+        sharedlib.h
 
 unix {
     target.path = /usr/lib

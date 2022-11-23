@@ -4,9 +4,12 @@
 #include <QObject>
 #include <QBitArray>
 #include <QList>
+
+#include "sharedlib.h"
+
 #include "controller/digitalinputcontrollerbase.h"
 
-class DigitalInputControllerSimulator : public DigitalInputControllerBase
+class SHARED_LIB_EXPORT DigitalInputControllerSimulator : public DigitalInputControllerBase
 {
     Q_OBJECT
 public:

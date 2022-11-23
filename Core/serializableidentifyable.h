@@ -1,10 +1,12 @@
 #ifndef SERIALIZABLEIDENTIFYABLE_H
 #define SERIALIZABLEIDENTIFYABLE_H
 
+#include "sharedlib.h"
+
 #include "identifyable.h"
 #include "datamodel/serializationsupport.h"
 
-class SerializableIdentifyable : public Identifyable, public SerializationSupport
+class SHARED_LIB_EXPORT SerializableIdentifyable : public Identifyable, public SerializationSupport
 {
 public:
     explicit SerializableIdentifyable(QString id = "");

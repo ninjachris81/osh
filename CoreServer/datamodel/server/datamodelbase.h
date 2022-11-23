@@ -5,6 +5,9 @@
 
 #include <QMap>
 #include <QList>
+
+#include "sharedlib.h"
+
 #include "device/knowndevice.h"
 #include "actor/actorbase.h"
 #include "value/valuegroup.h"
@@ -21,7 +24,7 @@
 
 using namespace unit;
 
-class DatamodelBase : public QObject, public Identifyable
+class SHARED_LIB_EXPORT DatamodelBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

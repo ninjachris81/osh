@@ -5,7 +5,9 @@ QT += serialbus
 
 TARGET = OBISController
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -50,4 +52,5 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../CoreSerial/libCoreSerial.a
 
 HEADERS += \
     obiscontroller.h \
+    sharedlib.h \
     smlparser.h

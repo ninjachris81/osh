@@ -6,13 +6,15 @@
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttSubscription>
 
+#include "sharedlib.h"
+
 #include "communication/mqtt/mqttcommunicationmanagerbase.h"
 #include "config/localconfig.h"
 #include "qmqttmessageconverter.h"
 
 #include <QList>
 
-class QMqttCommunicationManager : public MqttCommunicationManagerBase
+class SHARED_LIB_EXPORT QMqttCommunicationManager : public MqttCommunicationManagerBase
 {
     Q_OBJECT
 

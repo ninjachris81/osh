@@ -3,11 +3,13 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "serializableidentifyable.h"
 #include "shared/controllercmdtypes_qt.h"
 #include "datamodel/serializationsupport.h"
 
-class DeviceBase : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT DeviceBase : public QObject, public SerializableIdentifyable
 {
     Q_OBJECT
 public:

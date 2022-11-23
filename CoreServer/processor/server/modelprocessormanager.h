@@ -7,6 +7,8 @@
 #include <QJSEngine>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "processor/server/processortask.h"
 #include "datamodel/server/datamodelmanager.h"
@@ -15,7 +17,7 @@
 #include "processor/server/localstorage.h"
 #include "value/valuemanagerbase.h"
 
-class ModelProcessorManager : public ManagerBase
+class SHARED_LIB_EXPORT ModelProcessorManager : public ManagerBase
 {
     Q_OBJECT
 public:

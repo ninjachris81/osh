@@ -3,12 +3,14 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 #include "datamodelloaderbase.h"
 #include "datamodelbase.h"
 
-class DatamodelManager : public ManagerBase
+class SHARED_LIB_EXPORT DatamodelManager : public ManagerBase
 {
     Q_OBJECT
 public:

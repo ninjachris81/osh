@@ -5,7 +5,9 @@
 #include <QMap>
 #include <QVariant>
 
-class LocalStorage : public QObject
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT LocalStorage : public QObject
 {
     Q_OBJECT
 public:

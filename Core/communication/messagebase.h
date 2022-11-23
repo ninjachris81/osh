@@ -2,10 +2,11 @@
 #define MESSAGEBASE_H
 
 #include <QObject>
-
 #include <QVariant>
 
-class MessageBase : public QObject
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT MessageBase : public QObject
 {
     Q_OBJECT
 public:

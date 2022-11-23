@@ -2,10 +2,13 @@
 #define DYNAMICDATAMODEL_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "datamodel/server/datamodelbase.h"
 #include "datamodel/serializationsupport.h"
 
-class DynamicDatamodel : public DatamodelBase
+class SHARED_LIB_EXPORT DynamicDatamodel : public DatamodelBase
 {
     Q_OBJECT
 public:

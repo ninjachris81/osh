@@ -2,9 +2,12 @@
 #define SCRIPTRESULTMESSAGE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 
-class ScriptResultMessage : public MessageBase
+class SHARED_LIB_EXPORT ScriptResultMessage : public MessageBase
 {
     Q_OBJECT
 public:

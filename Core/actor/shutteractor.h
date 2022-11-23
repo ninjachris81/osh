@@ -2,11 +2,14 @@
 #define SHUTTERACTOR_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "actorbase.h"
 #include "shared/actor_qt.h"
 #include "value/integervalue.h"
 
-class ShutterActor : public ActorBase
+class SHARED_LIB_EXPORT ShutterActor : public ActorBase
 {
     Q_OBJECT
 public:

@@ -3,11 +3,13 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 
 #include "shared/controllercmdtypes_qt.h"
 
-class DeviceDiscoveryMessage : public MessageBase
+class SHARED_LIB_EXPORT DeviceDiscoveryMessage : public MessageBase
 {
     Q_OBJECT
 public:

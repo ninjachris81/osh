@@ -3,10 +3,12 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "device/devicebase.h"
 #include "datamodel/serializationsupport.h"
 
-class KnownDevice : public DeviceBase
+class SHARED_LIB_EXPORT KnownDevice : public DeviceBase
 {
     Q_OBJECT
 public:

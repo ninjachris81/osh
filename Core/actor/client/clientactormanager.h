@@ -2,14 +2,15 @@
 #define CLIENTACTORMANAGER_H
 
 #include <QObject>
-
 #include <QMap>
+
+#include "sharedlib.h"
 
 #include "shared/actor_qt.h"
 #include "manager/managerbase.h"
 #include "actor/actorbase.h"
 
-class ClientActorManager : public ManagerBase
+class SHARED_LIB_EXPORT ClientActorManager : public ManagerBase
 {
     Q_OBJECT
 public:

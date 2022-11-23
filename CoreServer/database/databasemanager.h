@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 
-class DatabaseManager : public ManagerBase
+class SHARED_LIB_EXPORT DatabaseManager : public ManagerBase
 {
     Q_OBJECT
 public:

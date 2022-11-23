@@ -2,15 +2,16 @@
 #define MANAGERREGISTRATION_H
 
 #include <QObject>
-
 #include <QMap>
+
+#include "sharedlib.h"
 
 #include "config/localconfig.h"
 #include "identifyable.h"
 
 class ManagerBase;      // fwd decl
 
-class ManagerRegistration : public QObject, public Identifyable
+class SHARED_LIB_EXPORT ManagerRegistration : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

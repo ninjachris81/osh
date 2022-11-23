@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "identifyable.h"
 #include "config/localconfig.h"
 #include "value/client/clientvaluemanager.h"
@@ -14,7 +16,7 @@
 class ControllerManager;    // fwddcl
 class ControllerMessage;    // fwddcl
 
-class ControllerBase : public QObject, public Identifyable
+class SHARED_LIB_EXPORT ControllerBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

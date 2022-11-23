@@ -8,11 +8,13 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "communication/communicationmanagerbase.h"
 #include "time/server/systemtimemanager.h"
 
-class SystemtimeManagerSimulator : public SystemtimeManager
+class SHARED_LIB_EXPORT SystemtimeManagerSimulator : public SystemtimeManager
 {
     Q_OBJECT
 public:

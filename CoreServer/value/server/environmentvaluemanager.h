@@ -4,10 +4,12 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "value/longvalue.h"
 
-class EnvironmentValueManager : public ManagerBase
+class SHARED_LIB_EXPORT EnvironmentValueManager : public ManagerBase
 {
     Q_OBJECT
 public:

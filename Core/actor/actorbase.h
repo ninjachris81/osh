@@ -3,13 +3,15 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "value/valuebase.h"
 #include "value/valuegroup.h"
 #include "shared/actor_qt.h"
 
 using namespace actor;
 
-class ActorBase : public ValueBase
+class SHARED_LIB_EXPORT ActorBase : public ValueBase
 {
     Q_OBJECT
 public:

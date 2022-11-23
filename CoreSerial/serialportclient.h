@@ -5,8 +5,9 @@
 #include <QSerialPort>
 #include <QTimer>
 
+#include "sharedlib.h"
 
-class SerialPortClient : public QObject
+class SHARED_LIB_EXPORT SerialPortClient : public QObject
 {
     Q_OBJECT
 

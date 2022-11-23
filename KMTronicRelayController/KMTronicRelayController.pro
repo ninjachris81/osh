@@ -9,7 +9,9 @@ QT      += serialport
 
 TARGET = KMTronicRelayController
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 DEFINES += KMTRONICRELAYCONTROLLER_LIBRARY
 
@@ -29,7 +31,8 @@ SOURCES += \
 
 HEADERS += \
         kmtronicrelaycontroller.h \
-        kmtronicrelaycontroller_global.h 
+        kmtronicrelaycontroller_global.h  \
+        sharedlib.h
 
 unix {
     target.path = /usr/lib

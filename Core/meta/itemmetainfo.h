@@ -3,9 +3,11 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "datamodel/serializationsupport.h"
 
-class ItemMetaInfo : private SerializationSupport
+class SHARED_LIB_EXPORT ItemMetaInfo : private SerializationSupport
 {
 
 public:

@@ -7,11 +7,13 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "actor/actorbase.h"
 #include "communication/communicationmanagerbase.h"
 
-class ActorManager : public ManagerBase
+class SHARED_LIB_EXPORT ActorManager : public ManagerBase
 {
     Q_OBJECT
 public:

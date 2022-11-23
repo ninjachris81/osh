@@ -2,9 +2,12 @@
 #define HTTPLOGFORWARDER_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "logforwarderbase.h"
 
-class HttpLogforwarder : public LogForwarderBase
+class SHARED_LIB_EXPORT HttpLogforwarder : public LogForwarderBase
 {
     Q_OBJECT
 public:

@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QUrl>
+
+#include "sharedlib.h"
+
 #include "datamodelloaderbase.h"
 
-class HttpDataModelLoader : public DatamodelLoaderBase
+class SHARED_LIB_EXPORT HttpDataModelLoader : public DatamodelLoaderBase
 {
     Q_OBJECT
 public:
