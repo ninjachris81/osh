@@ -97,6 +97,15 @@ else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PW
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../CoreServer/debug/CoreServer.lib
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../CoreServer/libCoreServer.a
 
+INCLUDEPATH += $$PWD/../CoreSimulation
+DEPENDPATH += $$PWD/../CoreSimulation
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../CoreSimulation/release/libCoreSimulation.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../CoreSimulation/debug/libCoreSimulation.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../CoreSimulation/release/libCoreSimulation.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../CoreSimulation/debug/libCoreSimulation.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../CoreSimulation/libCoreSimulation.a
+
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/release/ -lQMqttCommunicationManager
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/debug/ -lQMqttCommunicationManager

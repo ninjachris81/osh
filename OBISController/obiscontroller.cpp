@@ -61,6 +61,7 @@ void OBISController::onSerialDataReceived(QByteArray data) {
             for (int i = 0;i< SML_INDEX::COUNT;i++) {
                 m_values[i] = -1;
             }
+            m_startReceived = true;
             break;
         case SmlParser::SML_LISTEND:
             iDebug() << "SML data";
@@ -83,7 +84,9 @@ void OBISController::onSerialDataReceived(QByteArray data) {
             m_warnManager->raiseWarning("SML Checksum error");
             break;
         case SmlParser::SML_UNEXPECTED:
-            m_warnManager->raiseWarning("SML Unexpected error");
+            if (m_startReceived) {
+                m_warnManager->raiseWarning("SML Unexpected error");
+            }
             break;
         default:
             break;

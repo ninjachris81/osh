@@ -14,7 +14,7 @@
 class ControllerManager;    // fwddcl
 class ControllerMessage;    // fwddcl
 
-class ControllerBase : public Identifyable
+class ControllerBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

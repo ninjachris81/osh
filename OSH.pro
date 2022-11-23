@@ -7,6 +7,8 @@ SUBDIRS += \
     CoreSerial \
     CoreServer \
     CoreService \
+    CoreServiceSimulator \
+    CoreSimulation \
     CoreUI \
     KMTronicRelayController \
     KMTronicRelayService \
@@ -22,8 +24,9 @@ SUBDIRS += \
     qtmqtt
 
 CoreService.depends = Core CoreServer QMqttCommunicationManager
-CoreUI.depends = Core CoreServer QMqttCommunicationManager
+CoreUI.depends = Core CoreServer CoreSimulation QMqttCommunicationManager
 CoreServer.depends = Core
+CoreServiceSimulator.depends = Core CoreServer CoreSimulation QMqttCommunicationManager
 
 QMqttCommunicationManager.depends = qtmqtt Core
 

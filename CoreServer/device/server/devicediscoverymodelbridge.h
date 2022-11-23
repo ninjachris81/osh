@@ -10,7 +10,7 @@
 
 #include "identifyable.h"
 
-class DeviceDiscoveryModelBridge : public Identifyable
+class DeviceDiscoveryModelBridge : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

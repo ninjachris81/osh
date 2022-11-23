@@ -16,7 +16,7 @@ using namespace value;
 
 class ValueManagerBase;
 
-class ValueBase : public SerializableIdentifyable, public MetaInfoSupport
+class ValueBase : public QObject, public SerializableIdentifyable, public MetaInfoSupport
 {
 Q_OBJECT
 
@@ -35,6 +35,7 @@ public:
 
     /*virtual*/ void deserialize(QJsonObject obj) override;
 
+    /*virtual*/ QString getClassName() override;
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 

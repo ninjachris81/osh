@@ -8,11 +8,10 @@
 
 #include "macros.h"
 
-class Identifyable : public QObject
+class Identifyable
 {
-    Q_OBJECT
 public:
-    explicit Identifyable(QString id = "", QObject *parent = nullptr);
+    explicit Identifyable(QString id = "");
 
     virtual QString id();
 

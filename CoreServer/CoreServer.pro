@@ -41,7 +41,6 @@ SOURCES += \
     processor/server/commonscripts.cpp \
     processor/server/localstorage.cpp \
     processor/server/scriptbase.cpp \
-    simulator/server/simulatorbase.cpp \
         time/server/systemtimemanager.cpp \
         value/server/environmentvaluemanager.cpp \
         value/server/servervaluemanager.cpp \
@@ -66,7 +65,6 @@ HEADERS += \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \
     processor/server/scriptbase.h \
-    simulator/server/simulatorbase.h \
         time/server/systemtimemanager.h \
         value/server/environmentvaluemanager.h \
         value/server/servervaluemanager.h \

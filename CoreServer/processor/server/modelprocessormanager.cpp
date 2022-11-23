@@ -94,13 +94,17 @@ void ModelProcessorManager::executeTasks() {
         case ProcessorTask::PTT_INTERVAL:
             if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
                 QVariant result = it.value()->run(&m_engine);
-                publishScriptResult(it.key(), result);
+                if (it.value()->publishResult()) {
+                    publishScriptResult(it.key(), result);
+                }
             }
             break;
         case ProcessorTask::PTT_ONLY_ONCE:
             if (m_isFirstRun) {
                 QVariant result = it.value()->run(&m_engine);
-                publishScriptResult(it.key(), result);
+                if (it.value()->publishResult()) {
+                    publishScriptResult(it.key(), result);
+                }
             }
             break;
         case ProcessorTask::PTT_TRIGGER:

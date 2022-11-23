@@ -29,6 +29,9 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
+protected:
+    virtual qint64 _getSystemTime();
+
 private slots:
     void sendSystemtime();
 

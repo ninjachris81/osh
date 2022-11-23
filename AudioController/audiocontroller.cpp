@@ -4,7 +4,7 @@
 #include "macros.h"
 #include "actor/actormessage.h"
 
-AudioController::AudioController(ControllerManager *manager, QString id, QObject *parent) : AudioControllerBase(manager, id, parent)
+AudioController::AudioController(ControllerManager *manager, QString id, QObject *parent) : AudioControllerSimulator(manager, id, parent)
 {
 }
 

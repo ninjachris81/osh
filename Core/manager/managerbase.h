@@ -10,7 +10,7 @@
 #include "shared/logging_categories_qt.h"
 #include "identifyable.h"
 
-class ManagerBase : public Identifyable
+class ManagerBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

@@ -11,6 +11,7 @@
 #include "value/stringvalue.h"
 #include "actor/digitalactor.h"
 #include "actor/audioplaybackactor.h"
+#include "value/valuegroup.h"
 
 DynamicDatamodel::DynamicDatamodel(QObject *parent) : DatamodelBase("DynamicDatamodel", parent)
 {

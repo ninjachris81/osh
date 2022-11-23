@@ -9,7 +9,7 @@
 ValueBase::ValueBase() : SerializableIdentifyable() {
 }
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id, parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id), QObject(parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 
@@ -31,7 +31,10 @@ void ValueBase::deserialize(QJsonObject obj) {
 
     m_valueType = (VALUE_TYPE) obj.value("valueType").toInt();
     m_alwaysEmit = obj.value("alwaysEmit").toBool();
+}
 
+QString ValueBase::getClassName() {
+    return metaObject()->className();
 }
 
 QString ValueBase::fullId() {

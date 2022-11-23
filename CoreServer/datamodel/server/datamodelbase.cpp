@@ -1,6 +1,6 @@
 #include "datamodelbase.h"
 
-DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id, parent)
+DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id), QObject(parent)
 {
 
 }
@@ -97,8 +97,8 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
-ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval) {
-    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, runCondition, scheduleInterval);
+ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, runCondition, scheduleInterval, publishResult);
     m_processorTasks.insert(processorNode->id(), processorNode);
     Q_EMIT(datamodelContentChanged());
     return processorNode;

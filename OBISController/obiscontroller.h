@@ -48,6 +48,7 @@ private:
     SerialPortClient* m_serialClient;
 
     QList<ValueBase*> m_valueMappings;
+    bool m_startReceived = false;
 
     double m_values[SML_INDEX::COUNT];
 

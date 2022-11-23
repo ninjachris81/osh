@@ -43,7 +43,7 @@
 // types
 #define MQTT_MESSAGE_TYPE_VA            "va"        // value
 #define MQTT_MESSAGE_TYPE_AC            "ac"        // actor
-#define MQTT_MESSAGE_TYPE_ACCO          "acco"      // actor config
+#define MQTT_MESSAGE_TYPE_AO            "ao"        // actor config
 #define MQTT_MESSAGE_TYPE_DD            "dd"        // device discovery
 #define MQTT_MESSAGE_TYPE_ST            "st"        // system time
 #define MQTT_MESSAGE_TYPE_SW            "sw"        // system warnings

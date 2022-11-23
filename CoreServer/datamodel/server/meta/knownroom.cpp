@@ -4,7 +4,7 @@
 KnownRoom::KnownRoom() : SerializableIdentifyable() {
 }
 
-KnownRoom::KnownRoom(QString id, QObject *parent) : SerializableIdentifyable(id, parent)
+KnownRoom::KnownRoom(QString id, QObject *parent) : SerializableIdentifyable(id), QObject(parent)
 {
 
 }
@@ -30,6 +30,10 @@ void KnownRoom::deserialize(QJsonObject obj) {
     SerializableIdentifyable::deserialize(obj);
 
     m_name = obj.value("name").toString();
+}
+
+QString KnownRoom::getClassName() {
+    return staticMetaObject.className();
 }
 
 void KnownRoom::setName(QString name) {

@@ -34,5 +34,6 @@ void MCP23017InputController::onError(QString desc) {
 }
 
 void MCP23017InputController::onStateChanged(quint8 index, bool state) {
+    Q_ASSERT(index < inputCount());
     m_valueMappings.at(index)->updateValue(state);
 }

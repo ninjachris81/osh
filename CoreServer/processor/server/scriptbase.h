@@ -4,7 +4,7 @@
 #include <QObject>
 #include "identifyable.h"
 
-class ScriptBase : public Identifyable
+class ScriptBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

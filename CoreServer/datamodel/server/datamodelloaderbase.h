@@ -6,7 +6,7 @@
 
 #include "identifyable.h"
 
-class DatamodelLoaderBase : public Identifyable
+class DatamodelLoaderBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

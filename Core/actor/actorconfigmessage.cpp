@@ -1,6 +1,6 @@
 #include "actorconfigmessage.h"
 
-ActorConfigMessage::ActorConfigMessage(QString actorGroupId, QString actorId, QMap<QString, QVariant> values, QObject *parent)
+ActorConfigMessage::ActorConfigMessage(QString actorGroupId, QString actorId, QVariantMap values, QObject *parent)
     : MessageBase(parent), m_actorGroupId(actorGroupId), m_actorId(actorId), m_values(values)
 {
 
@@ -30,6 +30,6 @@ QString ActorConfigMessage::fullId() {
     return m_actorGroupId + VALUE_SEPARATOR + m_actorId;
 }
 
-QMap<QString, QVariant> ActorConfigMessage::values() {
+QVariantMap ActorConfigMessage::values() {
     return m_values;
 }

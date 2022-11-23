@@ -1,6 +1,6 @@
 #include "datamodelloaderbase.h"
 
-DatamodelLoaderBase::DatamodelLoaderBase(QObject *parent) : Identifyable("DatamodelLoaderBase", parent)
+DatamodelLoaderBase::DatamodelLoaderBase(QObject *parent) : Identifyable("DatamodelLoaderBase"), QObject(parent)
 {
 
 }

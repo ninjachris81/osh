@@ -10,7 +10,7 @@
 
 class ManagerBase;      // fwd decl
 
-class ManagerRegistration : public Identifyable
+class ManagerRegistration : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

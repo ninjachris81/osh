@@ -10,7 +10,7 @@ class KnownDevice : public DeviceBase
 {
     Q_OBJECT
 public:
-    KnownDevice();
+    explicit KnownDevice();
     explicit KnownDevice(QString id, QString serviceId, QString name, QObject *parent = nullptr);
 
     QString name();

@@ -25,7 +25,7 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
 
     registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, true, MQTT_MESSAGE_TYPE_AC, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_ACCO, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_AO, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1);
@@ -75,7 +75,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             }
         }
         case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
-            //return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), rawValue);
+            return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
             QVariant ddVal = parseSingleValue(value);
@@ -230,6 +230,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         ActorMessage* actorMessage = static_cast<ActorMessage*>(&message);
         return serializeSingleJSONValue(actorMessage->cmd());
     }
+    case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
+        ActorConfigMessage* actorConfigMessage = static_cast<ActorConfigMessage*>(&message);
+        return serializeJSONValue(actorConfigMessage->values());
+    }
     case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
         SystemtimeMessage* systimeMessage = static_cast<SystemtimeMessage*>(&message);
         return serializeSingleJSONValue(systimeMessage->ts());
@@ -263,7 +267,6 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
 QByteArray MqttCommunicationManagerBase::serializeJSONValue(QVariantMap mapData) {
     return QJsonDocument::fromVariant(mapData).toJson();
 }
-
 
 QByteArray MqttCommunicationManagerBase::serializeSingleJSONValue(QVariant value) {
     QVariantMap mapData;

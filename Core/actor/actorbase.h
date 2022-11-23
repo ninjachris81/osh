@@ -13,7 +13,7 @@ class ActorBase : public ValueBase
 {
     Q_OBJECT
 public:
-    ActorBase();
+    explicit ActorBase();
     explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     void triggerCmd(ACTOR_CMDS cmd, QString reason);

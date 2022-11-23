@@ -8,7 +8,7 @@
 #include "actor/audioplaybackactor.h"
 #include "communication/communicationmanagerbase.h"
 
-class AudioController : public AudioControllerBase
+class AudioController : public AudioControllerSimulator
 {
     Q_OBJECT
 public:
