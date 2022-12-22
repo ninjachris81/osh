@@ -1,0 +1,413 @@
+package com.osh.communication.mqtt.service.impl;
+
+import android.util.JsonReader;
+
+import androidx.arch.core.executor.TaskExecutor;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.osh.actor.ActorCmds;
+import com.osh.actor.ActorConfigMessage;
+import com.osh.actor.ActorMessage;
+import com.osh.communication.MessageBase;
+import com.osh.communication.MessageBase.MESSAGE_TYPE;
+import com.osh.communication.mqtt.MessageTypeInfo;
+import com.osh.communication.mqtt.MqttConstants;
+import com.osh.communication.mqtt.service.ICommunicationManager;
+import com.osh.config.ApplicationConfig;
+import com.osh.config.IApplicationConfig;
+import com.osh.controller.ControllerMessage;
+import com.osh.device.DeviceDiscoveryMessage;
+import com.osh.log.LogMessage;
+import com.osh.log.LogMessage.MsgType;
+import com.osh.manager.IManagerRegistration;
+import com.osh.manager.ManagerBase;
+import com.osh.processor.ScriptResultMessage;
+import com.osh.time.SystemtimeMessage;
+import com.osh.value.ValueMessage;
+import com.osh.warn.SystemWarningMessage;
+
+public class MqttCommunicationManager extends ManagerBase implements ICommunicationManager {
+
+	private static final Logger log = LoggerFactory.getLogger(MqttCommunicationManager.class);
+
+	private ExecutorService executorService;
+	
+	public MqttCommunicationManager(IApplicationConfig appConfig, IManagerRegistration managerRegistration) {
+		super("MqttCommunicationManager", managerRegistration);
+		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		connectMqtt(appConfig);
+	}
+
+    private final MemoryPersistence persistence = new MemoryPersistence();
+
+    private MqttClient mqttClient;
+    
+    private Map<MessageBase.MESSAGE_TYPE, MessageTypeInfo> messageTypes = new HashMap<>();
+    
+    private List<String> customChannels;
+    
+    private Map<MessageBase.MESSAGE_TYPE, ManagerBase> managerMessageTypes = new HashMap<>();
+
+    
+	private void connectMqtt(IApplicationConfig appConfig) {
+		log.info("Init Mqtt");
+		
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_VALUE, true, MqttConstants.MQTT_MESSAGE_TYPE_VA, 2);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_ACTOR, true, MqttConstants.MQTT_MESSAGE_TYPE_AC, 2);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_ACTOR_CONFIG, true, MqttConstants.MQTT_MESSAGE_TYPE_ACCO, 2);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DEVICE_DISCOVERY, false, MqttConstants.MQTT_MESSAGE_TYPE_DD, 2);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SYSTEM_TIME, false, MqttConstants.MQTT_MESSAGE_TYPE_ST, 0);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SYSTEM_WARNING, false, MqttConstants.MQTT_MESSAGE_TYPE_SW, 1);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_CONTROLLER, false, MqttConstants.MQTT_MESSAGE_TYPE_CO, 1);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_LOG, false, MqttConstants.MQTT_MESSAGE_TYPE_LO, 2);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SCRIPT_RESULT, false, MqttConstants.MQTT_MESSAGE_TYPE_SR, 1);
+
+		
+		String serverUrl = appConfig.getMqtt().getServerUrl();
+		String clientId = appConfig.getMqtt().getClientId();
+		
+	    try {
+			mqttClient =  new MqttClient(serverUrl, clientId, persistence);
+
+			mqttClient.setCallback(new MqttCallbackExtended() {
+
+				@Override
+				public void connectionLost(Throwable cause) {
+					log.warn("Disconnected " + cause.toString());
+				}
+
+				@Override
+				public void messageArrived(String topic, MqttMessage message) throws Exception {
+					log.debug("Msg arrived {}, retain {}", topic, message.isRetained());
+					MessageBase msg = getMessage(topic, message);
+
+					/*
+					if (managerMessageTypes.containsKey(msg.getMessageType())) {
+						executorService.submit(() -> {
+							managerMessageTypes.get(msg.getMessageType()).handleReceivedMessage(msg);
+						});
+
+					} else {
+						log.warn("No handlers for msg type {}",  msg.getMessageType());
+					}*/
+				}
+
+				@Override
+				public void deliveryComplete(IMqttDeliveryToken token) {
+
+				}
+
+				@Override
+				public void connectComplete(boolean reconnect, String serverURI) {
+					log.debug("Connected " + reconnect);
+				}
+			});
+
+	        MqttConnectOptions connOpts = new MqttConnectOptions();
+			connOpts.setAutomaticReconnect(true);
+			connOpts.setConnectionTimeout(5000);
+			connOpts.setKeepAliveInterval(5000);
+	        connOpts.setCleanSession(true);
+	        log.info("Connecting to broker: " + serverUrl);
+	        mqttClient.connect(connOpts);
+	        log.info("Connected");
+	        subscribeChannels();
+	    } catch(MqttException me) {
+	    	log.error("reason "+me.getReasonCode());
+	    	log.error("msg "+me.getMessage());
+	    	log.error("loc "+me.getLocalizedMessage());
+	    	log.error("cause "+me.getCause());
+	    	log.error("excep "+me);
+	    }
+	    
+	    for (String managerName : getManagerRegistration().getManagers().keySet()) {
+	    	ManagerBase manager = getManagerRegistration().getManagers().get(managerName);
+	    	
+	    	MessageBase.MESSAGE_TYPE messageType = manager.getMessageType();
+	        if (messageType != MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_UNKNOWN) {
+	            log.debug("Register message type {} for manager {}", messageType, manager.getId());
+	            managerMessageTypes.put(messageType, manager);
+	        }
+	    }
+	}
+	
+	private void subscribeChannels() {
+	    if (customChannels != null) {
+	        subscribeChannels(customChannels);
+	    } else {
+	        switch(getManagerRegistration().getInstanceRole()) {
+	        case SERVER:
+	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC));
+	            break;
+	        case CLIENT:
+	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_AC));
+	            break;
+	        case GUI:
+	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC, MqttConstants.MQTT_MESSAGE_TYPE_SR, MqttConstants.MQTT_MESSAGE_TYPE_LO));
+	            break;
+	        default:
+	            log.warn("Unsupported instance role");
+	            break;
+	        }
+	    }
+
+	    /*
+	    ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_ID);
+	    subscribeControllerChannels(controllerManager->controllerNames());
+	    */
+    }
+	
+	private void subscribeChannels(List<String> topics) {
+	    log.debug("Subscribing to channels {}", topics);
+
+	    for (String topic : topics) {
+	    	String path = MqttConstants.MQTT_BASE_PATH + MqttConstants.MQTT_PATH_SEP + topic + MqttConstants.MQTT_PATH_SEP + MqttConstants.MQTT_WILDCARD;
+	    	subscribe(path);
+	        log.debug("Subscribed to {}", path);
+	    }
+	}
+	
+	
+	private MessageBase getMessage(String topic, MqttMessage message) throws JSONException {
+	    return getMessage(topic, message.getPayload());
+	}
+	
+	public void subscribe(String path) {
+		try {
+			if (mqttClient.isConnected()) {
+				mqttClient.subscribe(path);
+			} else {
+				log.warn("Cannot subscribe - not connected!");
+			}
+		} catch (MqttException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void publish(String path, String msg) {
+        log.debug("Publishing message: "+msg);
+        try {
+            MqttMessage message = new MqttMessage(msg.getBytes());
+            message.setQos(2);
+			mqttClient.publish(path, message);
+			log.debug("Message published");
+		} catch (MqttException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void sendMessage(MessageBase msg) {
+		
+	}
+	
+	private String serializePayload(MessageBase msg) throws JSONException {
+	    switch(msg.getMessageType()) {
+	    case MESSAGE_TYPE_VALUE:
+	        return serializeSingleJSONValue(((ValueMessage) msg).getRawValue());
+	    case MESSAGE_TYPE_ACTOR:
+	        return serializeSingleJSONValue(((ActorMessage) msg).getCmd().ordinal());
+	    case MESSAGE_TYPE_ACTOR_CONFIG:
+	        return serializeJSONMap(((ActorConfigMessage) msg).getValues());
+	    case MESSAGE_TYPE_SYSTEM_TIME:
+	        return serializeSingleJSONValue(((SystemtimeMessage) msg).getTs());
+	    case MESSAGE_TYPE_SYSTEM_WARNING:
+	        return serializeSingleJSONValue(((SystemWarningMessage) msg).getMsg());
+	    case MESSAGE_TYPE_DEVICE_DISCOVERY:
+	    	return serializeSingleJSONValue(((SystemtimeMessage) msg).getTs());
+	    case MESSAGE_TYPE_CONTROLLER:
+	    	return serializeSingleJSONValue(((ControllerMessage) msg).getData());
+	    case MESSAGE_TYPE_LOG:
+	    	return serializeSingleJSONValue(((LogMessage) msg).getMessage());
+	    case MESSAGE_TYPE_SCRIPT_RESULT:
+	    	return serializeSingleJSONValue(((ScriptResultMessage) msg).getValue());
+	    default:
+	    	log.warn("Unknown message type {}", msg.getMessageType());
+			return null;
+	    }
+	}
+	
+	/*
+	private String serializeSingleJSONValue(boolean value) {
+		JsonObject obj = Json.createObject();
+		serializeSingleJSONValue(value, obj);
+		obj.put(MqttConstants.MQTT_SINGLE_VALUE_ATTR, value);
+		return obj.asString();
+	}*/
+
+	private void serializeSingleJSONValue(String key, Object value, JSONObject obj) throws JSONException {
+		if (value instanceof Integer) {
+			obj.put(key, (int)value);
+		} else if (value instanceof Long) {
+			obj.put(key, (long)value);
+		} else if (value instanceof String) {
+			obj.put(key, (String)value);
+		} else if (value instanceof Boolean) {
+			obj.put(key, (boolean)value);
+		} else {
+			log.warn("Unsupported data type: " + value.getClass());
+		}
+	}
+	
+	private String serializeSingleJSONValue(Object value) throws JSONException {
+		JSONObject obj = new JSONObject();
+		serializeSingleJSONValue(MqttConstants.MQTT_SINGLE_VALUE_ATTR, value, obj);
+		return obj.toString();
+	}
+	
+	private String serializeJSONMap(Map<String, Object> value) throws JSONException {
+		JSONObject obj = new JSONObject();
+		for (String key : value.keySet()) {
+			serializeSingleJSONValue(key, value.get(key), obj);
+		}
+		return obj.toString();
+	}
+
+	private void registerMessageType(MessageBase.MESSAGE_TYPE messageType, boolean isRetained, String mqttTypePath, int mqttPathLevels) {
+	    MessageTypeInfo info = new MessageTypeInfo();
+
+	    info.messageType = messageType;
+	    info.isRetained = isRetained;
+	    info.mqttTypePath = mqttTypePath;
+	    info.mqttPathLevels = mqttPathLevels;
+
+	    messageTypes.put(messageType, info);
+	}
+
+	MessageBase getMessage(String topic, byte[] payload) throws JSONException {
+
+		if (topic.startsWith(MqttConstants.MQTT_BASE_PATH)) {
+			topic = topic.substring(MqttConstants.MQTT_BASE_PATH.length() + 1);
+		}
+		
+		String[] paths = topic.split("/");
+	    List<String> firstLevelPath = removeMessageTypePath(paths);
+	    MessageTypeInfo info = getMessageType(paths[0]);
+
+	    if (info.mqttPathLevels == firstLevelPath.size()) {
+	        Map<String, Object> rawValue = parseJSONPayload(payload);
+
+	        log.debug("{}, {}", info.messageType, rawValue);
+
+	        switch (info.messageType) {
+	        case MESSAGE_TYPE_VALUE: {
+	            return new ValueMessage(firstLevelPath.get(0), firstLevelPath.get(1), rawValue);
+	        }
+	        case MESSAGE_TYPE_ACTOR: {
+	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), ActorCmds.valueOf(parseSingleValue(rawValue).toString()));
+	        }
+	        case MESSAGE_TYPE_DEVICE_DISCOVERY: {
+	            return new DeviceDiscoveryMessage(firstLevelPath.get(0), firstLevelPath.get(1));
+	        }
+	        case MESSAGE_TYPE_SYSTEM_TIME: {
+	            return new SystemtimeMessage((long) parseSingleValue(rawValue));
+	        }
+	        case MESSAGE_TYPE_SYSTEM_WARNING: {
+	            return new SystemWarningMessage(firstLevelPath.get(0), parseSingleValue(rawValue).toString());
+	        }
+	        case MESSAGE_TYPE_CONTROLLER: {
+	            return new ControllerMessage(firstLevelPath.get(0), rawValue);
+	        }
+	        case MESSAGE_TYPE_LOG: {
+	            return new LogMessage(firstLevelPath.get(0), MsgType.fromString(firstLevelPath.get(0)), parseSingleValue(rawValue).toString());
+	        }
+	        case MESSAGE_TYPE_SCRIPT_RESULT: {
+	            return new ScriptResultMessage(firstLevelPath.get(0), rawValue);
+	        }
+	        default:
+	            log.warn("Unknown message type {}", info.messageType);
+	            return null;
+	        }
+	    } else {
+	        log.warn("Invalid path levels {}, expected {}", firstLevelPath.size(), info.mqttPathLevels);
+	        return null;
+	    }
+	}
+	
+	private Object parseSingleValue(Map<String, Object> value) {
+	    if (value.containsKey(MqttConstants.MQTT_SINGLE_VALUE_ATTR)) {
+	        return value.get(MqttConstants.MQTT_SINGLE_VALUE_ATTR);
+	    } else {
+	    	throw new IllegalArgumentException("Key not found " + MqttConstants.MQTT_SINGLE_VALUE_ATTR);
+	    }
+	}
+
+	
+	List<String> removeMessageTypePath(String[] paths) {
+		for (MessageTypeInfo messageTypeInfo : messageTypes.values()) {
+			
+	        if (paths[0].equals(messageTypeInfo.mqttTypePath)) {
+	        	List<String> returnList = Arrays.stream(paths).collect(Collectors.toList());
+	        	returnList.remove(0);
+	        	return returnList;
+	        }
+		}
+
+	    return List.of();
+	}
+	
+	MessageTypeInfo getMessageType(String name) {
+	    for (MessageTypeInfo messageTypeInfo : messageTypes.values()) {
+	    	if (messageTypeInfo.mqttTypePath.equals(name)) {
+	    		return messageTypeInfo;
+	    	}
+	    }
+
+	    log.warn("Unknown message type {}", name);
+	    return null;
+	}
+	
+	Object parsePayload(MessageBase.MESSAGE_TYPE messageType, byte[] payload) throws JSONException {
+        if (payload.length>0) {
+            return parseJSONPayload(payload);
+        } else {
+            return null;
+        }
+	}
+
+	Map<String, Object> parseJSONPayload(byte[] payload) throws JSONException {
+		JSONObject obj = new JSONObject(new String(payload));
+		Map < String, Object > map = new HashMap<>(obj.length());
+		while (obj.keys().hasNext()) {
+			String key = obj.keys().next();
+			map.put(key, obj.get(key));
+		}
+	    return map;
+	}
+
+	public void setCustomChannels(List<String> customChannels) {
+		this.customChannels = customChannels;
+	}
+
+	@Override
+	public MESSAGE_TYPE getMessageType() {
+		return MESSAGE_TYPE.MESSAGE_TYPE_UNKNOWN;
+	}
+
+	@Override
+	public void handleReceivedMessage(MessageBase msg) {
+	}
+
+}
