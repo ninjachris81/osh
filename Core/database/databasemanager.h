@@ -15,8 +15,8 @@ public:
     explicit DatabaseManager(QObject *parent = nullptr);
 
     static QLatin1String MANAGER_ID;
-
-    static QLatin1String SIMPLE_STORAGE_TABLE;
+    static QLatin1String DATABASE_TYPE_SQLITE;
+    static QLatin1String DATABASE_TYPE_PSQL;
 
     /*virtual*/ void init(LocalConfig* config) override;
 
@@ -30,13 +30,12 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
-    void simpleSet(QString prefix, QString id, QVariant value);
-    QVariant simpleGet(QString prefix, QString id);
-    QMap<QString, QVariant> simpleList(QString prefix);
-    void simpleRemove(QString prefix, QString id);
+    QSqlDatabase* db();
+
+    void checkCreateTable(QString tableName, int primaryKeyColumn, QStringList colNames, QList<QVariant::Type> types);
 
 protected:
-    QSqlDatabase* db();
+    QString getType(QVariant::Type type);
 
 private:
     QSqlDatabase m_db;
