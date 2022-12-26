@@ -9,7 +9,7 @@ ProcessorTask::ProcessorTask() : SerializableIdentifyable() {
 
 }
 
-ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent) : SerializableIdentifyable(id), QObject(parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult)
+ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent) : QObject(parent), SerializableIdentifyable(id), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult)
 {
 
 }

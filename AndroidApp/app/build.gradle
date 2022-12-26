@@ -62,6 +62,8 @@ dependencies {
     implementation project(path: ':OshCore')
     kapt "com.google.dagger:hilt-compiler:2.44"
 
+    implementation 'org.apache.commons:commons-lang3:3.9'
+
     /*
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

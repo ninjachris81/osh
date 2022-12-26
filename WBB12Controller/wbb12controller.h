@@ -5,10 +5,12 @@
 #include <QTimer>
 #include <QModbusRtuSerialMaster>
 
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 
-class WBB12Controller : public ControllerBase
+class SHARED_LIB_EXPORT WBB12Controller : public ControllerBase
 {
     Q_OBJECT
 public:

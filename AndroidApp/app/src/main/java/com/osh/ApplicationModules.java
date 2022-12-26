@@ -30,27 +30,4 @@ public class ApplicationModules {
         return new ApplicationConfig();
     }
 
-    @Provides
-    @Singleton
-    static IActorManager provideActorManager(IManagerRegistration managerRegistration) {
-        return new ActorManager(managerRegistration);
-    }
-
-    @Provides
-    @Singleton
-    static IManagerRegistration provideManagerRegistration() {
-        return new ManagerRegistration(ManagerRegistration.INSTANCE_ROLE.CLIENT);
-    }
-
-    @Provides
-    @Singleton
-    static ICommunicationManager provideCommunicationManager(IApplicationConfig applicationConfig, IManagerRegistration managerRegistration) {
-        return new MqttCommunicationManager(applicationConfig, managerRegistration);
-    }
-
-    @Provides
-    @Singleton
-    static IDoorUnlockManager provideDoorUnlockManager(IManagerRegistration managerRegistration, ICommunicationManager communicationManager) {
-        return new DoorUnlockManager(managerRegistration,communicationManager);
-    }
 }

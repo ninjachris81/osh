@@ -3,13 +3,15 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #define USES_UNITS_QT
 
 #include "constants.h"
 #include "units.h"
 
 namespace unit {
-Q_NAMESPACE
+SHARED_LIB_EXPORT Q_NAMESPACE
 
     enum UNIT_TYPE {
         UT_UNKNOWN = ENUM_UNKNOWN,

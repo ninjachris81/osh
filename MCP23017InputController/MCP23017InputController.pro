@@ -29,8 +29,7 @@ SOURCES += \
 
 HEADERS += \
         mcp23017inputcontroller.h \
-        mcp23017reader.h \
-        sharedlib.h
+        mcp23017reader.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

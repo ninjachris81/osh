@@ -18,7 +18,9 @@ Q_NAMESPACE
         LOGCAT_VALUE,
         LOGCAT_WARN,
         LOGCAT_PROCESSOR,
-        LOGCAT_DATAMODEL
+        LOGCAT_DATAMODEL,
+        LOGCAT_DOOR_UNLOCK,
+        LOGCAT_USER
     };
 
     enum LOGCAT {
@@ -32,7 +34,9 @@ Q_NAMESPACE
         VALUE,
         WARN,
         PROCESSOR,
-        DATAMODEL
+        DATAMODEL,
+        DOOR_UNLOCK,
+        USER
     };
     Q_ENUM_NS(LOGCAT)
 }

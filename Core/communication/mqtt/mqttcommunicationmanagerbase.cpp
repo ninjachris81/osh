@@ -14,6 +14,7 @@
 #include "controller/controllermanager.h"
 #include "log/logmessage.h"
 #include "processor/scriptresultmessage.h"
+#include "doorunlock/doorunlockmessage.h"
 #include "log/logmanager.h"
 
 MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : CommunicationManagerBase(parent)
@@ -32,6 +33,7 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, MQTT_MESSAGE_TYPE_CO, 1);
     registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, MQTT_MESSAGE_TYPE_SR, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DOOR_UNLOCK, false, MQTT_MESSAGE_TYPE_DU, 2);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
     iDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
@@ -118,6 +120,9 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         }
         case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
             return new ScriptResultMessage(firstLevelPath.first(), value);
+        }
+        case MessageBase::MESSAGE_TYPE_DOOR_UNLOCK: {
+            return new DoorUnlockMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         default:
             iWarning() << "Unknown message type" << levels;
@@ -257,6 +262,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
         ScriptResultMessage* scriptResultMessage = static_cast<ScriptResultMessage*>(&message);
         return serializeSingleJSONValue(scriptResultMessage->value());
+    }
+    case MessageBase::MESSAGE_TYPE_DOOR_UNLOCK: {
+        DoorUnlockMessage* doorUnlockMessage = static_cast<DoorUnlockMessage*>(&message);
+        return serializeJSONValue(doorUnlockMessage->values());
     }
     default:
         iWarning() << "Unknown message type" << message.getMessageType();

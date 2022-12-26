@@ -7,7 +7,7 @@
 #include "actor/actorbaseui.h"
 #include "datamodel/server/meta/knownroomui.h"
 
-DatamodelBaseUI::DatamodelBaseUI(QObject *parent) : IdentifyableUI(parent)
+DatamodelBaseUI::DatamodelBaseUI(Identifyable *parent) : IdentifyableUI(parent)
 {
     m_datamodel = static_cast<DatamodelBase*>(parent);
 

@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-VisualItemBase::VisualItemBase(QObject *parent) : IdentifyableUI(parent), m_metaInfos(nullptr)
+VisualItemBase::VisualItemBase(Identifyable *parent) : IdentifyableUI(parent), m_metaInfos(nullptr)
 {
     MetaInfoSupport* metaInfoSupport = dynamic_cast<MetaInfoSupport*>(parent);
     if (metaInfoSupport!=nullptr) {

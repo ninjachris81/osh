@@ -5,7 +5,10 @@ import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import android.app.Application;
 import android.content.SharedPreferences;
 
+import com.osh.actor.IActorManager;
+import com.osh.communication.mqtt.service.ICommunicationManager;
 import com.osh.config.IApplicationConfig;
+import com.osh.doorunlock.IDoorUnlockManager;
 
 import javax.inject.Inject;
 

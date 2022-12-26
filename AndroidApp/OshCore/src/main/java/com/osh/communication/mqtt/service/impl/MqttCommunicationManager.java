@@ -59,11 +59,12 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	private static final String TAG = MqttCommunicationManager.class.getName();
 
 	private ExecutorService executorService;
+	private IApplicationConfig appConfig;
 	
 	public MqttCommunicationManager(IApplicationConfig appConfig, IManagerRegistration managerRegistration) {
 		super("MqttCommunicationManager", managerRegistration);
-		ExecutorService executorService = Executors.newFixedThreadPool(1);
-		connectMqtt(appConfig);
+		this.executorService = Executors.newFixedThreadPool(1);
+		this.appConfig = appConfig;
 	}
 
     private Mqtt3AsyncClient mqttClient;
@@ -74,7 +75,11 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
     
     private Map<MessageBase.MESSAGE_TYPE, ManagerBase> managerMessageTypes = new HashMap<>();
 
-    
+	@Override
+	public void initComplete() {
+		connectMqtt(appConfig);
+	}
+
 	private void connectMqtt(IApplicationConfig appConfig) {
 		LogFacade.i(TAG, "Init Mqtt");
 		
@@ -87,7 +92,7 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_CONTROLLER, false, MqttConstants.MQTT_MESSAGE_TYPE_CO, 1);
 	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_LOG, false, MqttConstants.MQTT_MESSAGE_TYPE_LO, 2);
 	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SCRIPT_RESULT, false, MqttConstants.MQTT_MESSAGE_TYPE_SR, 1);
-		registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK, false, MqttConstants.MQTT_MESSAGE_TYPE_DU, 1);
+		registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK, false, MqttConstants.MQTT_MESSAGE_TYPE_DU, 2);
 
 		
 		mqttClient = MqttClient.builder()
@@ -138,7 +143,7 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_AC));
 	            break;
 	        case GUI:
-	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC, MqttConstants.MQTT_MESSAGE_TYPE_SR, MqttConstants.MQTT_MESSAGE_TYPE_LO));
+	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC, MqttConstants.MQTT_MESSAGE_TYPE_SR, MqttConstants.MQTT_MESSAGE_TYPE_LO, MqttConstants.MQTT_MESSAGE_TYPE_DU));
 	            break;
 	        default:
 				LogFacade.w(TAG, "Unsupported instance role");
@@ -169,7 +174,11 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 			if (msg != null) {
 				if (managerMessageTypes.containsKey(msg.getMessageType())) {
 					executorService.submit(() -> {
-						managerMessageTypes.get(msg.getMessageType()).handleReceivedMessage(msg);
+						try {
+							managerMessageTypes.get(msg.getMessageType()).handleReceivedMessage(msg);
+						} catch (Exception ex) {
+							LogFacade.w(TAG, "Error while executing handler: " + ex.toString());
+						}
 					});
 				} else {
 					LogFacade.w(TAG, "No handlers for msg type " + msg.getMessageType());
@@ -326,7 +335,7 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	            return new ValueMessage(firstLevelPath.get(0), firstLevelPath.get(1), rawValue);
 	        }
 	        case MESSAGE_TYPE_ACTOR: {
-	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), ActorCmds.valueOf(parseSingleValue(rawValue).toString()));
+	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), ActorCmds.values()[Integer.parseInt(parseSingleValue(rawValue).toString())]);
 	        }
 	        case MESSAGE_TYPE_DEVICE_DISCOVERY: {
 	            return new DeviceDiscoveryMessage(firstLevelPath.get(0), firstLevelPath.get(1));
@@ -346,6 +355,9 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	        case MESSAGE_TYPE_SCRIPT_RESULT: {
 	            return new ScriptResultMessage(firstLevelPath.get(0), rawValue);
 	        }
+			case MESSAGE_TYPE_DOOR_UNLOCK: {
+				return new DoorUnlockMessage(firstLevelPath.get(0), firstLevelPath.get(1), rawValue);
+			}
 	        default:
 				LogFacade.w(TAG, "Unknown message type " + info.messageType);
 	            return null;

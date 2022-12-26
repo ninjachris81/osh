@@ -11,6 +11,7 @@ import com.osh.user.User;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -45,11 +46,15 @@ public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager
     }
 
     @Override
+    public void initComplete() {
+
+    }
+        @Override
     public void handleReceivedMessage(MessageBase msg) {
         if (msg instanceof DoorUnlockMessage) {
             DoorUnlockMessage dum = (DoorUnlockMessage) msg;
             if (dum.getValues().containsKey(DoorUnlockMessage.DU_ATTRIB_STAGE)) {
-                DoorUnlockMessage.DU_AUTH_STAGE stage = (DoorUnlockMessage.DU_AUTH_STAGE) dum.getValues().get(DoorUnlockMessage.DU_ATTRIB_STAGE);
+                DoorUnlockMessage.DU_AUTH_STAGE stage = DoorUnlockMessage.DU_AUTH_STAGE.values()[(int) dum.getValues().get(DoorUnlockMessage.DU_ATTRIB_STAGE)];
 
                 switch (stage) {
                     case CHALLENGE_CREATED:
@@ -58,7 +63,7 @@ public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager
 
                         if (!StringUtils.isEmpty(oth)) {
                             if (ts != null) {
-                                respondChallenge(dum.getUserId(), ts, oth);
+                                respondChallenge(dum.getUserId(), dum.getDoorId(), ts, oth);
                             } else {
                                 LogFacade.w(TAG,"TS cannot be empty");
                             }
@@ -83,16 +88,17 @@ public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager
         }
     }
 
-    private String calculateChallenge(String userId, long timestamp, String oth) {
+    private String calculateChallenge(String userId, String doorId, long timestamp, String oth) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
 
-            md.update(String.valueOf(timestamp).getBytes());
-            md.update(oth.getBytes());
-            md.update(userId.getBytes());
-            md.update(PSK.getBytes());
+            md.update(String.valueOf(timestamp).getBytes(Charset.forName("ISO-8859-1")));       // Latin1
+            md.update(oth.getBytes(Charset.forName("ISO-8859-1")));
+            md.update(userId.getBytes(Charset.forName("ISO-8859-1")));
+            md.update(PSK.getBytes(Charset.forName("ISO-8859-1")));
+            md.update(doorId.getBytes(Charset.forName("ISO-8859-1")));
 
-            return Base64.encodeToString(md.digest(), Base64.DEFAULT);
+            return Base64.encodeToString(md.digest(), Base64.NO_WRAP);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -100,11 +106,13 @@ public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager
         return null;
     }
 
-    private void respondChallenge(String userId, long ts, String oth) {
-        String resultHash = calculateChallenge(userId, ts, oth);
+    private void respondChallenge(String userId, String doorId, long ts, String oth) {
+        String resultHash = calculateChallenge(userId, doorId, ts, oth);
+
+        LogFacade.d(TAG, resultHash);
 
         if (resultHash != null) {
-            DoorUnlockMessage msg = new DoorUnlockMessage(userId, Map.of(
+            DoorUnlockMessage msg = new DoorUnlockMessage(userId, doorId, Map.of(
                     DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_CALCULATED,
                     DoorUnlockMessage.DU_ATTRIB_OTH, oth,
                     DoorUnlockMessage.DU_ATTRIB_TS, ts,
@@ -117,13 +125,13 @@ public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager
     }
 
     @Override
-    public void requestChallenge(String userId) {
-        DoorUnlockMessage msg = new DoorUnlockMessage(userId, Map.of(DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_REQUESTED));
+    public void requestChallenge(String userId, String doorId) {
+        DoorUnlockMessage msg = new DoorUnlockMessage(userId, doorId, Map.of(DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_REQUESTED));
         communicationManager.sendMessage(msg);
     }
 
     @Override
-    public void requestChallenge(User user) {
-        requestChallenge(user.getId());
+    public void requestChallenge(User user, String doorId) {
+        requestChallenge(user.getId(), doorId);
     }
 }

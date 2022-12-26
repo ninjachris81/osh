@@ -11,29 +11,13 @@ DigitalActor::DigitalActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueT
 }
 
 
-bool DigitalActor::cmdSupported(ACTOR_CMDS cmd) {
+bool DigitalActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
-    case ACTOR_CMD_ON:
-    case ACTOR_CMD_OFF:
+    case actor::ACTOR_CMD_ON:
+    case actor::ACTOR_CMD_OFF:
         return true;
     default:
         return false;
-    }
-}
-
-void DigitalActor::_triggerCmd(ACTOR_CMDS cmd) {
-    iDebug() << Q_FUNC_INFO << cmd;
-
-    switch(cmd) {
-    case ACTOR_CMD_ON:
-        Q_EMIT(statusRequested(true));
-        break;
-    case ACTOR_CMD_OFF:
-        Q_EMIT(statusRequested(false));
-        break;
-    default:
-        iWarning() << "Cmd not supported" << cmd;
-        break;
     }
 }
 
@@ -49,4 +33,8 @@ QVariant DigitalActor::_updateValue(QVariant newValue) {
 
 bool DigitalActor::isAsync() {
     return m_isAsync;
+}
+
+void DigitalActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
+    Q_EMIT(statusRequested(cmd == actor::ACTOR_CMD_ON ? true : false));
 }

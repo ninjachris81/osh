@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT      -= gui
-#QT      += qml
+QT      += sql
 
 TARGET = Core
 TEMPLATE = lib
@@ -30,10 +30,12 @@ SOURCES += \
         actor/actorbase.cpp \
         actor/actorconfig.cpp \
         actor/actorconfigmessage.cpp \
+        actor/actormanager.cpp \
         actor/actormessage.cpp \
         actor/audioplaybackactor.cpp \
-        actor/client/clientactormanager.cpp \
+        actor/cameraactor.cpp \
         actor/digitalactor.cpp \
+        actor/dooractor.cpp \
         actor/shutteractor.cpp \
         communication/communicationmanagerbase.cpp \
         controller/audiocontrollerbase.cpp \
@@ -41,6 +43,8 @@ SOURCES += \
         controller/controllermessage.cpp \
         controller/digitalinputcontrollerbase.cpp \
         controller/filegpiocontroller.cpp \
+        database/databasemanager.cpp \
+        database/simpledatabasemanager.cpp \
         datamodel/serializationsupport.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
@@ -48,6 +52,8 @@ SOURCES += \
         communication/mqtt/mqttcommunicationmanagerbase.cpp \
         device/devicediscoverymanagerbase.cpp \
         device/knowndevice.cpp \
+        doorunlock/doorunlockmanager.cpp \
+        doorunlock/doorunlockmessage.cpp \
         log/httplogforwarder.cpp \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
@@ -58,6 +64,8 @@ SOURCES += \
         serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemessage.cpp \
+        user/user.cpp \
+        user/usermanager.cpp \
         value/client/clientvaluemanager.cpp \
         value/longvalue.cpp \
         value/multivalue.cpp \
@@ -87,10 +95,12 @@ HEADERS += \
         actor/actorbase.h \
         actor/actorconfig.h \
         actor/actorconfigmessage.h \
+        actor/actormanager.h \
         actor/actormessage.h \
         actor/audioplaybackactor.h \
-        actor/client/clientactormanager.h \
+        actor/cameraactor.h \
         actor/digitalactor.h \
+        actor/dooractor.h \
         actor/shutteractor.h \
         communication/communicationmanagerbase.h \
         controller/audiocontrollerbase.h \
@@ -98,6 +108,8 @@ HEADERS += \
         controller/controllermessage.h \
         controller/digitalinputcontrollerbase.h \
         controller/filegpiocontroller.h \
+        database/databasemanager.h \
+        database/simpledatabasemanager.h \
         datamodel/serializationsupport.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
@@ -105,6 +117,9 @@ HEADERS += \
         communication/mqtt/mqttcommunicationmanagerbase.h \
         device/devicediscoverymanagerbase.h \
         device/knowndevice.h \
+        doorunlock/doorunlockmanager.h \
+        doorunlock/doorunlockmessage.h \
+        helpers.h \
         log/httplogforwarder.h \
         log/logforwarderbase.h \
         log/logmanager.h \
@@ -131,6 +146,8 @@ HEADERS += \
         sharedlib.h \
         time/client/clientsystemtimemanager.h \
         time/systemtimemessage.h \
+        user/user.h \
+        user/usermanager.h \
         value/client/clientvaluemanager.h \
         value/longvalue.h \
         value/multivalue.h \

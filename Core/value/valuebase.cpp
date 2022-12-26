@@ -76,7 +76,9 @@ bool ValueBase::updateValue(QVariant newValue) {
     m_value = _updateValue(newValue);
     //bool newValueApplied = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
-    if (m_alwaysEmit || isDifferent) Q_EMIT(valueChanged());
+    if (m_alwaysEmit || isDifferent) {
+        Q_EMIT(valueChanged());
+    }
     return isDifferent;
 }
 
@@ -155,12 +157,12 @@ UNIT_TYPE ValueBase::unitType() {
 
 UNIT_TYPE ValueBase::valueTypeToUnitType(VALUE_TYPE valueType) {
     switch(valueType) {
-    case VT_BRIGHTNESS: return UT_PERCENT;
-    case VT_TEMP: return UT_DEGREES;
-    case VT_HUMIDITY: return UT_PERCENT;
-    case VT_WATER_FLOW: return UT_LITER_PER_MIN;
-    case VT_WATER_LEVEL: return UT_LITERS;
-    case VT_TIMESTAMP: return UT_TIMESTAMP;
+    case VALUE_TYPE_BRIGHTNESS: return UT_PERCENT;
+    case VALUE_TYPE_TEMP: return UT_DEGREES;
+    case VALTYPE_HUMIDITY: return UT_PERCENT;
+    case VALTYPE_WATER_FLOW: return UT_LITER_PER_MIN;
+    case VALTYPE_WATER_LEVEL: return UT_LITERS;
+    case VALTYPE_TIMESTAMP: return UT_TIMESTAMP;
     default: return UT_UNKNOWN;
     }
 }

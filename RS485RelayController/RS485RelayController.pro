@@ -31,8 +31,7 @@ SOURCES += \
     rs485relaycontroller.cpp
 
 HEADERS += \
-        rs485relaycontroller.h \
-        sharedlib.h
+        rs485relaycontroller.h
 
 unix {
     target.path = /usr/lib

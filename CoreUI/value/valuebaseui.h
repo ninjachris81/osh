@@ -10,7 +10,7 @@ class ValueBaseUI : public VisualItemBase
 {
     Q_OBJECT
 public:
-    explicit ValueBaseUI(QObject *parent = nullptr);
+    explicit ValueBaseUI(Identifyable *parent = nullptr);
 
     Q_PROPERTY(QString fullId READ fullId NOTIFY fullIdChanged)
     Q_PROPERTY(bool isValid READ isValid NOTIFY isValidChanged)

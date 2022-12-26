@@ -39,7 +39,7 @@ public class DatamodelManager extends ManagerBase implements IDatamodelManager {
 	@Override
 	public void handleReceivedMessage(MessageBase msg) {
 	}
-	
+
 	@Override
 	public DatamodelBase getDatamodel() {
 		return datamodel;
@@ -67,7 +67,8 @@ public class DatamodelManager extends ManagerBase implements IDatamodelManager {
 		datamodelLoader.save(datamodel);
 	}
 
-	public void init() {
+	@Override
+	public void initComplete() {
 		log.info("Init Datamodel");
 		
 	    String datamodelLoaderName = appConfig.getDatamodel().getLoader();

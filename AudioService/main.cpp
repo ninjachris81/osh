@@ -7,7 +7,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
-//#include "actor/client/clientactormanager.h"
+//#include "actor/actormanager.h"
 #include "audiocontroller.h"
 #include "actor/digitalactor.h"
 #include "value/booleanvalue.h"
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     ValueGroup actorGroup(audioController.id());
     for (quint8 i=0;i<audioController.channelCount();i++) {
         qDebug() << "Init value" << i;
-        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VT_SWITCH);
+        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VALTYPE_SWITCH);
         value->withValueTimeout(ValueBase::VT_MID);
         values.append(value);
         audioController.bindValue(value);

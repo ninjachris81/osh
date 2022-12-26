@@ -10,12 +10,16 @@ SUBDIRS += \
     CoreServiceSimulator \
     CoreSimulation \
     CoreUI \
+    DoorUnlockController \
+    DoorUnlockService \
     KMTronicRelayController \
     KMTronicRelayService \
     MCP23017InputController \
     MCP23017InputService \
     OBISController \
     OBISService \
+    OnvifController \
+    OnvifService \
     QMqttCommunicationManager \
     RS485RelayController \
     RS485RelayService \
@@ -26,6 +30,7 @@ SUBDIRS += \
 CoreService.depends = Core CoreServer QMqttCommunicationManager
 CoreUI.depends = Core CoreServer CoreSimulation QMqttCommunicationManager
 CoreServer.depends = Core
+CoreSimulation.depends = Core CoreServer QMqttCommunicationManager
 CoreServiceSimulator.depends = Core CoreServer CoreSimulation QMqttCommunicationManager
 
 QMqttCommunicationManager.depends = qtmqtt Core
@@ -45,5 +50,11 @@ RS485RelayService.depends = Core RS485RelayController QMqttCommunicationManager
 WBB12Controller.depends = Core CoreSerial
 WBB12Service.depends = Core WBB12Controller QMqttCommunicationManager
 
+DoorUnlockController.depends = Core
+DoorUnlockService.depends = Core DoorUnlockController QMqttCommunicationManager
+
 OBISController.depends = Core CoreSerial
 OBISService.depends = Core OBISController QMqttCommunicationManager
+
+OnvifController.depends = Core
+OnvifService.depends = Core OnvifController QMqttCommunicationManager

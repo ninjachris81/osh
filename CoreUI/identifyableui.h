@@ -8,7 +8,7 @@ class IdentifyableUI : public QObject
 {
     Q_OBJECT
 public:
-    explicit IdentifyableUI(QObject *parent = nullptr);
+    explicit IdentifyableUI(Identifyable *parent = nullptr);
 
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
 

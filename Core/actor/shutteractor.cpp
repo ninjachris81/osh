@@ -9,10 +9,10 @@ ShutterActor::ShutterActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueT
 
 }
 
-bool ShutterActor::cmdSupported(ACTOR_CMDS cmd) {
+bool ShutterActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
-    case ACTOR_CMD_UP:
-    case ACTOR_CMD_DOWN:
+    case actor::ACTOR_CMD_UP:
+    case actor::ACTOR_CMD_DOWN:
         return true;
     default:
         return false;
@@ -34,13 +34,13 @@ bool ShutterActor::isAsync() {
 }
 
 
-void ShutterActor::_triggerCmd(ACTOR_CMDS cmd) {
+void ShutterActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << cmd;
 
     switch(cmd) {
-    case ACTOR_CMD_UP:
+    case actor::ACTOR_CMD_UP:
         break;
-    case ACTOR_CMD_DOWN:
+    case actor::ACTOR_CMD_DOWN:
         break;
     default:
         iWarning() << "Cmd not supported" << cmd;

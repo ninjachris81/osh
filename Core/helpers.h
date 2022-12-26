@@ -25,6 +25,8 @@ public:
 
         Q_ASSERT(returnConnection != nullptr);
 
+        qDebug() << "Connection success";
+
         return returnConnection;
     }
 

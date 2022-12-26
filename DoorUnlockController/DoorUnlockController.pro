@@ -1,5 +1,5 @@
 QT -= gui
-
+QT += sql
 
 TARGET = DoorUnlockController
 TEMPLATE = lib

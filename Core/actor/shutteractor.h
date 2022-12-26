@@ -16,7 +16,7 @@ public:
     explicit ShutterActor();
     explicit ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
-    /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);
+    /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue);
 
@@ -26,7 +26,7 @@ public:
     void setTiltState(IntegerValue* tiltState);
 
 protected:
-    /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd);
+    /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
 
     IntegerValue* m_closeState = nullptr;
     IntegerValue* m_tiltState = nullptr;

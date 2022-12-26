@@ -14,15 +14,17 @@ public:
         CHALLENGE_REQUEST,
         CHALLENGE_CREATED,
         CHALLENGE_CALCULATED,
-        CHALLENGE_SUCCESS
+        CHALLENGE_SUCCESS,
+        CHALLENGE_FAILURE
     };
 
     static QLatin1String DU_ATTRIB_STAGE;
     static QLatin1String DU_ATTRIB_TS;
     static QLatin1String DU_ATTRIB_OTH;
     static QLatin1String DU_ATTRIB_RESULT_HASH;
+    static QLatin1String DU_ATTRIB_DOOR_ID;
 
-    explicit DoorUnlockMessage(QString userId, QVariantMap values, QObject *parent = nullptr);
+    explicit DoorUnlockMessage(QString userId, QString doorId, QVariantMap values, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType();
 
@@ -32,10 +34,13 @@ public:
 
     QString userId();
 
+    QString doorId();
+
     QVariantMap values();
 
 private:
     QString m_userId;
+    QString m_doorId;
     QVariantMap m_values;
 
 signals:

@@ -42,7 +42,7 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="application/x-door-open" />
+                <data android:mimeType="application/x-door-unlock" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.osh.action.requestDoorUnlockChallenge" />

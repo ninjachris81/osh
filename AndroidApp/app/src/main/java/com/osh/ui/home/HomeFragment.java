@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getActivity(), DoorOpenActivity.class);
             startActivity(intent);
             Intent intent2 = new Intent(DoorOpenActivity.REQUEST_DOOR_UNLOCK_CHALLENGE_INTENT);
+            intent2.putExtra(DoorOpenActivity.DU_EXTRA_DOOR_ID, "frontDoor");
             startActivity(intent2);
         });
 

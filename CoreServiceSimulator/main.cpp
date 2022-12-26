@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
     //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nprocessor.*=true\ndatamodel.*=true"));
     //QLoggingCategory::setFilterRules(QStringLiteral("device.*=false"));
 
+    simulator.init();
 
     return a.exec();
 }

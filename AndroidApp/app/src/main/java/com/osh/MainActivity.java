@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
+import com.osh.actor.IActorManager;
 import com.osh.communication.mqtt.service.ICommunicationManager;
+import com.osh.doorunlock.IDoorUnlockManager;
 
 import javax.inject.Inject;
 
@@ -21,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     ICommunicationManager communicationManager;
+
+    @Inject
+    IActorManager actorManager;
+
+    @Inject
+    IDoorUnlockManager doorUnlockManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

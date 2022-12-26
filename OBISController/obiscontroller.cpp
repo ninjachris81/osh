@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include "controller/controllermanager.h"
+#include "helpers.h"
 
 OBISController::OBISController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent)
 {
@@ -19,11 +20,11 @@ void OBISController::init() {
     m_serialClient->setLineMode(false);
     m_serialClient->setReadDatagramSize(1);
 
-    connect(m_serialClient, &SerialPortClient::connected, this, &OBISController::onSerialConnected);
-    connect(m_serialClient, &SerialPortClient::disconnected, this, &OBISController::onSerialDisconnected);
-    connect(m_serialClient, &SerialPortClient::dataReceived, this, &OBISController::onSerialDataReceived);
+    Helpers::safeConnect(m_serialClient, &SerialPortClient::connected, this, &OBISController::onSerialConnected, SIGNAL(connected()), SLOT(onSerialConnected()));
+    Helpers::safeConnect(m_serialClient, &SerialPortClient::disconnected, this, &OBISController::onSerialDisconnected, SIGNAL(disconnected()), SLOT(onSerialDisconnected()));
+    Helpers::safeConnect(m_serialClient, &SerialPortClient::dataReceived, this, &OBISController::onSerialDataReceived, SIGNAL(dataReceived(QByteArray)), SLOT(onSerialDataReceived(QByteArray)));
 
-    connect(this, &OBISController::dataReceived, this, &OBISController::onDataReceived);
+    Helpers::safeConnect(this, &OBISController::dataReceived, this, &OBISController::onDataReceived, SIGNAL(dataReceived()), SLOT(onDataReceived()));
 }
 
 void OBISController::start() {

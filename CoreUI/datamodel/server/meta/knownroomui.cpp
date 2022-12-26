@@ -2,7 +2,7 @@
 #include "value/valuebaseui.h"
 #include "actor/actorbaseui.h"
 
-KnownRoomUI::KnownRoomUI( QObject *parent) : VisualItemBase(parent)
+KnownRoomUI::KnownRoomUI(Identifyable *parent) : VisualItemBase(parent)
 {
     m_knownRoom = static_cast<KnownRoom*>(parent);
 

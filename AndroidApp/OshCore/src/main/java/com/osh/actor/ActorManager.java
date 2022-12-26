@@ -30,4 +30,9 @@ public class ActorManager extends ManagerBase implements IActorManager {
 	public void handleReceivedMessage(MessageBase msg) {
 	}
 
+	@Override
+	public void initComplete() {
+
+	}
+
 }

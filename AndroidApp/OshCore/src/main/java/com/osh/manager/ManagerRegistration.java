@@ -21,20 +21,31 @@ public class ManagerRegistration implements IManagerRegistration {
     
     protected Map<String, ManagerBase> managers = new HashMap<>();
 
+	protected int expectedCount;
+
     @Override
 	public INSTANCE_ROLE getInstanceRole() {
 		return instanceRole;
 	}
 	
-	public ManagerRegistration(INSTANCE_ROLE instanceRole) {
+	public ManagerRegistration(INSTANCE_ROLE instanceRole, int expectedCount) {
 		super();
 		this.instanceRole = instanceRole;
+		this.expectedCount = expectedCount;
 	}
 
 	@Override
 	public void registerManager(ManagerBase manager) {
 		log.debug("Register manager {}", manager.getId());
 	    managers.put(manager.getId(), manager);
+
+		if (expectedCount == managers.size()) {
+			log.info("All managers complete - init");
+
+			for (ManagerBase m : managers.values()) {
+				m.initComplete();
+			}
+		}
 	}
 
 	public Map<String, ManagerBase> getManagers() {

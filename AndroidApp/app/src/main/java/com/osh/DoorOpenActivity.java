@@ -1,7 +1,5 @@
 package com.osh;
 
-import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 import static android.widget.Toast.*;
 
 import androidx.annotation.NonNull;
@@ -12,16 +10,17 @@ import android.content.Intent;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.osh.doorunlock.IDoorUnlockManager;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.concurrent.Executor;
 
@@ -32,9 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockManager.CallbackListener {
 
+    public static final String DU_EXTRA_DOOR_ID = "doorId";
     private static final String TAG = DoorOpenActivity.class.getName();
-
-    public static final String OSH_REQUEST_CHALLENGE = "REQUEST-CHALLENGE";
 
     public static final String REQUEST_DOOR_UNLOCK_CHALLENGE_INTENT = "com.osh.action.requestDoorUnlockChallenge";
 
@@ -70,9 +68,12 @@ public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockMa
 
                     if (messages[i].getRecords().length == 1) {
                         String data = new String(messages[i].getRecords()[0].getPayload());
-                        if (data.equals(OSH_REQUEST_CHALLENGE)) {
+
+                        if (!StringUtils.isEmpty(data)) {
                             Log.i(TAG, "Requesting challenge");
-                            executeAuth();
+                            executeAuth(data);
+                        } else {
+                            Log.w(TAG, "No doorid defined");
                         }
                         Log.i(TAG, data);
                     } else {
@@ -84,13 +85,20 @@ public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockMa
             }
         } else if (REQUEST_DOOR_UNLOCK_CHALLENGE_INTENT.equals(intent.getAction())) {
             Log.i(TAG, "Requesting challenge");
-            executeAuth();
+
+            String doorId = intent.getStringExtra(DU_EXTRA_DOOR_ID);
+
+            if (!StringUtils.isEmpty(doorId)) {
+                executeAuth(doorId);
+            } else {
+                Log.w(TAG, "No doorid defined");
+            }
         } else {
             Log.w(TAG, "Ignoring intent");
         }
     }
 
-    private void executeAuth() {
+    private void executeAuth(String doorId) {
         Executor executor;
         BiometricPrompt biometricPrompt;
         BiometricPrompt.PromptInfo promptInfo;
@@ -112,7 +120,7 @@ public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockMa
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                doorUnlockManager.requestChallenge("testuser");
+                doorUnlockManager.requestChallenge("testuser", doorId);
             }
 
             @Override
@@ -136,13 +144,19 @@ public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockMa
 
     @Override
     public void onAuthSuccess() {
-        makeText(getApplicationContext(),
-                "Authentication succeeded!", LENGTH_SHORT).show();
+
+        runOnUiThread(() -> {
+            makeText(getApplicationContext(),
+                    "Authentication succeeded!", LENGTH_SHORT).show();
+        });
+
     }
 
     @Override
     public void onAuthFailure() {
-        makeText(getApplicationContext(),
-                "Authentication Failed!", LENGTH_SHORT).show();
+        runOnUiThread(() -> {
+            makeText(getApplicationContext(),
+                    "Authentication Failed!", LENGTH_SHORT).show();
+        });
     }
 }

@@ -10,7 +10,7 @@ class ProcessorTaskUI : public IdentifyableUI
 {
     Q_OBJECT
 public:
-    explicit ProcessorTaskUI(QObject *parent = nullptr);
+    explicit ProcessorTaskUI(Identifyable *parent = nullptr);
 
     Q_PROPERTY(QString scriptCode READ scriptCode NOTIFY scriptCodeChanged)
     Q_PROPERTY(qint64 scheduleInterval READ scheduleInterval NOTIFY scheduleIntervalChanged)

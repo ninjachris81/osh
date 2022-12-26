@@ -11,7 +11,7 @@ class KnownRoomUI : public VisualItemBase
 {
     Q_OBJECT
 public:
-    explicit KnownRoomUI(QObject *parent = nullptr);
+    explicit KnownRoomUI(Identifyable *parent = nullptr);
 
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QList<QObject*> values READ values NOTIFY valuesChanged)

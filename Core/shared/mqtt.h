@@ -33,6 +33,9 @@
  *
  * Script Result Structure
  * MQTT_BASE_PATH / (message_type) / (processorTaskId)
+ *
+ * Door Unlock Structure
+ * MQTT_BASE_PATH / (message_type) / (userId)
 */
 
 
@@ -50,6 +53,7 @@
 #define MQTT_MESSAGE_TYPE_CO            "co"        // controller
 #define MQTT_MESSAGE_TYPE_LO            "lo"        // log
 #define MQTT_MESSAGE_TYPE_SR            "sr"        // script result reports
+#define MQTT_MESSAGE_TYPE_DU            "du"        // door unlock
 
 // devices
 

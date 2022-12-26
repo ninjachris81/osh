@@ -9,7 +9,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
-#include "actor/client/clientactormanager.h"
+#include "actor/actormanager.h"
 #include "value/doublevalue.h"
 #include "shared/mqtt_qt.h"
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     LocalConfig config;
 
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false"));
+    //QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false"));
 
     ManagerRegistration managerRegistration(ManagerRegistration::CLIENT);
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
-    ClientActorManager actorManager;
+    ActorManager actorManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     QList<ValueBase*> values;
     ValueGroup valueGroup(obisController.id());
     for (quint8 i=0;i<OBISController::SML_INDEX::COUNT;i++) {
-        DoubleValue* value = new DoubleValue(&valueGroup, QString::number(i), value::VT_ENERGY_CONSUMPTION_TIME);
+        DoubleValue* value = new DoubleValue(&valueGroup, QString::number(i), value::VALTYPE_ENERGY_CONSUMPTION_TIME);
         value->withValueTimeout(ValueBase::VT_MID); // no need, as internal status update triggers maintainance
         values.append(value);
         obisController.bindValue(value);
@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
     obisController.bindValueManager(&valueManager, values);
 
     controllerManager.start();
+
+    qDebug() << "RUNNING";
 
     return a.exec();
 }

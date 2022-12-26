@@ -16,7 +16,7 @@
 #include "warn/systemwarningsmanager.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "processor/server/modelprocessormanager.h"
-#include "actor/server/actormanager.h"
+#include "actor/actormanager.h"
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
 
@@ -25,6 +25,8 @@ class SHARED_LIB_EXPORT Simulator : public QObject
     Q_OBJECT
 public:
     explicit Simulator(LocalConfig* config, QObject *parent = nullptr);
+
+    void init();
 
 protected:
     LocalConfig* m_config;

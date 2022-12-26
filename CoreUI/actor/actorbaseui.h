@@ -11,7 +11,7 @@ class ActorBaseUI : public ValueBaseUI
 {
     Q_OBJECT
 public:
-    explicit ActorBaseUI(QObject *parent = nullptr);
+    explicit ActorBaseUI(Identifyable *parent = nullptr);
 
     ActorBase* parent();
 

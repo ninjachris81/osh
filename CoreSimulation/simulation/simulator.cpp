@@ -28,8 +28,10 @@ Simulator::Simulator(LocalConfig *config, QObject *parent) : QObject(parent), m_
     m_managerRegistration->registerManager(m_logManager);
     m_managerRegistration->registerManager(m_actorManager);
     m_managerRegistration->registerManager(m_databaseManager);
+}
 
-    m_managerRegistration->init(config);
+void Simulator::init() {
+    qInfo() << Q_FUNC_INFO;
 
-
+    m_managerRegistration->init(m_config);
 }

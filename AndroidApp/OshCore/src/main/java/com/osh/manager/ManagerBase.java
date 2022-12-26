@@ -20,4 +20,6 @@ public abstract class ManagerBase extends Identifyable {
 	}
 
 	public abstract void handleReceivedMessage(MessageBase msg);
+
+	public abstract void initComplete();
 }

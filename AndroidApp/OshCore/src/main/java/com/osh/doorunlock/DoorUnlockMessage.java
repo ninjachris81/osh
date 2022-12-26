@@ -7,6 +7,7 @@ import java.util.Map;
 public class DoorUnlockMessage extends MessageBase {
 
     public static String DU_ATTRIB_STAGE = "stage";
+    public static String DU_ATTRIB_DOOR_ID = "did";
     public static String DU_ATTRIB_TS = "ts";
     public static String DU_ATTRIB_OTH = "oth";
     public static String DU_ATTRIB_RESULT_HASH = "rh";
@@ -20,11 +21,17 @@ public class DoorUnlockMessage extends MessageBase {
     };
 
     private String userId;
+    private String doorId;
     private Map<String, Object> values;
 
-    public DoorUnlockMessage(String userId, Map<String, Object> values) {
+    public DoorUnlockMessage(String userId, String doorId, Map<String, Object> values) {
         this.userId = userId;
+        this.doorId = doorId;
         this.values = values;
+    }
+
+    public String getDoorId() {
+        return doorId;
     }
 
     public String getUserId() {
@@ -47,6 +54,6 @@ public class DoorUnlockMessage extends MessageBase {
 
     @Override
     public String getSecondLevelId() {
-        return "";
+        return doorId;
     }
 }

@@ -33,10 +33,6 @@ public:
 public slots:
     void start();
 
-signals:
-    void lineReceived(QByteArray data);
-    void dataReceived(QByteArray data);
-
 private:
     void startRestart();
 
@@ -55,7 +51,10 @@ private:
     quint8 m_readDatagramSize = 0;
     bool m_isConnected = false;
 
-signals:
+Q_SIGNALS:
+    void lineReceived(QByteArray data);
+    void dataReceived(QByteArray data);
+
     void connected();
     void disconnected();
 

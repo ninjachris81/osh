@@ -39,7 +39,12 @@ public class ValueManager extends ManagerBase implements IValueManager {
 			}
 		}
 	}
-	
+
+	@Override
+	public void initComplete() {
+
+	}
+
 	private void valueReceived(String valueGroupId, String valueId, Object newValue) {
 	    ValueBase value = getValue(valueGroupId, valueId);
 	    if (value != null) {

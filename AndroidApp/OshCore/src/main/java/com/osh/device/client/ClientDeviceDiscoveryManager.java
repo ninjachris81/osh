@@ -20,4 +20,9 @@ public class ClientDeviceDiscoveryManager extends DeviceDiscoveryManagerBase {
 	public void handleReceivedMessage(MessageBase msg) {
 	}
 
+	@Override
+	public void initComplete() {
+
+	}
+
 }

@@ -24,7 +24,7 @@
         android:id="@+id/unlockDoor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unlock Door"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="164dp" />
+        android:text="Unlock Front Door"
+        tools:layout_editor_absoluteX="108dp"
+        tools:layout_editor_absoluteY="195dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
