@@ -3,3 +3,4 @@ credentials.h
 /onviflibs/gsoap/gsoap-2.8/gsoap/doc
 /onviflibs/gsoap/gsoap-2.8/gsoap/samples
 /onviflibs/gsoap/gsoap-2.8/gsoap/ios_plugin/examples
+build-*
