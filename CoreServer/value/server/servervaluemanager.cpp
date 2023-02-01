@@ -16,10 +16,10 @@ ServerValueManager::ServerValueManager(QObject *parent) : ValueManagerBase(paren
 }
 
 void ServerValueManager::init(LocalConfig *config) {
-    REQUIRE_MANAGER(CommunicationManagerBase);
+    ValueManagerBase::init(config);
+
     REQUIRE_MANAGER(SimpleDatabaseManager);
 
-    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
     m_simpleDatabaseManager = getManager<SimpleDatabaseManager>(SimpleDatabaseManager::MANAGER_ID);
 
     connect(m_commManager, &CommunicationManagerBase::connected, this, [this] {

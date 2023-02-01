@@ -8,9 +8,8 @@ QLatin1String CommonScripts::INTERVAL_LAST_CHANGES = QLatin1String("interval_las
 QLatin1String CommonScripts::INTERVAL_STATES = QLatin1String("interval_states_");
 
 
-CommonScripts::CommonScripts(QJSEngine *engine, DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager)
+CommonScripts::CommonScripts(QJSEngine *engine, DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
 {
-
 }
 
 /*
@@ -161,7 +160,7 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
 
             // finally set the value
             if (actualValue != expectedValue && expectedValue.isValid()) {
-                lightActor->triggerCmd(expectedValue.toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, triggerReason);
+                publishCmd(lightActorFullId, expectedValue.toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, triggerReason);
             }
         }
 
@@ -297,11 +296,20 @@ void CommonScripts::publishValue(QString fullId, QVariant value) {
     publishValue(val, value);
 }
 
+void CommonScripts::publishCmd(QString fullId, int cmd, QString reason) {
+    ActorBase* actor = m_datamodel->actors().value(fullId);
+    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
+}
+
 void CommonScripts::publishValue(ValueBase* val, QVariant value) {
     val->updateValue(value);
     m_valueManager->publishValue(val);
 }
 
+void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
+    actor->triggerCmd(cmd, reason);
+    m_actorManager->publishCmd(actor, cmd);
+}
 
 void CommonScripts::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {
     if (durationOffMs > 0 && durationOnMs > 0) {

@@ -15,6 +15,7 @@
 #include "actor/actormanager.h"
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
+#include "database/simpledatabasemanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
     LogManager logManager;
     ActorManager actorManager;
     DatabaseManager databaseManager;
+    SimpleDatabaseManager simpleDatabaseManager;
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
@@ -48,10 +50,11 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&datamodelManager);
+    managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&modelProcessor);
     managerRegistration.registerManager(&logManager);
-    managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&databaseManager);
+    managerRegistration.registerManager(&simpleDatabaseManager);
 
     managerRegistration.init(&config);
 

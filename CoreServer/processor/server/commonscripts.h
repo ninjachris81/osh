@@ -11,12 +11,13 @@
 #include "datamodel/server/datamodelbase.h"
 #include "processor/server/localstorage.h"
 #include "value/valuemanagerbase.h"
+#include "actor/actormanager.h"
 
 class CommonScripts : public ScriptBase
 {
     Q_OBJECT
 public:
-    explicit CommonScripts(QJSEngine * engine, DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, QObject *parent = nullptr);
+    explicit CommonScripts(QJSEngine * engine, DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
     Q_INVOKABLE bool ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function);
 
@@ -36,6 +37,7 @@ public:
     static QLatin1String INTERVAL_STATES;
 
     Q_INVOKABLE void publishValue(QString fullId, QVariant value);
+    Q_INVOKABLE void publishCmd(QString fullId, int cmd, QString reason);
 
     Q_INVOKABLE void setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState = true);
     Q_INVOKABLE bool getIntervalState(QString key);
@@ -46,8 +48,10 @@ private:
     DatamodelBase* m_datamodel;
     LocalStorage* m_localStorage;
     ValueManagerBase* m_valueManager;
+    ActorManager* m_actorManager;
 
     void publishValue(ValueBase* val, QVariant value);
+    void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason);
 
 signals:
 
