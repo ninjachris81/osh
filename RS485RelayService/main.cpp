@@ -39,13 +39,14 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
 
     RS485RelayController relayController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "allRelays0"), RS485RelayController::RS485_SERIAL_32PORT, RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT));
+    quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
     controllerManager.registerController(&relayController);
 
     managerRegistration.init(&config);
 
     QList<ValueBase*> actors;
     ValueGroup actorGroup(relayController.id());
-    for (quint8 i=0;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT);i++) {
+    for (quint8 i=offset;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT) + offset;i++) {
         qDebug() << "Init actor" << i;
         DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), VALTYPE_RELAY_LIGHT , true);
         actor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance

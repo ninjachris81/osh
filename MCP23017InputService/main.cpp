@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
 
-    MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "egInputs0"));
+    MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
+    quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
     controllerManager.registerController(&inputController);
 
     managerRegistration.init(&config);
@@ -45,7 +46,7 @@ int main(int argc, char *argv[])
     QList<ValueBase*> values;
 
     ValueGroup actorGroup(inputController.id());
-    for (quint8 i=0;i<inputController.inputCount();i++) {
+    for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
         qDebug() << "Init value" << i;
         BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VALTYPE_SWITCH);
         value->withValueTimeout(ValueBase::VT_MID);

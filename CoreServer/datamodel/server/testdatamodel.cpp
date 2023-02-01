@@ -114,25 +114,12 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
 
     // SWITCHES
     ValueGroup* nodeSwitches = addValueGroup("switches");
+    // Basement
     heatingRoom->addValue(  addBooleanValue(nodeSwitches, "0", VALTYPE_SWITCH, ValueBase::VT_MID));
     workshop->addValue(     addBooleanValue(nodeSwitches, "1", VALTYPE_SWITCH, ValueBase::VT_MID));
                             addBooleanValue(nodeSwitches, "2", VALTYPE_SWITCH, ValueBase::VT_MID);
-                            /*
-                            addBooleanValue(nodeBasementInputs, "3", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "4", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "5", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "6", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "7", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "8", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "9", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "10", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "11", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "12", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "13", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "14", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeBasementInputs, "15", VT_SWITCH, ValueBase::VT_MID);
-                            */
 
+    // EG
     kitchen->addValue(      addBooleanValue(nodeSwitches, "20", VALTYPE_SWITCH, ValueBase::VT_MID));
     diningRoom->addValue(   addBooleanValue(nodeSwitches, "21", VALTYPE_SWITCH, ValueBase::VT_MID));
     toilet->addValue(       addBooleanValue(nodeSwitches, "22", VALTYPE_SWITCH, ValueBase::VT_MID));
@@ -140,36 +127,12 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     egFloor->addValue(      addBooleanValue(nodeSwitches, "24", VALTYPE_SWITCH, ValueBase::VT_MID));
     workingRoom->addValue(  addBooleanValue(nodeSwitches, "25", VALTYPE_SWITCH, ValueBase::VT_MID));
     supplyRoom->addValue(   addBooleanValue(nodeSwitches, "26", VALTYPE_SWITCH, ValueBase::VT_MID));
-    /*
-                            addBooleanValue(nodeEGInputs, "7", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "8", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "9", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "10", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "11", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "12", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "13", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "14", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeEGInputs, "15", VT_SWITCH, ValueBase::VT_MID);
-                            */
-
-    kitchen->addValue(      addBooleanValue(nodeSwitches, "40", VALTYPE_SWITCH, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodeSwitches, "41", VALTYPE_SWITCH, ValueBase::VT_MID));
-    toilet->addValue(       addBooleanValue(nodeSwitches, "42", VALTYPE_SWITCH, ValueBase::VT_MID));
-    mainFloor->addValue(    addBooleanValue(nodeSwitches, "43", VALTYPE_SWITCH, ValueBase::VT_MID));
-    egFloor->addValue(      addBooleanValue(nodeSwitches, "44", VALTYPE_SWITCH, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodeSwitches, "45", VALTYPE_SWITCH, ValueBase::VT_MID));
-    supplyRoom->addValue(   addBooleanValue(nodeSwitches, "46", VALTYPE_SWITCH, ValueBase::VT_MID));
-    /*
-                            addBooleanValue(nodeOGInputs, "7", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "8", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "9", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "10", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "11", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "12", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "13", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "14", VT_SWITCH, ValueBase::VT_MID);
-                            addBooleanValue(nodeOGInputs, "15", VT_SWITCH, ValueBase::VT_MID);
-                            */
+    // OG
+    ogFloor->addValue(      addBooleanValue(nodeSwitches, "28", VALTYPE_SWITCH, ValueBase::VT_MID));
+    clothingRoom->addValue( addBooleanValue(nodeSwitches, "29", VALTYPE_SWITCH, ValueBase::VT_MID));
+    livingRoom->addValue(   addBooleanValue(nodeSwitches, "30", VALTYPE_SWITCH, ValueBase::VT_MID));
+    sleepingRoom->addValue( addBooleanValue(nodeSwitches, "31", VALTYPE_SWITCH, ValueBase::VT_MID));
+    bathRoom->addValue(     addBooleanValue(nodeSwitches, "32", VALTYPE_SWITCH, ValueBase::VT_MID));
 
     ValueGroup* nodeTemps = addValueGroup("temps");
     // EG
