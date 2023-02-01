@@ -49,11 +49,15 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
     }
 }
 
-void ActorManager::registerActor(ActorBase* actor) {
-    m_actors.insert(actor->id(), actor);
+void ActorManager::registerActor(ActorBase* actor, ValueManagerBase *valueManager) {
+    qDebug() << Q_FUNC_INFO << actor->fullId();
+
+    m_actors.insert(actor->fullId(), actor);
     Q_ASSERT(connect(actor, &ActorBase::cmdTriggered, this, [this, actor](actor::ACTOR_CMDS cmd) {
         // TODO
     }) != nullptr);
+
+    valueManager->registerValue(actor);
 }
 
 void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd) {

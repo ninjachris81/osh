@@ -52,10 +52,8 @@ int main(int argc, char *argv[])
         actor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
         actors.append(actor);
         relayController.bindActor(actor);
-        actorManager.registerActor(actor);
+        actorManager.registerActor(actor, &valueManager);
     }
-
-    relayController.bindValueManager(&valueManager, actors);
 
     controllerManager.start();
 

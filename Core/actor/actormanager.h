@@ -27,7 +27,7 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
-    void registerActor(ActorBase* actor);
+    void registerActor(ActorBase* actor, ValueManagerBase* valueManager);
 
     void publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd);
 

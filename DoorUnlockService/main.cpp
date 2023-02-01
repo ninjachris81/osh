@@ -60,12 +60,10 @@ int main(int argc, char *argv[])
     actors.append(frontDoorDoorActor);
     actors.append(frontDoorRelayActor);
 
-    actorManager.registerActor(frontDoorDoorActor);
-    actorManager.registerActor(frontDoorRelayActor);
+    actorManager.registerActor(frontDoorDoorActor, &valueManager);
+    actorManager.registerActor(frontDoorRelayActor, &valueManager);
 
     frontDoorUnlockController.bindDoorActor(frontDoorDoorActor, frontDoorRelayActor);
-
-    frontDoorUnlockController.bindValueManager(&valueManager, actors);
 
     controllerManager.start();
 
