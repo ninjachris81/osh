@@ -53,9 +53,8 @@ int main(int argc, char *argv[])
         value->withValueTimeout(ValueBase::VT_MID); // no need, as internal status update triggers maintainance
         values.append(value);
         obisController.bindValue(value);
+        valueManager.registerValue(value);
     }
-
-    obisController.bindValueManager(&valueManager, values);
 
     controllerManager.start();
 

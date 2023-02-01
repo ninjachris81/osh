@@ -51,9 +51,9 @@ int main(int argc, char *argv[])
         value->withValueTimeout(ValueBase::VT_MID);
         values.append(value);
         audioController.bindValue(value);
+        valueManager.registerValue(value);
     }
 
-    audioController.bindValueManager(&valueManager, values);
     audioController.bindCommunicationManager(&commManager);
 
     audioController.start();

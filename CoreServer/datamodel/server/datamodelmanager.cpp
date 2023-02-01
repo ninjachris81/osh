@@ -81,8 +81,7 @@ void DatamodelManager::registerActors() {
     while(it.hasNext()) {
         it.next();
         iDebug() << "Register datamodel actor" << it.key();
-        actorManager->registerActor(it.value());
-        valueManager->registerValue(it.value());
+        actorManager->registerActor(it.value(), valueManager);
     }
 }
 

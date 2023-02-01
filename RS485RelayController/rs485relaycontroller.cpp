@@ -64,7 +64,7 @@ quint8 RS485RelayController::getRelayCount(RELAY_MODEL model) {
 }
 
 void RS485RelayController::onStateChanged() {
-    iDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO << m_modbusClient.state();
 
     switch(m_modbusClient.state()) {
     case QModbusClient::ConnectedState:

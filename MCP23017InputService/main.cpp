@@ -52,9 +52,8 @@ int main(int argc, char *argv[])
         value->withValueTimeout(ValueBase::VT_MID);
         values.append(value);
         inputController.bindValue(value);
+        valueManager.registerValue(value);
     }
-
-    inputController.bindValueManager(&valueManager, values);
 
     inputController.start();
 

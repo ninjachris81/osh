@@ -15,6 +15,7 @@ void ControllerBase::setConfig(LocalConfig* config) {
     m_config = config;
 }
 
+/*
 void ControllerBase::bindValueManager(ClientValueManager *clientValueManager, QList<ValueBase*> valueOrActors) {
 
     QListIterator<ValueBase*> it(valueOrActors);
@@ -23,3 +24,4 @@ void ControllerBase::bindValueManager(ClientValueManager *clientValueManager, QL
         clientValueManager->registerValue(valOrActor);
     }
 }
+*/
