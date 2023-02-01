@@ -77,6 +77,7 @@ bool ValueBase::updateValue(QVariant newValue) {
     //bool newValueApplied = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
     if (m_alwaysEmit || isDifferent) {
+        qDebug() << "Value changed emit";
         Q_EMIT(valueChanged());
     }
     return isDifferent;
