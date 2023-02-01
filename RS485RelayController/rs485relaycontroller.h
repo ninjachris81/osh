@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QMutex>
 #include <QModbusRtuSerialMaster>
 
 #include "sharedlib.h"
@@ -46,6 +47,7 @@ protected slots:
     void retrieveStatus();
 
 private:
+    QMutex m_Mutex;
     ClientSystemWarningsManager* m_warnManager;
     QModbusRtuSerialMaster m_modbusClient;
     QTimer m_statusTimer;

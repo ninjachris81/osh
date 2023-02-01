@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QSerialPort>
+#include <QMutexLocker>
 
 #include "controller/controllermanager.h"
 
@@ -42,12 +43,17 @@ void RS485RelayController::start() {
 
 void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     iDebug() << Q_FUNC_INFO << relayIndex << status;
+    QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-
         QModbusRequest req(QModbusRequest::WriteSingleRegister);
         req.encodeData(quint16(relayIndex + 1), quint8(status ? '\x01' : '\x02'), quint8(0x00));
-        m_modbusClient.sendRawRequest(req, m_slaveId);
+        QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
+        connect(reply, &QModbusReply::finished, this, [this, relayIndex, reply]() {
+            QModbusResponse response = reply->rawResult();
+            iDebug() << response.dataSize();
+            setStatus(relayIndex, response.data().at(2) == 0x01);
+        });
     } else {
         m_warnManager->raiseWarning("Serial not connected");
     }
@@ -125,6 +131,8 @@ void RS485RelayController::setSerialRelayStatus(RELAY_STATUS status) {
 
 void RS485RelayController::retrieveStatus() {
     iDebug() << Q_FUNC_INFO;
+
+    QMutexLocker locker(&m_Mutex);
 
     if (m_currentStatus == RETRIEVING_STATUS) {
         m_warnManager->raiseWarning("No status from relay");
