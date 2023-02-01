@@ -30,12 +30,6 @@ else:unix: LIBS += -L$$OUT_PWD/../Core/ -lCore
 INCLUDEPATH += $$PWD/../Core
 DEPENDPATH += $$PWD/../Core
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core/release/libCore.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core/debug/libCore.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core/release/Core.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../Core/debug/Core.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../Core/libCore.a
-
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/release/ -lQMqttCommunicationManager
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/debug/ -lQMqttCommunicationManager
 else:unix: LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/ -lQMqttCommunicationManager
@@ -43,24 +37,12 @@ else:unix: LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/ -lQMqttCommunicatio
 INCLUDEPATH += $$PWD/../QMqttCommunicationManager
 DEPENDPATH += $$PWD/../QMqttCommunicationManager
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/release/libQMqttCommunicationManager.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/debug/libQMqttCommunicationManager.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/release/QMqttCommunicationManager.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/debug/QMqttCommunicationManager.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../QMqttCommunicationManager/libQMqttCommunicationManager.a
-
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../MCP23017InputController/release/ -lMCP23017InputController
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../MCP23017InputController/debug/ -lMCP23017InputController
 else:unix: LIBS += -L$$OUT_PWD/../MCP23017InputController/ -lMCP23017InputController
 
 INCLUDEPATH += $$PWD/../MCP23017InputController
 DEPENDPATH += $$PWD/../MCP23017InputController
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../MCP23017InputController/release/libMCP23017InputController.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../MCP23017InputController/debug/libMCP23017InputController.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../MCP23017InputController/release/MCP23017InputController.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../MCP23017InputController/debug/MCP23017InputController.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../MCP23017InputController/libMCP23017InputController.a
 
 # wiringpi will not be maintained any longer
 unix: LIBS += -I/usr/local/include -L/usr/local/lib -lwiringPi
