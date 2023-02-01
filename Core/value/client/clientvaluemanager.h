@@ -27,6 +27,8 @@ private:
 private slots:
     void maintainValues();
 
+    void _onValueChanged();
+
 signals:
 
 public slots:
