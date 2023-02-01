@@ -24,11 +24,11 @@ void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {
 }
 
 void ClientValueManager::registerValue(ValueBase* value) {
+    qDebug() << Q_FUNC_INFO << value->fullId();
+
     ValueManagerBase::registerValue(value);
 
-    Q_ASSERT(QObject::connect(value, &ValueBase::valueChanged, [value, this]() {
-        this->publishValue(value);
-    }) != nullptr);
+    Helpers::safeConnect(value, &ValueBase::valueChanged, this, &ClientValueManager::_onValueChanged, SIGNAL(valueChanged), SLOT(onValueChanged));
 }
 
 void ClientValueManager::maintainValues() {
@@ -41,4 +41,12 @@ void ClientValueManager::maintainValues() {
             publishValue(it.value());
         }
     }
+}
+
+void ClientValueManager::_onValueChanged() {
+    qDebug() << Q_FUNC_INFO;
+
+    ValueBase* value = qobject_cast<ValueBase*>(sender());
+
+    this->publishValue(value);
 }
