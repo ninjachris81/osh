@@ -2,7 +2,6 @@
 
 #include <QDebug>
 
-#include "communication/communicationmanagerbase.h"
 #include "value/valuemessage.h"
 
 QLatin1String ValueManagerBase::MANAGER_ID = QLatin1String("ValueManager");
@@ -17,6 +16,13 @@ QString ValueManagerBase::id() {
     return MANAGER_ID;
 }
 
+void ValueManagerBase::init(LocalConfig* config) {
+    iDebug() << Q_FUNC_INFO;
+
+    REQUIRE_MANAGER(CommunicationManagerBase);
+    m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
+}
+
 LogCat::LOGCAT ValueManagerBase::logCat() {
     return LogCat::VALUE;
 }
@@ -24,9 +30,8 @@ LogCat::LOGCAT ValueManagerBase::logCat() {
 void ValueManagerBase::publishValue(ValueBase* value) {
     iDebug() << Q_FUNC_INFO << value->fullId();
 
-    CommunicationManagerBase* commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
     ValueMessage valueMessage(value->valueGroup()->id(), value->id(), value->rawValue());
-    commManager->sendMessage(valueMessage);
+    m_commManager->sendMessage(valueMessage);
 }
 
 void ValueManagerBase::registerValue(ValueBase* value) {

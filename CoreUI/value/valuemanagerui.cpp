@@ -20,7 +20,7 @@ QObject* ValueManagerUI::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine
 }
 
 void ValueManagerUI::init(LocalConfig *config) {
-    REQUIRE_MANAGER(CommunicationManagerBase);
+    ValueManagerBase::init(config);
 }
 
 void ValueManagerUI::handleReceivedMessage(ValueMessage* msg) {

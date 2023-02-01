@@ -10,6 +10,7 @@
 #include "communication/messagebase.h"
 #include "valuebase.h"
 #include "valuemessage.h"
+#include "communication/communicationmanagerbase.h"
 
 class SHARED_LIB_EXPORT ValueManagerBase : public ManagerBase
 {
@@ -20,6 +21,8 @@ public:
     static QLatin1String MANAGER_ID;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
+
+    /*virtual*/ void init(LocalConfig* config) override;
 
     /*virtual*/ QString id() override;
 
@@ -38,6 +41,7 @@ protected:
     ValueBase* getValue(QString valueGroupId, QString valueId);
 
     QMap<QString, ValueBase*> m_knownValues;
+    CommunicationManagerBase* m_commManager;
 
 private:
     QTimer m_signalRateTimer;

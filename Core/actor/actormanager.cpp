@@ -10,7 +10,6 @@ QLatin1String ActorManager::MANAGER_ID = QLatin1String("ActorManager");
 
 ActorManager::ActorManager(QObject *parent) : ManagerBase(parent)
 {
-
 }
 
 LogCat::LOGCAT ActorManager::logCat() {
@@ -53,14 +52,18 @@ void ActorManager::registerActor(ActorBase* actor, ValueManagerBase *valueManage
     qDebug() << Q_FUNC_INFO << actor->fullId();
 
     m_actors.insert(actor->fullId(), actor);
+    /*
     Q_ASSERT(connect(actor, &ActorBase::cmdTriggered, this, [this, actor](actor::ACTOR_CMDS cmd) {
         // TODO
     }) != nullptr);
+    */
 
     valueManager->registerValue(actor);
 }
 
 void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd) {
+    iDebug() << Q_FUNC_INFO << actor->fullId();
+
     ActorMessage msg(actor->valueGroup()->id(), actor->id(), cmd);
     m_commManager->sendMessage(msg);
 }

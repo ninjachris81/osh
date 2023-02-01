@@ -16,7 +16,7 @@ ClientValueManager::ClientValueManager(QObject *parent) : ValueManagerBase(paren
 }
 
 void ClientValueManager::init(LocalConfig *config) {
-    REQUIRE_MANAGER(CommunicationManagerBase);
+    ValueManagerBase::init(config);
 }
 
 void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {

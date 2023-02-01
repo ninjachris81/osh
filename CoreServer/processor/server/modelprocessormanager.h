@@ -16,6 +16,7 @@
 #include "communication/communicationmanagerbase.h"
 #include "processor/server/localstorage.h"
 #include "value/valuemanagerbase.h"
+#include "actor/actormanager.h"
 
 class SHARED_LIB_EXPORT ModelProcessorManager : public ManagerBase
 {
@@ -55,6 +56,7 @@ private:
     CommunicationManagerBase* m_commManager;
     DatamodelManager* m_dmManager;
     ValueManagerBase* m_valueManager;
+    ActorManager* m_actorManager;
     bool m_isFirstRun = true;
 
     void injectValues(DatamodelManager *dmManager);
