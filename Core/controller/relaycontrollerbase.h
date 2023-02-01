@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QList>
 
+#include "sharedlib.h"
+
 #include "controllerbase.h"
 #include "controllermessage.h"
 
 #include "actor/digitalactor.h"
 #include "value/client/clientvaluemanager.h"
 
-class RelayControllerBase : public ControllerBase
+class SHARED_LIB_EXPORT RelayControllerBase : public ControllerBase
 {
     Q_OBJECT
 public:

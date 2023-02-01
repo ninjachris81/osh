@@ -7,6 +7,8 @@
 
 #include "macros.h"
 
+#include "helpers.h"
+
 ClientValueManager::ClientValueManager(QObject *parent) : ValueManagerBase(parent)
 {
     connect(&m_maintenanceTimer, &QTimer::timeout, this, &ClientValueManager::maintainValues);
@@ -24,9 +26,9 @@ void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {
 void ClientValueManager::registerValue(ValueBase* value) {
     ValueManagerBase::registerValue(value);
 
-    QObject::connect(value, &ValueBase::valueChanged, [value, this]() {
+    Q_ASSERT(QObject::connect(value, &ValueBase::valueChanged, [value, this]() {
         this->publishValue(value);
-    });
+    }) != nullptr);
 }
 
 void ClientValueManager::maintainValues() {

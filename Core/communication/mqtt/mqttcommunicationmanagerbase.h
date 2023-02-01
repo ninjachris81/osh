@@ -5,6 +5,8 @@
 #include <QMap>
 #include <QJsonDocument>
 
+#include "sharedlib.h"
+
 #include "communication/communicationmanagerbase.h"
 
 #include "communication/messagebase.h"
@@ -12,8 +14,9 @@
 
 #define MQTT_HOST "mqtt.host"
 #define MQTT_PORT "mqtt.port"
+#define MQTT_RECONNECT_TIMEOUT "mqtt.reconnectTimeout"
 
-class MqttCommunicationManagerBase : public CommunicationManagerBase
+class SHARED_LIB_EXPORT MqttCommunicationManagerBase : public CommunicationManagerBase
 {
     Q_OBJECT
 public:

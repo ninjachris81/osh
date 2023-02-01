@@ -10,9 +10,9 @@ AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE
 
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
-    case ACTOR_CMD_START:
-    case ACTOR_CMD_PAUSE:
-    case ACTOR_CMD_STOP:
+    case actor::ACTOR_CMD_START:
+    case actor::ACTOR_CMD_PAUSE:
+    case actor::ACTOR_CMD_STOP:
         return true;
     default:
         return false;
@@ -21,15 +21,15 @@ bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
 
 void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
-    case ACTOR_CMD_START:
+    case actor::ACTOR_CMD_START:
         updateValue(true);
         Q_EMIT(startPlaybackRequested());
         break;
-    case ACTOR_CMD_PAUSE:
+    case actor::ACTOR_CMD_PAUSE:
         updateValue(false);
         Q_EMIT(pausePlaybackRequested());
         break;
-    case ACTOR_CMD_STOP:
+    case actor::ACTOR_CMD_STOP:
         updateValue(false);
         Q_EMIT(stopPlaybackRequested());
         break;

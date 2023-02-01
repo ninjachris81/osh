@@ -6,11 +6,13 @@
 #include <QTimer>
 #include <QDateTime>
 
+#include "sharedlib.h"
+
 #include "device/client/clientdevice.h"
 #include "manager/managerbase.h"
 #include "communication/communicationmanagerbase.h"
 
-class DeviceDiscoveryManagerBase : public ManagerBase
+class SHARED_LIB_EXPORT DeviceDiscoveryManagerBase : public ManagerBase
 {
     Q_OBJECT
 public:

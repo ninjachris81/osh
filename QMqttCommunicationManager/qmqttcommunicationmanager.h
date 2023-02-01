@@ -6,13 +6,15 @@
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttSubscription>
 
+#include "sharedlib.h"
+
 #include "communication/mqtt/mqttcommunicationmanagerbase.h"
 #include "config/localconfig.h"
 #include "qmqttmessageconverter.h"
 
 #include <QList>
 
-class QMqttCommunicationManager : public MqttCommunicationManagerBase
+class SHARED_LIB_EXPORT QMqttCommunicationManager : public MqttCommunicationManagerBase
 {
     Q_OBJECT
 
@@ -25,6 +27,8 @@ private:
 
     QList<QMqttSubscription*> m_subscriptions;
 
+    quint16 m_reconnectTimeoutMs;
+
 protected:
     /*virtual*/ void _init(LocalConfig *config);
     /*virtual*/ bool _sendMessage(MessageBase &message);
@@ -34,6 +38,7 @@ protected:
     /*virtual*/ void subscribeControllerChannels(QStringList controllers);
 
 protected slots:
+    void _onTryConnect();
     void _onMqttError(QMqttClient::ClientError error);
     void _onMqttStateChanged(QMqttClient::ClientState state);
 

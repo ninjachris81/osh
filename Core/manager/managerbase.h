@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QLoggingCategory>
 
+#include "sharedlib.h"
+
 #include "config/localconfig.h"
 #include "manager/managerregistration.h"
 #include "communication/messagebase.h"
 #include "shared/logging_categories_qt.h"
 #include "identifyable.h"
 
-class ManagerBase : public Identifyable
+class SHARED_LIB_EXPORT ManagerBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

@@ -9,7 +9,7 @@ class DatamodelBaseUI : public IdentifyableUI
 {
     Q_OBJECT
 public:
-    explicit DatamodelBaseUI(QObject *parent);
+    explicit DatamodelBaseUI(Identifyable *parent);
 
     Q_PROPERTY(QList<QObject*> processorTasks READ processorTasks NOTIFY processorTasksChanged)
     Q_PROPERTY(QList<QObject*> values READ values NOTIFY valuesChanged)

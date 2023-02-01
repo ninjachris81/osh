@@ -1,6 +1,7 @@
 #include "valuebase.h"
 
 #include "shared/constants.h"
+#include "value/valuemanagerbase.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -8,9 +9,11 @@
 ValueBase::ValueBase() : SerializableIdentifyable() {
 }
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id, parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id), QObject(parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
+
+    connect(this, &ValueBase::updateSignalRate, this, &ValueBase::onUpdateSignalRate);
 }
 
 void ValueBase::serialize(QJsonObject &obj) {
@@ -28,7 +31,10 @@ void ValueBase::deserialize(QJsonObject obj) {
 
     m_valueType = (VALUE_TYPE) obj.value("valueType").toInt();
     m_alwaysEmit = obj.value("alwaysEmit").toBool();
+}
 
+QString ValueBase::getClassName() {
+    return metaObject()->className();
 }
 
 QString ValueBase::fullId() {
@@ -70,7 +76,9 @@ bool ValueBase::updateValue(QVariant newValue) {
     m_value = _updateValue(newValue);
     //bool newValueApplied = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
-    if (m_alwaysEmit || isDifferent) Q_EMIT(valueChanged());
+    if (m_alwaysEmit || isDifferent) {
+        Q_EMIT(valueChanged());
+    }
     return isDifferent;
 }
 
@@ -110,14 +118,16 @@ void ValueBase::invalidate() {
 
     m_value = QVariant();
     Q_EMIT(invalidated());
-    updateSignalRate();
+    onUpdateSignalRate();
 }
 
 double ValueBase::signalRate() {
     return m_signalRate;
 }
 
-void ValueBase::updateSignalRate() {
+void ValueBase::onUpdateSignalRate() {
+    iDebug() << Q_FUNC_INFO;
+
     if (m_value.isValid()) {
         m_signalCount++;
         m_signalRate = 60 / qMax(m_signalCount * 10, 1) * qMax(m_currentSignalCount, (quint32)1);
@@ -133,6 +143,10 @@ void ValueBase::updateSignalRate() {
     }
 }
 
+void ValueBase::connectManager(ValueManagerBase* manager) {
+    connect(manager, &ValueManagerBase::updateSignalRates, this, &ValueBase::onUpdateSignalRate);
+}
+
 VALUE_TYPE ValueBase::valueType() {
     return m_valueType;
 }
@@ -143,12 +157,12 @@ UNIT_TYPE ValueBase::unitType() {
 
 UNIT_TYPE ValueBase::valueTypeToUnitType(VALUE_TYPE valueType) {
     switch(valueType) {
-    case VT_BRIGHTNESS: return UT_PERCENT;
-    case VT_TEMP: return UT_DEGREES;
-    case VT_HUMIDITY: return UT_PERCENT;
-    case VT_WATER_FLOW: return UT_LITER_PER_MIN;
-    case VT_WATER_LEVEL: return UT_LITERS;
-    case VT_TIMESTAMP: return UT_TIMESTAMP;
+    case VALUE_TYPE_BRIGHTNESS: return UT_PERCENT;
+    case VALUE_TYPE_TEMP: return UT_DEGREES;
+    case VALTYPE_HUMIDITY: return UT_PERCENT;
+    case VALTYPE_WATER_FLOW: return UT_LITER_PER_MIN;
+    case VALTYPE_WATER_LEVEL: return UT_LITERS;
+    case VALTYPE_TIMESTAMP: return UT_TIMESTAMP;
     default: return UT_UNKNOWN;
     }
 }

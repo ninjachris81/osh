@@ -6,7 +6,7 @@
 #include "macros.h"
 #include "shared/device.h"
 
-DeviceDiscoveryModelBridge::DeviceDiscoveryModelBridge(DeviceDiscoveryManagerBase *parent) : Identifyable("DeviceDiscoveryModelBridge", parent), m_parent(parent)
+DeviceDiscoveryModelBridge::DeviceDiscoveryModelBridge(DeviceDiscoveryManagerBase *parent) : Identifyable("DeviceDiscoveryModelBridge"), QObject(parent), m_parent(parent)
 {
     connect(&m_onlineCheckTimer, &QTimer::timeout, this, &DeviceDiscoveryModelBridge::onOnlineCheck);
 }

@@ -3,30 +3,29 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "value/valuebase.h"
 #include "value/valuegroup.h"
 #include "shared/actor_qt.h"
 
-using namespace actor;
-
-class ActorBase : public ValueBase
+class SHARED_LIB_EXPORT ActorBase : public ValueBase
 {
     Q_OBJECT
 public:
-    ActorBase();
+    explicit ActorBase();
     explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
-    void triggerCmd(ACTOR_CMDS cmd, QString reason);
-    //Q_INVOKABLE void triggerCmd(int cmd);
-    virtual bool cmdSupported(ACTOR_CMDS cmd) = 0;
+    void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
+    virtual bool cmdSupported(actor::ACTOR_CMDS cmd) = 0;
 
     virtual bool isAsync() = 0;
 
-signals:
-    void cmdTriggered(ACTOR_CMDS cmd);
+Q_SIGNALS:
+    void cmdTriggered(actor::ACTOR_CMDS cmd);
 
 protected:
-    virtual void _triggerCmd(ACTOR_CMDS cmd) = 0;
+    virtual void _triggerCmd(actor::ACTOR_CMDS cmd);
 
 public slots:
 };

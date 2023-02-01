@@ -4,12 +4,14 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 #include "valuebase.h"
 #include "valuemessage.h"
 
-class ValueManagerBase : public ManagerBase
+class SHARED_LIB_EXPORT ValueManagerBase : public ManagerBase
 {
     Q_OBJECT
 public:
@@ -41,9 +43,10 @@ private:
     QTimer m_signalRateTimer;
 
 private slots:
-    void updateSignalRates();
+    void onUpdateSignalRates();
 
 signals:
+    void updateSignalRates();
 
 public slots:
 };

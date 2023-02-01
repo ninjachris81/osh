@@ -2,9 +2,12 @@
 #define DOUBLEVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "valuebase.h"
 
-class DoubleValue : public ValueBase
+class SHARED_LIB_EXPORT DoubleValue : public ValueBase
 {
     Q_OBJECT
 public:

@@ -6,7 +6,7 @@
 #include "datamodel/server/testdatamodelloader.h"
 #include "datamodel/server/filedatamodelloader.h"
 #include "value/server/servervaluemanager.h"
-#include "actor/server/actormanager.h"
+#include "actor/actormanager.h"
 #include "datamodel/server/emptydatamodel.h"
 
 #include "macros.h"

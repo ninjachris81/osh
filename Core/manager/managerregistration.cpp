@@ -6,7 +6,7 @@
 #include "manager/managerbase.h"
 #include "log/logmanager.h"
 
-ManagerRegistration::ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent) : Identifyable ("ManagerRegistration", parent), m_instanceRole(instanceRole)
+ManagerRegistration::ManagerRegistration(INSTANCE_ROLE instanceRole, QObject *parent) : Identifyable ("ManagerRegistration"), QObject(parent), m_instanceRole(instanceRole)
 {
 
 }

@@ -10,7 +10,9 @@ QT += serialbus
 
 TARGET = RS485RelayController
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 DEFINES += RS485RELAYCONTROLLER_LIBRARY
 

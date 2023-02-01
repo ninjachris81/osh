@@ -9,7 +9,7 @@ class DeviceBaseUI : public IdentifyableUI
 {
     Q_OBJECT
 public:
-    explicit DeviceBaseUI(QObject *parent = nullptr);
+    explicit DeviceBaseUI(Identifyable *parent = nullptr);
 
     Q_PROPERTY(QString fullId READ fullId NOTIFY fullIdChanged)
     Q_PROPERTY(QString serviceId READ serviceId NOTIFY serviceIdChanged)

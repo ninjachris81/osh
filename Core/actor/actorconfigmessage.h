@@ -2,14 +2,17 @@
 #define ACTORCONFIGMESSAGE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 #include "shared/actor_qt.h"
 
-class ActorConfigMessage : public MessageBase
+class SHARED_LIB_EXPORT ActorConfigMessage : public MessageBase
 {
     Q_OBJECT
 public:
-    explicit ActorConfigMessage(QString actorGroupId, QString actorId, QMap<QString, QVariant> values, QObject *parent = nullptr);
+    explicit ActorConfigMessage(QString actorGroupId, QString actorId, QVariantMap values, QObject *parent = nullptr);
 
 
     /*virtual*/ MESSAGE_TYPE getMessageType();
@@ -22,13 +25,13 @@ public:
     QString actorId();
     QString fullId();
 
-    QMap<QString, QVariant> values();
+    QVariantMap values();
 
 protected:
     QString m_actorGroupId;
     QString m_actorId;
 
-    QMap<QString, QVariant> m_values;
+    QVariantMap m_values;
 
 signals:
 

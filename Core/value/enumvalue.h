@@ -2,9 +2,12 @@
 #define ENUMVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "integervalue.h"
 
-class EnumValue : public IntegerValue
+class SHARED_LIB_EXPORT EnumValue : public IntegerValue
 {
     Q_OBJECT
 public:

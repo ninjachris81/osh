@@ -4,11 +4,13 @@
 #include <QObject>
 #include <QMap>
 
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 
-class ControllerManager : public ManagerBase
+class SHARED_LIB_EXPORT ControllerManager : public ManagerBase
 {
     Q_OBJECT
 public:

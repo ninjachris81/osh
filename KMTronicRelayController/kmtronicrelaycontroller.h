@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "controller/relaycontrollerbase.h"
 #include "serialportclient.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 
 #define SERIAL_READ_TIMEOUT_MS 2000
 
-class KMTronicRelayController : public RelayControllerBase
+class SHARED_LIB_EXPORT KMTronicRelayController : public RelayControllerBase
 {
 Q_OBJECT
 

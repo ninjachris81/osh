@@ -3,10 +3,12 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "communication/messagebase.h"
 
-class ClientSystemtimeManager : public ManagerBase
+class SHARED_LIB_EXPORT ClientSystemtimeManager : public ManagerBase
 {
     Q_OBJECT
 public:

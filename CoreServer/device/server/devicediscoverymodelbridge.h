@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "datamodel/server/datamodelmanager.h"
 #include "device/devicediscoverymanagerbase.h"
 #include "device/devicediscoverymessage.h"
 
 #include "identifyable.h"
 
-class DeviceDiscoveryModelBridge : public Identifyable
+class SHARED_LIB_EXPORT DeviceDiscoveryModelBridge : public QObject, public Identifyable
 {
     Q_OBJECT
 public:

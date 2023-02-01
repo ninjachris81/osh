@@ -9,7 +9,7 @@
 DeviceBase::DeviceBase() : SerializableIdentifyable() {
 }
 
-DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : SerializableIdentifyable(id, parent), m_serviceId(serviceId) {
+DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : SerializableIdentifyable(id), QObject(parent) , m_serviceId(serviceId) {
 }
 
 void DeviceBase::serialize(QJsonObject &obj) {
@@ -20,6 +20,10 @@ void DeviceBase::serialize(QJsonObject &obj) {
 void DeviceBase::deserialize(QJsonObject obj) {
     SerializableIdentifyable::deserialize(obj);
     m_serviceId = obj.value("serviceId").toString();
+}
+
+QString DeviceBase::getClassName() {
+    return metaObject()->className();
 }
 
 void DeviceBase::updatePing() {

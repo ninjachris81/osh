@@ -4,10 +4,13 @@
 #include <QObject>
 #include <QBitArray>
 #include <QList>
+
+#include "sharedlib.h"
+
 #include "controller/controllerbase.h"
 #include "value/booleanvalue.h"
 
-class DigitalInputControllerBase : public ControllerBase
+class SHARED_LIB_EXPORT DigitalInputControllerBase : public ControllerBase
 {
     Q_OBJECT
 public:

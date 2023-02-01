@@ -4,7 +4,7 @@
 
 #include <QRandomGenerator64>
 
-Identifyable::Identifyable(QString id, QObject *parent) : QObject(parent), m_id(id)
+Identifyable::Identifyable(QString id) : m_id(id)
 {
 }
 

@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-DeviceBaseUI::DeviceBaseUI(QObject *parent) : IdentifyableUI(parent)
+DeviceBaseUI::DeviceBaseUI(Identifyable *parent) : IdentifyableUI(parent)
 {
     m_device = static_cast<DeviceBase*>(parent);
 

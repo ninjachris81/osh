@@ -33,6 +33,9 @@
  *
  * Script Result Structure
  * MQTT_BASE_PATH / (message_type) / (processorTaskId)
+ *
+ * Door Unlock Structure
+ * MQTT_BASE_PATH / (message_type) / (userId)
 */
 
 
@@ -43,13 +46,14 @@
 // types
 #define MQTT_MESSAGE_TYPE_VA            "va"        // value
 #define MQTT_MESSAGE_TYPE_AC            "ac"        // actor
-#define MQTT_MESSAGE_TYPE_ACCO          "acco"      // actor config
+#define MQTT_MESSAGE_TYPE_AO            "ao"        // actor config
 #define MQTT_MESSAGE_TYPE_DD            "dd"        // device discovery
 #define MQTT_MESSAGE_TYPE_ST            "st"        // system time
 #define MQTT_MESSAGE_TYPE_SW            "sw"        // system warnings
 #define MQTT_MESSAGE_TYPE_CO            "co"        // controller
 #define MQTT_MESSAGE_TYPE_LO            "lo"        // log
 #define MQTT_MESSAGE_TYPE_SR            "sr"        // script result reports
+#define MQTT_MESSAGE_TYPE_DU            "du"        // door unlock
 
 // devices
 

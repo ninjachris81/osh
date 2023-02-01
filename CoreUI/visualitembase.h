@@ -9,7 +9,7 @@ class VisualItemBase : public IdentifyableUI
 {
     Q_OBJECT
 public:
-    explicit VisualItemBase(QObject *parent = nullptr);
+    explicit VisualItemBase(Identifyable *parent = nullptr);
 
     Q_PROPERTY(int x READ x WRITE setX NOTIFY xChanged)
     Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged)

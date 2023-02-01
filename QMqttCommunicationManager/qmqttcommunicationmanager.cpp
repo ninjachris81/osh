@@ -26,14 +26,23 @@ void QMqttCommunicationManager::_init(LocalConfig* config) {
     m_mqttClient.setHostname(config->getString(MQTT_HOST, "localhost"));
     m_mqttClient.setPort(static_cast<quint16>(config->getInt(MQTT_PORT, 1883)));
     m_mqttClient.setCleanSession(false);
+    m_reconnectTimeoutMs = config->getInt(MQTT_RECONNECT_TIMEOUT, 5000);
 }
 
 void QMqttCommunicationManager::_onMqttError(QMqttClient::ClientError error) {
     iWarning() << Q_FUNC_INFO << error;
+    QTimer::singleShot(m_reconnectTimeoutMs, [this]() {
+        _onTryConnect();
+    });
 }
 
 void QMqttCommunicationManager::_onMqttStateChanged(QMqttClient::ClientState state) {
     iDebug() << Q_FUNC_INFO << state;
+    if (state == QMqttClient::ClientState::Disconnected) {
+        QTimer::singleShot(m_reconnectTimeoutMs, [this]() {
+            _onTryConnect();
+        });
+    }
 }
 
 void QMqttCommunicationManager::subscribeChannels(QStringList topics) {
@@ -85,8 +94,16 @@ void QMqttCommunicationManager::_onMqttMsgReceived(QMqttMessage message) {
 }
 
 void QMqttCommunicationManager::_startConnect() {
+    _onTryConnect();
+}
+
+void QMqttCommunicationManager::_onTryConnect() {
     iDebug() << Q_FUNC_INFO << m_mqttClient.hostname() << m_mqttClient.port();
 
-    m_mqttClient.setClientId(getManager<DeviceDiscoveryManagerBase>(DeviceDiscoveryManagerBase::MANAGER_ID)->device()->fullId());
-    m_mqttClient.connectToHost();
+    if (m_mqttClient.state() != QMqttClient::Connected) {
+        m_mqttClient.setClientId(getManager<DeviceDiscoveryManagerBase>(DeviceDiscoveryManagerBase::MANAGER_ID)->device()->fullId());
+        m_mqttClient.connectToHost();
+    } else {
+        iWarning() << "Already connected";
+    }
 }

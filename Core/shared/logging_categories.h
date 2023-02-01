@@ -12,5 +12,7 @@
 #define LOGCAT_WARN             "warn"
 #define LOGCAT_PROCESSOR        "processor"
 #define LOGCAT_DATAMODEL        "datamodel"
+#define LOGCAT_DOOR_UNLOCK      "door_unlock"
+#define LOGCAT_USER             "user"
 
 #endif // LOGGING_CATEGORIES_H

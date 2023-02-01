@@ -7,17 +7,19 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "value/valuegroup.h"
 #include "value/valuebase.h"
 #include "value/valuemanagerbase.h"
 #include "communication/messagebase.h"
-#include "database/databasemanager.h"
+#include "database/simpledatabasemanager.h"
 #include "communication/communicationmanagerbase.h"
 
 #include <QTimer>
 #include <QMap>
 
-class ServerValueManager : public ValueManagerBase
+class SHARED_LIB_EXPORT ServerValueManager : public ValueManagerBase
 {
     Q_OBJECT
 public:
@@ -34,7 +36,7 @@ public:
 protected:
     QTimer m_valueCheckTimer;
     CommunicationManagerBase* m_commManager = nullptr;
-    DatabaseManager* m_databaseManager = nullptr;
+    SimpleDatabaseManager* m_simpleDatabaseManager = nullptr;
 
     void valueReceived(ValueBase* value, QVariant newValue);
     void valueReceived(QString valueGroupId, QString valueId, QVariant newValue);

@@ -2,7 +2,7 @@
 
 #include "actor/actorbase.h"
 
-ActorBaseUI::ActorBaseUI(QObject *parent) : ValueBaseUI(parent)
+ActorBaseUI::ActorBaseUI(Identifyable *parent) : ValueBaseUI(parent)
 {
     m_actor = static_cast<ActorBase*>(parent);
 }

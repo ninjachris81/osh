@@ -2,9 +2,12 @@
 #define INTEGERVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "valuebase.h"
 
-class IntegerValue : public ValueBase
+class SHARED_LIB_EXPORT IntegerValue : public ValueBase
 {
     Q_OBJECT
 public:

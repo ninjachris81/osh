@@ -34,11 +34,15 @@ QString SystemtimeManager::id() {
     return MANAGER_ID;
 }
 
+qint64 SystemtimeManager::_getSystemTime() {
+    return QDateTime::currentSecsSinceEpoch();
+}
+
 void SystemtimeManager::sendSystemtime() {
     iDebug() << Q_FUNC_INFO;
 
     if (m_commManager->isConnected()) {
-        SystemtimeMessage systimeMessage(QDateTime::currentSecsSinceEpoch());
+        SystemtimeMessage systimeMessage(_getSystemTime());
         m_commManager->sendMessage(systimeMessage);
     }
 }

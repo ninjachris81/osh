@@ -9,7 +9,9 @@ QT      += serialport
 
 TARGET = CoreSerial
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -26,7 +28,8 @@ SOURCES += \
         serialportclient.cpp
 
 HEADERS += \
-        serialportclient.h
+        serialportclient.h \
+        sharedlib.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

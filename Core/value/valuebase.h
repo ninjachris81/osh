@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QVariant>
 
+#include "sharedlib.h"
+
 #include "valuegroup.h"
 #include "serializableidentifyable.h"
 #include "shared/units_qt.h"
@@ -14,7 +16,9 @@
 using namespace unit;
 using namespace value;
 
-class ValueBase : public SerializableIdentifyable, public MetaInfoSupport
+class ValueManagerBase;
+
+class SHARED_LIB_EXPORT ValueBase : public QObject, public SerializableIdentifyable, public MetaInfoSupport
 {
 Q_OBJECT
 
@@ -33,6 +37,7 @@ public:
 
     /*virtual*/ void deserialize(QJsonObject obj) override;
 
+    /*virtual*/ QString getClassName() override;
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 
@@ -72,7 +77,10 @@ public:
 
     double signalRate();
 
-    void updateSignalRate();
+    void connectManager(ValueManagerBase* manager);
+
+private slots:
+    void onUpdateSignalRate();
 
 private:
     VALUE_TYPE m_valueType;
@@ -92,6 +100,8 @@ signals:
     void valueChanged();
     void invalidated();
     void signalRateChanged();
+
+    void updateSignalRate();
 
 };
 

@@ -2,9 +2,12 @@
 #define LONGVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "valuebase.h"
 
-class LongValue : public ValueBase
+class SHARED_LIB_EXPORT LongValue : public ValueBase
 {
     Q_OBJECT
 public:

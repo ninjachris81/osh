@@ -2,10 +2,11 @@
 #define MESSAGEBASE_H
 
 #include <QObject>
-
 #include <QVariant>
 
-class MessageBase : public QObject
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT MessageBase : public QObject
 {
     Q_OBJECT
 public:
@@ -21,7 +22,8 @@ public:
         MESSAGE_TYPE_SYSTEM_WARNING,
         MESSAGE_TYPE_CONTROLLER,
         MESSAGE_TYPE_LOG,
-        MESSAGE_TYPE_SCRIPT_RESULT
+        MESSAGE_TYPE_SCRIPT_RESULT,
+        MESSAGE_TYPE_DOOR_UNLOCK
     };
     Q_ENUM(MESSAGE_TYPE)
 

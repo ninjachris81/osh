@@ -16,6 +16,7 @@ SerialPortClient::SerialPortClient(QString portName, QSerialPort::BaudRate baudR
 
     connect(&m_serialPort, &QSerialPort::readyRead, this, &SerialPortClient::handleReadyRead);
     connect(&m_serialPort, &QSerialPort::errorOccurred, this, &SerialPortClient::handleError);
+
     m_readTimer.setInterval(readTimeoutMs);
 }
 

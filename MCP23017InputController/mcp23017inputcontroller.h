@@ -2,12 +2,15 @@
 #define MCP23017INPUTCONTROLLER_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "controller/digitalinputcontrollerbase.h"
 #include "mcp23017reader.h"
 
 #define MCP23017_INPUT_COUNT 16
 
-class MCP23017InputController : public DigitalInputControllerBase
+class SHARED_LIB_EXPORT MCP23017InputController : public DigitalInputControllerBase
 {
 Q_OBJECT
 public:

@@ -1,8 +1,7 @@
 #include "identifyableui.h"
 
-IdentifyableUI::IdentifyableUI(QObject *parent) : QObject (parent)
+IdentifyableUI::IdentifyableUI(Identifyable *parent) : QObject (), m_parent(parent)
 {
-    m_parent = static_cast<Identifyable*>(parent);
 }
 
 QString IdentifyableUI::id() {

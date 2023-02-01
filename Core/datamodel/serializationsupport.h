@@ -3,7 +3,9 @@
 
 #include <QJsonObject>
 
-class SerializationSupport
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT SerializationSupport
 {
 public:
     virtual void serialize(QJsonObject &obj) = 0;

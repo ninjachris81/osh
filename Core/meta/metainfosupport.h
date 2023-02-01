@@ -3,7 +3,9 @@
 
 #include "meta/itemmetainfo.h"
 
-class MetaInfoSupport
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT MetaInfoSupport
 {
 public:
 

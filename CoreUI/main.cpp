@@ -7,16 +7,12 @@
 #include "controller/controllermanager.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "value/valuemanagerui.h"
-#include "actor/server/actormanager.h"
+#include "actor/actormanager.h"
 #include "datamodel/datamodelmanagerui.h"
 #include "processor/modelprocessormanagerui.h"
 #include "log/logmanagerui.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "connectoritembase.h"
-
-#include "value/longvalue.h"
-#include "value/stringvalue.h"
-#include "actor/audioplaybackactor.h"
 
 #define QML_BASE_PACKAGE "OSH"
 #define QML_VERSION_MAJOR 1
@@ -25,17 +21,6 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
-    KnownDevice test2;
-    ValueGroup wgewerg;
-    ShutterActor tewrg;
-    IntegerValue w2t234t;
-    DoubleValue w23t234t;
-    LongValue wergwe2134;
-    StringValue et14;
-    AudioPlaybackActor wge234;
-    DigitalActor ewherth;
-    BooleanValue eehe3;
 
     QGuiApplication app(argc, argv);
 

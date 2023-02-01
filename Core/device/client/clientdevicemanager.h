@@ -4,10 +4,12 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "manager/managerbase.h"
 #include "device/devicediscoverymanagerbase.h"
 
-class ClientDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
+class SHARED_LIB_EXPORT ClientDeviceDiscoveryManager : public DeviceDiscoveryManagerBase
 {
     Q_OBJECT
 public:

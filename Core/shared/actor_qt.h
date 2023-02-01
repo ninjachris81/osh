@@ -6,11 +6,13 @@
 #include "actor.h"
 #include "constants.h"
 
+#include "sharedlib.h"
+
 #include <QObject>
 #include <QVariant>
 
 namespace actor {
-Q_NAMESPACE
+Q_DECL_EXPORT Q_NAMESPACE
 
     enum ACTOR_CMDS {
         ACTOR_CMD_UNKNOWN = ENUM_UNKNOWN,

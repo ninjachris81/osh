@@ -5,6 +5,9 @@
 
 #include <QMap>
 #include <QList>
+
+#include "sharedlib.h"
+
 #include "device/knowndevice.h"
 #include "actor/actorbase.h"
 #include "value/valuegroup.h"
@@ -21,7 +24,7 @@
 
 using namespace unit;
 
-class DatamodelBase : public Identifyable
+class SHARED_LIB_EXPORT DatamodelBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
@@ -44,7 +47,7 @@ public:
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
-    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0);
+    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTask::INTERVAL_REALTIME, bool publishResult = false);
     KnownRoom* addKnownRoom(QString id, QString name);
 
 protected:

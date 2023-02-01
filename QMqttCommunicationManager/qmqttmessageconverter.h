@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 
 #include <QtMqtt/QMqttMessage>
@@ -10,7 +12,7 @@
 
 class QMqttCommunicationManager;
 
-class QMqttMessageConverter : public QObject
+class SHARED_LIB_EXPORT QMqttMessageConverter : public QObject
 {
     Q_OBJECT
 public:

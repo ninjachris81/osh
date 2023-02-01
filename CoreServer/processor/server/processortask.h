@@ -4,12 +4,16 @@
 #include <QObject>
 #include <QJSEngine>
 
+#include "sharedlib.h"
+
 #include "serializableidentifyable.h"
 
-class ProcessorTask : public SerializableIdentifyable
+class SHARED_LIB_EXPORT ProcessorTask : public QObject, public SerializableIdentifyable
 {
     Q_OBJECT
 public:
+    static qint64 INTERVAL_REALTIME;
+
     enum ProcessorTaskType {
         PTT_INTERVAL = 0,
         PTT_ONLY_ONCE = 1,
@@ -17,11 +21,13 @@ public:
     };
 
     ProcessorTask();
-    explicit ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, QObject *parent = nullptr);
+    explicit ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, QObject *parent = nullptr);
 
     /*virtual*/ void serialize(QJsonObject &obj) override;
 
     /*virtual*/ void deserialize(QJsonObject obj) override;
+
+    /*virtual*/ QString getClassName() override;
 
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
@@ -31,6 +37,7 @@ public:
     QString scriptCode();
     qint64 scheduleInterval();
     ProcessorTaskType taskType();
+    bool publishResult();
 
     qint64 lastExecution();
     QVariant lastResult();
@@ -42,6 +49,7 @@ private:
     QString m_scriptCode;
     QString m_runCondition;
     qint64 m_scheduleInterval;
+    bool m_publishResult = false;
     ProcessorTaskType m_processorTaskType = PTT_INTERVAL;
 
     qint64 m_lastExecution = 0;

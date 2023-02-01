@@ -4,10 +4,12 @@
 #include <QObject>
 #include <QTimer>
 
+#include "sharedlib.h"
+
 #include "value/valuemanagerbase.h"
 #include "communication/messagebase.h"
 
-class ClientValueManager : public ValueManagerBase
+class SHARED_LIB_EXPORT ClientValueManager : public ValueManagerBase
 {
     Q_OBJECT
 public:

@@ -10,7 +10,9 @@ QT       -= gui
 
 TARGET = CoreServer
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
+
+DEFINES += MAKE_SHARED_LIB
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -26,7 +28,6 @@ DEFINES += IS_OSH_CORE_SERVICE
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    database/databasemanager.cpp \
         datamodel/server/datamodelbase.cpp \
         datamodel/server/datamodelloaderbase.cpp \
         datamodel/server/datamodelmanager.cpp \
@@ -41,17 +42,14 @@ SOURCES += \
     processor/server/commonscripts.cpp \
     processor/server/localstorage.cpp \
     processor/server/scriptbase.cpp \
-    simulator/server/simulatorbase.cpp \
         time/server/systemtimemanager.cpp \
         value/server/environmentvaluemanager.cpp \
         value/server/servervaluemanager.cpp \
         device/server/devicediscoverymodelbridge.cpp \
         processor/server/modelprocessormanager.cpp \
-        processor/server/processortask.cpp \
-        actor/server/actormanager.cpp
+        processor/server/processortask.cpp
 
 HEADERS += \
-    database/databasemanager.h \
         datamodel/server/datamodelbase.h \
         datamodel/server/datamodelloaderbase.h \
         datamodel/server/datamodelmanager.h \
@@ -66,14 +64,13 @@ HEADERS += \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \
     processor/server/scriptbase.h \
-    simulator/server/simulatorbase.h \
+    sharedlib.h \
         time/server/systemtimemanager.h \
         value/server/environmentvaluemanager.h \
         value/server/servervaluemanager.h \
         device/server/devicediscoverymodelbridge.h \
         processor/server/modelprocessormanager.h \
-        processor/server/processortask.h \
-        actor/server/actormanager.h
+        processor/server/processortask.h
 
 unix {
     target.path = /usr/lib

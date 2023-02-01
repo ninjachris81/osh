@@ -8,7 +8,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
-#include "actor/client/clientactormanager.h"
+#include "actor/actormanager.h"
 #include "actor/digitalactor.h"
 #include "shared/mqtt_qt.h"
 
@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager("RelayService");
+    ClientDeviceDiscoveryManager clientManager("WBB12Service");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
-    ClientActorManager actorManager;
+    ActorManager actorManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
 
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     ValueGroup actorGroup(relayController.id());
     for (quint8 i=0;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT);i++) {
         qDebug() << "Init actor" << i;
-        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), VT_RELAY_LIGHT , true);
-        actor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
+        DigitalActor* actor = new DigitalActor(&actorGroup, QString::number(i), VALTYPE_RELAY_LIGHT , true);
+        actor->withValueTimeout(ValueBase::VALTYPE_NONE); // no need, as internal status update triggers maintainance
         actors.append(actor);
         relayController.bindActor(actor);
         actorManager.registerActor(actor);

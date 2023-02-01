@@ -14,6 +14,7 @@
 #include "controller/controllermanager.h"
 #include "log/logmessage.h"
 #include "processor/scriptresultmessage.h"
+#include "doorunlock/doorunlockmessage.h"
 #include "log/logmanager.h"
 
 MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : CommunicationManagerBase(parent)
@@ -25,13 +26,14 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
 
     registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, true, MQTT_MESSAGE_TYPE_AC, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_ACCO, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_AO, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1);
     registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, MQTT_MESSAGE_TYPE_CO, 1);
     registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, MQTT_MESSAGE_TYPE_SR, 1);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DOOR_UNLOCK, false, MQTT_MESSAGE_TYPE_DU, 2);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
     iDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
@@ -75,7 +77,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             }
         }
         case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
-            //return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), rawValue);
+            return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
             QVariant ddVal = parseSingleValue(value);
@@ -118,6 +120,9 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         }
         case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
             return new ScriptResultMessage(firstLevelPath.first(), value);
+        }
+        case MessageBase::MESSAGE_TYPE_DOOR_UNLOCK: {
+            return new DoorUnlockMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
         }
         default:
             iWarning() << "Unknown message type" << levels;
@@ -169,6 +174,8 @@ void MqttCommunicationManagerBase::onMqttConnected() {
 }
 
 void MqttCommunicationManagerBase::onMqttDisconnected() {
+    iWarning() << Q_FUNC_INFO;
+
 
 }
 
@@ -228,6 +235,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         ActorMessage* actorMessage = static_cast<ActorMessage*>(&message);
         return serializeSingleJSONValue(actorMessage->cmd());
     }
+    case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
+        ActorConfigMessage* actorConfigMessage = static_cast<ActorConfigMessage*>(&message);
+        return serializeJSONValue(actorConfigMessage->values());
+    }
     case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
         SystemtimeMessage* systimeMessage = static_cast<SystemtimeMessage*>(&message);
         return serializeSingleJSONValue(systimeMessage->ts());
@@ -252,6 +263,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         ScriptResultMessage* scriptResultMessage = static_cast<ScriptResultMessage*>(&message);
         return serializeSingleJSONValue(scriptResultMessage->value());
     }
+    case MessageBase::MESSAGE_TYPE_DOOR_UNLOCK: {
+        DoorUnlockMessage* doorUnlockMessage = static_cast<DoorUnlockMessage*>(&message);
+        return serializeJSONValue(doorUnlockMessage->values());
+    }
     default:
         iWarning() << "Unknown message type" << message.getMessageType();
         return nullptr;
@@ -261,7 +276,6 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
 QByteArray MqttCommunicationManagerBase::serializeJSONValue(QVariantMap mapData) {
     return QJsonDocument::fromVariant(mapData).toJson();
 }
-
 
 QByteArray MqttCommunicationManagerBase::serializeSingleJSONValue(QVariant value) {
     QVariantMap mapData;

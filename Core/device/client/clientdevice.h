@@ -2,9 +2,12 @@
 #define CLIENTDEVICE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "device/devicebase.h"
 
-class ClientDevice : public DeviceBase
+class SHARED_LIB_EXPORT ClientDevice : public DeviceBase
 {
     Q_OBJECT
 public:

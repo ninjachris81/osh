@@ -9,7 +9,7 @@ QLatin1String ValueManagerBase::MANAGER_ID = QLatin1String("ValueManager");
 
 ValueManagerBase::ValueManagerBase(QObject *parent) : ManagerBase(parent)
 {
-    connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::updateSignalRates);
+    connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::onUpdateSignalRates);
     m_signalRateTimer.start(10000);
 }
 
@@ -34,6 +34,7 @@ void ValueManagerBase::registerValue(ValueBase* value) {
 
     if (!m_knownValues.contains(value->fullId())) {
         m_knownValues.insert(value->fullId(), value);
+        value->connectManager(this);
     } else {
         iWarning() << "Value already registered" << value->fullId();
     }
@@ -63,14 +64,8 @@ void ValueManagerBase::handleReceivedMessage(MessageBase* msg) {
     handleReceivedMessage(valueMessage);
 }
 
-void ValueManagerBase::updateSignalRates() {
+void ValueManagerBase::onUpdateSignalRates() {
     iDebug() << Q_FUNC_INFO;
 
-    QMapIterator<QString, ValueBase*> it(m_knownValues);
-
-    while(it.hasNext()) {
-        it.next();
-        it.value()->updateSignalRate();
-    }
-
+    Q_EMIT(updateSignalRates());
 }

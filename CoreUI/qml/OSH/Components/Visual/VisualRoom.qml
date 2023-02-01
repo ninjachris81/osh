@@ -60,7 +60,7 @@ Item {
         console.info("Request Light " + cmd)
 
         /*
-        var inputIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_SWITCH, _internal.knownRoom.values, DatamodelManager.datamodel.values);
+        var inputIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_SWITCH, _internal.knownRoom.values, DatamodelManager.datamodel.values);
         if (inputIndex !== -1) {
             var value = DatamodelManager.datamodel.values[inputIndex]
             value.updateValue(true)
@@ -160,7 +160,7 @@ Item {
             _internal.knownRoom = Commons.selectRoom(root.knownRoomId)
 
             if (_internal.knownRoom) {
-                lightIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_RELAY_LIGHT, _internal.knownRoom.actors, DatamodelManager.datamodel.actors);
+                lightIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_RELAY_LIGHT, _internal.knownRoom.actors, DatamodelManager.datamodel.actors);
                 hasLight = lightIndex != -1
                 if (hasLight) {
                     console.info("Binding light for room " + root.knownRoomId)
@@ -170,7 +170,7 @@ Item {
                     hasLight = false
                 }
 
-                brightnessIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_BRIGHTNESS, _internal.knownRoom.values, DatamodelManager.datamodel.values);
+                brightnessIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_BRIGHTNESS, _internal.knownRoom.values, DatamodelManager.datamodel.values);
                 hasBrightness = brightnessIndex != -1
                 if (hasBrightness) {
                     console.info("Binding brightness for room " + root.knownRoomId)
@@ -178,7 +178,7 @@ Item {
                     brightness = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[brightnessIndex].rawValue, 0) })
                 }
 
-                shutterIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_RELAY_SHUTTER, _internal.knownRoom.actors, DatamodelManager.datamodel.actors);
+                shutterIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_RELAY_SHUTTER, _internal.knownRoom.actors, DatamodelManager.datamodel.actors);
                 hasShutter = shutterIndex != -1
                 if (hasShutter) {
                     console.info("Binding shutter for room " + root.knownRoomId)
@@ -186,7 +186,7 @@ Item {
                     shutterClosed = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.actors[shutterIndex].rawValue, false) })
                 }
 
-                motionIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_MOTION, _internal.knownRoom.values, DatamodelManager.datamodel.values);
+                motionIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_MOTION, _internal.knownRoom.values, DatamodelManager.datamodel.values);
                 hasPresence = motionIndex != -1
                 if (hasPresence) {
                     console.info("Binding motion for room " + root.knownRoomId)
@@ -194,7 +194,7 @@ Item {
                     presenceActive = Qt.binding(function() { return Commons.value(DatamodelManager.datamodel.values[motionIndex].rawValue, false) })
                 }
 
-                tempIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_TEMP, _internal.knownRoom.values, DatamodelManager.datamodel.values);
+                tempIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_TEMP, _internal.knownRoom.values, DatamodelManager.datamodel.values);
                 hasTemp = tempIndex != -1
                 if (hasTemp) {
                     console.info("Binding temp for room " + root.knownRoomId)
@@ -202,7 +202,7 @@ Item {
                     temp = Qt.binding(function() { return Commons.formatDoubleValue(DatamodelManager.datamodel.values[tempIndex]) })
                 }
 
-                humidityIndex = Commons.searchIndexByValueType(VALUE_TYPE.VT_HUMIDITY, _internal.knownRoom.values, DatamodelManager.datamodel.values);
+                humidityIndex = Commons.searchIndexByValueType(VALUE_TYPE.VALTYPE_HUMIDITY, _internal.knownRoom.values, DatamodelManager.datamodel.values);
                 hasHumidity = humidityIndex != -1
                 if (hasHumidity) {
                     console.info("Binding humidity for room " + root.knownRoomId)

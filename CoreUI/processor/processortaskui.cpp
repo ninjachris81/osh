@@ -1,6 +1,6 @@
 #include "processortaskui.h"
 
-ProcessorTaskUI::ProcessorTaskUI(QObject *parent) : IdentifyableUI(parent)
+ProcessorTaskUI::ProcessorTaskUI(Identifyable *parent) : IdentifyableUI(parent)
 {
     m_processorTask = static_cast<ProcessorTask*>(parent);
 

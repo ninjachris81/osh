@@ -2,11 +2,14 @@
 #define BOOLEANVALUE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "valuebase.h"
 
-class BooleanValue : public ValueBase
+class SHARED_LIB_EXPORT BooleanValue : public ValueBase
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     explicit BooleanValue();
     explicit BooleanValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);

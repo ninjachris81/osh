@@ -2,9 +2,12 @@
 #define SYSTEMTIMEMESSAGE_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "communication/messagebase.h"
 
-class SystemtimeMessage : public MessageBase
+class SHARED_LIB_EXPORT SystemtimeMessage : public MessageBase
 {
     Q_OBJECT
 public:

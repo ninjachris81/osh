@@ -10,7 +10,7 @@ ActorBase::ActorBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, Q
 
 }
 
-void ActorBase::triggerCmd(ACTOR_CMDS cmd, QString reason) {
+void ActorBase::triggerCmd(actor::ACTOR_CMDS cmd, QString reason) {
     iDebug() << Q_FUNC_INFO << cmd << reason;
 
     if (cmdSupported(cmd)) {
@@ -27,3 +27,7 @@ void ActorBase::triggerCmd(int cmd) {
     triggerCmd(static_cast<ACTOR_CMDS>(cmd));
 }
 */
+
+void ActorBase::_triggerCmd(actor::ACTOR_CMDS cmd) {
+
+}

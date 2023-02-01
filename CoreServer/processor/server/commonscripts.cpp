@@ -107,7 +107,7 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
 
         // finally set the value
         if (actualValue != expectedValue && expectedValue.isValid()) {
-            lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF, triggerReason);
+            lightActor->triggerCmd(expectedValue.toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, triggerReason);
         }
 
         return true;
@@ -132,10 +132,10 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
         QString triggerReason;
 
         if (inputSensor->isValid()) {
-            QVariant lastValue = m_localStorage->get(lastValueInputKey);
+            QVariant lastValue = m_localStorage->get(lastValueInputKey, false);
             m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
 
-            if (lastValue.isValid() && inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
+            if (inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
                 // toggle off / on
                 inputTriggered = true;
                 iDebug() << "Input sensor triggered";
@@ -147,23 +147,24 @@ bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSens
                     m_localStorage->set(lastTsInputKey, 0);
                 }
             }
-        }
 
-        if (!inputTriggered) {
-            // check for timeout
-            quint64 lastContact = m_localStorage->get(lastTsInputKey, 0).toULongLong();
-            if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
-                expectedValue = true;
-            } else {
-                triggerReason = "Timeout";
-                expectedValue = false;
+            if (!inputTriggered) {
+                // check for timeout
+                quint64 lastContact = m_localStorage->get(lastTsInputKey, 0).toULongLong();
+                if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
+                    expectedValue = true;
+                } else {
+                    triggerReason = "Timeout";
+                    expectedValue = false;
+                }
+            }
+
+            // finally set the value
+            if (actualValue != expectedValue && expectedValue.isValid()) {
+                lightActor->triggerCmd(expectedValue.toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, triggerReason);
             }
         }
 
-        // finally set the value
-        if (actualValue != expectedValue && expectedValue.isValid()) {
-            lightActor->triggerCmd(expectedValue.toBool() ? ACTOR_CMD_ON : ACTOR_CMD_OFF, triggerReason);
-        }
 
         return true;
     } else {
@@ -192,7 +193,7 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
                         if (deltaTemp > fullDeltaThresholdTemp) {
                             // always on, delta is too big
                             if (!tempValve->rawValue().toBool()) {
-                                tempValve->triggerCmd(ACTOR_CMD_ON, "Always on");
+                                tempValve->triggerCmd(actor::ACTOR_CMD_ON, "Always on");
                             }
                         } else {
                             qlonglong offMs;
@@ -226,7 +227,7 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
             bool targetValveState = getIntervalState(valveKey);
 
             if (tempValve->rawValue().toBool() != targetValveState) {
-                tempValve->triggerCmd(targetValveState ? ACTOR_CMD_ON : ACTOR_CMD_OFF, "Interval timeout");
+                tempValve->triggerCmd(targetValveState ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "Interval timeout");
             }
 
             return true;
@@ -273,15 +274,15 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullI
     if (shutterActor->isValid() && motionVal->isValid()) {
         if (isDownTime) {
             // down: check is motion active
-            if (!motionVal->rawValue().toBool() && shutterActor->rawValue().toInt() != ACTOR_CMDS::ACTOR_CMD_DOWN) {
-                shutterActor->triggerCmd(ACTOR_CMDS::ACTOR_CMD_DOWN, "applyShutterLogic");
+            if (!motionVal->rawValue().toBool() && shutterActor->rawValue().toInt() != actor::ACTOR_CMD_DOWN) {
+                shutterActor->triggerCmd(actor::ACTOR_CMD_DOWN, "applyShutterLogic");
             } else {
                 iDebug() << "Room still active - pausing shutter actions";
             }
         } else {
             // up: just time-based
-            if (shutterActor->rawValue().toInt() != ACTOR_CMDS::ACTOR_CMD_UP) {
-                shutterActor->triggerCmd(ACTOR_CMDS::ACTOR_CMD_UP, "applyShutterLogic");
+            if (shutterActor->rawValue().toInt() != actor::ACTOR_CMD_UP) {
+                shutterActor->triggerCmd(actor::ACTOR_CMD_UP, "applyShutterLogic");
             }
         }
         return true;

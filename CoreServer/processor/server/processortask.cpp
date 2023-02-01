@@ -3,11 +3,13 @@
 #include <QDebug>
 #include <QDateTime>
 
+qint64 ProcessorTask::INTERVAL_REALTIME = 0;
+
 ProcessorTask::ProcessorTask() : SerializableIdentifyable() {
 
 }
 
-ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, QObject *parent) : SerializableIdentifyable(id, parent), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval)
+ProcessorTask::ProcessorTask(QString id, ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent) : QObject(parent), SerializableIdentifyable(id), m_processorTaskType(taskType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult)
 {
 
 }
@@ -26,6 +28,10 @@ void ProcessorTask::deserialize(QJsonObject obj) {
     m_runCondition = obj.value("runCondition").toString();
     m_scheduleInterval = obj.value("scheduleInterval").toVariant().toLongLong();
     m_processorTaskType = (ProcessorTaskType) obj.value("m_processorTaskType").toInt();
+}
+
+QString ProcessorTask::getClassName() {
+    return staticMetaObject.className();
 }
 
 LogCat::LOGCAT ProcessorTask::logCat() {
@@ -71,6 +77,10 @@ qint64 ProcessorTask::scheduleInterval() {
 
 ProcessorTask::ProcessorTaskType ProcessorTask::taskType() {
     return m_processorTaskType;
+}
+
+bool ProcessorTask::publishResult() {
+    return m_publishResult;
 }
 
 qint64 ProcessorTask::lastExecution() {

@@ -17,14 +17,14 @@ ServerValueManager::ServerValueManager(QObject *parent) : ValueManagerBase(paren
 
 void ServerValueManager::init(LocalConfig *config) {
     REQUIRE_MANAGER(CommunicationManagerBase);
-    REQUIRE_MANAGER(DatabaseManager);
+    REQUIRE_MANAGER(SimpleDatabaseManager);
 
     m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
-    m_databaseManager = getManager<DatabaseManager>(DatabaseManager::MANAGER_ID);
+    m_simpleDatabaseManager = getManager<SimpleDatabaseManager>(SimpleDatabaseManager::MANAGER_ID);
 
     connect(m_commManager, &CommunicationManagerBase::connected, this, [this] {
 
-        QMap<QString, QVariant> values = m_databaseManager->simpleList(VALUE_PREFIX);
+        QMap<QString, QVariant> values = m_simpleDatabaseManager->simpleList(VALUE_PREFIX);
         QMapIterator<QString, QVariant> it(values);
 
         while(it.hasNext()) {
@@ -37,7 +37,7 @@ void ServerValueManager::init(LocalConfig *config) {
                 publishValue(value);
             } else {
                 iWarning() << "Value key" << it.key() << "is not a known value - removing it";
-                m_databaseManager->simpleRemove(VALUE_PREFIX, it.key());
+                m_simpleDatabaseManager->simpleRemove(VALUE_PREFIX, it.key());
             }
         }
 
@@ -58,7 +58,7 @@ void ServerValueManager::valueReceived(ValueBase* value, QVariant newValue) {
     if (value != nullptr) {
         value->updateValue(newValue);
         if (value->persist()) {
-            m_databaseManager->simpleSet(VALUE_PREFIX, value->fullId(), value->rawValue());
+            m_simpleDatabaseManager->simpleSet(VALUE_PREFIX, value->fullId(), value->rawValue());
         }
     }
 }

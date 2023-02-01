@@ -2,11 +2,14 @@
 #define KNOWNROOM_H
 
 #include <QObject>
+
+#include "sharedlib.h"
+
 #include "serializableidentifyable.h"
 #include "actor/actorbase.h"
 #include "value/valuebase.h"
 
-class KnownRoom : public SerializableIdentifyable
+class SHARED_LIB_EXPORT KnownRoom : public QObject, public SerializableIdentifyable
 {
     Q_OBJECT
 public:
@@ -16,6 +19,8 @@ public:
     /*virtual*/ void serialize(QJsonObject &obj) override;
 
     /*virtual*/ void deserialize(QJsonObject obj) override;
+
+    /*virtual*/ QString getClassName() override;
 
     void setName(QString name);
     QString name();

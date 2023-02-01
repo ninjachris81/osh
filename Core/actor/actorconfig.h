@@ -3,7 +3,9 @@
 
 #include <QObject>
 
-class ActorConfig : public QObject
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT ActorConfig : public QObject
 {
     Q_OBJECT
 public:
