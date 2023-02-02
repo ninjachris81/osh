@@ -1,4 +1,4 @@
 #!/bin/bash
 
-../Shared/start.sh CoreService
+/etc/osh/deploy/rpi/Services/Shared/start.sh CoreService
 
