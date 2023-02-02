@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../Shared/stop.sh CoreService
+/etc/osh/deploy/rpi/Services/Shared/stop.sh CoreService
