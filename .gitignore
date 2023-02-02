@@ -11,5 +11,6 @@ config.ini
 *.so.*
 CoreService/CoreService
 RS485RelayService/RS485RelayService
+MCP23017InputService/MCP23017InputService
 Makefile
 .qmake.stash
