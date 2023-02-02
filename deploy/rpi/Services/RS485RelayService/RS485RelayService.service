@@ -1,5 +1,5 @@
 [Unit]
-Description=OSH Core Service
+Description=OSH RS485Relay Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
 After=network.target
@@ -10,14 +10,16 @@ After=network.target
 #Type=forking
 Type=simple
 
-WorkingDirectory=/home/pi/osh/CoreService
+WorkingDirectory=/etc/osh/RS485RelayService
+
+#User=root
 
 ## here we can set custom environment variables
-ExecStart=/home/pi/osh/deploy/rpi/CoreService/start.sh
-ExecStop=/home/pi/osh/deploy/rpi/CoreService/stop.sh
+ExecStart=/etc/osh/deploy/rpi/Services/RS485RelayService/start.sh
+ExecStop=/etc/osh/deploy/rpi/Services/RS485RelayService/stop.sh
 
 # Useful during debugging; remove it once the service is working
-StandardOutput=file:/var/log/osh_core_service.log
+StandardOutput=file:/var/log/osh_rs485_relay_service.log
 StandardError=syslog
 
 [Install]

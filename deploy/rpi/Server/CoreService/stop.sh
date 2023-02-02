@@ -1,1 +1,0 @@
-../Shared/stop.sh CoreService

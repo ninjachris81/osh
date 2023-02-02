@@ -4,3 +4,12 @@ credentials.h
 /onviflibs/gsoap/gsoap-2.8/gsoap/samples
 /onviflibs/gsoap/gsoap-2.8/gsoap/ios_plugin/examples
 build-*
+moc_*
+*.o
+config.ini
+*.so
+*.so.*
+CoreService/CoreService
+RS485RelayService/RS485RelayService
+Makefile
+.qmake.stash
