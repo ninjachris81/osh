@@ -64,6 +64,7 @@ HEADERS += \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \
     processor/server/scriptbase.h \
+    processor/server/threadsafeqjsengine.h \
     sharedlib.h \
         time/server/systemtimemanager.h \
         value/server/environmentvaluemanager.h \
