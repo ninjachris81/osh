@@ -44,7 +44,6 @@ QVariant ProcessorTask::run(QJSEngine *engine) {
 
     if (checkRunCondition(engine)) {
         QJSValue result = ThreadSafeQJSEngine::call(engine, [&]{ return engine->evaluate(m_scriptCode);});
-        //QJSValue result = engine->evaluate(m_scriptCode);
 
         if (!result.isError()) {
             iDebug() << "Result" << result.toVariant();
@@ -66,7 +65,7 @@ QVariant ProcessorTask::run(QJSEngine *engine) {
 
 bool ProcessorTask::checkRunCondition(QJSEngine *engine) {
     if (m_runCondition.length() == 0) return true;
-    return engine->evaluate(m_runCondition).toBool();
+    return ThreadSafeQJSEngine::call(engine, [&]{ return engine->evaluate(m_runCondition);}).toBool();
 }
 
 QString ProcessorTask::scriptCode() {

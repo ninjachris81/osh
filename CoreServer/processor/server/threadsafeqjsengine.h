@@ -3,6 +3,7 @@
 
 #include <QJSEngine>
 #include <QThread>
+#include <QDebug>
 
 namespace ThreadSafeQJSEngine {
 
@@ -11,12 +12,16 @@ auto call(QJSEngine* engine, F&& f) -> typename std::enable_if<!std::is_void<dec
 {
     if (QThread::currentThread() != engine->thread())
     {
+        qDebug() << "Invoking in other thread";
+
         decltype(f()) result;
         QMetaObject::invokeMethod(engine, std::forward<F>(f), Qt::BlockingQueuedConnection, &result);
         return result;
     }
     else
     {
+        qDebug() << "Same thread";
+
         return std::forward<F>(f)();
     }
 }
@@ -26,10 +31,12 @@ auto call(QJSEngine* engine, F&& f) -> typename std::enable_if<std::is_void<decl
 {
     if (QThread::currentThread() != engine->thread())
     {
+        qDebug() << "Invoking in other thread";
         QMetaObject::invokeMethod(engine, std::forward<F>(f), Qt::BlockingQueuedConnection);
     }
     else
     {
+        qDebug() << "Same thread";
         std::forward<F>(f)();
     }
 }
