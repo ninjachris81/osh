@@ -7,3 +7,9 @@ build-*
 moc_*
 *.o
 config.ini
+*.so
+*.so.*
+CoreService/CoreService
+RS485RelayService/RS485RelayService
+Makefile
+.qmake.stash
