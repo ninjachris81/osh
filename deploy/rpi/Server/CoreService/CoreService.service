@@ -13,8 +13,8 @@ Type=simple
 WorkingDirectory=/etc/osh/CoreService
 
 ## here we can set custom environment variables
-ExecStart=/etc/osh/deploy/rpi/CoreService/start.sh
-ExecStop=/etc/osh/deploy/rpi/CoreService/stop.sh
+ExecStart=/etc/osh/deploy/rpi/Server/CoreService/start.sh
+ExecStop=/etc/osh/deploy/rpi/Server/CoreService/stop.sh
 
 # Useful during debugging; remove it once the service is working
 StandardOutput=file:/var/log/osh_core_service.log
