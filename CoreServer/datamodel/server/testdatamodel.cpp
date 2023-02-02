@@ -61,12 +61,12 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
 
     ValueGroup* nodeAllRelays0 = addValueGroup("allRelays0");
     // EG
-    kitchen->addActor(      addDigitalActor(nodeAllRelays0, "0", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
-    diningRoom->addActor(   addDigitalActor(nodeAllRelays0, "1", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
+    egFloor->addActor(      addDigitalActor(nodeAllRelays0, "0", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
+    workingRoom->addActor(  addDigitalActor(nodeAllRelays0, "1", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
     toilet->addActor(       addDigitalActor(nodeAllRelays0, "2", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
     mainFloor->addActor(    addDigitalActor(nodeAllRelays0, "3", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
-    egFloor->addActor(      addDigitalActor(nodeAllRelays0, "4", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
-    workingRoom->addActor(  addDigitalActor(nodeAllRelays0, "5", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
+    kitchen->addActor(      addDigitalActor(nodeAllRelays0, "4", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
+    diningRoom->addActor(   addDigitalActor(nodeAllRelays0, "5", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
     supplyRoom->addActor(   addDigitalActor(nodeAllRelays0, "6", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
     egMainFloor->addActor(  addDigitalActor(nodeAllRelays0, "7", VALTYPE_RELAY_LIGHT, true, ValueBase::VT_MID));
 
@@ -123,12 +123,12 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
 
     ValueGroup* nodeAllSwitches0 = addValueGroup("allSwitches0");
     // EG
-    kitchen->addValue(      addBooleanValue(nodeAllSwitches0, "0", VALTYPE_SWITCH, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodeAllSwitches0, "1", VALTYPE_SWITCH, ValueBase::VT_MID));
+    egFloor->addValue(      addBooleanValue(nodeAllSwitches0, "0", VALTYPE_SWITCH, ValueBase::VT_MID));
+    workingRoom->addValue(  addBooleanValue(nodeAllSwitches0, "1", VALTYPE_SWITCH, ValueBase::VT_MID));
     toilet->addValue(       addBooleanValue(nodeAllSwitches0, "2", VALTYPE_SWITCH, ValueBase::VT_MID));
     mainFloor->addValue(    addBooleanValue(nodeAllSwitches0, "3", VALTYPE_SWITCH, ValueBase::VT_MID));
-    egFloor->addValue(      addBooleanValue(nodeAllSwitches0, "4", VALTYPE_SWITCH, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodeAllSwitches0, "5", VALTYPE_SWITCH, ValueBase::VT_MID));
+    kitchen->addValue(      addBooleanValue(nodeAllSwitches0, "4", VALTYPE_SWITCH, ValueBase::VT_MID));
+    diningRoom->addValue(   addBooleanValue(nodeAllSwitches0, "5", VALTYPE_SWITCH, ValueBase::VT_MID));
     supplyRoom->addValue(   addBooleanValue(nodeAllSwitches0, "6", VALTYPE_SWITCH, ValueBase::VT_MID));
     egMainFloor->addValue(  addBooleanValue(nodeAllSwitches0, "7", VALTYPE_SWITCH, ValueBase::VT_MID));
     // OG
@@ -323,13 +323,13 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
 
 
     // eg
-    addProcessorTask("eg.kitchen.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.0', 'allSwitches0.0', 3600000)");
+    addProcessorTask("eg.egFloor.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.0', 'allSwitches0.0', 3600000)");
+    addProcessorTask("eg.workingRoom.light",    ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.1', 'allSwitches0.1', 3600000)");
     /*
     addProcessorTask("eg.diningRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.1', 'switches.21', 3600000)");
     addProcessorTask("eg.toilet.light",         ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.2', 'switches.22', 3600000)");
     addProcessorTask("eg.mainFloor.light",      ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.3', 'switches.23', 3600000)");
-    addProcessorTask("eg.egFloor.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.4', 'switches.24', 3600000)");
-    addProcessorTask("eg.workingRoom.light",    ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.5', 'switches.25', 3600000)");
+    addProcessorTask("eg.kitchen.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.4', 'switches.24', 3600000)");
     addProcessorTask("eg.supplyRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('lightRelays.6', 'switches.26', 3600000)");
 
     // og
