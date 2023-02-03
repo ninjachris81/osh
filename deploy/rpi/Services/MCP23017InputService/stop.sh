@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../Shared/stop.sh MCP23017InputService
+/etc/osh/deploy/rpi/Services/Shared/stop.sh MCP23017InputService

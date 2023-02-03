@@ -1,3 +1,3 @@
 #!/bin/bash
 
-../Shared/stop.sh RS485RelayService
+/etc/osh/deploy/rpi/Services/Shared/stop.sh RS485RelayService

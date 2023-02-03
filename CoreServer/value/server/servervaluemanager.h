@@ -35,7 +35,6 @@ public:
 
 protected:
     QTimer m_valueCheckTimer;
-    CommunicationManagerBase* m_commManager = nullptr;
     SimpleDatabaseManager* m_simpleDatabaseManager = nullptr;
 
     void valueReceived(ValueBase* value, QVariant newValue);

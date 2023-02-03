@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QModbusRtuSerialMaster>
+#include <QModbusTcpClient>
 
 #include "sharedlib.h"
 
@@ -108,7 +108,7 @@ protected slots:
 
 private:
     ClientSystemWarningsManager* m_warnManager;
-    QModbusRtuSerialMaster m_modbusClient;
+    QModbusTcpClient m_modbusClient;
     QTimer m_statusTimer;
     int m_slaveId = 1;
 

@@ -37,6 +37,7 @@ void ModelProcessorManager::init(LocalConfig* config) {
     m_actorManager = getManager<ActorManager>(ActorManager::MANAGER_ID);
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
+    m_scheduleTimer.setSingleShot(true);
 
     m_dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
 }
@@ -87,6 +88,7 @@ void ModelProcessorManager::stop() {
 }
 
 void ModelProcessorManager::executeTasks() {
+    m_scheduleTimer.stop();
     QMapIterator<QString, ProcessorTask*> it(m_processorTasks);
 
     while(it.hasNext()) {
@@ -115,10 +117,15 @@ void ModelProcessorManager::executeTasks() {
         }
     }
 
+    m_engine.collectGarbage();
+
     m_isFirstRun = false;
+    m_scheduleTimer.start();
 }
 
 void ModelProcessorManager::publishScriptResult(QString taskId, QVariant value) {
+    iDebug() << Q_FUNC_INFO << taskId << value;
+
     ScriptResultMessage srMessage(taskId, value);
     m_commManager->sendMessage(srMessage);
 }

@@ -25,7 +25,7 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     connect(this, &MqttCommunicationManagerBase::mqttDisconnected, this, &CommunicationManagerBase::disconnected);
 
     registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, true, MQTT_MESSAGE_TYPE_AC, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, false, MQTT_MESSAGE_TYPE_AC, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_AO, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0);
