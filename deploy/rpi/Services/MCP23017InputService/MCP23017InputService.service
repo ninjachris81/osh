@@ -19,8 +19,8 @@ ExecStart=/etc/osh/deploy/rpi/Services/MCP23017InputService/start.sh
 ExecStop=/etc/osh/deploy/rpi/Services/MCP23017InputService/stop.sh
 
 # Useful during debugging; remove it once the service is working
-StandardOutput=file:/var/log/osh_mcp_23017_input_service.log
-StandardError=syslog
+#StandardOutput=file:/var/log/osh_mcp_23017_input_service.log
+#StandardError=syslog
 
 [Install]
 WantedBy=multi-user.target
