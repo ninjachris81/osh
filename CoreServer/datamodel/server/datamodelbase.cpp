@@ -97,8 +97,13 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
-ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
-    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, runCondition, scheduleInterval, publishResult);
+ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, ProcessorTask::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+    ProcessorTask* processorNode = new ProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+
+    if (taskType == ProcessorTask::PTT_NATIVE) {
+        parseNativeFunction(scriptCode, processorNode);
+    }
+
     m_processorTasks.insert(processorNode->id(), processorNode);
     Q_EMIT(datamodelContentChanged());
     return processorNode;
@@ -110,4 +115,36 @@ KnownRoom* DatamodelBase::addKnownRoom(QString id, QString name) {
     m_knownRooms.insert(knownRoom->id(), knownRoom);
     Q_EMIT(datamodelContentChanged());
     return knownRoom;
+}
+
+void DatamodelBase::parseNativeFunction(QString scriptCode, ProcessorTask *task) {
+    iDebug() << Q_FUNC_INFO << scriptCode;
+
+    if (scriptCode.startsWith("CommonScripts.applySwitchLogic(") && scriptCode.endsWith(")")) {
+        task->setNativeFunction(ProcessorTask::NFT_APPLY_SWITCH_LOGIC);
+        extractParams(scriptCode, task);
+    } else {
+        iWarning() << "Unable to resolve native function" << scriptCode;
+    }
+}
+
+void DatamodelBase::extractParams(QString scriptCode, ProcessorTask *task) {
+    iDebug() << Q_FUNC_INFO << scriptCode;
+
+    int start = scriptCode.indexOf("(");
+    int end = scriptCode.lastIndexOf(")");
+
+    QString params = scriptCode.mid(start + 1, end - (start + 1));
+    QStringList paramTokens = params.split(",");
+    QList<QVariant::Type> typeList = ProcessorTask::paramTypeList(task->nativeFunction());
+
+    for (quint8 i = 0; i < paramTokens.size();i++) {
+        QString str = paramTokens.at(i).trimmed();
+        if (str.startsWith("'")) str = str.mid(1);
+        if (str.endsWith("'")) str = str.chopped(1);
+
+        QVariant var = QVariant::fromValue(str);
+        var.convert(typeList.at(i));
+        task->addNativeParam(var);
+    }
 }

@@ -47,7 +47,7 @@ public:
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
-    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTask::INTERVAL_REALTIME, bool publishResult = false);
+    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, ProcessorTask::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTask::INTERVAL_REALTIME, bool publishResult = false);
     KnownRoom* addKnownRoom(QString id, QString name);
 
 protected:
@@ -58,6 +58,10 @@ protected:
     QMap<QString, KnownRoom*> m_knownRooms;
 
     QMap<QString, ProcessorTask*> m_processorTasks;
+
+private:
+    void parseNativeFunction(QString scriptCode, ProcessorTask *task);
+    void extractParams(QString scriptCode, ProcessorTask *task);
 
 signals:
     void datamodelContentChanged();

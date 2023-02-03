@@ -5,6 +5,7 @@
 #include <QMetaEnum>
 #include <QResource>
 #include <QQmlEngine>
+#include <QThread>
 
 #include "macros.h"
 #include "value/server/servervaluemanager.h"
@@ -37,7 +38,6 @@ void ModelProcessorManager::init(LocalConfig* config) {
     m_actorManager = getManager<ActorManager>(ActorManager::MANAGER_ID);
 
     m_scheduleTimer.setInterval(config->getInt("processor.intervalMs", 100));
-    m_scheduleTimer.setSingleShot(true);
 
     m_dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
 }
@@ -45,7 +45,8 @@ void ModelProcessorManager::init(LocalConfig* config) {
 void ModelProcessorManager::postInit() {
     iDebug() << Q_FUNC_INFO;
 
-    registerScript(new CommonScripts(&m_engine, m_dmManager->datamodel(), &m_localStorage, m_valueManager, m_actorManager));
+    m_commonScripts = new CommonScripts(&m_engine, m_dmManager->datamodel(), &m_localStorage, m_valueManager, m_actorManager);
+    registerScript(m_commonScripts);
 
     m_processorTasks = m_dmManager->datamodel()->processorTasks();
 
@@ -88,39 +89,35 @@ void ModelProcessorManager::stop() {
 }
 
 void ModelProcessorManager::executeTasks() {
-    m_scheduleTimer.stop();
     QMapIterator<QString, ProcessorTask*> it(m_processorTasks);
 
     while(it.hasNext()) {
         it.next();
 
-        switch(it.value()->taskType()) {
-        case ProcessorTask::PTT_INTERVAL:
+        switch(it.value()->taskTriggerType()) {
+        case ProcessorTask::PTTT_INTERVAL:
             if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
-                QVariant result = it.value()->run(&m_engine);
+                QVariant result = it.value()->run(&m_engine, m_commonScripts);
                 if (it.value()->publishResult()) {
                     publishScriptResult(it.key(), result);
                 }
             }
             break;
-        case ProcessorTask::PTT_ONLY_ONCE:
+        case ProcessorTask::PTTT_ONLY_ONCE:
             if (m_isFirstRun) {
-                QVariant result = it.value()->run(&m_engine);
+                QVariant result = it.value()->run(&m_engine, m_commonScripts);
                 if (it.value()->publishResult()) {
                     publishScriptResult(it.key(), result);
                 }
             }
             break;
-        case ProcessorTask::PTT_TRIGGER:
+        case ProcessorTask::PTTT_TRIGGER:
             // will triggered externally
             break;
         }
     }
 
-    m_engine.collectGarbage();
-
     m_isFirstRun = false;
-    m_scheduleTimer.start();
 }
 
 void ModelProcessorManager::publishScriptResult(QString taskId, QVariant value) {

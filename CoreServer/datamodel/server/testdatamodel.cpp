@@ -323,13 +323,13 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
 
 
     // eg
-    addProcessorTask("eg.egFloor.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.0', 'allSwitches0.0', 3600000)");
-    addProcessorTask("eg.workingRoom.light",    ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.1', 'allSwitches0.1', 3600000)");
-    addProcessorTask("eg.diningRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.2', 'allSwitches0.2', 3600000)");
-    addProcessorTask("eg.toilet.light",         ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.3', 'allSwitches0.3', 3600000)");
-    addProcessorTask("eg.mainFloor.light",      ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.4', 'allSwitches0.4', 3600000)");
-    addProcessorTask("eg.kitchen.light",        ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.5', 'allSwitches0.5', 3600000)");
-    addProcessorTask("eg.supplyRoom.light",     ProcessorTask::PTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.6', 'allSwitches0.6', 3600000)");
+    addProcessorTask("eg.egFloor.light",        ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.0', 'allSwitches0.0', 3600000)");
+    addProcessorTask("eg.workingRoom.light",    ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.1', 'allSwitches0.1', 3600000)");
+    addProcessorTask("eg.diningRoom.light",     ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.2', 'allSwitches0.2', 3600000)");
+    addProcessorTask("eg.toilet.light",         ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.3', 'allSwitches0.3', 3600000)");
+    addProcessorTask("eg.mainFloor.light",      ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.4', 'allSwitches0.4', 3600000)");
+    addProcessorTask("eg.kitchen.light",        ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.5', 'allSwitches0.5', 3600000)");
+    addProcessorTask("eg.supplyRoom.light",     ProcessorTask::PTT_NATIVE, ProcessorTask::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.6', 'allSwitches0.6', 3600000)");
 
     /*
     // og

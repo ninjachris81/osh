@@ -15,6 +15,7 @@
 #include "processor/server/scriptbase.h"
 #include "communication/communicationmanagerbase.h"
 #include "processor/server/localstorage.h"
+#include "processor/server/commonscripts.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
 
@@ -50,6 +51,7 @@ private:
     QList<QJSValue> m_values;
 
     QMap<QString, ScriptBase*> m_scripts;
+    CommonScripts *m_commonScripts;
 
     LocalStorage m_localStorage;
 
