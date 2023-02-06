@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
+    wbb12Controller.bindValueManager(&valueManager);
+
     /*
     QList<ValueBase*> actors;
     ValueGroup actorGroup(relayController.id());
