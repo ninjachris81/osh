@@ -2,10 +2,10 @@
 
 ProcessorTaskUI::ProcessorTaskUI(Identifyable *parent) : IdentifyableUI(parent)
 {
-    m_processorTask = static_cast<ProcessorTask*>(parent);
+    m_processorTask = static_cast<ProcessorTaskBase*>(parent);
 
-    connect(m_processorTask, &ProcessorTask::lastExecutionChanged, this, &ProcessorTaskUI::lastExecutionChanged);
-    connect(m_processorTask, &ProcessorTask::lastResultChanged, this, &ProcessorTaskUI::lastResultChanged);
+    connect(m_processorTask, &ProcessorTaskBase::lastExecutionChanged, this, &ProcessorTaskUI::lastExecutionChanged);
+    connect(m_processorTask, &ProcessorTaskBase::lastResultChanged, this, &ProcessorTaskUI::lastResultChanged);
 }
 
 QString ProcessorTaskUI::scriptCode() {

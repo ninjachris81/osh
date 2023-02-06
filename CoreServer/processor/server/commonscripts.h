@@ -2,8 +2,6 @@
 #define COMMONSCRIPTS_H
 
 #include <QObject>
-#include <QJSValue>
-#include <QJSEngine>
 
 #include "processor/server/scriptbase.h"
 #include "value/valuebase.h"
@@ -13,13 +11,13 @@
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
 
-class CommonScripts : public ScriptBase
+class SHARED_LIB_EXPORT CommonScripts : public ScriptBase
 {
     Q_OBJECT
 public:
-    explicit CommonScripts(QJSEngine * engine, DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit CommonScripts(DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
-    Q_INVOKABLE bool ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function);
+    //Q_INVOKABLE bool ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function);
 
     Q_INVOKABLE bool applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs);
 
@@ -44,7 +42,6 @@ public:
     Q_INVOKABLE void clearInterval(QString key);
 
 private:
-    QJSEngine * m_engine;
     DatamodelBase* m_datamodel;
     LocalStorage* m_localStorage;
     ValueManagerBase* m_valueManager;

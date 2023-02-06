@@ -4,7 +4,7 @@
 #include <QObject>
 #include "identifyableui.h"
 
-#include "processor/server/processortask.h"
+#include "processor/server/processortaskbase.h"
 
 class ProcessorTaskUI : public IdentifyableUI
 {
@@ -25,7 +25,7 @@ public:
     void setLastResult(QVariant lastResult);
 
 private:
-    ProcessorTask* m_processorTask;
+    ProcessorTaskBase* m_processorTask;
 
 signals:
     void scriptCodeChanged();

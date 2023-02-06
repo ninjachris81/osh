@@ -8,13 +8,14 @@ QLatin1String CommonScripts::INTERVAL_LAST_CHANGES = QLatin1String("interval_las
 QLatin1String CommonScripts::INTERVAL_STATES = QLatin1String("interval_states_");
 
 
-CommonScripts::CommonScripts(QJSEngine *engine, DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
+CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
 {
 }
 
 /*
  * Returns true if the function has been called
 */
+/*
 bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant invalidValue, QJSValue function) {
     iDebug() << Q_FUNC_INFO << actualValue << expectedValue;
 
@@ -38,6 +39,7 @@ bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue
 
     return false;
 }
+*/
 
 bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs) {
     if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId) && m_datamodel->values().contains(motionSensorFullId) && m_datamodel->values().contains(brightnessSensorFullId)) {

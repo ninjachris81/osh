@@ -4,6 +4,7 @@ SUBDIRS += \
     AudioController \
     AudioService \
     Core \
+    CoreProcessorJS \
     CoreSerial \
     CoreServer \
     CoreService \

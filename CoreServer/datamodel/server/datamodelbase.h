@@ -16,7 +16,7 @@
 #include "value/integervalue.h"
 #include "actor/digitalactor.h"
 #include "actor/shutteractor.h"
-#include "processor/server/processortask.h"
+#include "processor/server/processortaskbase.h"
 #include "shared/units_qt.h"
 
 #include "identifyable.h"
@@ -35,7 +35,7 @@ public:
     QMap<QString, KnownDevice *> knownDevices();
     QMap<QString, ValueBase*> values();
     QMap<QString, ActorBase*> actors();
-    QMap<QString, ProcessorTask*> processorTasks();
+    QMap<QString, ProcessorTaskBase*> processorTasks();
     QMap<QString, KnownRoom*> knownRooms();
 
     KnownDevice* addKnownDevice(QString id, QString serviceId, QString name);
@@ -47,7 +47,7 @@ public:
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
-    ProcessorTask* addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, ProcessorTask::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTask::INTERVAL_REALTIME, bool publishResult = false);
+    ProcessorTaskBase* addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false);
     KnownRoom* addKnownRoom(QString id, QString name);
 
 protected:
@@ -57,11 +57,9 @@ protected:
     QMap<QString, ActorBase*> m_actors;
     QMap<QString, KnownRoom*> m_knownRooms;
 
-    QMap<QString, ProcessorTask*> m_processorTasks;
+    QMap<QString, ProcessorTaskBase*> m_processorTasks;
 
 private:
-    void parseNativeFunction(QString scriptCode, ProcessorTask *task);
-    void extractParams(QString scriptCode, ProcessorTask *task);
 
 signals:
     void datamodelContentChanged();

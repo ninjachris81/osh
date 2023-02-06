@@ -1,5 +1,12 @@
 #include "datamodelbase.h"
 
+
+#include "processor/server/nativeprocessortask.h"
+
+#ifdef PROCESSOR_JS_SUPPORT
+    #include "processor/server/jsprocessortask.h"
+#endif
+
 DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id), QObject(parent)
 {
 
@@ -17,7 +24,7 @@ QMap<QString, KnownDevice*> DatamodelBase::knownDevices() {
     return m_knownDevices;
 }
 
-QMap<QString, ProcessorTask*> DatamodelBase::processorTasks() {
+QMap<QString, ProcessorTaskBase *> DatamodelBase::processorTasks() {
     return m_processorTasks;
 }
 
@@ -97,11 +104,20 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
-ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, ProcessorTask::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
-    ProcessorTask* processorNode = new ProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+ProcessorTaskBase* DatamodelBase::addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+    ProcessorTaskBase* processorNode;
 
-    if (taskType == ProcessorTask::PTT_NATIVE) {
-        parseNativeFunction(scriptCode, processorNode);
+    switch(taskType) {
+        case ProcessorTaskBase::PTT_JS:
+#ifdef PROCESSOR_JS_SUPPORT
+            processorNode = new JSProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+#else
+        qFatal("JS not supported");
+#endif
+            break;
+        case ProcessorTaskBase::PTT_NATIVE:
+            processorNode = new NativeProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+            break;
     }
 
     m_processorTasks.insert(processorNode->id(), processorNode);
@@ -115,36 +131,4 @@ KnownRoom* DatamodelBase::addKnownRoom(QString id, QString name) {
     m_knownRooms.insert(knownRoom->id(), knownRoom);
     Q_EMIT(datamodelContentChanged());
     return knownRoom;
-}
-
-void DatamodelBase::parseNativeFunction(QString scriptCode, ProcessorTask *task) {
-    iDebug() << Q_FUNC_INFO << scriptCode;
-
-    if (scriptCode.startsWith("CommonScripts.applySwitchLogic(") && scriptCode.endsWith(")")) {
-        task->setNativeFunction(ProcessorTask::NFT_APPLY_SWITCH_LOGIC);
-        extractParams(scriptCode, task);
-    } else {
-        iWarning() << "Unable to resolve native function" << scriptCode;
-    }
-}
-
-void DatamodelBase::extractParams(QString scriptCode, ProcessorTask *task) {
-    iDebug() << Q_FUNC_INFO << scriptCode;
-
-    int start = scriptCode.indexOf("(");
-    int end = scriptCode.lastIndexOf(")");
-
-    QString params = scriptCode.mid(start + 1, end - (start + 1));
-    QStringList paramTokens = params.split(",");
-    QList<QVariant::Type> typeList = ProcessorTask::paramTypeList(task->nativeFunction());
-
-    for (quint8 i = 0; i < paramTokens.size();i++) {
-        QString str = paramTokens.at(i).trimmed();
-        if (str.startsWith("'")) str = str.mid(1);
-        if (str.endsWith("'")) str = str.chopped(1);
-
-        QVariant var = QVariant::fromValue(str);
-        var.convert(typeList.at(i));
-        task->addNativeParam(var);
-    }
 }
