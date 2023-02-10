@@ -110,6 +110,7 @@ case "$1" in
       buildOSHLib "ShutterController"
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
+      ;;
    RS485RelayService )
       BUILD_TARGET=$1
       printInfos
