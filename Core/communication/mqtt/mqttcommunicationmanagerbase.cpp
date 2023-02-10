@@ -50,13 +50,17 @@ void MqttCommunicationManagerBase::registerMessageType(MessageBase::MESSAGE_TYPE
     m_messageTypes.insert(messageType, info);
 }
 
-MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteArray payload) {
-    iDebug() << Q_FUNC_INFO << levels << payload;
+MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteArray payload, bool isRetain) {
+    iDebug() << Q_FUNC_INFO << levels << payload << isRetain;
 
     QStringList path = MqttCommunicationManagerBase::removeBasePath(levels);
     QStringList firstLevelPath = MqttCommunicationManagerBase::removeMessageTypePath(path);
     MessageBase::MESSAGE_TYPE messageType = getMessageType(path.first());
     MessageTypeInfo info = m_messageTypes.value(messageType);
+    if (isRetain && !info.isRetained) {
+        iWarning() << "Ignoring retained message" << messageType;
+        return nullptr;
+    }
 
     if (info.mqttPathLevels == firstLevelPath.size()) {
         QVariantMap value = parseJSONPayload(payload);

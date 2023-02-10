@@ -8,6 +8,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "log/logmanager.h"
 #include "actor/actormanager.h"
 #include "actor/digitalactor.h"
 #include "shared/mqtt_qt.h"
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     ActorManager actorManager;
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
 
@@ -37,6 +39,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
+    managerRegistration.registerManager(&logManager);
 
     RS485RelayController relayController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "allRelays0"), RS485RelayController::RS485_SERIAL_32PORT, RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT));
     quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);

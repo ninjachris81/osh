@@ -7,6 +7,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "log/logmanager.h"
 //#include "actor/actormanager.h"
 #include "audiocontroller.h"
 #include "actor/digitalactor.h"
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
@@ -36,6 +38,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&logManager);
 
     AudioController audioController(&controllerManager, config.getString(&clientManager, "audioGroupId", "egAudio0"));
     controllerManager.registerController(&audioController);

@@ -30,7 +30,7 @@ public:
 
     void registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels);
 
-    MessageBase* getMessage(QStringList levels, QByteArray payload);
+    MessageBase* getMessage(QStringList levels, QByteArray payload, bool isRetain);
 
     QByteArray serializePayload(MessageBase &message);
 

@@ -94,6 +94,22 @@ void ShutterController::onMaintenance() {
         } else if (QDateTime::currentMSecsSinceEpoch() - movement.startedAt > movement.duration) {      // stop it
             m_actorManager->publishCmd(movement.relayActor, actor::ACTOR_CMD_OFF);
             it.remove();        // remove the task
+        } else if (movement.updatesStatus) {
+            // update value
+            double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
+            double duration = movement.duration;
+            int percentage = qBound(0, (int) ((elapsedTime / duration) * 100), 100);
+
+            // border handling
+            if (percentage > 95) percentage = 100;
+            if (percentage < 5) percentage = 0;
+
+            // invert
+            if (!movement.directionDown) {
+                percentage = 100 - percentage;
+            }
+
+            movement.shutterActor->updateClosePattern(percentage);
         }
     }
 }
@@ -108,22 +124,22 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
         m_actorManager->publishCmd(m_actorsDown.value(shutterActor), actor::ACTOR_CMD_OFF);
         break;
     case actor::ACTOR_CMD_UP:
-        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt());
+        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt(), false, true);
         break;
     case actor::ACTOR_CMD_DOWN:
-        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt());
+        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt(), true, true);
         break;
     case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
         // first, all down
-        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt());
+        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt(), true, true);
         // then, turn open
-        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt());
+        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt(), false, false);
         break;
     case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
-        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt());
+        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt(), false, false);
         break;
     case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
-        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt());
+        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt(), false, false);
         break;
     case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
     case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
@@ -132,7 +148,7 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
     }
 }
 
-void ShutterController::insertShutterMovement(ShutterActor* shutterActor, DigitalActor* relayActor, qint64 duration) {
+void ShutterController::insertShutterMovement(ShutterActor* shutterActor, DigitalActor* relayActor, qint64 duration, bool directionDown, bool updatesStatus) {
     QMutexLocker locker(&m_activeShutterMovementsMutex);
 
     ActiveShutterMovement movement;
@@ -141,6 +157,8 @@ void ShutterController::insertShutterMovement(ShutterActor* shutterActor, Digita
     movement.relayActor = relayActor;
     movement.duration = duration;
     movement.startedAt = -1;
+    movement.directionDown = directionDown;
+    movement.updatesStatus = updatesStatus;
 
     m_activeShutterMovements.enqueue(movement);
 }

@@ -35,6 +35,8 @@ public:
         DigitalActor* relayActor;
         qint64 startedAt;
         qint64 duration;
+        bool directionDown;
+        bool updatesStatus;
     };
 
     ShutterController(ControllerManager* manager, ActorManager *actorManager, QString id, QObject *parent = nullptr);
@@ -57,7 +59,7 @@ private:
     void initializeShutters();
 
     void insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd);
-    void insertShutterMovement(ShutterActor* shutterActor, DigitalActor *relayActor, qint64 duration);
+    void insertShutterMovement(ShutterActor* shutterActor, DigitalActor *relayActor, qint64 duration, bool directionDown, bool updatesStatus);
     void cancelShutterMovements(ShutterActor* shutterActor);
 
     QMap<ShutterActor*, DigitalActor*> m_actorsUp;

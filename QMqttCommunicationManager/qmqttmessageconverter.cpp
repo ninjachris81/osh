@@ -11,7 +11,7 @@ QMqttMessageConverter::QMqttMessageConverter(QObject *parent) : QObject(parent)
 }
 
 MessageBase* QMqttMessageConverter::getMessage(QMqttMessage &message) {
-    return m_commManager->getMessage(message.topic().levels(), message.payload());
+    return m_commManager->getMessage(message.topic().levels(), message.payload(), message.retain());
 }
 
 QMqttTopicName QMqttMessageConverter::getTopicName(MessageBase &message) {
