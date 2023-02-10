@@ -10,6 +10,7 @@
 #include "shuttercontroller.h"
 #include "actor/actormanager.h"
 #include "actor/actorconfigmanager.h"
+#include "log/logmanager.h"
 #include "actor/shutteractor.h"
 #include "shared/mqtt_qt.h"
 
@@ -29,6 +30,7 @@ int main(int argc, char *argv[])
     ClientValueManager valueManager;
     ActorManager actorManager;
     ActorConfigManager actorConfigManager;
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_AO);
 
@@ -40,18 +42,21 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&actorConfigManager);
+    managerRegistration.registerManager(&logManager);
 
     QString shutterValueGroupId = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
+    ValueGroup shutterGroup(shutterValueGroupId);
+    quint16 shutterOffset = config.getInt(&shutterGroup, "shutterValueGroupOffset", 0);
+
+    QString relayValueGroupId = config.getString(&shutterGroup, "relayValueGroupId", "allRelays0");
+    ValueGroup relayGroup(relayValueGroupId);
+    quint16 relayOffset = config.getInt(&shutterGroup, "relayValueGroupOffset", 0);
+    quint16 count = config.getInt(&shutterGroup, "shutterCount", 1);
+
     ShutterController shutterController(&controllerManager, &actorManager, shutterValueGroupId);
-    QString relayValueGroupId = config.getString(&clientManager, "relayValueGroupId", "allRelays0");
-    quint16 shutterOffset = config.getInt(&clientManager, "shutterValueGroupOffset", 0);
-    quint16 relayOffset = config.getInt(&clientManager, "relayValueGroupOffset", 0);
-    quint16 count = config.getInt(&clientManager, "shutterCount", 1);
     controllerManager.registerController(&shutterController);
 
     QList<ValueBase*> actors;
-    ValueGroup shutterGroup(shutterValueGroupId);
-    ValueGroup relayGroup(relayValueGroupId);
 
     for (quint8 i=0;i<count;i++) {
         qDebug() << "Init actor" << i;
