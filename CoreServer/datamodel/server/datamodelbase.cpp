@@ -58,25 +58,15 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     return actor;
 }
 
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, ValueBase::VALUE_TIMEOUT timeout) {
     ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType);
     actor->withValueTimeout(timeout);
+    QVariantMap config;
+    config.insert(ShutterActor::CONFIG_TILT_SUPPORT, tiltSupport);
+    config.insert(ShutterActor::CONFIG_FULL_CLOSE_DURATION, fullCloseDuration);
+    actor->setConfig(config);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());
-    return actor;
-}
-
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
-    ShutterActor* actor = addShutterActor(valueGroupState, id, valueType, timeout);
-    IntegerValue *closeState = addIntegerValue(valueGroupCloseState, id, VALUE_TYPE::VALTYPE_SHUTTER_CLOSE_STATE, ValueBase::VALUE_TIMEOUT::VT_MID);
-    actor->setCloseState(closeState);
-    return actor;
-}
-
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, ValueGroup* valueGroupTiltState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
-    ShutterActor* actor = addShutterActor(valueGroupState, valueGroupCloseState, id, valueType, timeout);
-    IntegerValue *tiltState = addIntegerValue(valueGroupTiltState, id, VALUE_TYPE::VALTYPE_SHUTTER_TILT_STATE, ValueBase::VALUE_TIMEOUT::VT_MID);
-    actor->setTiltState(tiltState);
     return actor;
 }
 
@@ -131,4 +121,12 @@ KnownRoom* DatamodelBase::addKnownRoom(QString id, QString name) {
     m_knownRooms.insert(knownRoom->id(), knownRoom);
     Q_EMIT(datamodelContentChanged());
     return knownRoom;
+}
+
+KnownArea* DatamodelBase::addKnownArea(QString id, QString name) {
+    KnownArea* knownArea = new KnownArea(id);
+    knownArea->setName(name);
+    m_knownAreas.insert(knownArea->id(), knownArea);
+    Q_EMIT(datamodelContentChanged());
+    return knownArea;
 }

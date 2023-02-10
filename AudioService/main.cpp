@@ -56,7 +56,5 @@ int main(int argc, char *argv[])
 
     audioController.bindCommunicationManager(&commManager);
 
-    audioController.start();
-
     return a.exec();
 }

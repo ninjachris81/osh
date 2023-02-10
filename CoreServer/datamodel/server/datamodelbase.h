@@ -21,6 +21,7 @@
 
 #include "identifyable.h"
 #include "datamodel/server/meta/knownroom.h"
+#include "datamodel/server/meta/knownarea.h"
 
 using namespace unit;
 
@@ -41,14 +42,13 @@ public:
     KnownDevice* addKnownDevice(QString id, QString serviceId, QString name);
     ValueGroup* addValueGroup(QString id);
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout);
-    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
-    ShutterActor* addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
-    ShutterActor* addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, ValueGroup* valueGroupTiltState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, ValueBase::VALUE_TIMEOUT timeout);
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     ProcessorTaskBase* addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false);
     KnownRoom* addKnownRoom(QString id, QString name);
+    KnownArea* addKnownArea(QString id, QString name);
 
 protected:
     QMap<QString, KnownDevice*> m_knownDevices;
@@ -56,6 +56,7 @@ protected:
     QMap<QString, ValueBase*> m_values;
     QMap<QString, ActorBase*> m_actors;
     QMap<QString, KnownRoom*> m_knownRooms;
+    QMap<QString, KnownArea*> m_knownAreas;
 
     QMap<QString, ProcessorTaskBase*> m_processorTasks;
 

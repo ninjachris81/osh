@@ -16,7 +16,17 @@ class SHARED_LIB_EXPORT WBB12Controller : public ControllerBase
     Q_OBJECT
 public:
 
+#define WBB12_INTERVAL_TEMPERATURES 30000
+#define WBB12_INTERVAL_WARNINGS     60000
+#define WBB12_INTERVAL_MODES        30000
+#define WBB12_INTERVAL_FIXED_VALUES 60000
+#define WBB12_INTERVAL_STATISTICS   600000
+
     static int WBB12_Input_Registers_Offset;
+    static int WBB12_Holding_Registers_Offset;
+
+    static int WBB12_NoError;
+    static int WBB12_NoWarning;
 
     enum WBB12_Input_Registers {
         OUTSIDE_TEMP_1 = 0,
@@ -44,8 +54,8 @@ public:
         HEAT_PUMP_MODE = 3100,
         HEAT_PUMP_ERROR = 3101,
         HEAT_PUMP_CONSUMPTION = 3102,
-        HEAT_PUMP_FLOW = 3103,
-        HEAT_PUMP_RETURN_FLOW = 3104,
+        HEAT_PUMP_FLOW_TEMP = 3103,
+        HEAT_PUMP_RETURN_FLOW_TEMP = 3104,
 
         HEAT_COIL_STATUS = 4100,
         HEAT_COIL_WORKING_HOURS = 4101,
@@ -77,10 +87,10 @@ public:
     };
     Q_ENUM(WBB12_Input_Registers)
 
-    enum WBB12_Holdings {
+    enum WBB12_Holding_Registers {
         OPERATING_MODE = 0,
     };
-    Q_ENUM(WBB12_Holdings)
+    Q_ENUM(WBB12_Holding_Registers)
 
     enum WBB12_ConfigHP {
         WFDE_ConfigHP_NotConfigured,
@@ -95,6 +105,7 @@ public:
         WFDE_ConfigHeating_DemandConstantControl,
         WFDE_ConfigHeating_DemandWeatherControl
     };
+    Q_ENUM(WBB12_ConfigHeating)
 
     enum WBB12_StatusHeating {
         WFDE_StatusHeating_Off,
@@ -103,6 +114,7 @@ public:
         WFDE_StatusHeating_HeatingBlocked,
         WFDE_StatusHeating_CoolingBlocked
     };
+    Q_ENUM(WBB12_StatusHeating)
 
     enum WBB12_AllowanceStatusHP {
         WFDE_AllowanceStatusHP_Off,
@@ -110,11 +122,13 @@ public:
         WFDE_AllowanceStatusHP_OnlyCooling,
         WFDE_AllowanceStatusHP_HeatingCoolingAllowed
     };
+    Q_ENUM(WBB12_AllowanceStatusHP)
 
     enum WBB12_ConfigWarmWater {
         WFDE_ConfigWarmWater_Blocked,
         WFDE_ConfigWarmWater_WithTargetValue
     };
+    Q_ENUM(WBB12_ConfigWarmWater)
 
     enum WBB12_StatusWarmWater {
         WFDE_StatusWarmWater_Off,
@@ -123,6 +137,7 @@ public:
         WFDE_StatusWarmWater_LoadingParallel,
         WFDE_StatusWarmWater_DemandActiveLoadingBlocked
     };
+    Q_ENUM(WBB12_StatusWarmWater)
 
     static signed short WFDE_TargetValue_NotAvailable;
     static signed short WFDE_TargetValue_Off;
@@ -137,6 +152,7 @@ public:
         WFDE_EZOperationStatus_ExternalEnergy,
         WFDE_EZOperationStatus_Cooling
     };
+    Q_ENUM(WBB12_EEZOperationStatus)
 
     static signed short WFDE_Temperature_NoSensor;
     static signed short WFDE_Temperature_NoValue;
@@ -145,6 +161,7 @@ public:
         WFDE_Status_Off,
         WFDE_Status_On
     };
+    Q_ENUM(WBB12_Status)
 
     enum WBB12_OperationStatus {
         WFDE_OperationStatus_Undefined,
@@ -184,6 +201,7 @@ public:
         WFDE_OperationStatus_HKBlock,
         WFDE_OperationStatus_Reduction
     };
+    Q_ENUM(WBB12_OperationStatus)
 
     enum WBB12_DataFormat {
         WDF_ConfigHP,
@@ -204,9 +222,10 @@ public:
         WDF_ConfigRoom,
         WDF_OperationStatus,
     };
+    Q_ENUM(WBB12_DataFormat)
 
     struct RetrieveValue {
-        uint16_t retrieveInterval;
+        qint64 retrieveInterval;
         QVariant::Type type;
         WBB12_DataFormat dataFormat;
         QString mqttName;
@@ -230,12 +249,22 @@ protected slots:
     void retrieveStatus();
 
 private:
-    void registerInput(WBB12_Input_Registers reg, uint16_t retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat, QString mqttName);
+    ValueBase* createValue(RetrieveValue retVal);
+
+    void registerInput(WBB12_Input_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat, QString mqttName);
+    void registerHolding(WBB12_Holding_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat, QString mqttName);
+
     void _readInput(WBB12_Input_Registers reg, RetrieveValue val);
+    void _readHolding(WBB12_Holding_Registers reg, RetrieveValue val);
     QVariant parseValue(int rawValue, WBB12_DataFormat format);
 
     QMap<WBB12_Input_Registers, RetrieveValue> m_inputRegisters;
-    QMap<WBB12_Input_Registers, ValueBase*> m_valueMappings;
+    QMap<WBB12_Input_Registers, ValueBase*> m_inputMappings;
+    QMap<WBB12_Input_Registers, qint64> m_lastInputReadings;
+
+    QMap<WBB12_Holding_Registers, RetrieveValue> m_holdingRegisters;
+    QMap<WBB12_Holding_Registers, ValueBase*> m_holdingMappings;
+    QMap<WBB12_Holding_Registers, qint64> m_lastHoldingReadings;
 
     ClientSystemWarningsManager* m_warnManager;
     QModbusTcpClient m_modbusClient;
@@ -243,6 +272,8 @@ private:
     int m_slaveId = 1;
 
     ValueManagerBase* m_valueManager = nullptr;
+    ValueGroup *m_wbb12Group;
+
 
 
 signals:

@@ -93,8 +93,6 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    controllerManager.start();
-
     bool res = onvifController.subscribeMotionEvent(staticCam);
 
     qDebug() << "RUNNING";

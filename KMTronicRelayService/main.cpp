@@ -54,7 +54,5 @@ int main(int argc, char *argv[])
         actorManager.registerActor(actor, &valueManager);
     }
 
-    controllerManager.start();
-
     return a.exec();
 }

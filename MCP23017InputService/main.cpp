@@ -8,6 +8,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "log/logmanager.h"
 //#include "actor/actormanager.h"
 #include "actor/digitalactor.h"
 #include "value/booleanvalue.h"
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
@@ -36,6 +38,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&logManager);
 
     MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
     quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
@@ -54,8 +57,6 @@ int main(int argc, char *argv[])
         inputController.bindValue(value);
         valueManager.registerValue(value);
     }
-
-    inputController.start();
 
     return a.exec();
 }

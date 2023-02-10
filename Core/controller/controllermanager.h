@@ -32,14 +32,15 @@ public:
 
     void registerController(ControllerBase *controller);
 
-    void start();
-
     ControllerBase* getController(QString id);
 
     QStringList controllerNames();
 
 private:
     QMap<QString, ControllerBase*> m_controllers;
+
+private slots:
+    void onStart();
 
 signals:
 

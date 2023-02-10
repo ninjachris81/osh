@@ -31,3 +31,16 @@ void ActorBase::triggerCmd(int cmd) {
 void ActorBase::_triggerCmd(actor::ACTOR_CMDS cmd) {
 
 }
+
+void ActorBase::setConfig(QVariantMap values) {
+    m_configValues = values;
+}
+
+QVariant ActorBase::getConfig(QString key, QVariant defaultValue) {
+    return m_configValues.value(key, defaultValue);
+}
+
+
+QStringList ActorBase::configKeys() {
+    return m_configValues.keys();
+}

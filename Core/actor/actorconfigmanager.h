@@ -1,5 +1,5 @@
-#ifndef ACTORMANAGER_H
-#define ACTORMANAGER_H
+#ifndef ACTORCONFIGMANAGER_H
+#define ACTORCONFIGMANAGER_H
 
 #include <QObject>
 
@@ -7,13 +7,14 @@
 
 #include "manager/managerbase.h"
 #include "actor/actorbase.h"
+#include "actor/actormanager.h"
 #include "communication/communicationmanagerbase.h"
 
-class SHARED_LIB_EXPORT ActorManager : public ManagerBase
+class SHARED_LIB_EXPORT ActorConfigManager : public ManagerBase
 {
     Q_OBJECT
 public:
-    explicit ActorManager(QObject *parent = nullptr);
+    explicit ActorConfigManager(QObject *parent = nullptr);
 
     static QLatin1String MANAGER_ID;
 
@@ -27,25 +28,15 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
-    void registerActor(ActorBase* actor, ValueManagerBase* valueManager);
-
-    void publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd);
-
-    //void onCmdTriggered(ActorBase *actor, actor::ACTOR_CMDS cmd);
-
-    ActorBase* getActor(QString fullId);
-
-    QList<ActorBase*> actors();
-
-private:
-    QMap<QString, ActorBase*> m_actors;
-    CommunicationManagerBase* m_commManager;
-
 private slots:
+    void onBroadcastConfig();
 
 signals:
 
-public slots:
+private:
+    ActorManager* m_actorManager;
+    CommunicationManagerBase* m_commManager;
+
 };
 
-#endif // ACTORMANAGER_H
+#endif // ACTORCONFIGMANAGER_H

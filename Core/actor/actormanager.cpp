@@ -76,3 +76,11 @@ void ActorManager::onCmdTriggered(ActorBase* actor, actor::ACTOR_CMDS cmd) {
     m_commManager->sendMessage(msg);
 }
 */
+
+ActorBase* ActorManager::getActor(QString fullId) {
+    return m_actors.value(fullId);
+}
+
+QList<ActorBase*> ActorManager::actors() {
+    return m_actors.values();
+}

@@ -29,12 +29,14 @@ public:
 
     Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
+    Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
+
     static QLatin1String INTERVAL_OFF_DURATIONS;
     static QLatin1String INTERVAL_ON_DURATIONS;
     static QLatin1String INTERVAL_LAST_CHANGES;
     static QLatin1String INTERVAL_STATES;
 
-    Q_INVOKABLE void publishValue(QString fullId, QVariant value);
+    //Q_INVOKABLE void publishValue(QString fullId, QVariant value);
     Q_INVOKABLE void publishCmd(QString fullId, int cmd, QString reason);
 
     Q_INVOKABLE void setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState = true);
@@ -47,7 +49,7 @@ private:
     ValueManagerBase* m_valueManager;
     ActorManager* m_actorManager;
 
-    void publishValue(ValueBase* val, QVariant value);
+    //void publishValue(ValueBase* val, QVariant value);
     void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason);
 
 signals:

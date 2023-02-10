@@ -60,7 +60,5 @@ int main(int argc, char *argv[])
     relayController.bindValueManager(&valueManager, actors);
     */
 
-    controllerManager.start();
-
     return a.exec();
 }

@@ -37,6 +37,7 @@ SOURCES += \
     datamodel/server/emptydatamodel.cpp \
     datamodel/server/filedatamodelloader.cpp \
         datamodel/server/httpdatamodelloader.cpp \
+    datamodel/server/meta/knownarea.cpp \
     datamodel/server/meta/knownroom.cpp \
         datamodel/server/testdatamodel.cpp \
         datamodel/server/testdatamodelloader.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     datamodel/server/emptydatamodel.h \
     datamodel/server/filedatamodelloader.h \
         datamodel/server/httpdatamodelloader.h \
+    datamodel/server/meta/knownarea.h \
     datamodel/server/meta/knownroom.h \
         datamodel/server/testdatamodel.h \
         datamodel/server/testdatamodelloader.h \
