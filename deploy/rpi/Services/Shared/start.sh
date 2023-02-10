@@ -1,3 +1,4 @@
 #!/bin/bash
 
-/etc/osh/$1/$1
+cd /etc/osh/$1
+./$1
