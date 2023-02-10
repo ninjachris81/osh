@@ -10,6 +10,7 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "log/logmanager.h"
 #include "actor/actormanager.h"
 #include "value/doublevalue.h"
 #include "shared/mqtt_qt.h"
@@ -31,6 +32,7 @@ int main(int argc, char *argv[])
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     ActorManager actorManager;
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
@@ -41,6 +43,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
+    managerRegistration.registerManager(&logManager);
 
     //OnvifServerController onvifServerController(&controllerManager, "OnvifServer");
     OnvifController onvifController(&controllerManager, "OnvifClient");

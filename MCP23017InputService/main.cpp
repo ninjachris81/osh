@@ -41,14 +41,14 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&logManager);
 
     MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
-    quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
+    ValueGroup actorGroup(inputController.id());
+    quint16 offset = config.getInt(&actorGroup, "inputValueGroupOffset", 0);
     controllerManager.registerController(&inputController);
 
     managerRegistration.init(&config);
 
     QList<ValueBase*> values;
 
-    ValueGroup actorGroup(inputController.id());
     for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
         qDebug() << "Init value" << i;
         BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VALTYPE_SWITCH);

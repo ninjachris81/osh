@@ -34,6 +34,8 @@ void LogManager::init(LocalConfig *config) {
     if (config->getBool("log.warn", true)) m_typeFilter.append(QtMsgType::QtWarningMsg);
     if (config->getBool("log.critical", true)) m_typeFilter.append(QtMsgType::QtCriticalMsg);
     if (config->getBool("log.fatal", true)) m_typeFilter.append(QtMsgType::QtFatalMsg);
+
+    m_publishLog = config->getBool("log.publish", false);
 }
 
 QString LogManager::id() {
@@ -87,7 +89,13 @@ void LogManager::messageHandler(QtMsgType type, const QMessageLogContext &contex
     QByteArray localMsg = msg.toLocal8Bit();
 
     if (m_instance != nullptr) {
-        m_instance->publishLog(type, msg);
+        if (m_instance->m_publishLog) {
+            m_instance->publishLog(type, msg);
+        }
+
+        if (!m_instance->m_typeFilter.contains(type)) {
+            return;
+        }
     }
 
     switch (type) {

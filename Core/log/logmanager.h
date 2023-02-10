@@ -50,6 +50,8 @@ private:
     CommunicationManagerBase* m_commManager;
     DeviceDiscoveryManagerBase* m_ddManager;
 
+    bool m_publishLog = false;
+
 protected:
     QList<QtMsgType> m_typeFilter;
 
