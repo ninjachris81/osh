@@ -19,8 +19,8 @@ ExecStart=/etc/osh/deploy/rpi/Services/RS485RelayService/start.sh
 ExecStop=/etc/osh/deploy/rpi/Services/RS485RelayService/stop.sh
 
 # Useful during debugging; remove it once the service is working
-StandardOutput=file:/var/log/osh_rs485_relay_service.log
-StandardError=syslog
+#StandardOutput=file:/var/log/osh_rs485_relay_service.log
+#StandardError=syslog
 
 [Install]
 WantedBy=multi-user.target

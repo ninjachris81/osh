@@ -56,8 +56,6 @@ int main(int argc, char *argv[])
         valueManager.registerValue(value);
     }
 
-    controllerManager.start();
-
     qDebug() << "RUNNING";
 
     return a.exec();

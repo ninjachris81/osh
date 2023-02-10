@@ -11,7 +11,7 @@ DatamodelBaseUI::DatamodelBaseUI(Identifyable *parent) : IdentifyableUI(parent)
 {
     m_datamodel = static_cast<DatamodelBase*>(parent);
 
-    QMapIterator<QString, ProcessorTask*> it(m_datamodel->processorTasks());
+    QMapIterator<QString, ProcessorTaskBase*> it(m_datamodel->processorTasks());
     while(it.hasNext()) {
         it.next();
         m_processorTasks.append(new ProcessorTaskUI(it.value()));

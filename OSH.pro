@@ -4,6 +4,7 @@ SUBDIRS += \
     AudioController \
     AudioService \
     Core \
+    CoreProcessorJS \
     CoreSerial \
     CoreServer \
     CoreService \
@@ -23,6 +24,8 @@ SUBDIRS += \
     QMqttCommunicationManager \
     RS485RelayController \
     RS485RelayService \
+    ShutterController \
+    ShutterService \
     WBB12Controller \
     WBB12Service \
     qtmqtt
@@ -58,3 +61,6 @@ OBISService.depends = Core OBISController QMqttCommunicationManager
 
 OnvifController.depends = Core
 OnvifService.depends = Core OnvifController QMqttCommunicationManager
+
+ShutterController.depends = Core
+ShutterService.depends = Core ShutterController QMqttCommunicationManager

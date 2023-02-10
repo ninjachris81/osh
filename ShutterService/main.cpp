@@ -1,0 +1,72 @@
+#include <QCoreApplication>
+
+#include "manager/managerregistration.h"
+#include "qmqttcommunicationmanager.h"
+#include "controller/controllermanager.h"
+#include "device/client/clientdevicemanager.h"
+#include "time/client/clientsystemtimemanager.h"
+#include "warn/client/clientsystemwarningsmanager.h"
+#include "value/client/clientvaluemanager.h"
+#include "shuttercontroller.h"
+#include "actor/actormanager.h"
+#include "actor/actorconfigmanager.h"
+#include "actor/shutteractor.h"
+#include "shared/mqtt_qt.h"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+
+    LocalConfig config;
+
+    ManagerRegistration managerRegistration(ManagerRegistration::CLIENT);
+
+    QMqttCommunicationManager commManager;
+    ControllerManager controllerManager;
+    ClientDeviceDiscoveryManager clientManager("ShutterService");
+    ClientSystemtimeManager systimeManager;
+    ClientSystemWarningsManager syswarnManager;
+    ClientValueManager valueManager;
+    ActorManager actorManager;
+    ActorConfigManager actorConfigManager;
+
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_AO);
+
+    managerRegistration.registerManager(&commManager);
+    managerRegistration.registerManager(&controllerManager);
+    managerRegistration.registerManager(&clientManager);
+    managerRegistration.registerManager(&systimeManager);
+    managerRegistration.registerManager(&syswarnManager);
+    managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&actorManager);
+    managerRegistration.registerManager(&actorConfigManager);
+
+    QString shutterValueGroupId = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
+    ShutterController shutterController(&controllerManager, &actorManager, shutterValueGroupId);
+    QString relayValueGroupId = config.getString(&clientManager, "relayValueGroupId", "allRelays0");
+    quint16 shutterOffset = config.getInt(&clientManager, "shutterValueGroupOffset", 0);
+    quint16 relayOffset = config.getInt(&clientManager, "relayValueGroupOffset", 0);
+    quint16 count = config.getInt(&clientManager, "shutterCount", 1);
+    controllerManager.registerController(&shutterController);
+
+    QList<ValueBase*> actors;
+    ValueGroup shutterGroup(shutterValueGroupId);
+    ValueGroup relayGroup(relayValueGroupId);
+
+    for (quint8 i=0;i<count;i++) {
+        qDebug() << "Init actor" << i;
+        ShutterActor* shutterActor = new ShutterActor(&shutterGroup, QString::number(i + shutterOffset), value::VALTYPE_RELAY_SHUTTER);
+        DigitalActor* relayActorUp = new DigitalActor(&relayGroup, QString::number((i * 2) + relayOffset), value::VALTYPE_RELAY_SHUTTER, true);
+        DigitalActor* relayActorDown = new DigitalActor(&relayGroup, QString::number((i * 2) + relayOffset + 1), value::VALTYPE_RELAY_SHUTTER, true);
+        shutterActor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
+        actors.append(shutterActor);
+        shutterController.bindActor(shutterActor, relayActorUp, relayActorDown);
+        actorManager.registerActor(shutterActor, &valueManager);
+        actorManager.registerActor(relayActorUp, &valueManager);
+        actorManager.registerActor(relayActorDown, &valueManager);
+    }
+
+    managerRegistration.init(&config);
+
+    return a.exec();
+}

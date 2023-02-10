@@ -65,7 +65,5 @@ int main(int argc, char *argv[])
 
     frontDoorUnlockController.bindDoorActor(frontDoorDoorActor, frontDoorRelayActor);
 
-    controllerManager.start();
-
     return a.exec();
 }

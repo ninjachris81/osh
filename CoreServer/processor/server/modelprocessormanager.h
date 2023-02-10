@@ -4,19 +4,19 @@
 #include <QObject>
 #include <QList>
 #include <QFuture>
-#include <QJSEngine>
 #include <QTimer>
 
 #include "sharedlib.h"
 
 #include "manager/managerbase.h"
-#include "processor/server/processortask.h"
 #include "datamodel/server/datamodelmanager.h"
 #include "processor/server/scriptbase.h"
 #include "communication/communicationmanagerbase.h"
 #include "processor/server/localstorage.h"
+#include "processor/server/commonscripts.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
+#include "processor/server/processorexecutorbase.h"
 
 class SHARED_LIB_EXPORT ModelProcessorManager : public ManagerBase
 {
@@ -43,13 +43,9 @@ public:
     void stop();
 
 private:
-    QJSEngine m_engine;
-    QMap<QString, ProcessorTask*> m_processorTasks;
+    QMap<ProcessorTaskBase::ProcessorTaskType, ProcessorExecutorBase*> m_processorExecutors;
+    QMap<QString, ProcessorTaskBase*> m_processorTasks;
     QTimer m_scheduleTimer;
-
-    QList<QJSValue> m_values;
-
-    QMap<QString, ScriptBase*> m_scripts;
 
     LocalStorage m_localStorage;
 
@@ -58,17 +54,6 @@ private:
     ValueManagerBase* m_valueManager;
     ActorManager* m_actorManager;
     bool m_isFirstRun = true;
-
-    void injectValues(DatamodelManager *dmManager);
-    void injectActors(DatamodelManager *dmManager);
-    void injectConstants();
-    void injectScripts();
-    void injectLocalStorage();
-
-    void injectValue(ValueBase* value);
-    void injectActor(ActorBase* actor);
-
-    void registerScript(ScriptBase* script);
 
     void publishScriptResult(QString taskId, QVariant value);
 

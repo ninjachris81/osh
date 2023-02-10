@@ -33,6 +33,10 @@ public:
 
     //void onCmdTriggered(ActorBase *actor, actor::ACTOR_CMDS cmd);
 
+    ActorBase* getActor(QString fullId);
+
+    QList<ActorBase*> actors();
+
 private:
     QMap<QString, ActorBase*> m_actors;
     CommunicationManagerBase* m_commManager;

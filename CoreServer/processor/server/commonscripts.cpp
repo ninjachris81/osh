@@ -8,13 +8,14 @@ QLatin1String CommonScripts::INTERVAL_LAST_CHANGES = QLatin1String("interval_las
 QLatin1String CommonScripts::INTERVAL_STATES = QLatin1String("interval_states_");
 
 
-CommonScripts::CommonScripts(QJSEngine *engine, DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_engine(engine), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
+CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
 {
 }
 
 /*
  * Returns true if the function has been called
 */
+/*
 bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant invalidValue, QJSValue function) {
     iDebug() << Q_FUNC_INFO << actualValue << expectedValue;
 
@@ -38,6 +39,7 @@ bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue
 
     return false;
 }
+*/
 
 bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs) {
     if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId) && m_datamodel->values().contains(motionSensorFullId) && m_datamodel->values().contains(brightnessSensorFullId)) {
@@ -244,15 +246,15 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
 
     if (radarVal->isValid() && radarVal->rawValue().toBool()) {
         if (motionVal->updateValue(true)) {
-            publishValue(motionVal, true);
+            //publishValue(motionVal, true);
         }
     } else if (pirVal->isValid() && pirVal->rawValue().toBool()) {
         if (motionVal->updateValue(true)) {
-            publishValue(motionVal, true);
+            //publishValue(motionVal, true);
         }
     } else {
         if (motionVal->updateValue(false)) {
-            publishValue(motionVal, false);
+            //publishValue(motionVal, false);
         }
     }
     return true;
@@ -262,13 +264,7 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullI
     ActorBase* shutterActor = m_datamodel->actors().value(shutterFullId);
     ValueBase* motionVal = m_datamodel->values().value(motionFullId);
 
-    int from = ((hourFrom * 60) + minuteFrom) * 60 * 1000;
-    int to = ((hourTo * 60) + minuteTo) * 60 * 1000;
-
-    if (to < from) {
-        to += 24 * 60 * 60 * 1000;
-    }
-    bool isDownTime = QTime::currentTime().msecsSinceStartOfDay() > from && QTime::currentTime().msecsSinceStartOfDay() < to;
+    bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
     if (shutterActor->isValid() && motionVal->isValid()) {
         if (isDownTime) {
@@ -291,20 +287,24 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullI
     }
 }
 
+/*
 void CommonScripts::publishValue(QString fullId, QVariant value) {
     ValueBase* val = m_datamodel->values().value(fullId);
     publishValue(val, value);
 }
+*/
 
 void CommonScripts::publishCmd(QString fullId, int cmd, QString reason) {
     ActorBase* actor = m_datamodel->actors().value(fullId);
     publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
 }
 
+/*
 void CommonScripts::publishValue(ValueBase* val, QVariant value) {
     val->updateValue(value);
     m_valueManager->publishValue(val);
 }
+*/
 
 void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
     actor->triggerCmd(cmd, reason);
@@ -360,4 +360,18 @@ void CommonScripts::clearInterval(QString key) {
     m_localStorage->unset(INTERVAL_ON_DURATIONS + key);
     m_localStorage->unset(INTERVAL_LAST_CHANGES + key);
     m_localStorage->unset(INTERVAL_STATES + key);
+}
+
+
+bool CommonScripts::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
+    int from = ((hourFrom * 60) + minuteFrom) * 60 * 1000;
+    int to = ((hourTo * 60) + minuteTo) * 60 * 1000;
+
+    if (from == to) return 0;
+
+    if (to < from) {
+        to += 24 * 60 * 60 * 1000;
+    }
+
+    return QTime::currentTime().msecsSinceStartOfDay() > from && QTime::currentTime().msecsSinceStartOfDay() < to;
 }

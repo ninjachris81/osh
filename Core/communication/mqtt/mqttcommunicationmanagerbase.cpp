@@ -155,13 +155,13 @@ void MqttCommunicationManagerBase::onMqttConnected() {
     } else {
         switch(managerRegistration()->instanceRole()) {
         case ManagerRegistration::SERVER:
-            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_AO);
             break;
         case ManagerRegistration::CLIENT:
             subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
             break;
         case ManagerRegistration::GUI:
-            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO);
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO << MQTT_MESSAGE_TYPE_AO);
             break;
         default:
             iWarning() << "Unsupported instance role";

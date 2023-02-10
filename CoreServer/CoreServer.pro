@@ -4,8 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += qml sql
-
+QT       += sql
+QT       += network
 QT       -= gui
 
 TARGET = CoreServer
@@ -13,6 +13,8 @@ TEMPLATE = lib
 #CONFIG += staticlib
 
 DEFINES += MAKE_SHARED_LIB
+
+#DEFINES += PROCESSOR_JS_SUPPORT
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -35,19 +37,23 @@ SOURCES += \
     datamodel/server/emptydatamodel.cpp \
     datamodel/server/filedatamodelloader.cpp \
         datamodel/server/httpdatamodelloader.cpp \
+    datamodel/server/meta/knownarea.cpp \
     datamodel/server/meta/knownroom.cpp \
         datamodel/server/testdatamodel.cpp \
         datamodel/server/testdatamodelloader.cpp \
         device/server/serverdevicediscoverymanager.cpp \
     processor/server/commonscripts.cpp \
     processor/server/localstorage.cpp \
+    processor/server/nativeprocessorexecutor.cpp \
+    processor/server/nativeprocessortask.cpp \
+    processor/server/processorexecutorbase.cpp \
+    processor/server/processortaskbase.cpp \
     processor/server/scriptbase.cpp \
         time/server/systemtimemanager.cpp \
         value/server/environmentvaluemanager.cpp \
         value/server/servervaluemanager.cpp \
         device/server/devicediscoverymodelbridge.cpp \
-        processor/server/modelprocessormanager.cpp \
-        processor/server/processortask.cpp
+        processor/server/modelprocessormanager.cpp
 
 HEADERS += \
         datamodel/server/datamodelbase.h \
@@ -57,12 +63,17 @@ HEADERS += \
     datamodel/server/emptydatamodel.h \
     datamodel/server/filedatamodelloader.h \
         datamodel/server/httpdatamodelloader.h \
+    datamodel/server/meta/knownarea.h \
     datamodel/server/meta/knownroom.h \
         datamodel/server/testdatamodel.h \
         datamodel/server/testdatamodelloader.h \
         device/server/serverdevicediscoverymanager.h \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \
+    processor/server/nativeprocessorexecutor.h \
+    processor/server/nativeprocessortask.h \
+    processor/server/processorexecutorbase.h \
+    processor/server/processortaskbase.h \
     processor/server/scriptbase.h \
     processor/server/threadsafeqjsengine.h \
     sharedlib.h \
@@ -70,8 +81,18 @@ HEADERS += \
         value/server/environmentvaluemanager.h \
         value/server/servervaluemanager.h \
         device/server/devicediscoverymodelbridge.h \
-        processor/server/modelprocessormanager.h \
-        processor/server/processortask.h
+        processor/server/modelprocessormanager.h
+
+
+defined(PROCESSOR_JS_SUPPORT) {
+    win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../CoreProcessorJS/release/ -lCoreProcessorJS
+    else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../CoreProcessorJS/debug/ -lCoreProcessorJS
+    else:unix: LIBS += -L$$OUT_PWD/../CoreProcessorJS/ -lCoreProcessorJS
+
+    INCLUDEPATH += $$PWD/../CoreProcessorJS
+    DEPENDPATH += $$PWD/../CoreProcessorJS
+    message("JS Processor Support")
+}
 
 unix {
     target.path = /usr/lib

@@ -29,6 +29,7 @@ DEFINES += IS_OSH_CORE_SERVICE
 SOURCES += \
         actor/actorbase.cpp \
         actor/actorconfig.cpp \
+        actor/actorconfigmanager.cpp \
         actor/actorconfigmessage.cpp \
         actor/actormanager.cpp \
         actor/actormessage.cpp \
@@ -94,6 +95,7 @@ SOURCES += \
 HEADERS += \
         actor/actorbase.h \
         actor/actorconfig.h \
+        actor/actorconfigmanager.h \
         actor/actorconfigmessage.h \
         actor/actormanager.h \
         actor/actormessage.h \

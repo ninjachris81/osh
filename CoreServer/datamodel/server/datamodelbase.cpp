@@ -1,5 +1,12 @@
 #include "datamodelbase.h"
 
+
+#include "processor/server/nativeprocessortask.h"
+
+#ifdef PROCESSOR_JS_SUPPORT
+    #include "processor/server/jsprocessortask.h"
+#endif
+
 DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id), QObject(parent)
 {
 
@@ -17,7 +24,7 @@ QMap<QString, KnownDevice*> DatamodelBase::knownDevices() {
     return m_knownDevices;
 }
 
-QMap<QString, ProcessorTask*> DatamodelBase::processorTasks() {
+QMap<QString, ProcessorTaskBase *> DatamodelBase::processorTasks() {
     return m_processorTasks;
 }
 
@@ -51,25 +58,15 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     return actor;
 }
 
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, ValueBase::VALUE_TIMEOUT timeout) {
     ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType);
     actor->withValueTimeout(timeout);
+    QVariantMap config;
+    config.insert(ShutterActor::CONFIG_TILT_SUPPORT, tiltSupport);
+    config.insert(ShutterActor::CONFIG_FULL_CLOSE_DURATION, fullCloseDuration);
+    actor->setConfig(config);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());
-    return actor;
-}
-
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
-    ShutterActor* actor = addShutterActor(valueGroupState, id, valueType, timeout);
-    IntegerValue *closeState = addIntegerValue(valueGroupCloseState, id, VALUE_TYPE::VALTYPE_SHUTTER_CLOSE_STATE, ValueBase::VALUE_TIMEOUT::VT_MID);
-    actor->setCloseState(closeState);
-    return actor;
-}
-
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, ValueGroup* valueGroupCloseState, ValueGroup* valueGroupTiltState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
-    ShutterActor* actor = addShutterActor(valueGroupState, valueGroupCloseState, id, valueType, timeout);
-    IntegerValue *tiltState = addIntegerValue(valueGroupTiltState, id, VALUE_TYPE::VALTYPE_SHUTTER_TILT_STATE, ValueBase::VALUE_TIMEOUT::VT_MID);
-    actor->setTiltState(tiltState);
     return actor;
 }
 
@@ -97,8 +94,22 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
-ProcessorTask* DatamodelBase::addProcessorTask(QString id, ProcessorTask::ProcessorTaskType taskType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
-    ProcessorTask* processorNode = new ProcessorTask(id, taskType, scriptCode, runCondition, scheduleInterval, publishResult);
+ProcessorTaskBase* DatamodelBase::addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+    ProcessorTaskBase* processorNode;
+
+    switch(taskType) {
+        case ProcessorTaskBase::PTT_JS:
+#ifdef PROCESSOR_JS_SUPPORT
+            processorNode = new JSProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+#else
+        qFatal("JS not supported");
+#endif
+            break;
+        case ProcessorTaskBase::PTT_NATIVE:
+            processorNode = new NativeProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+            break;
+    }
+
     m_processorTasks.insert(processorNode->id(), processorNode);
     Q_EMIT(datamodelContentChanged());
     return processorNode;
@@ -110,4 +121,12 @@ KnownRoom* DatamodelBase::addKnownRoom(QString id, QString name) {
     m_knownRooms.insert(knownRoom->id(), knownRoom);
     Q_EMIT(datamodelContentChanged());
     return knownRoom;
+}
+
+KnownArea* DatamodelBase::addKnownArea(QString id, QString name) {
+    KnownArea* knownArea = new KnownArea(id);
+    knownArea->setName(name);
+    m_knownAreas.insert(knownArea->id(), knownArea);
+    Q_EMIT(datamodelContentChanged());
+    return knownArea;
 }
