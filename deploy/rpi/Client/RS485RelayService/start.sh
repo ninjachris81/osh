@@ -1,1 +1,0 @@
-../Shared/start.sh RS485RelayService
