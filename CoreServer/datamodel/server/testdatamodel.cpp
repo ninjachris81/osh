@@ -118,17 +118,17 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     // SHUTTERS
     ValueGroup* nodeAllShutters = addValueGroup("allShutters0");
 
-    workingRoom->addActor(  addShutterActor(nodeAllShutters, "0", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
-    kitchen->addActor(      addShutterActor(nodeAllShutters, "1", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
-    diningRoom->addActor(   addShutterActor(nodeAllShutters, "2", VALTYPE_RELAY_SHUTTER, false, 30000, ValueBase::VT_MID));
-    toilet->addActor(       addShutterActor(nodeAllShutters, "3", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
-    supplyRoom->addActor(   addShutterActor(nodeAllShutters, "4", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
-    egSideFloor->addActor(  addShutterActor(nodeAllShutters, "5", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
+    workingRoom->addActor(  addShutterActor(nodeAllShutters, "0", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
+    kitchen->addActor(      addShutterActor(nodeAllShutters, "1", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
+    diningRoom->addActor(   addShutterActor(nodeAllShutters, "2", VALTYPE_RELAY_SHUTTER, false, 30000, ValueBase::VT_NONE));
+    toilet->addActor(       addShutterActor(nodeAllShutters, "3", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
+    supplyRoom->addActor(   addShutterActor(nodeAllShutters, "4", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
+    egSideFloor->addActor(  addShutterActor(nodeAllShutters, "5", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
 
-    sleepingRoom->addActor( addShutterActor(nodeAllShutters, "6", VALTYPE_RELAY_SHUTTER, true, 20000, ValueBase::VT_MID));
-    clothingRoom->addActor( addShutterActor(nodeAllShutters, "7", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
-    bathRoom->addActor(     addShutterActor(nodeAllShutters, "8", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_MID));
-    livingRoom->addActor(   addShutterActor(nodeAllShutters, "9", VALTYPE_RELAY_SHUTTER, true, 20000, ValueBase::VT_MID));
+    sleepingRoom->addActor( addShutterActor(nodeAllShutters, "6", VALTYPE_RELAY_SHUTTER, true, 20000, ValueBase::VT_NONE));
+    clothingRoom->addActor( addShutterActor(nodeAllShutters, "7", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
+    bathRoom->addActor(     addShutterActor(nodeAllShutters, "8", VALTYPE_RELAY_SHUTTER, false, 20000, ValueBase::VT_NONE));
+    livingRoom->addActor(   addShutterActor(nodeAllShutters, "9", VALTYPE_RELAY_SHUTTER, true, 20000, ValueBase::VT_NONE));
 
     ValueGroup* nodeShutterRelays0 = addValueGroup("shutterRelays0");
 
