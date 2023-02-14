@@ -16,4 +16,8 @@ public class AudioPlaybackActor extends ActorBase implements SerializationSuppor
 		
 	}
 
+	@Override
+	protected Object _updateValue(Object newValue) {
+		return newValue;
+	}
 }

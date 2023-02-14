@@ -7,10 +7,12 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="corretto-11" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/OshCore" />
+            <option value="$PROJECT_DIR$/OshWbb12" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

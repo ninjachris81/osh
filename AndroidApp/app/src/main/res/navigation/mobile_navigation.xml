@@ -22,4 +22,11 @@
         android:name="com.osh.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_wbb12"
+        android:name="com.osh.ui.wbb12.WBB12Fragment"
+        android:label="WBB12"
+        tools:layout="@layout/fragment_wbb12"
+        />
 </navigation>

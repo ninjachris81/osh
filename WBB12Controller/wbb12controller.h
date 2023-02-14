@@ -48,6 +48,18 @@ public:
         HK2_FLOW_TARGET_TEMP = 1203,
         HK2_FLOW_TEMP = 1204,
 
+        HK3_ROOM_TARGET_TEMP = 1300,
+        HK3_ROOM_TEMP = 1301,
+        HK3_ROOM_HUMIDITY = 1302,
+        HK3_FLOW_TARGET_TEMP = 1303,
+        HK3_FLOW_TEMP = 1304,
+
+        HK4_ROOM_TARGET_TEMP = 1400,
+        HK4_ROOM_TEMP = 1401,
+        HK4_ROOM_HUMIDITY = 1402,
+        HK4_FLOW_TARGET_TEMP = 1403,
+        HK4_FLOW_TEMP = 1404,
+
         WARM_WATER_TARGET_TEMP = 2100,
         WARM_WATER_TEMP = 2101,
 
@@ -89,6 +101,52 @@ public:
 
     enum WBB12_Holding_Registers {
         OPERATING_MODE = 0,
+
+        HK1_HEATING_CONFIG = 1100,
+        HK1_HEATING_DEMAND_TYPE = 1101,
+        HK1_HEATING_OPERATING_MODE = 1102,
+        HK1_HEATING_PAUSE_PARTY = 1103,
+        HK1_HEATING_TARGET_TEMP_REDUCE = 1106,
+        HK1_HEATING_CONSTANT_TEMP = 1109,
+        HK1_HEATING_CONSTANT_TEMP_REDUCE = 1110,
+
+        HK2_HEATING_CONFIG = 1200,
+        HK2_HEATING_DEMAND_TYPE = 1201,
+        HK2_HEATING_OPERATING_MODE = 1202,
+        HK2_HEATING_PAUSE_PARTY = 1203,
+        HK2_HEATING_TARGET_TEMP_REDUCE = 1206,
+        HK2_HEATING_CONSTANT_TEMP = 1209,
+        HK2_HEATING_CONSTANT_TEMP_REDUCE = 1210,
+
+        HK3_HEATING_CONFIG = 1300,
+        HK3_HEATING_DEMAND_TYPE = 1301,
+        HK3_HEATING_OPERATING_MODE = 1302,
+        HK3_HEATING_PAUSE_PARTY = 1303,
+        HK3_HEATING_TARGET_TEMP_REDUCE = 1306,
+        HK3_HEATING_CONSTANT_TEMP = 1309,
+        HK3_HEATING_CONSTANT_TEMP_REDUCE = 1310,
+
+        HK4_HEATING_CONFIG = 1400,
+        HK4_HEATING_DEMAND_TYPE = 1401,
+        HK4_HEATING_OPERATING_MODE = 1402,
+        HK4_HEATING_PAUSE_PARTY = 1403,
+        HK4_HEATING_TARGET_TEMP_REDUCE = 1406,
+        HK4_HEATING_CONSTANT_TEMP = 1409,
+        HK4_HEATING_CONSTANT_TEMP_REDUCE = 1410,
+
+        PUMP_POWER_HEATING = 3102,
+        PUMP_POWER_COOLING = 3103,
+        PUMP_POWER_WARM_WATER = 3104,
+        PUMP_POWER_DEICE = 3105,
+
+        VOLUME_FLOW_HEATING = 3106,
+        VOLUME_FLOW_COOLING = 3107,
+        VOLUME_FLOW_WARM_WATER = 3108,
+
+        COIL_CONFIG = 4100,
+        COIL_BORDER_TEMP = 4101,
+        COIL_BIVALENT_TEMP = 4102,
+        COIL_BIVALENT_TEMP_WW = 4103
     };
     Q_ENUM(WBB12_Holding_Registers)
 
@@ -213,6 +271,7 @@ public:
         WDF_TargetValue,
         WDF_EEZOperationStatus,
         WDF_Temperature,
+        WDF_Temperature_Int,
         WDF_Warning,
         WDF_Blocking,
         WDF_Locking,
@@ -250,13 +309,16 @@ protected slots:
 
 private:
     ValueBase* createValue(RetrieveValue retVal);
+    QString generateMqttName(QString enumName);
 
-    void registerInput(WBB12_Input_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat, QString mqttName);
-    void registerHolding(WBB12_Holding_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat, QString mqttName);
+    void registerInput(WBB12_Input_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat);
+    void registerHolding(WBB12_Holding_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat);
 
     void _readInput(WBB12_Input_Registers reg, RetrieveValue val);
     void _readHolding(WBB12_Holding_Registers reg, RetrieveValue val);
+    void _writeHolding(WBB12_Holding_Registers reg, RetrieveValue val, QVariant value);
     QVariant parseValue(int rawValue, WBB12_DataFormat format);
+    quint16 generateValue(QVariant val, WBB12_DataFormat format);
 
     QMap<WBB12_Input_Registers, RetrieveValue> m_inputRegisters;
     QMap<WBB12_Input_Registers, ValueBase*> m_inputMappings;

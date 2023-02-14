@@ -10,7 +10,8 @@ public enum ValueType {
     VT_TIMESTAMP(6),
     VT_RELAY_LIGHT(50),
     VT_RELAY_SHUTTER(51),
-    VT_ALARM_SOUND(60);
+    VT_ALARM_SOUND(60),
+    VT_HEAT_PUMP_DATA(80);
 
 	ValueType(int value) {
 	}
