@@ -8,6 +8,8 @@ import com.osh.utils.IObservableListenerHolder;
 import com.osh.utils.IObservableManager;
 import com.osh.utils.ObservableManagerImpl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Optional;
 
 public abstract class ValueBase<VALUE_TYPE extends ValueBase, NATIVE_TYPE> extends SerializableIdentifyable implements IObservableItem<VALUE_TYPE>, IObservableListenerHolder<VALUE_TYPE> {
@@ -57,6 +59,16 @@ public abstract class ValueBase<VALUE_TYPE extends ValueBase, NATIVE_TYPE> exten
 
 	public NATIVE_TYPE getValue() {
 		return value;
+	}
+
+	public NATIVE_TYPE getValue(NATIVE_TYPE ifNullValue) {
+		if (value == null) return ifNullValue;
+		return value;
+	}
+
+	public String getValueAsString() {
+		if (value == null) return StringUtils.EMPTY;
+		return value.toString();
 	}
 
 	public ValueType getValueType() {

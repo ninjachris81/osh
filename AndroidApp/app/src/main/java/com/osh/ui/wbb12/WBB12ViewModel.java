@@ -43,6 +43,6 @@ public class WBB12ViewModel extends ViewModel {
     }
 
     public void setValue(MutableLiveData<String> liveData, ValueBase val) {
-        liveData.postValue(String.valueOf(val.getValue()) + wbb12Manager.getWBB12InputFormat(val.getFullId()).getUnit().getAppendix(true));
+        liveData.postValue(wbb12Manager.getWBB12InputFormat(val.getFullId()).getUnit().withUnit(val, wbb12Manager.getWBB12InputFormat(val.getFullId()).getEnumType()));
     }
 }

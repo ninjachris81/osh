@@ -31,62 +31,56 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     m_wbb12Group = new ValueGroup(id);
 
     // inputs
+    registerInput(WBB12_Input_Registers::OUTSIDE_TEMP_1, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::ERROR_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::WARNING_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::OPERATING_DISPLAY, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus);
+
+    registerInput(WBB12_Input_Registers::HK1_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HK1_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HK1_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HK1_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+
     /*
-    registerInput(WBB12_Input_Registers::OUTSIDE_TEMP_1, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "outsideTemp1");
-    registerInput(WBB12_Input_Registers::ERROR_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count, "errorCode");
-    registerInput(WBB12_Input_Registers::WARNING_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count, "warningCode");
-    registerInput(WBB12_Input_Registers::OPERATING_DISPLAY, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus, "operationStatus");
-
-    registerInput(WBB12_Input_Registers::HK1_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk1RoomTargetTemp");
-    registerInput(WBB12_Input_Registers::HK1_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk1RoomTemp");
-    registerInput(WBB12_Input_Registers::HK1_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk1FlowTargetTemp");
-    registerInput(WBB12_Input_Registers::HK1_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk1FlowTemp");
-
     registerInput(WBB12_Input_Registers::HK2_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk2RoomTargetTemp");
     registerInput(WBB12_Input_Registers::HK2_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk2RoomTemp");
     registerInput(WBB12_Input_Registers::HK2_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk2FlowTargetTemp");
     registerInput(WBB12_Input_Registers::HK2_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk2FlowTemp");
-
-    registerInput(WBB12_Input_Registers::HK3_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk3RoomTargetTemp");
-    registerInput(WBB12_Input_Registers::HK3_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk3RoomTemp");
-    registerInput(WBB12_Input_Registers::HK3_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk3FlowTargetTemp");
-    registerInput(WBB12_Input_Registers::HK3_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk3FlowTemp");
-
     */
+
+    registerInput(WBB12_Input_Registers::HK3_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HK3_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HK3_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HK3_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
 
     registerInput(WBB12_Input_Registers::WARM_WATER_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::WARM_WATER_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
 
-    /*
-
-    registerInput(WBB12_Input_Registers::HEAT_PUMP_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus, "hpMode");
-    registerInput(WBB12_Input_Registers::HEAT_PUMP_ERROR, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count, "hpError");
-    */
+    registerInput(WBB12_Input_Registers::HEAT_PUMP_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus);
+    registerInput(WBB12_Input_Registers::HEAT_PUMP_ERROR, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::HEAT_PUMP_CONSUMPTION, 30000, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_PUMP_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+    registerInput(WBB12_Input_Registers::HEAT_PUMP_RETURN_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+
+    registerInput(WBB12_Input_Registers::HEAT_COIL_STATUS, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_COIL_WORKING_HOURS, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_COIL_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_COIL_STATUS_COIL1, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_COIL_STATUS_COIL2, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_COIL_WORKING_HOURS_COIL1, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_COIL_WORKING_HOURS_COIL2, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+
+    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_TODAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_YESTERDAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_MONTH, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_YEAR, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+
     /*
-    registerInput(WBB12_Input_Registers::HEAT_PUMP_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hpFlowTemp");
-    registerInput(WBB12_Input_Registers::HEAT_PUMP_RETURN_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hpReturnFlowTemp");
-
-    registerInput(WBB12_Input_Registers::HEAT_COIL_STATUS, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count, "hcStatus");
-    registerInput(WBB12_Input_Registers::HEAT_COIL_WORKING_HOURS, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "hcWorkingHours");
-    registerInput(WBB12_Input_Registers::HEAT_COIL_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count, "hcSwitch");
-    registerInput(WBB12_Input_Registers::HEAT_COIL_STATUS_COIL1, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count, "hcStatusCoil1");
-    registerInput(WBB12_Input_Registers::HEAT_COIL_STATUS_COIL2, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count, "hcStatusCoil2");
-    registerInput(WBB12_Input_Registers::HEAT_COIL_WORKING_HOURS_COIL1, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "hcWorkingHoursCoil1");
-    registerInput(WBB12_Input_Registers::HEAT_COIL_WORKING_HOURS_COIL2, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "hcWorkingHoursCoil2");
-    */
-
-    /*
-    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_TODAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "energyTotalToday");
-    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_YESTERDAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "energyTotalYesterday");
-    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_MONTH, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "energyTotalMonth");
-    registerInput(WBB12_Input_Registers::ENERGY_TOTAL_YEAR, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "energyTotalYear");
-    */
-
     registerInput(WBB12_Input_Registers::ENERGY_HEATING_TODAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::ENERGY_HEATING_YESTERDAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::ENERGY_HEATING_MONTH, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::ENERGY_HEATING_YEAR, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    */
 
     /*
     registerInput(WBB12_Input_Registers::ENERGY_WARM_WATER_TODAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count, "energyWarmWaterToday");
@@ -101,34 +95,54 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     */
 
     // holdings
-    //registerHolding(WBB12_Holding_Registers::OPERATING_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus, "operationStatus");
-
-    /*
-    registerHolding(WBB12_Holding_Registers::COIL_CONFIG, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count, "coilConfig");
-    registerHolding(WBB12_Holding_Registers::COIL_BORDER_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "coilBorderTemp");
-    registerHolding(WBB12_Holding_Registers::COIL_BIVALENT_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature_Int, "coilBivalentTemp");
-    registerHolding(WBB12_Holding_Registers::COIL_BIVALENT_TEMP_WW, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature_Int, "coilBivalentTempWW");
-    registerHolding(WBB12_Holding_Registers::VOLUME_FLOW_HEATING, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count, "volumeFlowHeating");
-    */
+    registerHolding(WBB12_Holding_Registers::OPERATING_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus);
 
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONFIG, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_DEMAND_TYPE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_OPERATING_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_PAUSE_PARTY, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_COMFORT, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_NORMAL, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_HEAD_CURVE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_SUMMER_WINTER_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONSTANT_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK1_COOLING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONFIG, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_DEMAND_TYPE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_OPERATING_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_PAUSE_PARTY, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_TARGET_TEMP_COMFORT, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_TARGET_TEMP_NORMAL, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_TARGET_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_HEAD_CURVE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_SUMMER_WINTER_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONSTANT_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HK3_COOLING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
 
-    /*
-    registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature, "hk1HeatingConstantTemp");
-    registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature, "hk3HeatingConstantTemp");
+    registerHolding(WBB12_Holding_Registers::WARM_WATER_CONFIG, WBB12_INTERVAL_MODES,                   QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::WARM_WATER_PUSH, WBB12_INTERVAL_MODES,                     QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::WARM_WATER_NORMAL, WBB12_INTERVAL_MODES,                   QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::WARM_WATER_REDUCE, WBB12_INTERVAL_MODES,                   QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::WARM_WATER_SG_READY, WBB12_INTERVAL_MODES,                 QVariant::Double, WDF_Temperature);
 
-    registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONSTANT_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature, "hk1HeatingConstantTempReduce");
-    registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONSTANT_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature, "hk3HeatingConstantTempReduce");
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_CONFIG, WBB12_INTERVAL_MODES,                    QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_ACTIVATION_MODE, WBB12_INTERVAL_MODES,           QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_HEATING, WBB12_INTERVAL_MODES,                   QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_COOLING, WBB12_INTERVAL_MODES,                   QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_WARM_WATER, WBB12_INTERVAL_MODES,                QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_DEICE, WBB12_INTERVAL_MODES,                     QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_VOLUME_FLOW_HEATING, WBB12_INTERVAL_MODES,       QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_VOLUME_FLOW_COOLING, WBB12_INTERVAL_MODES,       QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_PUMP_VOLUME_FLOW_WARM_WATER, WBB12_INTERVAL_MODES,    QVariant::Int, WDF_Count);
 
-    registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature, "hk1HeatingTargetTempReduce");
-    registerHolding(WBB12_Holding_Registers::HK3_HEATING_TARGET_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature, "hk3HeatingTargetTempReduce");
-    */
-
+    registerHolding(WBB12_Holding_Registers::HEAT_COIL_CONFIG, WBB12_INTERVAL_MODES,                    QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HEAT_COIL_BORDER_TEMP, WBB12_INTERVAL_TEMPERATURES,        QVariant::Double, WDF_Temperature);
+    registerHolding(WBB12_Holding_Registers::HEAT_COIL_BIVALENT_TEMP, WBB12_INTERVAL_TEMPERATURES,      QVariant::Double, WDF_Temperature_Int);
+    registerHolding(WBB12_Holding_Registers::HEAT_COIL_BIVALENT_TEMP_WW, WBB12_INTERVAL_TEMPERATURES,   QVariant::Double, WDF_Temperature_Int);
 }
 
 void WBB12Controller::init() {
@@ -136,7 +150,7 @@ void WBB12Controller::init() {
 
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
-    m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
+    m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 20000));
 
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
@@ -208,6 +222,7 @@ void WBB12Controller::onStateChanged() {
         QThread::yieldCurrentThread();
         _writeHolding(HK3_HEATING_PAUSE_PARTY, m_holdingRegisters.value(HK3_HEATING_PAUSE_PARTY), 4);
         */
+        //_writeHolding(OPERATING_MODE, m_holdingRegisters.value(OPERATING_MODE), 4);     // standby
 
         break;
     case QModbusClient::UnconnectedState:
