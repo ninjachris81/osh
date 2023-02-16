@@ -51,6 +51,7 @@ void ShutterController::onCmdTriggered(actor::ACTOR_CMDS cmd) {
     ShutterActor *shutterActor = qobject_cast<ShutterActor*>(sender());
 
     switch(cmd) {
+    case actor::ACTOR_CMD_STOP:
     case actor::ACTOR_CMD_UP:
     case actor::ACTOR_CMD_DOWN:
         insertShutterMovements(shutterActor, cmd);
