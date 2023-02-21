@@ -4,7 +4,7 @@
 
 #include "macros.h"
 
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 
 DeviceDiscoveryManagerUI * DeviceDiscoveryManagerUI::m_qmlInstance = nullptr;
 

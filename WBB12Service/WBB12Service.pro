@@ -1,5 +1,6 @@
 QT -= gui
 QT += mqtt
+QT += sql
 QT += serialport
 QT += serialbus
 

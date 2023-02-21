@@ -5,7 +5,7 @@
 
 #include "sharedlib.h"
 
-#include "datamodel/server/datamodelbase.h"
+#include "datamodel/datamodelbase.h"
 
 class SHARED_LIB_EXPORT EmptyDatamodel : public DatamodelBase
 {

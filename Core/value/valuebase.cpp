@@ -6,6 +6,9 @@
 #include <QDebug>
 #include <QDateTime>
 
+QLatin1String ValueBase::PROPERTY_VALUE_TYPE = QLatin1String("valueType");
+QLatin1String ValueBase::PROPERTY_VALUE_TIMEOUT = QLatin1String("valueTimeout");
+
 ValueBase::ValueBase() : SerializableIdentifyable() {
 }
 

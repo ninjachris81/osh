@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "identifyableui.h"
-#include "datamodel/server/datamodelbase.h"
+#include "datamodel/datamodelbase.h"
 
 class DatamodelBaseUI : public IdentifyableUI
 {

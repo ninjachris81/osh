@@ -5,7 +5,7 @@
 #include "device/devicediscoverymanagerui.h"
 #include "qmqttcommunicationmanager.h"
 #include "controller/controllermanager.h"
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "value/valuemanagerui.h"
 #include "actor/actormanager.h"
 #include "datamodel/datamodelmanagerui.h"

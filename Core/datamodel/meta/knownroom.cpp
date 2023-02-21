@@ -1,10 +1,13 @@
 #include "knownroom.h"
 #include <QJsonArray>
 
+QLatin1String KnownRoom::PROPERTY_NAME = QLatin1String("name");
+QLatin1String KnownRoom::PROPERTY_KNOWN_AREA = QLatin1String("knownArea");
+
 KnownRoom::KnownRoom() : SerializableIdentifyable() {
 }
 
-KnownRoom::KnownRoom(QString id, QObject *parent) : SerializableIdentifyable(id), QObject(parent)
+KnownRoom::KnownRoom(QString id, QObject *parent) : QObject(parent), SerializableIdentifyable(id)
 {
 
 }

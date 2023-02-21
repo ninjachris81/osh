@@ -1,8 +1,8 @@
 #include "datamodelbase.h"
 
-
-#include "processor/server/nativeprocessortask.h"
-
+#ifdef PROCESSOR_NATIVE_SUPPORT
+    #include "processor/nativeprocessortask.h"
+#endif
 #ifdef PROCESSOR_JS_SUPPORT
     #include "processor/server/jsprocessortask.h"
 #endif
@@ -14,6 +14,14 @@ DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id), Q
 
 LogCat::LOGCAT DatamodelBase::logCat() {
     return LogCat::DATAMODEL;
+}
+
+QList<ValueGroup*> DatamodelBase::valueGroups() {
+    return m_valueGroups.values();
+}
+
+ValueGroup* DatamodelBase::valueGroup(QString id) {
+    return m_valueGroups.value(id);
 }
 
 QMap<QString, ValueBase*> DatamodelBase::values() {
@@ -50,7 +58,7 @@ ValueGroup* DatamodelBase::addValueGroup(QString id) {
     return valueGroup;
 }
 
-DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout) {
+DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync) {
     DigitalActor* actor = new DigitalActor(valueGroup, id, valueType, isAsync);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
@@ -58,7 +66,7 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     return actor;
 }
 
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, ValueBase::VALUE_TIMEOUT timeout) {
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration) {
     ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType);
     actor->withValueTimeout(timeout);
     QVariantMap config;
@@ -86,6 +94,14 @@ IntegerValue* DatamodelBase::addIntegerValue(ValueGroup* valueGroup, QString id,
     return value;
 }
 
+LongValue* DatamodelBase::addLongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    LongValue* value = new LongValue(valueGroup, id, valueType);
+    value->withValueTimeout(timeout);
+    m_values.insert(value->fullId(), value);
+    Q_EMIT(datamodelContentChanged());
+    return value;
+}
+
 DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
     DoubleValue* value = new DoubleValue(valueGroup, id, valueType);
     value->withValueTimeout(timeout);
@@ -94,31 +110,48 @@ DoubleValue* DatamodelBase::addDoubleValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
+StringValue* DatamodelBase::addStringValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    StringValue* value = new StringValue(valueGroup, id, valueType);
+    value->withValueTimeout(timeout);
+    m_values.insert(value->fullId(), value);
+    Q_EMIT(datamodelContentChanged());
+    return value;
+}
+
 ProcessorTaskBase* DatamodelBase::addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
-    ProcessorTaskBase* processorNode;
+    ProcessorTaskBase* processorNode = nullptr;
 
     switch(taskType) {
         case ProcessorTaskBase::PTT_JS:
 #ifdef PROCESSOR_JS_SUPPORT
             processorNode = new JSProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
 #else
-        qFatal("JS not supported");
+            qWarning("JS Processor task not supported");
 #endif
             break;
         case ProcessorTaskBase::PTT_NATIVE:
+#ifdef PROCESSOR_NATIVE_SUPPORT
             processorNode = new NativeProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
-            break;
+#else
+            qWarning("Native Processor task not supported");
+#endif
+        break;
     }
 
-    m_processorTasks.insert(processorNode->id(), processorNode);
-    Q_EMIT(datamodelContentChanged());
-    return processorNode;
+    if (processorNode != nullptr) {
+        m_processorTasks.insert(processorNode->id(), processorNode);
+        Q_EMIT(datamodelContentChanged());
+        return processorNode;
+    } else {
+        return nullptr;
+    }
 }
 
-KnownRoom* DatamodelBase::addKnownRoom(QString id, QString name) {
+KnownRoom* DatamodelBase::addKnownRoom(KnownArea* knownArea, QString id, QString name) {
     KnownRoom* knownRoom = new KnownRoom(id);
     knownRoom->setName(name);
     m_knownRooms.insert(knownRoom->id(), knownRoom);
+    knownArea->addKnownRoom(knownRoom);
     Q_EMIT(datamodelContentChanged());
     return knownRoom;
 }
@@ -129,4 +162,8 @@ KnownArea* DatamodelBase::addKnownArea(QString id, QString name) {
     m_knownAreas.insert(knownArea->id(), knownArea);
     Q_EMIT(datamodelContentChanged());
     return knownArea;
+}
+
+KnownArea *DatamodelBase::knownArea(QString id) {
+    return m_knownAreas.value(id);
 }

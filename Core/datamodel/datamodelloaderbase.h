@@ -5,18 +5,26 @@
 
 #include "sharedlib.h"
 
-#include "datamodel/server/datamodelbase.h"
+#include "datamodel/datamodelbase.h"
 #include "identifyable.h"
 
 class SHARED_LIB_EXPORT DatamodelLoaderBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
+    struct DatamodelLoadingOptions {
+        bool loadKnownAreas = true;
+        bool loadKnownRooms = true;
+        bool loadActors = true;
+        bool loadValues = true;
+        bool loadProcessorTasks = true;
+    };
+
     explicit DatamodelLoaderBase(QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    virtual DatamodelBase* load() = 0;
+    virtual DatamodelBase* load(DatamodelLoadingOptions options) = 0;
 
     virtual void save(DatamodelBase* datamodel) = 0;
 

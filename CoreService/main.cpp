@@ -10,7 +10,7 @@
 #include "device/client/clientdevicemanager.h"
 #include "time/server/systemtimemanager.h"
 #include "warn/systemwarningsmanager.h"
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "processor/server/modelprocessormanager.h"
 #include "actor/actormanager.h"
 #include "actor/actorconfigmanager.h"

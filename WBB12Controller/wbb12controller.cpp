@@ -8,7 +8,6 @@
 #include "controller/controllermanager.h"
 #include "shared/controllercmdtypes_qt.h"
 #include "controller/controllermessage.h"
-#include "value/booleanvalue.h"
 #include "value/doublevalue.h"
 #include "value/integervalue.h"
 
@@ -180,9 +179,14 @@ void WBB12Controller::bindValueManager(ValueManagerBase* valueManager) {
 
     for (WBB12_Input_Registers reg : m_inputRegisters.keys()) {
         RetrieveValue retVal = m_inputRegisters.value(reg);
-        ValueBase *val = createValue(retVal);
 
-        m_valueManager->registerValue(val);
+        ValueBase* val = m_valueManager->getValue(ValueBase::getFullId(m_wbb12Group->id(), retVal.mqttName));
+        if (val == nullptr) {
+            iWarning() << "Value not in datamodel, creating temp value" << retVal.mqttName;
+            val = createValue(retVal);
+            m_valueManager->registerValue(val);
+        }
+
         m_inputMappings.insert(reg, val);
     }
 
@@ -201,8 +205,6 @@ ValueBase* WBB12Controller::createValue(RetrieveValue retVal) {
         return new IntegerValue(m_wbb12Group, retVal.mqttName, value::VALTYPE_HEAT_PUMP_DATA);
     case QVariant::Double:
         return new DoubleValue(m_wbb12Group, retVal.mqttName, value::VALTYPE_HEAT_PUMP_DATA);
-    case QVariant::Bool:
-        return new BooleanValue(m_wbb12Group, retVal.mqttName, value::VALTYPE_HEAT_PUMP_DATA);
     default:
         qFatal("Invalid type");
     }

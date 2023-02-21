@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = HomeFragment.newInstance();
                 break;
             case R.id.navigation_dashboard:
-                selectedFragment = DashboardFragment.newInstance();
+                selectedFragment = DashboardFragment.newInstance(valueManager);
                 break;
             case R.id.navigation_notifications:
                 selectedFragment = NotificationsFragment.newInstance();
@@ -126,17 +126,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void testShutterUp() {
-        ActorMessage msg = new ActorMessage("allShutters0", "0", ActorCmds.ACTOR_CMD_UP);
+        ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_UP);
         communicationManager.sendMessage(msg);
     }
 
     public void testShutterStop() {
-        ActorMessage msg = new ActorMessage("allShutters0", "0", ActorCmds.ACTOR_CMD_STOP);
+        ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_STOP);
         communicationManager.sendMessage(msg);
     }
 
     public void testShutterDown() {
-        ActorMessage msg = new ActorMessage("allShutters0", "0", ActorCmds.ACTOR_CMD_DOWN);
+        ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_DOWN);
         communicationManager.sendMessage(msg);
     }
 }

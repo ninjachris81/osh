@@ -4,7 +4,7 @@
 #include <QObject>
 #include "identifyableui.h"
 
-#include "processor/server/processortaskbase.h"
+#include "processor/processortaskbase.h"
 
 class ProcessorTaskUI : public IdentifyableUI
 {

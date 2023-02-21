@@ -17,7 +17,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+    </Button>
+
+    <net.steamcrafted.materialiconlib.MaterialIconView
+        android:id="@+id/relayUpIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/buttonUp"
+        app:layout_constraintTop_toTopOf="@id/buttonUp"
+        app:materialIcon="arrow_up"
+        app:materialIconColor="@color/black" />
+
 
     <Button
         android:id="@+id/buttonStop"
@@ -42,5 +53,17 @@
         android:text="Shutter down"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStop" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonStop">
+    </Button>
+
+    <net.steamcrafted.materialiconlib.MaterialIconView
+        android:id="@+id/relayDownIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/buttonDown"
+        app:layout_constraintTop_toTopOf="@id/buttonDown"
+        app:materialIcon="arrow_down"
+        app:materialIconColor="@color/black" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

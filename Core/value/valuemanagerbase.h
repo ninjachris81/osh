@@ -36,8 +36,9 @@ public:
 
     virtual void registerValue(ValueBase* value);
 
-protected:
     ValueBase* getValue(QString fullId);
+
+protected:
     ValueBase* getValue(QString valueGroupId, QString valueId);
 
     QMap<QString, ValueBase*> m_knownValues;

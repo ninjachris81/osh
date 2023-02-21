@@ -6,7 +6,7 @@
 
 #include "sharedlib.h"
 
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "device/devicediscoverymanagerbase.h"
 #include "device/devicediscoverymessage.h"
 

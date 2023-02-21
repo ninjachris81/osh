@@ -1,10 +1,12 @@
 #include "knownarea.h"
 #include <QJsonArray>
 
+QLatin1String KnownArea::PROPERTY_NAME = QLatin1String("name");
+
 KnownArea::KnownArea() : SerializableIdentifyable() {
 }
 
-KnownArea::KnownArea(QString id, QObject *parent) : SerializableIdentifyable(id), QObject(parent)
+KnownArea::KnownArea(QString id, QObject *parent) : QObject(parent), SerializableIdentifyable(id)
 {
 
 }

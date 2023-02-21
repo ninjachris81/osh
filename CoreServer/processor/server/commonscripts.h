@@ -6,7 +6,7 @@
 #include "processor/server/scriptbase.h"
 #include "value/valuebase.h"
 #include "actor/actorbase.h"
-#include "datamodel/server/datamodelbase.h"
+#include "datamodel/datamodelbase.h"
 #include "processor/server/localstorage.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"

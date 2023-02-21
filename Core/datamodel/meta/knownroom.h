@@ -13,6 +13,9 @@ class SHARED_LIB_EXPORT KnownRoom : public QObject, public SerializableIdentifya
 {
     Q_OBJECT
 public:
+    static QLatin1String PROPERTY_NAME;
+    static QLatin1String PROPERTY_KNOWN_AREA;
+
     KnownRoom();
     explicit KnownRoom(QString id, QObject *parent = nullptr);
 

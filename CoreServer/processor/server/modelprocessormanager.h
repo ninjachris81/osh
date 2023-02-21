@@ -9,7 +9,7 @@
 #include "sharedlib.h"
 
 #include "manager/managerbase.h"
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "processor/server/scriptbase.h"
 #include "communication/communicationmanagerbase.h"
 #include "processor/server/localstorage.h"

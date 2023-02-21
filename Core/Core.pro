@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT      -= gui
+QT      += network
 QT      += sql
 
 TARGET = Core
@@ -46,7 +47,19 @@ SOURCES += \
         controller/filegpiocontroller.cpp \
         database/databasemanager.cpp \
         database/simpledatabasemanager.cpp \
+        datamodel/datamodelbase.cpp \
+        datamodel/datamodelloaderbase.cpp \
+        datamodel/datamodelmanager.cpp \
+        datamodel/dbdatamodelloader.cpp \
+        datamodel/dynamicdatamodel.cpp \
+        datamodel/emptydatamodel.cpp \
+        datamodel/filedatamodelloader.cpp \
+        datamodel/httpdatamodelloader.cpp \
+        datamodel/meta/knownarea.cpp \
+        datamodel/meta/knownroom.cpp \
         datamodel/serializationsupport.cpp \
+        datamodel/testdatamodel.cpp \
+        datamodel/testdatamodelloader.cpp \
         device/client/clientdevice.cpp \
         device/client/clientdevicemanager.cpp \
         communication/messagebase.cpp \
@@ -61,6 +74,7 @@ SOURCES += \
         log/logmessage.cpp \
         meta/itemmetainfo.cpp \
         meta/metainfosupport.cpp \
+        processor/processortaskbase.cpp \
         processor/scriptresultmessage.cpp \
         serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
@@ -112,7 +126,19 @@ HEADERS += \
         controller/filegpiocontroller.h \
         database/databasemanager.h \
         database/simpledatabasemanager.h \
+        datamodel/datamodelbase.h \
+        datamodel/datamodelloaderbase.h \
+        datamodel/datamodelmanager.h \
+        datamodel/dbdatamodelloader.h \
+        datamodel/dynamicdatamodel.h \
+        datamodel/emptydatamodel.h \
+        datamodel/filedatamodelloader.h \
+        datamodel/httpdatamodelloader.h \
+        datamodel/meta/knownarea.h \
+        datamodel/meta/knownroom.h \
         datamodel/serializationsupport.h \
+        datamodel/testdatamodel.h \
+        datamodel/testdatamodelloader.h \
         device/client/clientdevice.h \
         device/client/clientdevicemanager.h \
         communication/messagebase.h \
@@ -129,6 +155,7 @@ HEADERS += \
         macros.h \
         meta/itemmetainfo.h \
         meta/metainfosupport.h \
+        processor/processortaskbase.h \
         processor/scriptresultmessage.h \
         serializableidentifyable.h \
         shared/actor.h \

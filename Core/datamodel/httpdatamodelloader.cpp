@@ -16,7 +16,7 @@ HttpDataModelLoader::HttpDataModelLoader(QUrl url, int requestTimeoutMs, QObject
 
 }
 
-DatamodelBase *HttpDataModelLoader::load() {
+DatamodelBase *HttpDataModelLoader::load(DatamodelLoadingOptions options) {
     iDebug() << Q_FUNC_INFO;
 
     QNetworkAccessManager nam;

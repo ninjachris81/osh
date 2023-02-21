@@ -5,7 +5,7 @@
 
 #include "sharedlib.h"
 
-#include "datamodel/server/datamodelbase.h"
+#include "datamodel/datamodelbase.h"
 #include "datamodel/serializationsupport.h"
 
 class SHARED_LIB_EXPORT DynamicDatamodel : public DatamodelBase
@@ -17,6 +17,9 @@ public:
     QByteArray serialize();
 
     void deserialize(QByteArray data);
+
+    void addActor(QString typeName, ValueGroup *valueGroup, QString id, QVariantMap properties);
+    void addValue(QString typeName, ValueGroup *valueGroup, QString id, QVariantMap properties);
 
 private:
     template <typename K, typename T> void serializeMap(QJsonObject &obj, QString name, QMap<K, T> map);

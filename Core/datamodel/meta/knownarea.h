@@ -6,12 +6,14 @@
 #include "sharedlib.h"
 
 #include "serializableidentifyable.h"
-#include "datamodel/server/meta/knownroom.h"
+#include "datamodel/meta/knownroom.h"
 
 class SHARED_LIB_EXPORT KnownArea : public QObject, public SerializableIdentifyable
 {
     Q_OBJECT
 public:
+    static QLatin1String PROPERTY_NAME;
+
     KnownArea();
     explicit KnownArea(QString id, QObject *parent = nullptr);
 

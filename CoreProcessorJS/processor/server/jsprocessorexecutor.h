@@ -6,7 +6,7 @@
 #include <QJSEngine>
 
 #include "processor/server/processorexecutorbase.h"
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "processor/server/jsprocessortask.h"
 #include "processor/server/scriptbase.h"
 #include "processor/server/commonscripts.h"

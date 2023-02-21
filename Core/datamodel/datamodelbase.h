@@ -14,14 +14,16 @@
 #include "value/valuebase.h"
 #include "value/doublevalue.h"
 #include "value/integervalue.h"
+#include "value/longvalue.h"
+#include "value/stringvalue.h"
 #include "actor/digitalactor.h"
 #include "actor/shutteractor.h"
-#include "processor/server/processortaskbase.h"
+#include "processor/processortaskbase.h"
 #include "shared/units_qt.h"
 
 #include "identifyable.h"
-#include "datamodel/server/meta/knownroom.h"
-#include "datamodel/server/meta/knownarea.h"
+#include "datamodel/meta/knownroom.h"
+#include "datamodel/meta/knownarea.h"
 
 using namespace unit;
 
@@ -33,22 +35,29 @@ public:
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    QMap<QString, KnownDevice *> knownDevices();
+    QList<ValueGroup*> valueGroups();
+    ValueGroup* valueGroup(QString id);
+
     QMap<QString, ValueBase*> values();
     QMap<QString, ActorBase*> actors();
+    QMap<QString, KnownDevice *> knownDevices();
     QMap<QString, ProcessorTaskBase*> processorTasks();
     QMap<QString, KnownRoom*> knownRooms();
 
     KnownDevice* addKnownDevice(QString id, QString serviceId, QString name);
     ValueGroup* addValueGroup(QString id);
-    DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, ValueBase::VALUE_TIMEOUT timeout);
-    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, ValueBase::VALUE_TIMEOUT timeout);
+    DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync);
+    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration);
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    LongValue* addLongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    StringValue* addStringValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     ProcessorTaskBase* addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false);
-    KnownRoom* addKnownRoom(QString id, QString name);
+    KnownRoom* addKnownRoom(KnownArea *knownArea, QString id, QString name);
+
     KnownArea* addKnownArea(QString id, QString name);
+    KnownArea* knownArea(QString id);
 
 protected:
     QMap<QString, KnownDevice*> m_knownDevices;

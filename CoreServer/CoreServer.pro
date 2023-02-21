@@ -23,6 +23,7 @@ DEFINES += MAKE_SHARED_LIB
 DEFINES += QT_DEPRECATED_WARNINGS
 
 DEFINES += IS_OSH_CORE_SERVICE
+DEFINES += PROCESSOR_NATIVE_SUPPORT
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -30,24 +31,12 @@ DEFINES += IS_OSH_CORE_SERVICE
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        datamodel/server/datamodelbase.cpp \
-        datamodel/server/datamodelloaderbase.cpp \
-        datamodel/server/datamodelmanager.cpp \
-        datamodel/server/dynamicdatamodel.cpp \
-    datamodel/server/emptydatamodel.cpp \
-    datamodel/server/filedatamodelloader.cpp \
-        datamodel/server/httpdatamodelloader.cpp \
-    datamodel/server/meta/knownarea.cpp \
-    datamodel/server/meta/knownroom.cpp \
-        datamodel/server/testdatamodel.cpp \
-        datamodel/server/testdatamodelloader.cpp \
         device/server/serverdevicediscoverymanager.cpp \
     processor/server/commonscripts.cpp \
     processor/server/localstorage.cpp \
     processor/server/nativeprocessorexecutor.cpp \
     processor/server/nativeprocessortask.cpp \
     processor/server/processorexecutorbase.cpp \
-    processor/server/processortaskbase.cpp \
     processor/server/scriptbase.cpp \
         time/server/systemtimemanager.cpp \
         value/server/environmentvaluemanager.cpp \
@@ -56,24 +45,12 @@ SOURCES += \
         processor/server/modelprocessormanager.cpp
 
 HEADERS += \
-        datamodel/server/datamodelbase.h \
-        datamodel/server/datamodelloaderbase.h \
-        datamodel/server/datamodelmanager.h \
-        datamodel/server/dynamicdatamodel.h \
-    datamodel/server/emptydatamodel.h \
-    datamodel/server/filedatamodelloader.h \
-        datamodel/server/httpdatamodelloader.h \
-    datamodel/server/meta/knownarea.h \
-    datamodel/server/meta/knownroom.h \
-        datamodel/server/testdatamodel.h \
-        datamodel/server/testdatamodelloader.h \
         device/server/serverdevicediscoverymanager.h \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \
     processor/server/nativeprocessorexecutor.h \
     processor/server/nativeprocessortask.h \
     processor/server/processorexecutorbase.h \
-    processor/server/processortaskbase.h \
     processor/server/scriptbase.h \
     processor/server/threadsafeqjsengine.h \
     sharedlib.h \

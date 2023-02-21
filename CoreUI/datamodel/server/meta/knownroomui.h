@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "visualitembase.h"
-#include "datamodel/server/meta/knownroom.h"
+#include "datamodel/meta/knownroom.h"
 #include "value/valuebaseui.h"
 #include "actor/actorbaseui.h"
 

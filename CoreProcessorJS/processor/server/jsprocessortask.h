@@ -6,7 +6,7 @@
 
 #include "sharedlib.h"
 
-#include "processor/server/processortaskbase.h"
+#include "processor/processortaskbase.h"
 
 class SHARED_LIB_EXPORT JSProcessorTask : public ProcessorTaskBase
 {

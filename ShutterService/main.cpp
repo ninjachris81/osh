@@ -59,10 +59,12 @@ int main(int argc, char *argv[])
     QList<ValueBase*> actors;
 
     for (quint8 i=0;i<count;i++) {
-        qDebug() << "Init actor" << i;
         ShutterActor* shutterActor = new ShutterActor(&shutterGroup, QString::number(i + shutterOffset), value::VALTYPE_RELAY_SHUTTER);
+        qInfo() << "Init actor" << i << shutterActor->fullId();
         DigitalActor* relayActorUp = new DigitalActor(&relayGroup, QString::number((i * 2) + relayOffset), value::VALTYPE_RELAY_SHUTTER, true);
+        qInfo() << "Init actor relay up" << relayActorUp->fullId();
         DigitalActor* relayActorDown = new DigitalActor(&relayGroup, QString::number((i * 2) + relayOffset + 1), value::VALTYPE_RELAY_SHUTTER, true);
+        qInfo() << "Init actor relay down" << relayActorDown->fullId();
         shutterActor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
         actors.append(shutterActor);
         shutterController.bindActor(shutterActor, relayActorUp, relayActorDown);

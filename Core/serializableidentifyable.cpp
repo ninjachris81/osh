@@ -2,6 +2,7 @@
 
 QLatin1String SerializableIdentifyable::PROPERTY_ID = QLatin1String("id");
 QLatin1String SerializableIdentifyable::PROPERTY_CLASSTYPE = QLatin1String("classType");
+QLatin1String SerializableIdentifyable::PROPERTY_VALUE_GROUP = QLatin1String("valueGroup");
 
 SerializableIdentifyable::SerializableIdentifyable(QString id) : Identifyable(id)
 {

@@ -17,11 +17,6 @@ class SHARED_LIB_EXPORT ShutterController : public ControllerBase
     Q_OBJECT
 
 public:
-    enum ShutterControllerState {
-        SHUTTER_CONTROLLER_INIT,
-        SHUTTER_CONTROLLER_ACTIVE
-    };
-
     enum ShutterState {
         ShutterInitializing,
         ShutterUp,
@@ -37,6 +32,7 @@ public:
         qint64 duration;
         bool directionDown;
         bool updatesStatus;
+        bool isInit;
     };
 
     ShutterController(ControllerManager* manager, ActorManager *actorManager, QString id, QObject *parent = nullptr);
@@ -58,9 +54,9 @@ private slots:
 private:
     void initializeShutters();
 
-    void insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd);
-    void insertShutterMovement(ShutterActor* shutterActor, DigitalActor *relayActor, qint64 duration, bool directionDown, bool updatesStatus);
-    void cancelShutterMovements(ShutterActor* shutterActor);
+    void insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd, bool isInit = false);
+    void insertShutterMovement(ShutterActor* shutterActor, DigitalActor *relayActor, qint64 duration, bool directionDown, bool updatesStatus, bool isInit);
+    bool cancelShutterMovements(ShutterActor* shutterActor);
 
     QMap<ShutterActor*, DigitalActor*> m_actorsUp;
     QMap<ShutterActor*, DigitalActor*> m_actorsDown;
