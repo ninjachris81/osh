@@ -36,10 +36,11 @@ public:
 
     virtual void registerValue(ValueBase* value);
 
-protected:
     ValueBase* getValue(QString fullId);
     ValueBase* getValue(QString valueGroupId, QString valueId);
+    ValueBase* getValue(ValueGroup *valueGroup, QString valueId);
 
+protected:
     QMap<QString, ValueBase*> m_knownValues;
     CommunicationManagerBase* m_commManager;
 

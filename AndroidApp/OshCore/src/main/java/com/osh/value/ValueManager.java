@@ -11,12 +11,17 @@ import com.osh.communication.MessageBase.MESSAGE_TYPE;
 import com.osh.manager.IManagerRegistration;
 import com.osh.manager.ManagerBase;
 import com.osh.manager.ManagerRegistration.INSTANCE_ROLE;
+import com.osh.utils.IItemChangeListener;
+import com.osh.utils.IObservableManager;
+import com.osh.utils.ObservableManagerImpl;
 
 public class ValueManager extends ManagerBase implements IValueManager {
 	
 	private static final Logger log = LoggerFactory.getLogger(ValueManager.class);
 
-	protected Map<String, ValueBase> values = new HashMap<>();
+	protected final Map<String, ValueBase> values = new HashMap<>();
+
+	protected final IObservableManager observableManager = new ObservableManagerImpl();
 
 	public ValueManager(IManagerRegistration managerRegistration) {
 		super("ValueManager", managerRegistration);
@@ -32,11 +37,7 @@ public class ValueManager extends ManagerBase implements IValueManager {
 		if (msg instanceof ValueMessage) {
 			log.info("Value received {}", msg);
 			
-			if (managerRegistration.getInstanceRole() == INSTANCE_ROLE.SERVER) {
-				valueReceived(((ValueMessage)msg).getValueGroupId(), ((ValueMessage)msg).getValueId(), ((ValueMessage)msg).getRawValue());
-			} else {
-				
-			}
+			valueReceived(((ValueMessage)msg).getValueGroupId(), ((ValueMessage)msg).getValueId(), ((ValueMessage)msg).getRawValue());
 		}
 	}
 
@@ -68,7 +69,8 @@ public class ValueManager extends ManagerBase implements IValueManager {
 	    return getValue(ValueBase.getFullId(valueGroupId, valueId));
 	}
 
-	private ValueBase getValue(String fullId) {
+	@Override
+	public ValueBase getValue(String fullId) {
 	    if (values.containsKey(fullId)) {
 	        return values.get(fullId);
 	    } else {

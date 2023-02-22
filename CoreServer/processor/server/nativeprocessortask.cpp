@@ -8,8 +8,12 @@ NativeProcessorTask::NativeProcessorTask() : ProcessorTaskBase() {
 NativeProcessorTask::NativeProcessorTask(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent) : ProcessorTaskBase(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, parent)
 {
 
-    if (scriptCode.startsWith("CommonScripts.applySwitchLogic(") && scriptCode.endsWith(")")) {
-        m_nativeFunction = NativeProcessorTask::NFT_APPLY_SWITCH_LOGIC;
+    if (scriptCode.startsWith("CommonScripts.") && scriptCode.endsWith(")")) {
+        if (scriptCode.startsWith("CommonScripts.applySwitchLogic")) {
+            m_nativeFunction = NativeProcessorTask::NFT_APPLY_SWITCH_LOGIC;
+        } else if (scriptCode.startsWith("CommonScripts.applyShutterLogic")) {
+            m_nativeFunction = NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC;
+        }
 
         int start = scriptCode.indexOf("(");
         int end = scriptCode.lastIndexOf(")");
@@ -56,10 +60,11 @@ QVariant NativeProcessorTask::run() {
     switch(m_nativeFunction) {
     case NFT_APPLY_SWITCH_LOGIC:
         return m_commonScripts->applySwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
+    case NFT_APPLY_SHUTTER_LOGIC:
+        return m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt());
     default:
         break;
     }
-
 }
 
 void NativeProcessorTask::setCommonScripts(CommonScripts* commonScripts) {
@@ -88,6 +93,8 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
     switch(nativeFunction) {
     case NativeProcessorTask::NFT_APPLY_SWITCH_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int;
+    case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::Int;
     default:
         return QList<QVariant::Type>();
     }

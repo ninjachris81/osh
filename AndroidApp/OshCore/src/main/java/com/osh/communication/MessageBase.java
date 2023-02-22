@@ -1,7 +1,7 @@
 package com.osh.communication;
 
 public abstract class MessageBase {
-	
+
     public enum MESSAGE_TYPE {
         MESSAGE_TYPE_UNKNOWN,
         MESSAGE_TYPE_VALUE,

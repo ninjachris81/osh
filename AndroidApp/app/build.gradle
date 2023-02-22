@@ -1,8 +1,11 @@
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -60,9 +63,21 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation project(path: ':OshCore')
+
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation project(path: ':OshWbb12')
+
     kapt "com.google.dagger:hilt-compiler:2.44"
 
     implementation 'org.apache.commons:commons-lang3:3.9'
+
+    implementation 'net.steamcrafted:materialiconlib:1.1.5'
 
     /*
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'

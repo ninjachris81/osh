@@ -11,7 +11,7 @@ Simulator::Simulator(LocalConfig *config, QObject *parent) : QObject(parent), m_
     m_controllerManager = new ControllerManager();
     m_systimeManager = new SystemtimeManagerSimulator();
     m_syswarnManager = new SystemWarningsManager();
-    m_datamodelManager = new DatamodelManager();
+    m_datamodelManager = new DatamodelManager(true, true, true, true, true, true);
     m_modelProcessor = new ModelProcessorManager();
     m_logManager = new LogManager();
     m_actorManager = new ActorManager();

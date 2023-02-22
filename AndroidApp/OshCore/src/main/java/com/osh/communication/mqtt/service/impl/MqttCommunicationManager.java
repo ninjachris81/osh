@@ -51,6 +51,9 @@ import com.osh.manager.IManagerRegistration;
 import com.osh.manager.ManagerBase;
 import com.osh.processor.ScriptResultMessage;
 import com.osh.time.SystemtimeMessage;
+import com.osh.utils.IObservableBoolean;
+import com.osh.utils.IObservableManager;
+import com.osh.utils.ObservableBoolean;
 import com.osh.value.ValueMessage;
 import com.osh.warn.SystemWarningMessage;
 
@@ -60,7 +63,14 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 
 	private ExecutorService executorService;
 	private IApplicationConfig appConfig;
-	
+
+	private final ObservableBoolean connectedState = new ObservableBoolean(false);
+
+	@Override
+	public IObservableBoolean connectedState() {
+		return connectedState;
+	}
+
 	public MqttCommunicationManager(IApplicationConfig appConfig, IManagerRegistration managerRegistration) {
 		super("MqttCommunicationManager", managerRegistration);
 		this.executorService = Executors.newFixedThreadPool(1);
@@ -79,6 +89,8 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	public void initComplete() {
 		connectMqtt(appConfig);
 	}
+
+
 
 	private void connectMqtt(IApplicationConfig appConfig) {
 		LogFacade.i(TAG, "Init Mqtt");
@@ -102,9 +114,11 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 				.serverPort(appConfig.getMqtt().getServerPort())
 				.addConnectedListener(listener -> {
 					LogFacade.d(TAG, "Connected");
+					connectedState.changeValue(true);
 				})
 				.addDisconnectedListener(listener -> {
 					LogFacade.w(TAG, "Disconnected " + listener.getCause());
+					connectedState.changeValue(false);
 				})
 				.useMqttVersion3().buildAsync();
 
@@ -341,7 +355,7 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	            return new DeviceDiscoveryMessage(firstLevelPath.get(0), firstLevelPath.get(1));
 	        }
 	        case MESSAGE_TYPE_SYSTEM_TIME: {
-	            return new SystemtimeMessage((long) parseSingleValue(rawValue));
+	            return new SystemtimeMessage(((Number) parseSingleValue(rawValue)).longValue());
 	        }
 	        case MESSAGE_TYPE_SYSTEM_WARNING: {
 	            return new SystemWarningMessage(firstLevelPath.get(0), parseSingleValue(rawValue).toString());

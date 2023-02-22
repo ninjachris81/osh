@@ -1,7 +1,7 @@
 #include "devicediscoverymodelbridge.h"
 
 #include <QDebug>
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 
 #include "macros.h"
 #include "shared/device.h"

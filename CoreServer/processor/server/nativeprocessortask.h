@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "processor/server/processortaskbase.h"
+#include "processor/processortaskbase.h"
 
 class CommonScripts;
 
@@ -13,7 +13,8 @@ class SHARED_LIB_EXPORT NativeProcessorTask : public ProcessorTaskBase
 public:
     enum NativeFunctionType {
         NFT_INVALID = 0,
-        NFT_APPLY_SWITCH_LOGIC = 1
+        NFT_APPLY_SWITCH_LOGIC = 1,
+        NFT_APPLY_SHUTTER_LOGIC = 2
     };
 
     NativeProcessorTask();

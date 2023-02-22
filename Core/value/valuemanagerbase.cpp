@@ -8,8 +8,10 @@ QLatin1String ValueManagerBase::MANAGER_ID = QLatin1String("ValueManager");
 
 ValueManagerBase::ValueManagerBase(QObject *parent) : ManagerBase(parent)
 {
-    connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::onUpdateSignalRates);
-    m_signalRateTimer.start(10000);
+    if (managerRegistration()->instanceRole() == ManagerRegistration::GUI) {
+        connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::onUpdateSignalRates);
+        m_signalRateTimer.start(10000);
+    }
 }
 
 QString ValueManagerBase::id() {
@@ -56,6 +58,10 @@ ValueBase* ValueManagerBase::getValue(QString fullId) {
     } else {
         return nullptr;
     }
+}
+
+ValueBase* ValueManagerBase::getValue(ValueGroup *valueGroup, QString valueId) {
+    return getValue(valueGroup->id(), valueId);
 }
 
 MessageBase::MESSAGE_TYPE ValueManagerBase::getMessageType() {

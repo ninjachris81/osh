@@ -8,6 +8,8 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "database/databasemanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "log/logmanager.h"
 //#include "actor/actormanager.h"
 #include "actor/digitalactor.h"
@@ -27,6 +29,8 @@ int main(int argc, char *argv[])
     ClientDeviceDiscoveryManager clientManager("InputService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
+    DatabaseManager databaseManager;
+    DatamodelManager datamodelManager(false, false, false, true, false, false);
     ClientValueManager valueManager;
     LogManager logManager;
 
@@ -38,24 +42,22 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&databaseManager);
+    managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
     MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
-    ValueGroup actorGroup(inputController.id());
-    quint16 offset = config.getInt(&actorGroup, "inputValueGroupOffset", 0);
+    ValueGroup valueGroup(inputController.id());
+    quint16 offset = config.getInt(&valueGroup, "inputValueGroupOffset", 0);
     controllerManager.registerController(&inputController);
 
     managerRegistration.init(&config);
 
-    QList<ValueBase*> values;
-
     for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
-        qDebug() << "Init value" << i;
-        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VALTYPE_SWITCH);
-        value->withValueTimeout(ValueBase::VT_MID);
-        values.append(value);
+        qDebug() << "Init value" << valueGroup.id() << i;
+        BooleanValue* value = static_cast<BooleanValue*>(valueManager.getValue(&valueGroup, QString::number(i)));
+        Q_ASSERT(value != nullptr);
         inputController.bindValue(value);
-        valueManager.registerValue(value);
     }
 
     return a.exec();

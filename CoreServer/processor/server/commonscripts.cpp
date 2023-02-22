@@ -262,14 +262,19 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
 
 bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
     ActorBase* shutterActor = m_datamodel->actors().value(shutterFullId);
-    ValueBase* motionVal = m_datamodel->values().value(motionFullId);
+
+    bool motionActive = false;
+    if (!motionFullId.isEmpty()) {
+        ValueBase* motionVal = m_datamodel->values().value(motionFullId);
+        motionActive = motionVal->rawValue().toBool();
+    }
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
-    if (shutterActor->isValid() && motionVal->isValid()) {
+    if (shutterActor->isValid()) {
         if (isDownTime) {
             // down: check is motion active
-            if (!motionVal->rawValue().toBool() && shutterActor->rawValue().toInt() != actor::ACTOR_CMD_DOWN) {
+            if (!motionActive && shutterActor->rawValue().toInt() != actor::ACTOR_CMD_DOWN) {
                 shutterActor->triggerCmd(actor::ACTOR_CMD_DOWN, "applyShutterLogic");
             } else {
                 iDebug() << "Room still active - pausing shutter actions";

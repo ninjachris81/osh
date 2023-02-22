@@ -6,7 +6,7 @@
 
 QLatin1String DatabaseManager::MANAGER_ID = QLatin1String("DatabaseManager");
 QLatin1String DatabaseManager::DATABASE_TYPE_SQLITE = QLatin1String("QSQLITE");
-QLatin1String DatabaseManager::DATABASE_TYPE_PSQL = QLatin1String();
+QLatin1String DatabaseManager::DATABASE_TYPE_PSQL = QLatin1String("QPSQL");
 
 
 DatabaseManager::DatabaseManager(QObject *parent)
@@ -30,6 +30,7 @@ void DatabaseManager::init(LocalConfig* config) {
         m_db = QSqlDatabase::addDatabase(DATABASE_TYPE_PSQL);
         m_db.setDatabaseName(config->getString("database.name", "osh"));
         m_db.setHostName(config->getString("database.host", "localhost"));
+        m_db.setPort(config->getInt("database.port", 5432));
         m_db.setUserName(config->getString("database.username", "osh"));
         m_db.setPassword(config->getString("database.password", "osh"));
     }
@@ -37,7 +38,8 @@ void DatabaseManager::init(LocalConfig* config) {
     if (m_db.open()) {
         iInfo() << "Opened database" << m_db.databaseName();
     } else {
-        iWarning() << "Failed to open database" << m_db.databaseName() << m_db.lastError();
+        iWarning() << m_db.databaseName() << m_db.lastError();
+        qFatal("Failed to open database");
     }
 }
 

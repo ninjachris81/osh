@@ -30,6 +30,9 @@ public:
         VT_LONG = VALUE_TIMEOUT_LONG
     } m_valueTimeout = VT_NONE;
 
+    static QLatin1String PROPERTY_VALUE_TYPE;
+    static QLatin1String PROPERTY_VALUE_TIMEOUT;
+
     ValueBase();
     explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
 

@@ -14,8 +14,11 @@ dependencyResolutionManagement {
         maven {
             url "https://repo.eclipse.org/content/repositories/paho-releases/"
         }
+
+        jcenter()
     }
 }
 rootProject.name = "OSH"
 include ':app'
 include ':OshCore'
+include ':OshWbb12'

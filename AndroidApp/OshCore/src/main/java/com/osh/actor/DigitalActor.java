@@ -42,7 +42,7 @@ public class DigitalActor extends ActorBase implements SerializationSupport {
 	    }
 	}
 	
-	Object _updateValue(Object newValue) {
+	protected Object _updateValue(Object newValue) {
 	    if (newValue instanceof Boolean) {
 	        return newValue;
 	    } else {

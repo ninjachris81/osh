@@ -5,7 +5,7 @@ MultiValue::MultiValue() : ValueBase()
 
 }
 
-MultiValue::MultiValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ValueBase (valueGroup, id, valueType, UT_UNKNOWN, parent)
+MultiValue::MultiValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase (valueGroup, id, valueType, alwaysEmit, parent)
 {
 
 }

@@ -42,6 +42,7 @@ protected:
 
 private slots:
     void checkValues();
+    void onConnected();
 
 signals:
 

@@ -9,6 +9,10 @@ import com.osh.doorunlock.DoorUnlockManager;
 import com.osh.doorunlock.IDoorUnlockManager;
 import com.osh.manager.IManagerRegistration;
 import com.osh.manager.ManagerRegistration;
+import com.osh.value.IValueManager;
+import com.osh.value.ValueManager;
+import com.osh.wbb12.IWBB12Manager;
+import com.osh.wbb12.WBB12Manager;
 
 import javax.inject.Singleton;
 
@@ -24,13 +28,19 @@ public class ManagerModules {
     @Provides
     @Singleton
     static IManagerRegistration provideManagerRegistration() {
-        return new ManagerRegistration(ManagerRegistration.INSTANCE_ROLE.GUI, 3);
+        return new ManagerRegistration(ManagerRegistration.INSTANCE_ROLE.GUI, 5);
     }
 
     @Provides
     @Singleton
     static IActorManager provideActorManager(IManagerRegistration managerRegistration) {
         return new ActorManager(managerRegistration);
+    }
+
+    @Provides
+    @Singleton
+    static IValueManager provideValueManager(IManagerRegistration managerRegistration) {
+        return new ValueManager(managerRegistration);
     }
 
     @Provides
@@ -43,6 +53,12 @@ public class ManagerModules {
     @Singleton
     static IDoorUnlockManager provideDoorUnlockManager(IManagerRegistration managerRegistration, ICommunicationManager communicationManager) {
         return new DoorUnlockManager(managerRegistration,communicationManager);
+    }
+
+    @Provides
+    @Singleton
+    static IWBB12Manager provideWBB12Manager(IManagerRegistration managerRegistration, IValueManager valueManager) {
+        return new WBB12Manager(managerRegistration, valueManager);
     }
 
 }

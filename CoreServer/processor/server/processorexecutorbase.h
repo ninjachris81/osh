@@ -4,9 +4,9 @@
 #include <QObject>
 
 #include "identifyable.h"
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "processor/server/localstorage.h"
-#include "processor/server/processortaskbase.h"
+#include "processor/processortaskbase.h"
 
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"

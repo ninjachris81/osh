@@ -6,10 +6,13 @@
 #include <QDebug>
 #include <QDateTime>
 
+QLatin1String ValueBase::PROPERTY_VALUE_TYPE = QLatin1String("valueType");
+QLatin1String ValueBase::PROPERTY_VALUE_TIMEOUT = QLatin1String("valueTimeout");
+
 ValueBase::ValueBase() : SerializableIdentifyable() {
 }
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : SerializableIdentifyable (id), QObject(parent), m_valueGroup(valueGroup), m_valueType(valueType), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : QObject(parent), SerializableIdentifyable (id), m_valueType(valueType), m_valueGroup(valueGroup), m_alwaysEmit(alwaysEmit)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 

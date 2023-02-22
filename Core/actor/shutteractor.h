@@ -26,6 +26,9 @@ public:
     static int CONFIG_FULL_CLOSE_DURATION_DEFAULT;
     static int CONFIG_FULL_TILT_DURATION_DEFAULT;
 
+    static QLatin1String PROPERTY_TILT_SUPPORT;
+    static QLatin1String PROPERTY_FULL_CLOSE_DURATION;
+
     explicit ShutterActor();
     explicit ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 

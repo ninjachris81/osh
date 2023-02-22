@@ -10,7 +10,7 @@
 #include "device/client/clientdevicemanager.h"
 #include "time/server/systemtimemanager.h"
 #include "warn/systemwarningsmanager.h"
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "processor/server/modelprocessormanager.h"
 #include "actor/actormanager.h"
 #include "actor/actorconfigmanager.h"
@@ -37,8 +37,9 @@ int main(int argc, char *argv[])
     ControllerManager controllerManager;
     SystemtimeManager systimeManager;
     SystemWarningsManager syswarnManager;
-    DatamodelManager datamodelManager;
+    DatamodelManager datamodelManager(true, true, true, true, true, true);
     ModelProcessorManager modelProcessor;
+    datamodelManager.setProcessorTaskFactory(&modelProcessor);
     LogManager logManager;
     ActorManager actorManager;
     ActorConfigManager actorConfigManager;

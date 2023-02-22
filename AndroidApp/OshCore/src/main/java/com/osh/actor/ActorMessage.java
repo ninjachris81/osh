@@ -1,5 +1,7 @@
 package com.osh.actor;
 
+import static com.osh.value.ValueBase.VALUE_SEPARATOR;
+
 import com.osh.communication.MessageBase;
 
 public class ActorMessage extends MessageBase {
@@ -40,6 +42,10 @@ public class ActorMessage extends MessageBase {
 
 	public ActorCmds getCmd() {
 		return cmd;
+	}
+
+	public String getFullId() {
+		return actorGroupId + VALUE_SEPARATOR + actorId;
 	}
 
 }

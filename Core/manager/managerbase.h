@@ -38,6 +38,9 @@ public:
 
     template<class MANAGER_TYPE> MANAGER_TYPE* getManager(QString id) {
         MANAGER_TYPE* returnVal = static_cast<MANAGER_TYPE*>(managerRegistration()->getManager(id));
+        if (returnVal == nullptr) {
+            qWarning() << "Unable to find manager" << id;
+        }
         Q_ASSERT(returnVal != nullptr);
         return returnVal;
     }

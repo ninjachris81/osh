@@ -7,6 +7,7 @@
 #include "value/valuemessage.h"
 
 #include "macros.h"
+#include "helpers.h"
 
 QLatin1String ServerValueManager::VALUE_PREFIX = QLatin1String("values");
 
@@ -22,27 +23,10 @@ void ServerValueManager::init(LocalConfig *config) {
 
     m_simpleDatabaseManager = getManager<SimpleDatabaseManager>(SimpleDatabaseManager::MANAGER_ID);
 
-    connect(m_commManager, &CommunicationManagerBase::connected, this, [this] {
-
-        QMap<QString, QVariant> values = m_simpleDatabaseManager->simpleList(VALUE_PREFIX);
-        QMapIterator<QString, QVariant> it(values);
-
-        while(it.hasNext()) {
-            it.next();
-
-            if (m_knownValues.contains(it.key())) {
-                iInfo() << "Publishing stored value" << it.key() << it.value();
-                ValueBase* value = m_knownValues.value(it.key());
-                value->updateValue(it.value());
-                publishValue(value);
-            } else {
-                iWarning() << "Value key" << it.key() << "is not a known value - removing it";
-                m_simpleDatabaseManager->simpleRemove(VALUE_PREFIX, it.key());
-            }
-        }
-
-
-    });
+    /* not needed, using retain
+     *
+    Helpers::safeConnect(m_commManager, &CommunicationManagerBase::connected, this, &ServerValueManager::onConnected, SIGNAL(connected()), SLOT(onConnected()));
+    */
 
     m_valueCheckTimer.setInterval(config->getInt("value.checkInterval", 1000));
     m_valueCheckTimer.start();
@@ -92,5 +76,27 @@ void ServerValueManager::checkValues() {
 void ServerValueManager::invalidateValue(ValueBase* value) {
     value->invalidate();
     publishValue(value);
+}
+
+void ServerValueManager::onConnected() {
+    iInfo() << Q_FUNC_INFO;
+
+    QMap<QString, QVariant> values = m_simpleDatabaseManager->simpleList(VALUE_PREFIX);
+    QMapIterator<QString, QVariant> it(values);
+
+    while(it.hasNext()) {
+        it.next();
+
+        if (m_knownValues.contains(it.key())) {
+            iInfo() << "Publishing stored value" << it.key() << it.value();
+            ValueBase* value = m_knownValues.value(it.key());
+            value->updateValue(it.value());
+            publishValue(value);
+        } else {
+            iWarning() << "Value key" << it.key() << "is not a known value - removing it";
+            m_simpleDatabaseManager->simpleRemove(VALUE_PREFIX, it.key());
+        }
+    }
+
 }
 

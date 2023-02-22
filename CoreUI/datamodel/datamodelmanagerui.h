@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQmlEngine>
 
-#include "datamodel/server/datamodelmanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "datamodel/datamodelbaseui.h"
 #include "identifyableui.h"
 
