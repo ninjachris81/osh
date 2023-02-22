@@ -62,20 +62,23 @@ int main(int argc, char *argv[])
     ShutterController shutterController(&controllerManager, &actorManager, shutterValueGroupId);
     controllerManager.registerController(&shutterController);
 
+    managerRegistration.init(&config);
+
     for (quint8 i=0;i<count;i++) {
+        qDebug() << i + shutterOffset;
         ShutterActor* shutterActor = static_cast<ShutterActor*>(actorManager.getActor(&shutterGroup, QString::number(i + shutterOffset)));
         Q_ASSERT(shutterActor != nullptr);
         qInfo() << "Init actor" << i << shutterActor->fullId();
+        qDebug() << (i * 2) + relayOffset;
         DigitalActor* relayActorUp = static_cast<DigitalActor*>(actorManager.getActor(&relayGroup, QString::number((i * 2) + relayOffset)));
         Q_ASSERT(relayActorUp != nullptr);
         qInfo() << "Init actor relay up" << relayActorUp->fullId();
+        qDebug() << (i * 2) + relayOffset + 1;
         DigitalActor* relayActorDown = static_cast<DigitalActor*>(actorManager.getActor(&relayGroup, QString::number((i * 2) + relayOffset + 1)));
         Q_ASSERT(relayActorDown != nullptr);
         qInfo() << "Init actor relay down" << relayActorDown->fullId();
         shutterController.bindActor(shutterActor, relayActorUp, relayActorDown);
     }
-
-    managerRegistration.init(&config);
 
     return a.exec();
 }
