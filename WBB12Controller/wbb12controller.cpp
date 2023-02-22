@@ -27,8 +27,6 @@ signed short WBB12Controller::WFDE_Temperature_NoValue = -32767;
 WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
     connect(&m_statusTimer, &QTimer::timeout, this, &WBB12Controller::retrieveStatus);
 
-    m_wbb12Group = new ValueGroup(id);
-
     // inputs
     registerInput(WBB12_Input_Registers::OUTSIDE_TEMP_1, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::ERROR_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
@@ -172,10 +170,14 @@ void WBB12Controller::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-void WBB12Controller::bindValueManager(ValueManagerBase* valueManager) {
+void WBB12Controller::bindValueManager(ValueManagerBase* valueManager, DatamodelBase* datamodel) {
     iDebug() << Q_FUNC_INFO;
 
     m_valueManager = valueManager;
+
+    iInfo() << "Getting value group" << this->id();
+    m_wbb12Group = datamodel->valueGroup(this->id());
+    Q_ASSERT(m_wbb12Group != nullptr);
 
     for (WBB12_Input_Registers reg : m_inputRegisters.keys()) {
         RetrieveValue retVal = m_inputRegisters.value(reg);

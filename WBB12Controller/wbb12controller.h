@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QModbusTcpClient>
 
+#include "datamodel/datamodelbase.h"
 #include "sharedlib.h"
 
 #include "controller/controllerbase.h"
@@ -326,7 +327,7 @@ public:
 
     /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
-    void bindValueManager(ValueManagerBase* valueManager);
+    void bindValueManager(ValueManagerBase* valueManager, DatamodelBase *datamodel);
 
 protected slots:
     void onStateChanged();

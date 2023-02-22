@@ -53,10 +53,13 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    ValueGroup actorGroup(relayController.id());
+    qInfo() << "Init actor group" << relayController.id();
+    ValueGroup *actorGroup = datamodelManager.datamodel()->valueGroup(relayController.id());
+    Q_ASSERT(actorGroup != nullptr);
+
     for (quint8 i=offset;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT) + offset;i++) {
-        qDebug() << "Init actor" << actorGroup.id() << i;
-        DigitalActor* actor = static_cast<DigitalActor*>(actorManager.getActor(&actorGroup, QString::number(i)));
+        qDebug() << "Init actor" << actorGroup->id() << i;
+        DigitalActor* actor = static_cast<DigitalActor*>(actorManager.getActor(actorGroup, QString::number(i)));
         Q_ASSERT(actor != nullptr);
         relayController.bindActor(actor);
     }

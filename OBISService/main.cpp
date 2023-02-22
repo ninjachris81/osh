@@ -52,10 +52,12 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    ValueGroup valueGroup(obisController.id());
+    qInfo() << "Init value group" << obisController.id();
+    ValueGroup *valueGroup = datamodelManager.datamodel()->valueGroup(obisController.id());
+    Q_ASSERT(valueGroup != nullptr);
 
     for (quint8 i=0;i<OBISController::SML_INDEX::COUNT;i++) {
-        DoubleValue* value = static_cast<DoubleValue*>(valueManager.getValue(&valueGroup, QString::number(i)));
+        DoubleValue* value = static_cast<DoubleValue*>(valueManager.getValue(valueGroup, QString::number(i)));
         Q_ASSERT(value != nullptr);
         obisController.bindValue(value);
     }

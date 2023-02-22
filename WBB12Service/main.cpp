@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    wbb12Controller.bindValueManager(&valueManager);
+    wbb12Controller.bindValueManager(&valueManager, datamodelManager.datamodel());
 
     return a.exec();
 }
