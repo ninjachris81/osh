@@ -47,15 +47,19 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&logManager);
 
     MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
-    ValueGroup valueGroup(inputController.id());
-    quint16 offset = config.getInt(&valueGroup, "inputValueGroupOffset", 0);
+
+    qInfo() << "Init value group" << inputController.id();
+    ValueGroup *valueGroup = datamodelManager.datamodel()->valueGroup(inputController.id());
+    Q_ASSERT(valueGroup != nullptr);
+
+    quint16 offset = config.getInt(valueGroup, "inputValueGroupOffset", 0);
     controllerManager.registerController(&inputController);
 
     managerRegistration.init(&config);
 
     for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
-        qDebug() << "Init value" << valueGroup.id() << i;
-        BooleanValue* value = static_cast<BooleanValue*>(valueManager.getValue(&valueGroup, QString::number(i)));
+        qDebug() << "Init value" << valueGroup->id() << i;
+        BooleanValue* value = static_cast<BooleanValue*>(valueManager.getValue(valueGroup, QString::number(i)));
         Q_ASSERT(value != nullptr);
         inputController.bindValue(value);
     }
