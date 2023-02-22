@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&logManager);
 
     MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
+    controllerManager.registerController(&inputController);
     managerRegistration.init(&config);
 
     qInfo() << "Init value group" << inputController.id();
@@ -54,7 +55,6 @@ int main(int argc, char *argv[])
     Q_ASSERT(valueGroup != nullptr);
 
     quint16 offset = config.getInt(valueGroup, "inputValueGroupOffset", 0);
-    controllerManager.registerController(&inputController);
 
     for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
         qDebug() << "Init value" << valueGroup->id() << i;
