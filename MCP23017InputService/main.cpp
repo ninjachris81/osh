@@ -46,9 +46,8 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    managerRegistration.init(&config);
-
     MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
+    managerRegistration.init(&config);
 
     qInfo() << "Init value group" << inputController.id();
     ValueGroup *valueGroup = datamodelManager.datamodel()->valueGroup(inputController.id());
