@@ -8,10 +8,6 @@ QLatin1String ValueManagerBase::MANAGER_ID = QLatin1String("ValueManager");
 
 ValueManagerBase::ValueManagerBase(QObject *parent) : ManagerBase(parent)
 {
-    if (managerRegistration()->instanceRole() == ManagerRegistration::GUI) {
-        connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::onUpdateSignalRates);
-        m_signalRateTimer.start(10000);
-    }
 }
 
 QString ValueManagerBase::id() {
@@ -23,6 +19,11 @@ void ValueManagerBase::init(LocalConfig* config) {
 
     REQUIRE_MANAGER(CommunicationManagerBase);
     m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
+
+    if (managerRegistration()->instanceRole() == ManagerRegistration::GUI) {
+        connect(&m_signalRateTimer, &QTimer::timeout, this, &ValueManagerBase::onUpdateSignalRates);
+        m_signalRateTimer.start(10000);
+    }
 }
 
 LogCat::LOGCAT ValueManagerBase::logCat() {
