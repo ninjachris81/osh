@@ -47,10 +47,10 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
+    managerRegistration.init(&config);
+
     OBISController obisController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "obis"));
     controllerManager.registerController(&obisController);
-
-    managerRegistration.init(&config);
 
     qInfo() << "Init value group" << obisController.id();
     ValueGroup *valueGroup = datamodelManager.datamodel()->valueGroup(obisController.id());
