@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
+    managerRegistration.init(&config);
+
     QString shutterValueGroupId = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
     qInfo() << "Init shutter group" << shutterValueGroupId;
     ValueGroup *shutterGroup = datamodelManager.datamodel()->valueGroup(shutterValueGroupId);
@@ -65,8 +67,6 @@ int main(int argc, char *argv[])
 
     ShutterController shutterController(&controllerManager, &actorManager, shutterValueGroupId);
     controllerManager.registerController(&shutterController);
-
-    managerRegistration.init(&config);
 
     for (quint8 i=0;i<count;i++) {
         qDebug() << i + shutterOffset;

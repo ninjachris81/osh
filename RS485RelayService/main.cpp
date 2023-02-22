@@ -47,11 +47,11 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
+    managerRegistration.init(&config);
+
     RS485RelayController relayController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "allRelays0"), RS485RelayController::RS485_SERIAL_32PORT, RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT));
     quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
     controllerManager.registerController(&relayController);
-
-    managerRegistration.init(&config);
 
     qInfo() << "Init actor group" << relayController.id();
     ValueGroup *actorGroup = datamodelManager.datamodel()->valueGroup(relayController.id());
