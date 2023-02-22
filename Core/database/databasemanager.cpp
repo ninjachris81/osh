@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QDataStream>
 #include <QSqlRecord>
+#include <QTimer>
 
 QLatin1String DatabaseManager::MANAGER_ID = QLatin1String("DatabaseManager");
 QLatin1String DatabaseManager::DATABASE_TYPE_SQLITE = QLatin1String("QSQLITE");
@@ -40,6 +41,14 @@ void DatabaseManager::init(LocalConfig* config) {
     } else {
         iWarning() << m_db.databaseName() << m_db.lastError();
         qFatal("Failed to open database");
+    }
+
+    if (config->getBool("database.autoclose", true)) {      // auto close connection after startup
+        QTimer::singleShot(20000, this, [this] () {
+            iInfo() << "Auto close DB connection";
+            m_db.close();
+        });
+
     }
 }
 
