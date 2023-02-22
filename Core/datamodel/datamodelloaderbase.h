@@ -6,6 +6,7 @@
 #include "sharedlib.h"
 
 #include "datamodel/datamodelbase.h"
+#include "processor/processortaskfactory.h"
 #include "identifyable.h"
 
 class SHARED_LIB_EXPORT DatamodelLoaderBase : public QObject, public Identifyable
@@ -18,13 +19,14 @@ public:
         bool loadActors = true;
         bool loadValues = true;
         bool loadProcessorTasks = true;
+        bool loadKnownDevices = true;
     };
 
     explicit DatamodelLoaderBase(QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
-    virtual DatamodelBase* load(DatamodelLoadingOptions options) = 0;
+    virtual DatamodelBase* load(ProcessorTaskFactory *processorTaskFactory, DatamodelLoadingOptions options) = 0;
 
     virtual void save(DatamodelBase* datamodel) = 0;
 

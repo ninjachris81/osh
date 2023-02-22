@@ -15,7 +15,7 @@ public:
 
     static QString LOADER_TYPE_NAME;
 
-    /*virtual*/ DatamodelBase* load(DatamodelLoadingOptions options) override;
+    /*virtual*/ DatamodelBase* load(ProcessorTaskFactory *processorTaskFactory, DatamodelLoadingOptions options) override;
 
     /*virtual*/ void save(DatamodelBase* datamodel) override;
 

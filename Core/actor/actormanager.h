@@ -34,6 +34,8 @@ public:
     //void onCmdTriggered(ActorBase *actor, actor::ACTOR_CMDS cmd);
 
     ActorBase* getActor(QString fullId);
+    ActorBase* getActor(QString valueGroupId, QString actorId);
+    ActorBase* getActor(ValueGroup *valueGroup, QString actorId);
 
     QList<ActorBase*> actors();
 

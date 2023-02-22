@@ -12,6 +12,7 @@
 #include "processor/server/commonscripts.h"
 #include "processor/scriptresultmessage.h"
 #include "processor/server/nativeprocessorexecutor.h"
+#include "processor/server/nativeprocessortask.h"
 
 #ifdef PROCESSOR_JS_SUPPORT
     #include "processor/server/jsprocessorexecutor.h"
@@ -24,6 +25,29 @@ ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(pare
 {
     connect(&m_scheduleTimer, &QTimer::timeout, this, &ModelProcessorManager::executeTasks);
 }
+
+ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+
+    switch(taskType) {
+        case ProcessorTaskBase::PTT_JS:
+#ifdef PROCESSOR_JS_SUPPORT
+            return new JSProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+#else
+            qWarning("JS Processor task not supported");
+#endif
+            break;
+        case ProcessorTaskBase::PTT_NATIVE:
+#ifdef IS_OSH_CORE_SERVICE
+            return new NativeProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+#else
+            qWarning("Native Processor task not supported");
+#endif
+        break;
+    }
+
+
+}
+
 
 LogCat::LOGCAT ModelProcessorManager::logCat() {
     return LogCat::PROCESSOR;

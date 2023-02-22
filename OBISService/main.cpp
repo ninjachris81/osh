@@ -9,8 +9,9 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "database/databasemanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "log/logmanager.h"
-#include "actor/actormanager.h"
 #include "value/doublevalue.h"
 #include "shared/mqtt_qt.h"
 
@@ -30,7 +31,8 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
-    ActorManager actorManager;
+    DatabaseManager databaseManager;
+    DatamodelManager datamodelManager(false, false, false, true, false, false);
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
@@ -41,7 +43,8 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
-    managerRegistration.registerManager(&actorManager);
+    managerRegistration.registerManager(&databaseManager);
+    managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
     OBISController obisController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "obis"));
@@ -49,17 +52,13 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    QList<ValueBase*> values;
     ValueGroup valueGroup(obisController.id());
-    for (quint8 i=0;i<OBISController::SML_INDEX::COUNT;i++) {
-        DoubleValue* value = new DoubleValue(&valueGroup, QString::number(i), value::VALTYPE_ENERGY_CONSUMPTION_TIME);
-        value->withValueTimeout(ValueBase::VT_MID); // no need, as internal status update triggers maintainance
-        values.append(value);
-        obisController.bindValue(value);
-        valueManager.registerValue(value);
-    }
 
-    qDebug() << "RUNNING";
+    for (quint8 i=0;i<OBISController::SML_INDEX::COUNT;i++) {
+        DoubleValue* value = static_cast<DoubleValue*>(valueManager.getValue(&valueGroup, QString::number(i)));
+        Q_ASSERT(value != nullptr);
+        obisController.bindValue(value);
+    }
 
     return a.exec();
 }

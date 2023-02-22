@@ -3,6 +3,13 @@
 
 qint64 ProcessorTaskBase::INTERVAL_REALTIME = 0;
 
+QLatin1String ProcessorTaskBase::PROPERTY_TASK_TYPE = QLatin1String("taskType");
+QLatin1String ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE = QLatin1String("taskTriggerType");
+QLatin1String ProcessorTaskBase::PROPERTY_SCRIPT_CODE = QLatin1String("scriptCode");
+QLatin1String ProcessorTaskBase::PROPERTY_RUN_CONDITION = QLatin1String("runCondition");
+QLatin1String ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL =QLatin1String("scheduleInterval");
+QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publishResult");
+
 ProcessorTaskBase::ProcessorTaskBase() : QObject() {
 }
 

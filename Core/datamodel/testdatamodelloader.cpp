@@ -11,7 +11,7 @@ TestDatamodelLoader::TestDatamodelLoader(QObject *parent) : DatamodelLoaderBase(
 
 }
 
-DatamodelBase* TestDatamodelLoader::load(DatamodelLoadingOptions options) {
+DatamodelBase* TestDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactory, DatamodelLoadingOptions options) {
     iDebug() << Q_FUNC_INFO;
     return new TestDatamodel();
 }

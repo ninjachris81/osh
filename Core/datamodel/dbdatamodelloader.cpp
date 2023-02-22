@@ -13,7 +13,7 @@ DBDatamodelLoader::DBDatamodelLoader(DatabaseManager *databaseManager, QObject *
 
 }
 
-DatamodelBase *DBDatamodelLoader::load(DatamodelLoadingOptions options) {
+DatamodelBase *DBDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactory, DatamodelLoadingOptions options) {
     iDebug() << Q_FUNC_INFO;
 
     if (m_databaseManager != nullptr) {
@@ -38,7 +38,8 @@ DatamodelBase *DBDatamodelLoader::load(DatamodelLoadingOptions options) {
         }
 
         if (options.loadProcessorTasks) {
-
+            datamodel->setProcessorTaskFactory(processorTaskFactory);
+            loadProcessorTasks(datamodel);
         }
 
         return datamodel;
@@ -137,6 +138,43 @@ void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel) {
         iWarning() << query.lastError();
     }
 }
+
+void DBDatamodelLoader::loadKnownDevices(DynamicDatamodel *datamodel) {
+    iInfo() << Q_FUNC_INFO;
+
+    QSqlQuery query(*m_databaseManager->db());
+
+    if (query.exec("SELECT * FROM dm_known_devices")) {
+        while (query.next()) {
+            datamodel->addKnownDevice(query.value(SerializableIdentifyable::PROPERTY_ID).toString(), query.value(KnownDevice::PROPERTY_SERVICE_ID).toString(), query.value(KnownDevice::PROPERTY_NAME).toString());
+        }
+    } else {
+        iWarning() << query.lastError();
+    }
+}
+
+void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
+    iInfo() << Q_FUNC_INFO;
+
+    QSqlQuery query(*m_databaseManager->db());
+
+    if (query.exec("SELECT * FROM dm_processor_tasks")) {
+        while (query.next()) {
+            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            ProcessorTaskBase::ProcessorTaskType taskType = static_cast<ProcessorTaskBase::ProcessorTaskType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TYPE).toInt());
+            ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType = static_cast<ProcessorTaskBase::ProcessorTaskTriggerType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE).toInt());
+            QString scriptCode = query.value(ProcessorTaskBase::PROPERTY_SCRIPT_CODE).toString();
+            QString runCondition = query.value(ProcessorTaskBase::PROPERTY_RUN_CONDITION).toString();
+            qint64 scheduleInterval = query.value(ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL).toLongLong();
+            bool publishResult = query.value(ProcessorTaskBase::PROPERTY_PUBLISH_RESULT).toBool();
+
+            datamodel->addProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+        }
+    } else {
+        iWarning() << query.lastError();
+    }
+}
+
 
 QVariantMap DBDatamodelLoader::collectValues(QSqlQuery &query, QString &classType, QString &valueGroup, QString &id) {
     iInfo() << Q_FUNC_INFO;

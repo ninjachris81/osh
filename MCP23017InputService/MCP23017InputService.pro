@@ -1,3 +1,4 @@
+QT += sql
 QT -= gui
 QT += mqtt
 

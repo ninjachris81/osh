@@ -81,6 +81,14 @@ ActorBase* ActorManager::getActor(QString fullId) {
     return m_actors.value(fullId);
 }
 
+ActorBase* ActorManager::getActor(QString valueGroupId, QString actorId) {
+    return getActor(ValueBase::getFullId(valueGroupId, actorId));
+}
+
+ActorBase* ActorManager::getActor(ValueGroup *valueGroup, QString actorId) {
+    return getActor(valueGroup->id(), actorId);
+}
+
 QList<ActorBase*> ActorManager::actors() {
     return m_actors.values();
 }

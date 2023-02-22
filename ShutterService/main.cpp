@@ -7,6 +7,8 @@
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "database/databasemanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "shuttercontroller.h"
 #include "actor/actormanager.h"
 #include "actor/actorconfigmanager.h"
@@ -27,6 +29,8 @@ int main(int argc, char *argv[])
     ClientDeviceDiscoveryManager clientManager("ShutterService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
+    DatabaseManager databaseManager;
+    DatamodelManager datamodelManager(false, false, true, true, false, false);
     ClientValueManager valueManager;
     ActorManager actorManager;
     ActorConfigManager actorConfigManager;
@@ -42,6 +46,8 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&actorConfigManager);
+    managerRegistration.registerManager(&databaseManager);
+    managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
     QString shutterValueGroupId = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
@@ -56,21 +62,17 @@ int main(int argc, char *argv[])
     ShutterController shutterController(&controllerManager, &actorManager, shutterValueGroupId);
     controllerManager.registerController(&shutterController);
 
-    QList<ValueBase*> actors;
-
     for (quint8 i=0;i<count;i++) {
-        ShutterActor* shutterActor = new ShutterActor(&shutterGroup, QString::number(i + shutterOffset), value::VALTYPE_RELAY_SHUTTER);
+        ShutterActor* shutterActor = static_cast<ShutterActor*>(actorManager.getActor(&shutterGroup, QString::number(i + shutterOffset)));
+        Q_ASSERT(shutterActor != nullptr);
         qInfo() << "Init actor" << i << shutterActor->fullId();
-        DigitalActor* relayActorUp = new DigitalActor(&relayGroup, QString::number((i * 2) + relayOffset), value::VALTYPE_RELAY_SHUTTER, true);
+        DigitalActor* relayActorUp = static_cast<DigitalActor*>(actorManager.getActor(&relayGroup, QString::number((i * 2) + relayOffset)));
+        Q_ASSERT(relayActorUp != nullptr);
         qInfo() << "Init actor relay up" << relayActorUp->fullId();
-        DigitalActor* relayActorDown = new DigitalActor(&relayGroup, QString::number((i * 2) + relayOffset + 1), value::VALTYPE_RELAY_SHUTTER, true);
+        DigitalActor* relayActorDown = static_cast<DigitalActor*>(actorManager.getActor(&relayGroup, QString::number((i * 2) + relayOffset + 1)));
+        Q_ASSERT(relayActorDown != nullptr);
         qInfo() << "Init actor relay down" << relayActorDown->fullId();
-        shutterActor->withValueTimeout(ValueBase::VT_NONE); // no need, as internal status update triggers maintainance
-        actors.append(shutterActor);
         shutterController.bindActor(shutterActor, relayActorUp, relayActorDown);
-        actorManager.registerActor(shutterActor, &valueManager);
-        actorManager.registerActor(relayActorUp, &valueManager);
-        actorManager.registerActor(relayActorDown, &valueManager);
     }
 
     managerRegistration.init(&config);

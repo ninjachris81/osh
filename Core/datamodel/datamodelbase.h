@@ -19,6 +19,7 @@
 #include "actor/digitalactor.h"
 #include "actor/shutteractor.h"
 #include "processor/processortaskbase.h"
+#include "processor/processortaskfactory.h"
 #include "shared/units_qt.h"
 
 #include "identifyable.h"
@@ -34,6 +35,8 @@ public:
     explicit DatamodelBase(QString id, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
+
+    void setProcessorTaskFactory(ProcessorTaskFactory* processorTaskFactory);
 
     QList<ValueGroup*> valueGroups();
     ValueGroup* valueGroup(QString id);
@@ -60,6 +63,8 @@ public:
     KnownArea* knownArea(QString id);
 
 protected:
+    ProcessorTaskFactory* m_processorTaskFactory = nullptr;
+
     QMap<QString, KnownDevice*> m_knownDevices;
     QMap<QString, ValueGroup*> m_valueGroups;
     QMap<QString, ValueBase*> m_values;

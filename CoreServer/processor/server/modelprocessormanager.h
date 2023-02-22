@@ -17,14 +17,18 @@
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
 #include "processor/server/processorexecutorbase.h"
+#include "processor/server/nativeprocessortask.h"
 
-class SHARED_LIB_EXPORT ModelProcessorManager : public ManagerBase
+
+class SHARED_LIB_EXPORT ModelProcessorManager : public ManagerBase, public ProcessorTaskFactory
 {
     Q_OBJECT
 public:
     explicit ModelProcessorManager(QObject *parent = nullptr);
 
     static QLatin1String MANAGER_ID;
+
+    ProcessorTaskBase* createProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) override;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 

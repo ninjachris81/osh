@@ -180,7 +180,7 @@ void WBB12Controller::bindValueManager(ValueManagerBase* valueManager) {
     for (WBB12_Input_Registers reg : m_inputRegisters.keys()) {
         RetrieveValue retVal = m_inputRegisters.value(reg);
 
-        ValueBase* val = m_valueManager->getValue(ValueBase::getFullId(m_wbb12Group->id(), retVal.mqttName));
+        ValueBase* val = m_valueManager->getValue(m_wbb12Group, retVal.mqttName);
         if (val == nullptr) {
             iWarning() << "Value not in datamodel, creating temp value" << retVal.mqttName;
             val = createValue(retVal);

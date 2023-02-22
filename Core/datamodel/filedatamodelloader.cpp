@@ -11,7 +11,7 @@ FileDataModelLoader::FileDataModelLoader(QString filePath, QObject *parent) : Da
 
 }
 
-DatamodelBase *FileDataModelLoader::load(DatamodelLoadingOptions options) {
+DatamodelBase *FileDataModelLoader::load(ProcessorTaskFactory *processorTaskFactory, DatamodelLoadingOptions options) {
     iDebug() << Q_FUNC_INFO;
 
     QFile file(m_filePath);

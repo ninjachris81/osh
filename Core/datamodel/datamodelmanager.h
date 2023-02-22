@@ -9,12 +9,13 @@
 #include "communication/messagebase.h"
 #include "datamodelloaderbase.h"
 #include "datamodelbase.h"
+#include "processor/processortaskfactory.h"
 
 class SHARED_LIB_EXPORT DatamodelManager : public ManagerBase
 {
     Q_OBJECT
 public:
-    explicit DatamodelManager(QObject *parent = nullptr);
+    explicit DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, QObject *parent = nullptr);
 
     static QLatin1String MANAGER_ID;
 
@@ -28,6 +29,8 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
+    void setProcessorTaskFactory(ProcessorTaskFactory* processorTaskFactory);
+
     DatamodelBase* datamodel();
 
     bool isLoaded();
@@ -35,9 +38,13 @@ public:
     Q_INVOKABLE void save();
 
 private:
+    DatamodelLoaderBase::DatamodelLoadingOptions m_loadingOptions;
+
     bool m_isLoaded = false;
     DatamodelLoaderBase* m_datamodelLoader = nullptr;
     DatamodelBase* m_datamodel = nullptr;
+
+    ProcessorTaskFactory* m_processorTaskFactory = nullptr;
 
     void registerValues();
     void registerActors();

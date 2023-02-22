@@ -13,9 +13,7 @@
 #include "actor/audioplaybackactor.h"
 #include "value/valuegroup.h"
 
-#ifdef PROCESSOR_NATIVE_SUPPORT
-    #include "processor/server/nativeprocessortask.h"
-#endif
+//#include "processor/server/nativeprocessortask.h"
 
 #ifdef PROCESSOR_JS_SUPPORT
     #include "processor/server/jsprocessortask.h"
@@ -101,9 +99,8 @@ void DynamicDatamodel::deserialize(QByteArray data) {
 
         return newInstance->id();
     });
-#ifdef PROCESSOR_NATIVE_SUPPORT
-    deserializeMap(doc.object(), "processorTasks", m_processorTasks, [](NativeProcessorTask* newInstance, QJsonObject) { return newInstance->id(); });
-#endif
+
+    //deserializeMap(doc.object(), "processorTasks", m_processorTasks, [](NativeProcessorTask* newInstance, QJsonObject) { return newInstance->id(); });
 }
 
 template <typename K, typename T, typename SETUP_FUNC> void DynamicDatamodel::deserializeMap(QJsonObject obj, QString name, QMap<K, T> &map, SETUP_FUNC setupFunc) {
@@ -139,10 +136,10 @@ template <typename K, typename T, typename SETUP_FUNC> void DynamicDatamodel::de
 
         } else if (classType == KnownRoom::staticMetaObject.className()) {
             newInstance = new KnownRoom();
-#ifdef PROCESSOR_NATIVE_SUPPORT
+            /*
         } else if (classType == NativeProcessorTask::staticMetaObject.className()) {
             newInstance = new NativeProcessorTask();
-#endif
+            */
         } else {
             qFatal("Unsupported class type");
         }

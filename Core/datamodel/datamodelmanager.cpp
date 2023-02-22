@@ -14,8 +14,15 @@
 
 QLatin1String DatamodelManager::MANAGER_ID = QLatin1String("DatamodelManager");
 
-DatamodelManager::DatamodelManager(QObject *parent) : ManagerBase(parent)
+DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, QObject *parent) : ManagerBase(parent)
 {
+    m_loadingOptions.loadKnownAreas = loadKnownAreas;
+    m_loadingOptions.loadKnownRooms = loadKnownRooms;
+    m_loadingOptions.loadActors = loadActors;
+    m_loadingOptions.loadValues = loadValues;
+    m_loadingOptions.loadProcessorTasks = loadProcessorTasks;
+    m_loadingOptions.loadKnownDevices = loadKnownDevices;
+
     m_datamodel = new EmptyDatamodel();
 }
 
@@ -23,11 +30,19 @@ LogCat::LOGCAT DatamodelManager::logCat() {
     return LogCat::DATAMODEL;
 }
 
+void DatamodelManager::setProcessorTaskFactory(ProcessorTaskFactory* processorTaskFactory) {
+    m_processorTaskFactory = processorTaskFactory;
+}
+
 void DatamodelManager::init(LocalConfig* config) {
     iDebug() << Q_FUNC_INFO;
 
-    REQUIRE_MANAGER(ValueManagerBase);
-    REQUIRE_MANAGER(ActorManager);
+    if (m_loadingOptions.loadValues) {
+        REQUIRE_MANAGER(ValueManagerBase);
+    }
+    if (m_loadingOptions.loadActors) {
+        REQUIRE_MANAGER(ActorManager);
+    }
 
     QString datamodelLoaderName = config->getString("datamodel.loader", TestDatamodelLoader::LOADER_TYPE_NAME);
 
@@ -50,15 +65,8 @@ void DatamodelManager::init(LocalConfig* config) {
     connect(m_datamodelLoader, &DatamodelLoaderBase::saved, this, &DatamodelManager::onDatamodelSaved);
     connect(m_datamodelLoader, &DatamodelLoaderBase::error, this, &DatamodelManager::onDatamodelError);
 
-    DatamodelLoaderBase::DatamodelLoadingOptions loadingOptions;
-    loadingOptions.loadKnownAreas = config->getBool("datamodel.loadKnownAreas", true);
-    loadingOptions.loadKnownRooms = config->getBool("datamodel.loadKnownRooms", true);
-    loadingOptions.loadValues = config->getBool("datamodel.loadValues", true);
-    loadingOptions.loadActors = config->getBool("datamodel.loadActors", true);
-    loadingOptions.loadProcessorTasks = config->getBool("datamodel.loadProcessorTasks", true);
-
     delete m_datamodel;
-    m_datamodel = m_datamodelLoader->load(loadingOptions);
+    m_datamodel = m_datamodelLoader->load(m_processorTaskFactory, m_loadingOptions);
     Q_ASSERT(m_datamodel != nullptr);
 
     m_isLoaded = true;
@@ -66,8 +74,13 @@ void DatamodelManager::init(LocalConfig* config) {
     iDebug() << "Datamodel loaded";
 
     // now, register values in managers
-    registerValues();
-    registerActors();
+    if (m_loadingOptions.loadValues) {
+        registerValues();
+    }
+
+    if (m_loadingOptions.loadActors) {
+        registerActors();
+    }
 
     Q_EMIT(datamodelChanged());
 }

@@ -1,15 +1,12 @@
 #include "datamodelbase.h"
 
-#ifdef PROCESSOR_NATIVE_SUPPORT
-    #include "processor/nativeprocessortask.h"
-#endif
-#ifdef PROCESSOR_JS_SUPPORT
-    #include "processor/server/jsprocessortask.h"
-#endif
-
-DatamodelBase::DatamodelBase(QString id, QObject *parent) : Identifyable (id), QObject(parent)
+DatamodelBase::DatamodelBase(QString id, QObject *parent) : QObject(parent), Identifyable (id)
 {
 
+}
+
+void DatamodelBase::setProcessorTaskFactory(ProcessorTaskFactory* processorTaskFactory) {
+    m_processorTaskFactory = processorTaskFactory;
 }
 
 LogCat::LOGCAT DatamodelBase::logCat() {
@@ -119,32 +116,20 @@ StringValue* DatamodelBase::addStringValue(ValueGroup* valueGroup, QString id, V
 }
 
 ProcessorTaskBase* DatamodelBase::addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
-    ProcessorTaskBase* processorNode = nullptr;
-
-    switch(taskType) {
-        case ProcessorTaskBase::PTT_JS:
-#ifdef PROCESSOR_JS_SUPPORT
-            processorNode = new JSProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
-#else
-            qWarning("JS Processor task not supported");
-#endif
-            break;
-        case ProcessorTaskBase::PTT_NATIVE:
-#ifdef PROCESSOR_NATIVE_SUPPORT
-            processorNode = new NativeProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
-#else
-            qWarning("Native Processor task not supported");
-#endif
-        break;
-    }
-
-    if (processorNode != nullptr) {
-        m_processorTasks.insert(processorNode->id(), processorNode);
-        Q_EMIT(datamodelContentChanged());
-        return processorNode;
+    if (m_processorTaskFactory != nullptr) {
+        ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+        if (processorNode != nullptr) {
+            m_processorTasks.insert(processorNode->id(), processorNode);
+            Q_EMIT(datamodelContentChanged());
+            return processorNode;
+        } else {
+            iWarning() << "Failed to create processor node" << id;
+        }
     } else {
-        return nullptr;
+        iWarning() << "No processor factory set!";
     }
+
+    return nullptr;
 }
 
 KnownRoom* DatamodelBase::addKnownRoom(KnownArea* knownArea, QString id, QString name) {

@@ -17,7 +17,7 @@ public:
 
     static QString LOADER_TYPE_NAME;
 
-    /*virtual*/ DatamodelBase* load(DatamodelLoadingOptions options) override;
+    /*virtual*/ DatamodelBase* load(ProcessorTaskFactory *processorTaskFactory, DatamodelLoadingOptions options) override;
 
     /*virtual*/ void save(DatamodelBase* datamodel) override;
 
@@ -37,6 +37,8 @@ private:
     void loadValueGroups(DynamicDatamodel *datamodel);
     void loadValues(DynamicDatamodel *datamodel);
     void loadActors(DynamicDatamodel *datamodel);
+    void loadProcessorTasks(DynamicDatamodel *datamodel);
+    void loadKnownDevices(DynamicDatamodel *datamodel);
 
 };
 

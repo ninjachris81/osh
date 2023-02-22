@@ -13,6 +13,13 @@ class SHARED_LIB_EXPORT ProcessorTaskBase : public QObject, public SerializableI
 public:
     static qint64 INTERVAL_REALTIME;
 
+    static QLatin1String PROPERTY_TASK_TYPE;
+    static QLatin1String PROPERTY_TASK_TRIGGER_TYPE;
+    static QLatin1String PROPERTY_SCRIPT_CODE;
+    static QLatin1String PROPERTY_RUN_CONDITION;
+    static QLatin1String PROPERTY_SCHEDULE_INTERVAL;
+    static QLatin1String PROPERTY_PUBLISH_RESULT;
+
     enum ProcessorTaskTriggerType {
         PTTT_INTERVAL = 0,
         PTTT_ONLY_ONCE = 1,
