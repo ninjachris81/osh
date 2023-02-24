@@ -1,9 +1,7 @@
-package com.osh.communication.mqtt.service.impl;
+package com.osh.service.impl;
 
 import static com.osh.communication.mqtt.MqttConstants.MQTT_BASE_PATH;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_PATH_SEP;
-
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -21,10 +19,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.hivemq.client.internal.mqtt.message.MqttMessage;
 import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.MqttClientState;
 import com.hivemq.client.mqtt.datatypes.MqttQos;
@@ -36,10 +31,10 @@ import com.osh.actor.ActorCmds;
 import com.osh.actor.ActorConfigMessage;
 import com.osh.actor.ActorMessage;
 import com.osh.communication.MessageBase;
-import com.osh.communication.MessageBase.MESSAGE_TYPE;
 import com.osh.communication.mqtt.MessageTypeInfo;
 import com.osh.communication.mqtt.MqttConstants;
-import com.osh.communication.mqtt.service.ICommunicationManager;
+import com.osh.manager.IMqttSupport;
+import com.osh.service.ICommunicationService;
 import com.osh.config.IApplicationConfig;
 import com.osh.controller.ControllerMessage;
 import com.osh.device.DeviceDiscoveryMessage;
@@ -47,19 +42,16 @@ import com.osh.doorunlock.DoorUnlockMessage;
 import com.osh.log.LogFacade;
 import com.osh.log.LogMessage;
 import com.osh.log.LogMessage.MsgType;
-import com.osh.manager.IManagerRegistration;
-import com.osh.manager.ManagerBase;
 import com.osh.processor.ScriptResultMessage;
 import com.osh.time.SystemtimeMessage;
 import com.osh.utils.IObservableBoolean;
-import com.osh.utils.IObservableManager;
 import com.osh.utils.ObservableBoolean;
 import com.osh.value.ValueMessage;
 import com.osh.warn.SystemWarningMessage;
 
-public class MqttCommunicationManager extends ManagerBase implements ICommunicationManager {
+public class MqttCommunicationServiceImpl implements ICommunicationService {
 
-	private static final String TAG = MqttCommunicationManager.class.getName();
+	private static final String TAG = MqttCommunicationServiceImpl.class.getName();
 
 	private ExecutorService executorService;
 	private IApplicationConfig appConfig;
@@ -71,8 +63,7 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 		return connectedState;
 	}
 
-	public MqttCommunicationManager(IApplicationConfig appConfig, IManagerRegistration managerRegistration) {
-		super("MqttCommunicationManager", managerRegistration);
+	public MqttCommunicationServiceImpl(IApplicationConfig appConfig) {
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.appConfig = appConfig;
 	}
@@ -81,18 +72,10 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
     
     private Map<MessageBase.MESSAGE_TYPE, MessageTypeInfo> messageTypes = new HashMap<>();
     
-    private List<String> customChannels;
-    
-    private Map<MessageBase.MESSAGE_TYPE, ManagerBase> managerMessageTypes = new HashMap<>();
+    private Map<MessageBase.MESSAGE_TYPE, IMqttSupport> messageTypeServices = new HashMap<>();
 
 	@Override
-	public void initComplete() {
-		connectMqtt(appConfig);
-	}
-
-
-
-	private void connectMqtt(IApplicationConfig appConfig) {
+	public void connectMqtt() {
 		LogFacade.i(TAG, "Init Mqtt");
 		
 	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_VALUE, true, MqttConstants.MQTT_MESSAGE_TYPE_VA, 2);
@@ -106,7 +89,6 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SCRIPT_RESULT, false, MqttConstants.MQTT_MESSAGE_TYPE_SR, 1);
 		registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK, false, MqttConstants.MQTT_MESSAGE_TYPE_DU, 2);
 
-		
 		mqttClient = MqttClient.builder()
 				.identifier(appConfig.getMqtt().getClientId())
 				.automaticReconnectWithDefaultConfig()
@@ -133,42 +115,15 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 				subscribeChannels();
 			}
 		});
+	}
 
-	    for (String managerName : getManagerRegistration().getManagers().keySet()) {
-	    	ManagerBase manager = getManagerRegistration().getManagers().get(managerName);
-	    	
-	    	MessageBase.MESSAGE_TYPE messageType = manager.getMessageType();
-	        if (messageType != MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_UNKNOWN) {
-				LogFacade.d(TAG, "Register message type " + messageType + " for manager " + manager.getId());
-	            managerMessageTypes.put(messageType, manager);
-	        }
-	    }
+	@Override
+	public void registerMessageType(MessageBase.MESSAGE_TYPE messageType, IMqttSupport service) {
+		messageTypeServices.put(messageType, service);
 	}
 	
 	private void subscribeChannels() {
-	    if (customChannels != null) {
-	        subscribeChannels(customChannels);
-	    } else {
-	        switch(getManagerRegistration().getInstanceRole()) {
-	        case SERVER:
-	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC));
-	            break;
-	        case CLIENT:
-	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_AC));
-	            break;
-	        case GUI:
-	            subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC, MqttConstants.MQTT_MESSAGE_TYPE_SR, MqttConstants.MQTT_MESSAGE_TYPE_LO, MqttConstants.MQTT_MESSAGE_TYPE_DU));
-	            break;
-	        default:
-				LogFacade.w(TAG, "Unsupported instance role");
-	            break;
-	        }
-	    }
-
-	    /*
-	    ControllerManager* controllerManager = getManager<ControllerManager>(ControllerManager::MANAGER_ID);
-	    subscribeControllerChannels(controllerManager->controllerNames());
-	    */
+		subscribeChannels(Arrays.asList(MqttConstants.MQTT_MESSAGE_TYPE_VA, MqttConstants.MQTT_MESSAGE_TYPE_DD, MqttConstants.MQTT_MESSAGE_TYPE_ST, MqttConstants.MQTT_MESSAGE_TYPE_SW, MqttConstants.MQTT_MESSAGE_TYPE_AC, MqttConstants.MQTT_MESSAGE_TYPE_SR, MqttConstants.MQTT_MESSAGE_TYPE_LO, MqttConstants.MQTT_MESSAGE_TYPE_DU));
     }
 	
 	private void subscribeChannels(List<String> topics) {
@@ -186,10 +141,10 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 		try {
 			MessageBase msg = getMessage(topic.toString(), payload);
 			if (msg != null) {
-				if (managerMessageTypes.containsKey(msg.getMessageType())) {
+				if (messageTypeServices.containsKey(msg.getMessageType())) {
 					executorService.submit(() -> {
 						try {
-							managerMessageTypes.get(msg.getMessageType()).handleReceivedMessage(msg);
+							messageTypeServices.get(msg.getMessageType()).handleReceivedMessage(msg);
 						} catch (Exception ex) {
 							LogFacade.w(TAG, "Error while executing handler: " + ex.toString());
 						}
@@ -436,10 +391,6 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 	    return map;
 	}
 
-	public void setCustomChannels(List<String> customChannels) {
-		this.customChannels = customChannels;
-	}
-
 	private String getTopicName(MessageBase message) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(MQTT_BASE_PATH);
@@ -466,14 +417,5 @@ public class MqttCommunicationManager extends ManagerBase implements ICommunicat
 		return info.isRetained;
 	}
 
-
-	@Override
-	public MESSAGE_TYPE getMessageType() {
-		return MESSAGE_TYPE.MESSAGE_TYPE_UNKNOWN;
-	}
-
-	@Override
-	public void handleReceivedMessage(MessageBase msg) {
-	}
 
 }

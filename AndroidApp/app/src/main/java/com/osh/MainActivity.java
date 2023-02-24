@@ -14,15 +14,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.osh.actor.ActorCmds;
 import com.osh.actor.ActorMessage;
-import com.osh.actor.IActorManager;
-import com.osh.communication.mqtt.service.ICommunicationManager;
+import com.osh.service.IActorService;
+import com.osh.service.ICommunicationService;
 import com.osh.doorunlock.IDoorUnlockManager;
+import com.osh.service.IDatabaseService;
+import com.osh.service.IDatamodelService;
+import com.osh.ui.area.AreaFragment;
 import com.osh.ui.dashboard.DashboardFragment;
 import com.osh.ui.home.HomeFragment;
 import com.osh.ui.notifications.NotificationsFragment;
 import com.osh.ui.wbb12.WBB12Fragment;
-import com.osh.value.IValueManager;
-import com.osh.wbb12.IWBB12Manager;
+import com.osh.service.IValueService;
+import com.osh.wbb12.service.IWBB12Service;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialMenuInflater;
@@ -35,19 +38,25 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends AppCompatActivity {
 
     @Inject
-    ICommunicationManager communicationManager;
+    ICommunicationService communicationService;
 
     @Inject
-    IActorManager actorManager;
+    IActorService actorService;
 
     @Inject
     IDoorUnlockManager doorUnlockManager;
 
     @Inject
-    IWBB12Manager wbb12Manager;
+    IWBB12Service wbb12Service;
 
     @Inject
-    IValueManager valueManager;
+    IValueService valueService;
+
+    @Inject
+    IDatabaseService databaseService;
+
+    @Inject
+    IDatamodelService datamodelService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = HomeFragment.newInstance();
                 break;
             case R.id.navigation_dashboard:
-                selectedFragment = DashboardFragment.newInstance(valueManager);
+                selectedFragment = DashboardFragment.newInstance(valueService);
                 break;
             case R.id.navigation_notifications:
-                selectedFragment = NotificationsFragment.newInstance();
+                selectedFragment = AreaFragment.newInstance(datamodelService, valueService, actorService);
                 break;
             case R.id.navigation_wbb12:
-                selectedFragment = WBB12Fragment.newInstance(wbb12Manager);
+                selectedFragment = WBB12Fragment.newInstance(wbb12Service);
                 break;
         }
         // It will help to replace the
@@ -102,10 +111,20 @@ public class MainActivity extends AppCompatActivity {
         Drawable wifiOnIcon = MaterialDrawableBuilder.with(this).setIcon(MaterialDrawableBuilder.IconValue.WIFI).setColor(Color.WHITE).build();
         Drawable wifiOffIcon = MaterialDrawableBuilder.with(this).setIcon(MaterialDrawableBuilder.IconValue.WIFI_OFF).setColor(Color.WHITE).build();
 
-        MenuItem connectedStateIcon = menu.findItem(R.id.connected_state_icon);
-        communicationManager.connectedState().addItemChangeListener(connectedState -> {
+        Drawable dbOnIcon = MaterialDrawableBuilder.with(this).setIcon(MaterialDrawableBuilder.IconValue.DATABASE).setColor(Color.WHITE).build();
+        Drawable dbOffIcon = MaterialDrawableBuilder.with(this).setIcon(MaterialDrawableBuilder.IconValue.DATABASE_MINUS).setColor(Color.WHITE).build();
+
+        MenuItem mqttConnectedStateIcon = menu.findItem(R.id.mqtt_connected_state_icon);
+        communicationService.connectedState().addItemChangeListener(connectedState -> {
             runOnUiThread(() -> {
-                connectedStateIcon.setIcon(connectedState ? wifiOnIcon : wifiOffIcon);
+                mqttConnectedStateIcon.setIcon(connectedState ? wifiOnIcon : wifiOffIcon);
+            });
+        }, true);
+
+        MenuItem dbConnectedStateIcon = menu.findItem(R.id.db_connected_state_icon);
+        datamodelService.loadedState().addItemChangeListener(loadedState -> {
+            runOnUiThread(() -> {
+                dbConnectedStateIcon.setIcon(loadedState ? dbOnIcon : dbOffIcon);
             });
         }, true);
 
@@ -124,20 +143,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void testShutterUp() {
         ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_UP);
-        communicationManager.sendMessage(msg);
+        communicationService.sendMessage(msg);
     }
 
     public void testShutterStop() {
         ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_STOP);
-        communicationManager.sendMessage(msg);
+        communicationService.sendMessage(msg);
     }
 
     public void testShutterDown() {
         ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_DOWN);
-        communicationManager.sendMessage(msg);
+        communicationService.sendMessage(msg);
     }
 }
 

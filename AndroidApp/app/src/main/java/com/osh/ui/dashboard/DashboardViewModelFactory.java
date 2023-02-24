@@ -3,14 +3,13 @@ package com.osh.ui.dashboard;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.osh.value.IValueManager;
-import com.osh.value.ValueManager;
+import com.osh.service.IValueService;
 
 public class DashboardViewModelFactory  implements ViewModelProvider.Factory {
 
-    private final IValueManager valueManager;
+    private final IValueService valueManager;
 
-    public DashboardViewModelFactory(IValueManager valueManager) {
+    public DashboardViewModelFactory(IValueService valueManager) {
         this.valueManager = valueManager;
     }
 

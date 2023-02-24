@@ -3,11 +3,9 @@ package com.osh.ui.dashboard;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.osh.service.IValueService;
 import com.osh.value.BooleanValue;
-import com.osh.value.IValueManager;
-import com.osh.value.ValueBase;
 import com.osh.value.ValueGroup;
-import com.osh.value.ValueManager;
 import com.osh.value.ValueType;
 
 public class DashboardViewModel extends ViewModel {
@@ -15,7 +13,7 @@ public class DashboardViewModel extends ViewModel {
     private final MutableLiveData<Boolean> relayUp;
     private final MutableLiveData<Boolean> relayDown;
 
-    public DashboardViewModel(IValueManager valueManager) {
+    public DashboardViewModel(IValueService valueManager) {
         relayUp = new MutableLiveData<>();
         relayDown = new MutableLiveData<>();
 

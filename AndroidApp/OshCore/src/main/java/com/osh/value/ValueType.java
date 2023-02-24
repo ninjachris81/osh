@@ -13,6 +13,16 @@ public enum ValueType {
     VT_ALARM_SOUND(60),
     VT_HEAT_PUMP_DATA(80);
 
+    private int value;
 	ValueType(int value) {
+        this.value = value;
 	}
+
+    public static ValueType of(int value) {
+        for (ValueType vt : ValueType.values()) {
+            if (vt.value == value) return vt;
+        }
+
+        return null;
+    }
 }

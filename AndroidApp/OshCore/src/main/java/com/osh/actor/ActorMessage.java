@@ -17,6 +17,10 @@ public class ActorMessage extends MessageBase {
 		this.cmd = cmd;
 	}
 
+	public ActorMessage(ActorBase actor, ActorCmds actorCmd) {
+		this(actor.getValueGroup().getId(), actor.getId(), actorCmd);
+	}
+
 	@Override
 	public MESSAGE_TYPE getMessageType() {
 		return MESSAGE_TYPE.MESSAGE_TYPE_ACTOR;

@@ -12,8 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.osh.MainActivity;
 import com.osh.databinding.FragmentDashboardBinding;
-import com.osh.value.IValueManager;
-import com.osh.value.ValueManager;
+import com.osh.service.IValueService;
 
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
@@ -21,13 +20,13 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
-    private final IValueManager valueManager;
+    private final IValueService valueManager;
 
-    public DashboardFragment(IValueManager valueManager) {
+    public DashboardFragment(IValueService valueManager) {
         this.valueManager = valueManager;
     }
 
-    public static Fragment newInstance(IValueManager valueManager) {
+    public static Fragment newInstance(IValueService valueManager) {
         return new DashboardFragment(valueManager);
     }
 

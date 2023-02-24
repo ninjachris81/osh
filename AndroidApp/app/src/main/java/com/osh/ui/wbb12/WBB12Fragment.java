@@ -13,27 +13,26 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.osh.databinding.FragmentWbb12Binding;
-import com.osh.wbb12.IWBB12Manager;
+import com.osh.wbb12.service.IWBB12Service;
 
 public class WBB12Fragment extends Fragment {
 
     private FragmentWbb12Binding binding;
 
-    private final IWBB12Manager wbb12Manager;
+    private final IWBB12Service wbb12Manager;
 
     private WBB12ViewModel wbb12ViewModel;
 
-    public WBB12Fragment(IWBB12Manager wbb12Manager) {
+    public WBB12Fragment(IWBB12Service wbb12Manager) {
         this.wbb12Manager = wbb12Manager;
     }
 
-    public static WBB12Fragment newInstance(IWBB12Manager wbb12Manager) {
+    public static WBB12Fragment newInstance(IWBB12Service wbb12Manager) {
         return new WBB12Fragment(wbb12Manager);
     }
 

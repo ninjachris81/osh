@@ -1,12 +1,7 @@
 package com.osh.device;
 
-import com.osh.manager.IManagerRegistration;
-import com.osh.manager.ManagerBase;
+import com.osh.manager.IMqttSupport;
 
-public abstract class DeviceDiscoveryManagerBase extends ManagerBase {
-
-	public DeviceDiscoveryManagerBase(String id, IManagerRegistration managerRegistration) {
-		super(id, managerRegistration);
-	}
+public abstract class DeviceDiscoveryManagerBase implements IMqttSupport {
 
 }

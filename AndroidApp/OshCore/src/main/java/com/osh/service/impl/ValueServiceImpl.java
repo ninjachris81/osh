@@ -1,4 +1,4 @@
-package com.osh.value;
+package com.osh.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,23 +8,26 @@ import org.slf4j.LoggerFactory;
 
 import com.osh.communication.MessageBase;
 import com.osh.communication.MessageBase.MESSAGE_TYPE;
-import com.osh.manager.IManagerRegistration;
-import com.osh.manager.ManagerBase;
-import com.osh.manager.ManagerRegistration.INSTANCE_ROLE;
-import com.osh.utils.IItemChangeListener;
+import com.osh.service.ICommunicationService;
+import com.osh.service.IValueService;
 import com.osh.utils.IObservableManager;
 import com.osh.utils.ObservableManagerImpl;
+import com.osh.value.ValueBase;
+import com.osh.value.ValueMessage;
 
-public class ValueManager extends ManagerBase implements IValueManager {
+public class ValueServiceImpl implements IValueService {
 	
-	private static final Logger log = LoggerFactory.getLogger(ValueManager.class);
+	private static final Logger log = LoggerFactory.getLogger(ValueServiceImpl.class);
 
 	protected final Map<String, ValueBase> values = new HashMap<>();
 
 	protected final IObservableManager observableManager = new ObservableManagerImpl();
 
-	public ValueManager(IManagerRegistration managerRegistration) {
-		super("ValueManager", managerRegistration);
+	protected final ICommunicationService communicationService;
+
+	public ValueServiceImpl(ICommunicationService communicationService) {
+		this.communicationService = communicationService;
+		communicationService.registerMessageType(getMessageType(), this);
 	}
 
 	@Override
@@ -39,11 +42,6 @@ public class ValueManager extends ManagerBase implements IValueManager {
 			
 			valueReceived(((ValueMessage)msg).getValueGroupId(), ((ValueMessage)msg).getValueId(), ((ValueMessage)msg).getRawValue());
 		}
-	}
-
-	@Override
-	public void initComplete() {
-
 	}
 
 	private void valueReceived(String valueGroupId, String valueId, Object newValue) {
@@ -82,4 +80,12 @@ public class ValueManager extends ManagerBase implements IValueManager {
 	public void registerValue(ValueBase value) {
 		values.put(value.getFullId(), value);
 	}
+
+	@Override
+	public void publishValue(ValueBase value) {
+		ValueMessage msg = new ValueMessage(value);
+		communicationService.sendMessage(msg);
+
+	}
+
 }

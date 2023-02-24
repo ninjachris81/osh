@@ -1,16 +1,18 @@
-package com.osh.wbb12;
+package com.osh.wbb12.service.impl;
 
 import com.osh.communication.MessageBase;
-import com.osh.manager.IManagerRegistration;
-import com.osh.manager.ManagerBase;
+import com.osh.service.IDatamodelService;
+import com.osh.service.IValueService;
 import com.osh.value.DoubleValue;
-import com.osh.value.IValueManager;
 import com.osh.value.IntegerValue;
 import com.osh.value.ValueBase;
 import com.osh.value.ValueGroup;
 import com.osh.value.ValueType;
+import com.osh.wbb12.WBB12_Enums;
+import com.osh.wbb12.WBB12_Holding_Registers;
+import com.osh.wbb12.WBB12_Input_Registers;
+import com.osh.wbb12.service.IWBB12Service;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-public class WBB12Manager extends ManagerBase implements IWBB12Manager {
+public class WBB12ServiceImpl implements IWBB12Service {
 
-    private static final Logger log = LoggerFactory.getLogger(WBB12Manager.class);
+    private static final Logger log = LoggerFactory.getLogger(WBB12ServiceImpl.class);
 
     private static final int WBB12_NoWarning = 65535;
     private static final int WBB12_Temperature_NoSensor = -32768;
@@ -114,7 +116,7 @@ public class WBB12Manager extends ManagerBase implements IWBB12Manager {
 
 
     protected LinkedHashMap<String, WBB12Format> wbb12InputFormats = new LinkedHashMap<>();
-    protected IValueManager valueManager;
+    protected IValueService valueManager;
 
     protected final ValueGroup wbb12ValueGroup = new ValueGroup("wbb12");
 
@@ -128,11 +130,16 @@ public class WBB12Manager extends ManagerBase implements IWBB12Manager {
         return valueManager.getValue(fullId);
     }
 
-    public WBB12Manager(IManagerRegistration managerRegistration, IValueManager valueManager) {
-        super("WBB12Manager", managerRegistration);
-
+    public WBB12ServiceImpl(IDatamodelService datamodelService, IValueService valueManager) {
         this.valueManager = valueManager;
 
+        datamodelService.loadedState().addItemChangeListener(isLoaded -> {
+            if (isLoaded) {
+                registerItems();
+            }
+        }, true);
+    }
+    private void registerItems() {
         /*
         INPUTS
          */
@@ -222,10 +229,6 @@ public class WBB12Manager extends ManagerBase implements IWBB12Manager {
     public void handleReceivedMessage(MessageBase msg) {
     }
 
-    @Override
-    public void initComplete() {
-    }
-
     private void registerInputRegister(WBB12_Input_Registers reg, WBB12Unit unit, boolean isDouble) {
         if (unit == WBB12Unit.Enum) {
             log.warn("Should provide enum type");
@@ -238,11 +241,9 @@ public class WBB12Manager extends ManagerBase implements IWBB12Manager {
 
         log.info("Registering WBB12 input " + mqttName);
 
-        ValueBase val;
-        if (isDouble) {
-            val = new DoubleValue(wbb12ValueGroup, mqttName, ValueType.VT_HEAT_PUMP_DATA);
-        } else {
-            val = new IntegerValue(wbb12ValueGroup, mqttName, ValueType.VT_HEAT_PUMP_DATA);
+        ValueBase val = valueManager.getValue(ValueBase.getFullId(wbb12ValueGroup.getId(), mqttName));
+        if (val == null) {
+            log.warn("Unable to find value in datamodel: " + mqttName);
         }
 
         if (wbb12InputFormats.containsValue(val.getFullId())) {

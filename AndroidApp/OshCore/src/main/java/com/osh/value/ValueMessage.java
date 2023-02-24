@@ -25,6 +25,10 @@ public class ValueMessage extends MessageBase {
 	    }
 	}
 
+	public ValueMessage(ValueBase value) {
+		this(value.getValueGroup().getId(), value.getId(), value.getValue());
+	}
+
 	@Override
 	public MESSAGE_TYPE getMessageType() {
 		return MESSAGE_TYPE.MESSAGE_TYPE_VALUE;

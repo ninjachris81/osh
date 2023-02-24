@@ -4,7 +4,7 @@ import com.osh.SerializationSupport;
 import com.osh.value.ValueGroup;
 import com.osh.value.ValueType;
 
-public class DigitalActor extends ActorBase implements SerializationSupport {
+public class DigitalActor extends ActorBase<DigitalActor, Boolean> implements SerializationSupport {
 	
 	protected boolean isAsync;
 
@@ -42,9 +42,9 @@ public class DigitalActor extends ActorBase implements SerializationSupport {
 	    }
 	}
 	
-	protected Object _updateValue(Object newValue) {
+	protected Boolean _updateValue(Object newValue) {
 	    if (newValue instanceof Boolean) {
-	        return newValue;
+	        return (Boolean) newValue;
 	    } else {
 	        return null;
 	    }
