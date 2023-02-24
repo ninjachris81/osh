@@ -1,8 +1,8 @@
 [Unit]
-Description=OSH Core Service
+Description=OSH Shutter 2 Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
-After=network.target postgresql.service
+After=network.target postgresql.service CoreService.service RS485RelayService2.service
 
 [Service]
 ## use 'Type=forking' if the service backgrounds itself
@@ -10,16 +10,16 @@ After=network.target postgresql.service
 #Type=forking
 Type=simple
 
-WorkingDirectory=/etc/osh/CoreService
+WorkingDirectory=/etc/osh/ShutterService2
 
 #User=root
 
 ## here we can set custom environment variables
-ExecStart=/etc/osh/deploy/rpi/Services/CoreService/start.sh
-ExecStop=/etc/osh/deploy/rpi/Services/CoreService/stop.sh
+ExecStart=/etc/osh/deploy/rpi/Services/ShutterService2/start.sh
+ExecStop=/etc/osh/deploy/rpi/Services/ShutterService2/stop.sh
 
 # Useful during debugging; remove it once the service is working
-#StandardOutput=file:/var/log/osh_core_service.log
+#StandardOutput=file:/var/log/osh_rs485_relay_service.log
 #StandardError=syslog
 
 [Install]
