@@ -30,6 +30,7 @@ DEFINES += IS_OSH_CORE_SERVICE
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    actor/server/togglecontroller.cpp \
         device/server/serverdevicediscoverymanager.cpp \
     processor/server/commonscripts.cpp \
     processor/server/localstorage.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
         processor/server/modelprocessormanager.cpp
 
 HEADERS += \
+    actor/server/togglecontroller.h \
         device/server/serverdevicediscoverymanager.h \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \

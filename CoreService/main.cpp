@@ -17,6 +17,7 @@
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
 #include "database/simpledatabasemanager.h"
+#include "actor/server/togglecontroller.h"
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +47,10 @@ int main(int argc, char *argv[])
     DatabaseManager databaseManager;
     SimpleDatabaseManager simpleDatabaseManager;
 
+    ToggleController toggleController(&controllerManager, "ToggleController");
+
+    controllerManager.registerController(&toggleController);
+
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&deviceDiscoveryManager);
     managerRegistration.registerManager(&valueManager);
@@ -61,6 +66,8 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&simpleDatabaseManager);
 
     managerRegistration.init(&config);
+
+    toggleController.bindManager(&actorManager, &valueManager);
 
     return a.exec();
 }

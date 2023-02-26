@@ -1,5 +1,5 @@
-#ifndef DIGITALACTOR_H
-#define DIGITALACTOR_H
+#ifndef TOGGLEACTOR_H
+#define TOGGLEACTOR_H
 
 #include <QObject>
 
@@ -10,13 +10,11 @@
 
 #include "value/booleanvalue.h"
 
-class SHARED_LIB_EXPORT DigitalActor : public ActorBase
+class SHARED_LIB_EXPORT ToggleActor : public ActorBase
 {
     Q_OBJECT
 public:
-
-    explicit DigitalActor();
-    explicit DigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, QObject *parent = nullptr);
+    explicit ToggleActor(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 
@@ -25,14 +23,12 @@ public:
     /*virtual*/ bool isAsync();
 
 protected:
-    bool m_isAsync;
-
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
 
-signals:
-    void statusRequested(bool status);
 
-public slots:
+signals:
+    void requestToggle();
+
 };
 
-#endif // DIGITALACTOR_H
+#endif // TOGGLEACTOR_H

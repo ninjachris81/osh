@@ -14,6 +14,7 @@
 #define ACTOR_START 5
 #define ACTOR_STOP  6
 #define ACTOR_PAUSE 7
+#define ACTOR_TOGGLE 8
 
 // specific ones
 #define ACTOR_SHUTTER_HALF_CLOSE        40      // half, but closed

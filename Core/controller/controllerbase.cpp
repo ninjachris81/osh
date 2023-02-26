@@ -2,7 +2,7 @@
 
 #include "controller/controllermanager.h"
 
-ControllerBase::ControllerBase(ControllerManager *manager, QString id, QObject *parent) : Identifyable(id), QObject(parent), m_manager(manager)
+ControllerBase::ControllerBase(ControllerManager *manager, QString id, QObject *parent) : QObject(parent), Identifyable(id), m_manager(manager)
 {
 
 }

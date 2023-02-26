@@ -127,6 +127,78 @@
             android:layout_marginStart="30dp"
             app:layout_constraintStart_toEndOf="@+id/labelHFO"
             app:layout_constraintTop_toTopOf="@+id/labelHFO" />
+
+        <ToggleButton
+            android:id="@+id/shutterSZ"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-22dp"
+            android:layout_marginTop="85dp"
+            android:rotation="-90"
+            android:rotationY="30"
+            android:text="ToggleButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/shutterWZ1"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-22dp"
+            android:layout_marginTop="235dp"
+            android:rotation="-90"
+            android:rotationY="30"
+            android:text="ToggleButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/shutterWZ2"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-22dp"
+            android:layout_marginTop="400dp"
+            android:rotation="-90"
+            android:rotationY="30"
+            android:text="ToggleButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/shutterUZ"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="-22dp"
+            android:rotation="90"
+            android:rotationY="-30"
+            android:text="ToggleButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/shutterB1"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="170dp"
+            android:layout_marginEnd="-22dp"
+            android:rotation="90"
+            android:rotationY="-30"
+            android:text="ToggleButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/shutterB2"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="290dp"
+            android:layout_marginEnd="-22dp"
+            android:rotation="90"
+            android:rotationY="-30"
+            android:text="ToggleButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

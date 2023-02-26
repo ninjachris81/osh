@@ -13,6 +13,8 @@ class SHARED_LIB_EXPORT ActorBase : public ValueBase
 {
     Q_OBJECT
 public:
+    static QLatin1String PROPERTY_IS_ASYNC;
+
     explicit ActorBase();
     explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 

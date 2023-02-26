@@ -85,12 +85,14 @@ public:
 private slots:
     void onUpdateSignalRate();
 
+protected:
+    bool m_alwaysEmit = true;
+
 private:
     VALUE_TYPE m_valueType;
     ValueGroup* m_valueGroup;
     QVariant m_value;
     qint64 m_lastUpdate = 0;
-    bool m_alwaysEmit = true;
     bool m_persist = false;
 
     qint64 m_lastMaintenance = 0;

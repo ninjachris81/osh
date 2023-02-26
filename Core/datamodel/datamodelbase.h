@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QList>
 
+#include "actor/toggleactor.h"
 #include "sharedlib.h"
 
 #include "device/knowndevice.h"
@@ -49,6 +50,7 @@ public:
 
     KnownDevice* addKnownDevice(QString id, QString serviceId, QString name);
     ValueGroup* addValueGroup(QString id);
+    ToggleActor* addToggleActor(ValueGroup* valueGroup, QString id);
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync);
     ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration);
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);

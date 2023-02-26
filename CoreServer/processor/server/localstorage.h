@@ -21,8 +21,16 @@ public:
 
     Q_INVOKABLE void unset(QString key);
 
+    Q_INVOKABLE void setObject(QString key, QObject* obj);
+
+    Q_INVOKABLE QObject* getObject(QString key);
+
+    Q_INVOKABLE void unsetObject(QString key);
+
+
 private:
     QMap<QString, QVariant> m_values;
+    QMap<QString, QObject*> m_objects;
 
 signals:
 

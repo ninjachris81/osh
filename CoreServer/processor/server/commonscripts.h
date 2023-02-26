@@ -21,7 +21,9 @@ public:
 
     Q_INVOKABLE bool applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs);
 
-    Q_INVOKABLE bool applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, quint64 triggerTimeoutMs);
+    Q_INVOKABLE bool initSwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString toggleActorFullId);
+
+    Q_INVOKABLE bool applySwitchTimeoutLogic(QString toggleActorFullId, quint64 triggerTimeoutMs);
 
     Q_INVOKABLE bool applyTempValveLogic(QString tempFullId, QString tempTargetFullId, QString tempValveActorFullId, int adjustIntervalMs, double fullDeltaThresholdTemp = 5.0, int factorIntervalMs = 10000);
 
@@ -42,6 +44,10 @@ public:
     Q_INVOKABLE void setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState = true);
     Q_INVOKABLE bool getIntervalState(QString key);
     Q_INVOKABLE void clearInterval(QString key);
+
+private slots:
+    void onInitSwitchLogic_inputSensorValueChanged();
+    void onInitSwitchLogic_toggleActorValueChanged();
 
 private:
     DatamodelBase* m_datamodel;

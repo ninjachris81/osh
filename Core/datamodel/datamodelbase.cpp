@@ -55,6 +55,14 @@ ValueGroup* DatamodelBase::addValueGroup(QString id) {
     return valueGroup;
 }
 
+ToggleActor* DatamodelBase::addToggleActor(ValueGroup* valueGroup, QString id) {
+    ToggleActor* actor = new ToggleActor(valueGroup, id);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+
 DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync) {
     DigitalActor* actor = new DigitalActor(valueGroup, id, valueType, isAsync);
     actor->withValueTimeout(timeout);

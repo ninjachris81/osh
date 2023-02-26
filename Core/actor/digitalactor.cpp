@@ -2,8 +2,6 @@
 
 #include <QDebug>
 
-QLatin1String DigitalActor::PROPERTY_IS_ASYNC = QLatin1String("isAsync");
-
 DigitalActor::DigitalActor() : ActorBase() {
 }
 

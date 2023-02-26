@@ -304,7 +304,7 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	            return new ValueMessage(firstLevelPath.get(0), firstLevelPath.get(1), rawValue);
 	        }
 	        case MESSAGE_TYPE_ACTOR: {
-	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), ActorCmds.values()[Integer.parseInt(parseSingleValue(rawValue).toString())]);
+	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), ActorCmds.of(Integer.parseInt(parseSingleValue(rawValue).toString())));
 	        }
 	        case MESSAGE_TYPE_DEVICE_DISCOVERY: {
 	            return new DeviceDiscoveryMessage(firstLevelPath.get(0), firstLevelPath.get(1));

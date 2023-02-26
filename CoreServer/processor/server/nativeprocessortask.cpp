@@ -9,10 +9,14 @@ NativeProcessorTask::NativeProcessorTask(QString id, ProcessorTaskType taskType,
 {
 
     if (scriptCode.startsWith("CommonScripts.") && scriptCode.endsWith(")")) {
-        if (scriptCode.startsWith("CommonScripts.applySwitchLogic")) {
-            m_nativeFunction = NativeProcessorTask::NFT_APPLY_SWITCH_LOGIC;
+        if (scriptCode.startsWith("CommonScripts.initSwitchLogic")) {
+            m_nativeFunction = NativeProcessorTask::NFT_INIT_SWITCH_LOGIC;
+        } else if (scriptCode.startsWith("CommonScripts.applySwitchTimeoutLogic")) {
+            m_nativeFunction = NativeProcessorTask::NFT_APPLY_SWITCH_TIMEOUT_LOGIC;
         } else if (scriptCode.startsWith("CommonScripts.applyShutterLogic")) {
             m_nativeFunction = NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC;
+        } else {
+            qFatal("Unsupported script operation");
         }
 
         int start = scriptCode.indexOf("(");
@@ -58,8 +62,10 @@ QVariant NativeProcessorTask::run() {
     }
 
     switch(m_nativeFunction) {
-    case NFT_APPLY_SWITCH_LOGIC:
-        return m_commonScripts->applySwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
+    case NFT_INIT_SWITCH_LOGIC:
+        return m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
+    case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
+        return m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
     case NFT_APPLY_SHUTTER_LOGIC:
         return m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt());
     default:
@@ -91,8 +97,10 @@ QVariantList NativeProcessorTask::nativeParams() {
 
 QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::NativeFunctionType nativeFunction) {
     switch(nativeFunction) {
-    case NativeProcessorTask::NFT_APPLY_SWITCH_LOGIC:
-        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int;
+    case NativeProcessorTask::NFT_INIT_SWITCH_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String;
+    case NativeProcessorTask::NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::Int;
     case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::Int;
     default:

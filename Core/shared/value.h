@@ -40,6 +40,8 @@
 #define VALUE_TYPE_DOOR_OPENER      70
 #define VALUE_TYPE_HEAT_PUMP_DATA   80
 
+#define VALUE_TYPE_VIRTUAL_ACTOR    90
+
 // static vars
 #define VALUE_TYPE_STATIC_TEMP  100
 

@@ -12,6 +12,7 @@ import com.osh.Identifyable;
 import com.osh.actor.ActorBase;
 import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
+import com.osh.actor.ToggleActor;
 import com.osh.datamodel.meta.KnownArea;
 import com.osh.datamodel.meta.KnownRoom;
 import com.osh.device.KnownDevice;
@@ -90,6 +91,12 @@ public class DatamodelBase extends Identifyable {
 	public ShutterActor addShutterActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, boolean tiltSupport, int fullCloseDuration) {
 		ShutterActor actor = new ShutterActor(valueGroup, id, valueType);
 		actor.withValueTimeout(timeout);
+		actors.put(actor.getFullId(), actor);
+		return actor;
+	}
+
+	public ToggleActor addToggleActor(ValueGroup valueGroup, String id) {
+		ToggleActor actor = new ToggleActor(valueGroup, id);
 		actors.put(actor.getFullId(), actor);
 		return actor;
 	}
@@ -180,4 +187,5 @@ public class DatamodelBase extends Identifyable {
 		Collections.sort(ka, Comparator.comparingInt(KnownArea::getDisplayOrder));
 		return ka;
     }
+
 }

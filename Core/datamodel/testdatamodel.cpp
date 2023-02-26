@@ -6,8 +6,10 @@
 #include "processor/processortaskbase.h"
 #include <QDebug>
 
-TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", parent) {
+TestDatamodel::TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject *parent) : DatamodelBase("testdatamodel", parent) {
     iDebug() << Q_FUNC_INFO;
+
+    setProcessorTaskFactory(processorTaskFactory);
 
     // DEVICES
     addKnownDevice("349785676", "CoreServer", "Server");
@@ -53,7 +55,22 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     KnownRoom* ogMainFloor = addKnownRoom(og, "hfo", "HFO");
 
     // roof
+    ValueGroup* lightToggles = addValueGroup("lightToggles0");
+    egFloor->addActor(      addToggleActor(lightToggles, "0"));
+    workingRoom->addActor(  addToggleActor(lightToggles, "1"));
+    kitchen->addActor(      addToggleActor(lightToggles, "2"));
+    diningRoom->addActor(   addToggleActor(lightToggles, "3"));
+    toilet->addActor(       addToggleActor(lightToggles, "4"));
+    supplyRoom->addActor(   addToggleActor(lightToggles, "5"));
+    egMainFloor->addActor(  addToggleActor(lightToggles, "6"));
+    egSideFloor->addActor(  addToggleActor(lightToggles, "7"));
 
+    sleepingRoom->addActor( addToggleActor(lightToggles, "8"));
+    clothingRoom->addActor( addToggleActor(lightToggles, "9"));
+    bathRoom->addActor(     addToggleActor(lightToggles, "10"));
+    livingRoom->addActor(   addToggleActor(lightToggles, "11"));
+    ogFloor->addActor(      addToggleActor(lightToggles, "12"));
+    ogMainFloor->addActor(  addToggleActor(lightToggles, "13"));
 
     // TEMP VALVES
     ValueGroup* nodeTempValves = addValueGroup("tempValves");
@@ -102,10 +119,10 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     supplyRoom->addActor(   addShutterActor(nodeAllShutters, "4", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000));
     egSideFloor->addActor(  addShutterActor(nodeAllShutters, "5", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000));
 
-    sleepingRoom->addActor( addShutterActor(nodeAllShutters, "6", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 20000));
+    sleepingRoom->addActor( addShutterActor(nodeAllShutters, "6", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 50000));
     clothingRoom->addActor( addShutterActor(nodeAllShutters, "7", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000));
     bathRoom->addActor(     addShutterActor(nodeAllShutters, "8", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000));
-    livingRoom->addActor(   addShutterActor(nodeAllShutters, "9", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 20000));
+    livingRoom->addActor(   addShutterActor(nodeAllShutters, "9", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 50000));
 
     ValueGroup* nodeShutterRelays0 = addValueGroup("shutterRelays0");
 
@@ -363,7 +380,10 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
 
 
     // eg
-    addProcessorTask("eg.egFloor.light",        ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.0', 'allSwitches0.0', 3600000)");
+    addProcessorTask("eg.egFloor.light.init",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_ONLY_ONCE, "CommonScripts.initSwitchLogic('allRelays0.0', 'allSwitches0.0', 'lightToggles0.0')");
+    addProcessorTask("eg.egFloor.light",        ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchTimeoutLogic('lightToggles0.0', 10000)", "", 1000);
+
+    /*
     addProcessorTask("eg.workingRoom.light",    ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.1', 'allSwitches0.1', 3600000)");
     addProcessorTask("eg.kitchen.light",        ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.2', 'allSwitches0.2', 3600000)");
     addProcessorTask("eg.diningRoom.light",     ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.3', 'allSwitches0.3', 3600000)");
@@ -379,6 +399,7 @@ TestDatamodel::TestDatamodel(QObject *parent) : DatamodelBase("testdatamodel", p
     addProcessorTask("og.livingRoom.light",     ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.19', 'allSwitches0.11', 3600000)");
     addProcessorTask("og.ogFloor.light",        ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.20', 'allSwitches0.12', 3600000)");
     addProcessorTask("og.tbd.light",            ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.21', 'allSwitches0.13', 3600000)");
+    */
 
 
     // eg

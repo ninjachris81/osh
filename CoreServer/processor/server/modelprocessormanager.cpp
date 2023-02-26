@@ -111,6 +111,28 @@ void ModelProcessorManager::stop() {
 void ModelProcessorManager::executeTasks() {
     QMapIterator<QString, ProcessorTaskBase*> it(m_processorTasks);
 
+    // first, execute all only once's
+    if (m_isFirstRun) {
+        while(it.hasNext()) {
+            it.next();
+
+            ProcessorExecutorBase* executor = m_processorExecutors.value(it.value()->taskType());
+
+            if (it.value()->taskTriggerType() == ProcessorTaskBase::PTTT_ONLY_ONCE) {
+                if (m_isFirstRun) {
+                    QVariant result = executor->execute(it.value());
+                    //QVariant result = it.value()->run(&m_engine, m_commonScripts);
+                    if (it.value()->publishResult()) {
+                        publishScriptResult(it.key(), result);
+                    }
+                }
+            }
+        }
+
+        m_isFirstRun = false;
+    }
+
+
     while(it.hasNext()) {
         it.next();
 
@@ -126,22 +148,11 @@ void ModelProcessorManager::executeTasks() {
                 }
             }
             break;
-        case ProcessorTaskBase::PTTT_ONLY_ONCE:
-            if (m_isFirstRun) {
-                QVariant result = executor->execute(it.value());
-                //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-                if (it.value()->publishResult()) {
-                    publishScriptResult(it.key(), result);
-                }
-            }
-            break;
         case ProcessorTaskBase::PTTT_TRIGGER:
             // will triggered externally
             break;
         }
     }
-
-    m_isFirstRun = false;
 }
 
 void ModelProcessorManager::publishScriptResult(QString taskId, QVariant value) {

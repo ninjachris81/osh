@@ -158,6 +158,8 @@ void DynamicDatamodel::addActor(QString typeName, ValueGroup *valueGroup, QStrin
     } else if (typeName == "ShutterActor") {
         addShutterActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
                         properties.value(ShutterActor::PROPERTY_TILT_SUPPORT).toBool(), properties.value(ShutterActor::PROPERTY_FULL_CLOSE_DURATION).toInt() );
+    } else if (typeName == "ToggleActor") {
+        addToggleActor(valueGroup, id);
     } else {
         iWarning() << "Unsupported type name" << typeName;
     }
