@@ -38,30 +38,30 @@ public class ogFragment extends AreaFragmentBase {
         View root = inflater.inflate(R.layout.fragment_og, container, false);
 
         String relayValueGroupId= "allRelays0";
-        String switchValueGroupId = "allSwitches0";
+        String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
 
         initRoom(root, "sz", R.id.labelSZ);
-        initRoomLight(root, relayValueGroupId, "16", switchValueGroupId, "8", R.id.lightSZ);
+        initRoomLight(root, relayValueGroupId, "16", toggleValueGroupId, "8", R.id.lightSZ);
         initRoomShutter(root, shutterValueGroupId, "6", R.id.shutterSZ);
 
         initRoom(root, "uz", R.id.labelUZ);
-        initRoomLight(root, relayValueGroupId, "17", switchValueGroupId, "9", R.id.lightUZ);
+        initRoomLight(root, relayValueGroupId, "17", toggleValueGroupId, "9", R.id.lightUZ);
         initRoomShutter(root, shutterValueGroupId, "7", R.id.shutterUZ);
 
         initRoom(root, "b", R.id.labelB);
-        initRoomLight(root, relayValueGroupId, "18", switchValueGroupId, "10", R.id.lightB);
+        initRoomLight(root, relayValueGroupId, "18", toggleValueGroupId, "10", R.id.lightB);
         initRoomShutter(root, shutterValueGroupId, "8", R.id.shutterB1);
 
         initRoom(root, "wz", R.id.labelWZ);
-        initRoomLight(root, relayValueGroupId, "19", switchValueGroupId, "11", R.id.lightWZ);
+        initRoomLight(root, relayValueGroupId, "19", toggleValueGroupId, "11", R.id.lightWZ);
         initRoomShutter(root, shutterValueGroupId, "9", R.id.shutterWZ1);
 
         initRoom(root, "fog", R.id.labelFOG);
-        initRoomLight(root, relayValueGroupId, "20", switchValueGroupId, "12", R.id.lightFOG);
+        initRoomLight(root, relayValueGroupId, "20", toggleValueGroupId, "12", R.id.lightFOG);
 
         initRoom(root, "hfo", R.id.labelHFO);
-        initRoomLight(root, relayValueGroupId, "21", switchValueGroupId, "13", R.id.lightHFO);
+        initRoomLight(root, relayValueGroupId, "21", toggleValueGroupId, "13", R.id.lightHFO);
 
         return root;
     }

@@ -45,34 +45,34 @@ public class egFragment extends AreaFragmentBase {
         View root = inflater.inflate(R.layout.fragment_eg, container, false);
 
         String relayValueGroupId= "allRelays0";
-        String switchValueGroupId = "allSwitches0";
+        String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
 
         initRoom(root, "feg", R.id.labelFEG);
-        initRoomLight(root, relayValueGroupId, "0", switchValueGroupId, "0", R.id.lightFEG);
+        initRoomLight(root, relayValueGroupId, "0", toggleValueGroupId, "0", R.id.lightFEG);
 
         initRoom(root, "az", R.id.labelAZ);
-        initRoomLight(root, relayValueGroupId, "1", switchValueGroupId, "1", R.id.lightAZ);
+        initRoomLight(root, relayValueGroupId, "1", toggleValueGroupId, "1", R.id.lightAZ);
         initRoomShutter(root, shutterValueGroupId, "0", R.id.shutterAZ);
 
         initRoom(root, "k", R.id.labelK);
-        initRoomLight(root, relayValueGroupId, "2", switchValueGroupId, "2", R.id.lightK);
+        initRoomLight(root, relayValueGroupId, "2", toggleValueGroupId, "2", R.id.lightK);
         initRoomShutter(root, shutterValueGroupId, "1", R.id.shutterK);
 
         initRoom(root, "ez", R.id.labelEZ);
-        initRoomLight(root, relayValueGroupId, "3", switchValueGroupId, "3", R.id.lightEZ);
+        initRoomLight(root, relayValueGroupId, "3", toggleValueGroupId, "3", R.id.lightEZ);
         initRoomShutter(root, shutterValueGroupId, "2", R.id.shutterEZ);
 
         initRoom(root, "wc", R.id.labelWC);
-        initRoomLight(root, relayValueGroupId, "4", switchValueGroupId, "4", R.id.lightWC);
+        initRoomLight(root, relayValueGroupId, "4", toggleValueGroupId, "4", R.id.lightWC);
         initRoomShutter(root, shutterValueGroupId, "3", R.id.shutterWC);
 
         initRoom(root, "vz", R.id.labelVZ);
-        initRoomLight(root, relayValueGroupId, "5", switchValueGroupId, "5", R.id.lightVZ);
+        initRoomLight(root, relayValueGroupId, "5", toggleValueGroupId, "5", R.id.lightVZ);
         initRoomShutter(root, shutterValueGroupId, "4", R.id.shutterVZ);
 
         initRoom(root, "hfe", R.id.labelHFE);
-        initRoomLight(root, relayValueGroupId, "6", switchValueGroupId, "6", R.id.lightHFE);
+        initRoomLight(root, relayValueGroupId, "6", toggleValueGroupId, "6", R.id.lightHFE);
         // TODO: NFE
 
         return root;

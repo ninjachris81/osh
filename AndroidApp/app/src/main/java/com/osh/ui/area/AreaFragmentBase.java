@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.osh.actor.ActorCmds;
 import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
+import com.osh.actor.ToggleActor;
 import com.osh.datamodel.meta.KnownRoom;
 import com.osh.service.IActorService;
 import com.osh.service.IDatamodelService;
@@ -47,10 +48,10 @@ public abstract class AreaFragmentBase extends Fragment {
         label.setText(room.getName());
     }
 
-    protected void initRoomLight(View root, String lightRelayGroupId, String lightRelayActorId, String lightSwitchGroupId, String lightSwitchId, int lightResId) {
+    protected void initRoomLight(View root, String lightRelayGroupId, String lightRelayActorId, String lightToggleGroupId, String lightToggleActorId, int lightResId) {
         Switch lightSwitch = root.findViewById(lightResId);
 
-        BooleanValue lightSwitchValue = (BooleanValue) datamodelService.getDatamodel().getValue(lightSwitchId, lightSwitchGroupId);
+        ToggleActor lightToggleActor = (ToggleActor) datamodelService.getDatamodel().getActor(lightToggleActorId, lightToggleGroupId);
         DigitalActor lightActor = (DigitalActor) datamodelService.getDatamodel().getActor(lightRelayActorId, lightRelayGroupId);
         lightActor.addItemChangeListener(isEnabled -> {
             getActivity().runOnUiThread(() -> {
@@ -59,15 +60,7 @@ public abstract class AreaFragmentBase extends Fragment {
         }, true);
 
         lightSwitch.setOnClickListener((item) -> {
-            lightSwitchValue.updateValue(true, false);
-            valueService.publishValue(lightSwitchValue);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            lightSwitchValue.updateValue(false, false);
-            valueService.publishValue(lightSwitchValue);
+            actorService.publishCmd(lightToggleActor, ActorCmds.ACTOR_CMD_TOGGLE);
         });
     }
 
