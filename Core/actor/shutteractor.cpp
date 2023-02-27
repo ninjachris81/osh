@@ -6,6 +6,7 @@ QLatin1String ShutterActor::CONFIG_FULL_TILT_DURATION = QLatin1String("fullTiltD
 
 QLatin1String ShutterActor::PROPERTY_TILT_SUPPORT = QLatin1String("tiltSupport");
 QLatin1String ShutterActor::PROPERTY_FULL_CLOSE_DURATION = QLatin1String("fullCloseDuration");
+QLatin1String ShutterActor::CONFIG_OPERATION_MODE = QLatin1String("operationMode");
 
 int ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT = 20000;
 int ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT = 2000;
@@ -109,10 +110,10 @@ unsigned char ShutterActor::getTiltState(int state) {
     return v >> 8;
 }
 
-unsigned char ShutterActor::getCloseState() {
+unsigned char ShutterActor::closeState() {
     return getCloseState(rawValue().toInt());
 }
 
-unsigned char ShutterActor::getTiltState() {
+unsigned char ShutterActor::tiltState() {
     return getTiltState(rawValue().toInt());
 }

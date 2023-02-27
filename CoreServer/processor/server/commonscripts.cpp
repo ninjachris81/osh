@@ -278,7 +278,9 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
 }
 
 bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
-    ActorBase* shutterActor = m_datamodel->actors().value(shutterFullId);
+    ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actors().value(shutterFullId));
+
+    Q_ASSERT(shutterActor != nullptr);
 
     bool motionActive = false;
     if (!motionFullId.isEmpty()) {
@@ -288,18 +290,18 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullI
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
-    if (shutterActor->isValid()) {
+    if (shutterActor->isValid() && shutterActor->getConfig(ShutterActor::CONFIG_OPERATION_MODE, SHUTTER_OPERATION_MODE_AUTO) == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
             // down: check is motion active
-            if (!motionActive && shutterActor->rawValue().toInt() != actor::ACTOR_CMD_DOWN) {
-                shutterActor->triggerCmd(actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+            if (!motionActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
+                publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
             } else {
                 iDebug() << "Room still active - pausing shutter actions";
             }
         } else {
             // up: just time-based
-            if (shutterActor->rawValue().toInt() != actor::ACTOR_CMD_UP) {
-                shutterActor->triggerCmd(actor::ACTOR_CMD_UP, "applyShutterLogic");
+            if (shutterActor->rawValue().toInt() != SHUTTER_OPENED) {
+                publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
             }
         }
         return true;

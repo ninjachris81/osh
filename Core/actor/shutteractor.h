@@ -19,9 +19,13 @@ public:
     #define SHUTTER_TILT_OPENED 0
     #define SHUTTER_TILE_CLOSED 100
 
+    #define SHUTTER_OPERATION_MODE_AUTO     0
+    #define SHUTTER_OPERATION_MODE_MANUAL   1
+
     static QLatin1String CONFIG_TILT_SUPPORT;
     static QLatin1String CONFIG_FULL_CLOSE_DURATION;
     static QLatin1String CONFIG_FULL_TILT_DURATION;
+    static QLatin1String CONFIG_OPERATION_MODE;
 
     static int CONFIG_FULL_CLOSE_DURATION_DEFAULT;
     static int CONFIG_FULL_TILT_DURATION_DEFAULT;
@@ -43,9 +47,8 @@ public:
     // 0 = open, 100 = closed
     void updateTiltPattern(unsigned char tiltState);
 
-    unsigned char getCloseState();
-    unsigned char getTiltState();
-
+    unsigned char closeState();
+    unsigned char tiltState();
 
 protected:
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
