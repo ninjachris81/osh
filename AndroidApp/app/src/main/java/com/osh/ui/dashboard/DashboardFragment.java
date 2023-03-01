@@ -38,33 +38,6 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final MaterialIconView relayUpIcon = binding.relayUpIcon;
-        dashboardViewModel.getRelayUp().observe(getViewLifecycleOwner(), isActive -> {
-            relayUpIcon.setVisibility(isActive ? View.VISIBLE : View.INVISIBLE);
-        });
-
-        final MaterialIconView relayDownIcon = binding.relayDownIcon;
-        dashboardViewModel.getRelayDown().observe(getViewLifecycleOwner(), isActive -> {
-            relayDownIcon.setVisibility(isActive ? View.VISIBLE : View.INVISIBLE);
-        });
-
-        MainActivity activity = (MainActivity) getActivity();
-
-        final Button shutterUp = binding.buttonUp;
-        shutterUp.setOnClickListener(e -> {
-            activity.testShutterUp();
-        });
-
-        final Button shutterStop = binding.buttonStop;
-        shutterStop.setOnClickListener(e -> {
-            activity.testShutterStop();
-        });
-
-        final Button shutterDown = binding.buttonDown;
-        shutterDown.setOnClickListener(e -> {
-            activity.testShutterDown();
-        });
-
         return root;
     }
 

@@ -2,6 +2,8 @@ package com.osh.ui.area;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -63,5 +65,27 @@ public class AreaFragment extends Fragment {
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        tabLayout.getTabAt(sharedPref.getInt(getString(R.string.area_last_tab), 0)).select();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt(getString(R.string.area_last_tab), tab.getPosition());
+                editor.apply();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

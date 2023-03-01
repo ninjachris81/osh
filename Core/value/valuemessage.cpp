@@ -37,3 +37,6 @@ QVariant ValueMessage::rawValue() {
     return m_rawValue;
 }
 
+QString ValueMessage::fullId() {
+    return m_valueGroupId + VALUE_SEPARATOR + m_valueId;
+}

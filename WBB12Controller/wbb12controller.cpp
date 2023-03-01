@@ -6,10 +6,13 @@
 #include <QThread>
 
 #include "controller/controllermanager.h"
+#include "helpers.h"
+#include "qmetaobject.h"
 #include "shared/controllercmdtypes_qt.h"
 #include "controller/controllermessage.h"
 #include "value/doublevalue.h"
 #include "value/integervalue.h"
+#include "actor/valueactor.h"
 
 int WBB12Controller::WBB12_Input_Registers_Offset = 30001;
 int WBB12Controller::WBB12_Holding_Registers_Offset = 40001;
@@ -28,6 +31,7 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     connect(&m_statusTimer, &QTimer::timeout, this, &WBB12Controller::retrieveStatus);
 
     // inputs
+    /*
     registerInput(WBB12_Input_Registers::OUTSIDE_TEMP_1, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::ERROR_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::WARNING_CODE, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
@@ -37,6 +41,7 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     registerInput(WBB12_Input_Registers::HK1_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::HK1_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::HK1_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
+    */
 
     /*
     registerInput(WBB12_Input_Registers::HK2_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature, "hk2RoomTargetTemp");
@@ -45,6 +50,7 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     registerInput(WBB12_Input_Registers::HK2_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature, "hk2FlowTemp");
     */
 
+    /*
     registerInput(WBB12_Input_Registers::HK3_ROOM_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::HK3_ROOM_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::HK3_FLOW_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
@@ -71,6 +77,7 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     registerInput(WBB12_Input_Registers::ENERGY_TOTAL_YESTERDAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::ENERGY_TOTAL_MONTH, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::ENERGY_TOTAL_YEAR, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
+    */
 
     /*
     registerInput(WBB12_Input_Registers::ENERGY_HEATING_TODAY, WBB12_INTERVAL_STATISTICS, QVariant::Int, WDF_Count);
@@ -92,17 +99,21 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     */
 
     // holdings
+    /*
     registerHolding(WBB12_Holding_Registers::OPERATING_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus);
 
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONFIG, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_DEMAND_TYPE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_OPERATING_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    */
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_PAUSE_PARTY, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+
+    /*
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_COMFORT, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_NORMAL, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_TARGET_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_HEAD_CURVE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
-    registerHolding(WBB12_Holding_Registers::HK1_HEATING_SUMMER_WINTER_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK1_HEATING_SUMMER_WINTER_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK1_HEATING_CONSTANT_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK1_COOLING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
@@ -115,7 +126,7 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_TARGET_TEMP_NORMAL, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_TARGET_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_HEAD_CURVE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
-    registerHolding(WBB12_Holding_Registers::HK3_HEATING_SUMMER_WINTER_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Count);
+    registerHolding(WBB12_Holding_Registers::HK3_HEATING_SUMMER_WINTER_SWITCH, WBB12_INTERVAL_MODES, QVariant::Int, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK3_HEATING_CONSTANT_TEMP_REDUCE, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HK3_COOLING_CONSTANT_TEMP, WBB12_INTERVAL_MODES, QVariant::Double, WDF_Temperature);
@@ -140,6 +151,7 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     registerHolding(WBB12_Holding_Registers::HEAT_COIL_BORDER_TEMP, WBB12_INTERVAL_TEMPERATURES,        QVariant::Double, WDF_Temperature);
     registerHolding(WBB12_Holding_Registers::HEAT_COIL_BIVALENT_TEMP, WBB12_INTERVAL_TEMPERATURES,      QVariant::Double, WDF_Temperature_Int);
     registerHolding(WBB12_Holding_Registers::HEAT_COIL_BIVALENT_TEMP_WW, WBB12_INTERVAL_TEMPERATURES,   QVariant::Double, WDF_Temperature_Int);
+    */
 }
 
 void WBB12Controller::init() {
@@ -170,10 +182,11 @@ void WBB12Controller::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-void WBB12Controller::bindValueManager(ValueManagerBase* valueManager, DatamodelBase* datamodel) {
+void WBB12Controller::bindValueManager(ValueManagerBase* valueManager, ActorManager *actorManager, DatamodelBase* datamodel) {
     iDebug() << Q_FUNC_INFO;
 
     m_valueManager = valueManager;
+    m_actorManager = actorManager;
 
     iInfo() << "Getting value group" << this->id();
     m_wbb12Group = datamodel->valueGroup(this->id());
@@ -184,9 +197,8 @@ void WBB12Controller::bindValueManager(ValueManagerBase* valueManager, Datamodel
 
         ValueBase* val = m_valueManager->getValue(m_wbb12Group, retVal.mqttName);
         if (val == nullptr) {
-            iWarning() << "Value not in datamodel, creating temp value" << retVal.mqttName;
-            val = createValue(retVal);
-            m_valueManager->registerValue(val);
+            iWarning() << "Value not in datamodel" << retVal.mqttName;
+            Q_ASSERT(val != nullptr);
         }
 
         m_inputMappings.insert(reg, val);
@@ -194,21 +206,37 @@ void WBB12Controller::bindValueManager(ValueManagerBase* valueManager, Datamodel
 
     for (WBB12_Holding_Registers reg : m_holdingRegisters.keys()) {
         RetrieveValue retVal = m_holdingRegisters.value(reg);
-        ValueBase *val = createValue(retVal);
 
-        m_valueManager->registerValue(val);
+        ValueBase* val = m_actorManager->getActor(m_wbb12Group, retVal.mqttName);
+        if (val == nullptr) {
+            // try to find in value
+            val = m_valueManager->getValue(m_wbb12Group, retVal.mqttName);
+            if (val == nullptr) {
+                iWarning() << "Unable to find actor or value" << retVal.mqttName;
+                Q_ASSERT(val != nullptr);
+            }
+        } else {
+            ValueActor* actor = static_cast<ValueActor*>(val);
+            actor->setTypeHint(retVal.type);
+            Helpers::safeConnect(actor, &ValueActor::requestSetValue, this, &WBB12Controller::onRequestSetValue, SIGNAL(requestSetValue()), SLOT(onRequestSetValue()));
+        }
+
         m_holdingMappings.insert(reg, val);
     }
 }
 
-ValueBase* WBB12Controller::createValue(RetrieveValue retVal) {
-    switch(retVal.type) {
-    case QVariant::Int:
-        return new IntegerValue(m_wbb12Group, retVal.mqttName, value::VALTYPE_HEAT_PUMP_DATA);
-    case QVariant::Double:
-        return new DoubleValue(m_wbb12Group, retVal.mqttName, value::VALTYPE_HEAT_PUMP_DATA);
-    default:
-        qFatal("Invalid type");
+void WBB12Controller::onRequestSetValue() {
+    iDebug() << Q_FUNC_INFO;
+
+    ValueActor* actor = static_cast<ValueActor*>(sender());
+
+    WBB12_Holding_Registers reg = getHolding(actor->id());
+    RetrieveValue retVal = m_holdingRegisters.value(reg);
+
+    if (retVal.type != QVariant::Invalid) {
+        _writeHolding(reg, retVal, actor->rawValue());
+    } else {
+        iWarning() << "Unable to resolve" << actor->id();
     }
 }
 
@@ -254,6 +282,24 @@ QString WBB12Controller::generateMqttName(QString enumName) {
     }
 
     return parts.join("");
+}
+
+WBB12Controller::WBB12_Holding_Registers WBB12Controller::getHolding(QString name) {
+    QString enumName;
+
+    QRegExp ex("(?=[A-Z]+)");
+    ex.setCaseSensitivity(Qt::CaseSensitive);
+
+    for (QString token : name.split(ex)) {
+        enumName.append(token.toUpper());
+        enumName.append("_");
+    }
+
+    if (enumName.endsWith("_")) {
+        enumName.chop(1);
+    }
+
+    return static_cast<WBB12_Holding_Registers>(QMetaEnum::fromType<WBB12_Holding_Registers>().keyToValue(enumName.toLatin1()));
 }
 
 void WBB12Controller::registerInput(WBB12_Input_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat) {
@@ -437,16 +483,12 @@ quint16 WBB12Controller::generateValue(QVariant val, WBB12_DataFormat format) {
             return doubleVal;
         }
     }
+    */
     case WDF_Temperature: {
-        signed short shortVal = (signed short) rawValue;
-        if (shortVal == WFDE_Temperature_NoSensor || shortVal == WFDE_Temperature_NoValue) {
-            return shortVal;
-        } else {
-            double doubleVal = shortVal;
-            doubleVal /= 10;
-            return doubleVal;
-        }
-    }*/
+        double doubleVal = val.toDouble();
+        signed short shortVal = doubleVal * 10;
+        return shortVal;
+    }
     }
     case WDF_ConfigHP:
     case WDF_ConfigHeating:

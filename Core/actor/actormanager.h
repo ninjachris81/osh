@@ -42,6 +42,7 @@ public:
 private:
     QMap<QString, ActorBase*> m_actors;
     CommunicationManagerBase* m_commManager;
+    ValueManagerBase *m_valueManager;
 
 private slots:
 

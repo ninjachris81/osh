@@ -83,6 +83,15 @@ ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QStrin
     return actor;
 }
 
+ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    ValueActor* actor = new ValueActor(valueGroup, id, valueType);
+    actor->withValueTimeout(timeout);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+
 BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
     BooleanValue* value = new BooleanValue(valueGroup, id, valueType);
     value->withValueTimeout(timeout);

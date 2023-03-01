@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.osh.actor.ActorCmds;
 import com.osh.actor.DigitalActor;
@@ -25,6 +26,7 @@ public abstract class AreaFragmentBase extends Fragment {
     private IValueService valueService;
 
     private IActorService actorService;
+    private FragmentActivity activity;
 
     protected AreaFragmentBase() {
     }
@@ -39,6 +41,7 @@ public abstract class AreaFragmentBase extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.activity = getActivity();
     }
 
     protected void initRoom(View root, String roomId, int labelResId) {
@@ -54,7 +57,7 @@ public abstract class AreaFragmentBase extends Fragment {
         ToggleActor lightToggleActor = (ToggleActor) datamodelService.getDatamodel().getActor(lightToggleActorId, lightToggleGroupId);
         DigitalActor lightActor = (DigitalActor) datamodelService.getDatamodel().getActor(lightRelayActorId, lightRelayGroupId);
         lightActor.addItemChangeListener(isEnabled -> {
-            getActivity().runOnUiThread(() -> {
+            activity.runOnUiThread(() -> {
                 lightSwitch.setChecked(isEnabled.getValue(false));
             });
         }, true);
@@ -71,7 +74,7 @@ public abstract class AreaFragmentBase extends Fragment {
 
         shutterActor.addItemChangeListener(item -> {
             int progress = item.getValue(0);
-            getActivity().runOnUiThread(() -> {
+            activity.runOnUiThread(() -> {
                 button.setEnabled(progress == 0 || progress == 100);
                 button.setChecked(progress == 100);
             });

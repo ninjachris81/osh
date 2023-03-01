@@ -41,6 +41,7 @@ SOURCES += \
         actor/dooractor.cpp \
         actor/shutteractor.cpp \
         actor/toggleactor.cpp \
+        actor/valueactor.cpp \
         communication/communicationmanagerbase.cpp \
         controller/audiocontrollerbase.cpp \
         controller/controllermanager.cpp \
@@ -121,6 +122,7 @@ HEADERS += \
         actor/dooractor.h \
         actor/shutteractor.h \
         actor/toggleactor.h \
+        actor/valueactor.h \
         communication/communicationmanagerbase.h \
         controller/audiocontrollerbase.h \
         controller/controllermanager.h \

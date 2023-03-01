@@ -33,6 +33,17 @@ public:
 
     virtual QString getSecondLevelId() = 0;
 
+
+    void setSenderDeviceId(QString senderDeviceId);
+    void setTs(qint64 ts);
+
+    QString senderDeviceId();
+    qint64 ts();
+
+private:
+    QString m_senderDeviceId;
+    qint64 m_ts;
+
 signals:
 
 public slots:

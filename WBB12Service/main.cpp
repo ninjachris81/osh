@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false);
+    DatamodelManager datamodelManager(false, false, true, true, false, false);
     ActorManager actorManager;
     LogManager logManager;
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    wbb12Controller.bindValueManager(&valueManager, datamodelManager.datamodel());
+    wbb12Controller.bindValueManager(&valueManager, &actorManager, datamodelManager.datamodel());
 
     return a.exec();
 }

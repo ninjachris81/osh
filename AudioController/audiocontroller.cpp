@@ -58,7 +58,9 @@ void AudioController::bindCommunicationManager(CommunicationManagerBase *commMan
     m_commManager = commManager;
 
     connect(this, &AudioController::requestActivation, [this](QString amplGroupdId, QString amplActorId, bool activate) {
-        ActorMessage msg(amplGroupdId, amplActorId, activate ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF);
+        QString audioFile = ""; // TODO
+
+        ActorMessage msg(amplGroupdId, amplActorId, audioFile, activate ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF);
         m_commManager->sendMessage(msg);
     });
 }

@@ -50,7 +50,7 @@ public:
 
     static QString getFullId(QString valueGroupId, QString valueId);
 
-    bool updateValue(QVariant newValue);
+    bool updateValue(QVariant newValue, bool emitChange = true);
 
     virtual QVariant _updateValue(QVariant newValue) = 0;
 

@@ -45,6 +45,8 @@ public:
         return returnVal;
     }
 
+    QString deviceId();
+
 private:
     ManagerRegistration *m_managerRegistration;
 

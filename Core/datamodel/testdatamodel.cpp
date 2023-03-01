@@ -342,6 +342,9 @@ TestDatamodel::TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject
     heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "warm", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
     heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "garden", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
 
+    ValueGroup *nodeWbb12 = addValueGroup("wbb12");
+    addValueActor(nodeWbb12, "hk1HeatingPauseParty", VALTYPE_HEAT_PUMP_DATA, ValueBase::VT_LONG);
+
     /*
     // test interval
     addProcessorTask("test", ProcessorTask::PTT_ONLY_ONCE, "CommonScripts.setupInterval('test', 1000, 5000, false)");

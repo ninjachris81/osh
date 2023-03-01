@@ -11,6 +11,7 @@
 #include "controller/controllerbase.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/valuemanagerbase.h"
+#include "actor/actormanager.h"
 
 class SHARED_LIB_EXPORT WBB12Controller : public ControllerBase
 {
@@ -327,7 +328,7 @@ public:
 
     /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
-    void bindValueManager(ValueManagerBase* valueManager, DatamodelBase *datamodel);
+    void bindValueManager(ValueManagerBase* valueManager, ActorManager *actorManager, DatamodelBase *datamodel);
 
 protected slots:
     void onStateChanged();
@@ -335,9 +336,11 @@ protected slots:
 
     void retrieveStatus();
 
+    void onRequestSetValue();
+
 private:
-    ValueBase* createValue(RetrieveValue retVal);
     QString generateMqttName(QString enumName);
+    WBB12_Holding_Registers getHolding(QString name);
 
     void registerInput(WBB12_Input_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat);
     void registerHolding(WBB12_Holding_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat);
@@ -362,6 +365,7 @@ private:
     int m_slaveId = 1;
 
     ValueManagerBase* m_valueManager = nullptr;
+    ActorManager* m_actorManager = nullptr;
     ValueGroup *m_wbb12Group;
 
 

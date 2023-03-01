@@ -65,28 +65,40 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
     if (info.mqttPathLevels == firstLevelPath.size()) {
         QVariantMap value = parseJSONPayload(payload);
 
+        QString senderDeviceId = value.value(MQTT_SENDER_DEVICE_ID_ATTR, "").toString();
+        qint64 ts = value.value(MQTT_TS, 0).toLongLong();
+
+        MessageBase* msg;
+
         iDebug() << Q_FUNC_INFO << messageType << value << firstLevelPath;
 
         switch (messageType) {
         case MessageBase::MESSAGE_TYPE_VALUE: {
-            return new ValueMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            msg = new ValueMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            break;
         }
         case MessageBase::MESSAGE_TYPE_ACTOR: {
-            QVariant actorVal = parseSingleValue(value);
-            if (actorVal.isValid() && actorVal.canConvert(QVariant::Int)) {
-                return new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), static_cast<ACTOR_CMDS>(actorVal.toInt()));
+            QVariantMap value = parseJSONPayload(payload);
+            QVariant actorVal = value.value(MQTT_SINGLE_VALUE_ATTR);
+            QVariant actorCmd = value.value(MQTT_ACTOR_CMD_ATTR);
+
+            if (actorCmd.isValid() && actorCmd.canConvert(QVariant::Int)) {
+                msg = new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), actorVal, static_cast<ACTOR_CMDS>(actorCmd.toInt()));
+                break;
             } else {
                 iWarning() << "Invalid payload value" << value;
                 return nullptr;
             }
         }
         case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
-            return new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            msg = new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            break;
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
             QVariant ddVal = parseSingleValue(value);
             if (ddVal.isValid() && ddVal.canConvert(QVariant::ULongLong)) {
-                return new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong());
+                msg = new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong());
+                break;
             } else {
                 iWarning() << "Invalid payload value" << value;
                 return nullptr;
@@ -95,7 +107,8 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
             QVariant timeVal = parseSingleValue(value);
             if (timeVal.isValid() && timeVal.canConvert(QVariant::LongLong)) {
-                return new SystemtimeMessage(timeVal.toLongLong());
+                msg = new SystemtimeMessage(timeVal.toLongLong());
+                break;
             } else {
                 iWarning() << "Invalid payload value" << value;
                 return nullptr;
@@ -104,34 +117,44 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         case MessageBase::MESSAGE_TYPE_SYSTEM_WARNING: {
             QVariant swVal = parseSingleValue(value);
             if (swVal.isValid() && swVal.canConvert(QVariant::String)) {
-                return new SystemWarningMessage(firstLevelPath.first(), swVal.toString());
+                msg = new SystemWarningMessage(firstLevelPath.first(), swVal.toString());
+                break;
             } else {
                 iWarning() << "Invalid payload value" << value;
                 return nullptr;
             }
         }
         case MessageBase::MESSAGE_TYPE_CONTROLLER: {
-            return new ControllerMessage(firstLevelPath.first(), value);
+            msg = new ControllerMessage(firstLevelPath.first(), value);
+            break;
         }
         case MessageBase::MESSAGE_TYPE_LOG: {
             QVariant logVal = parseSingleValue(value);
             if (logVal.isValid() && logVal.canConvert(QVariant::String)) {
-                return new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), logVal.toString());
+                msg = new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), logVal.toString());
+                break;
             } else {
                 iWarning() << "Invalid payload value" << value;
                 return nullptr;
             }
         }
         case MessageBase::MESSAGE_TYPE_SCRIPT_RESULT: {
-            return new ScriptResultMessage(firstLevelPath.first(), value);
+            msg = new ScriptResultMessage(firstLevelPath.first(), value);
+            break;
         }
         case MessageBase::MESSAGE_TYPE_DOOR_UNLOCK: {
-            return new DoorUnlockMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            msg =  new DoorUnlockMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
+            break;
         }
         default:
             iWarning() << "Unknown message type" << levels;
             return nullptr;
         }
+
+        msg->setSenderDeviceId(senderDeviceId);
+        msg->setTs(ts);
+
+        return msg;
     } else {
         iWarning() << "Invalid path levels" << firstLevelPath.size() << "expected" << info.mqttPathLevels;
         return nullptr;
@@ -278,12 +301,16 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
 }
 
 QByteArray MqttCommunicationManagerBase::serializeJSONValue(QVariantMap mapData) {
+    mapData.insert(MQTT_SENDER_DEVICE_ID_ATTR, deviceId());
+    mapData.insert(MQTT_TS, QDateTime::currentMSecsSinceEpoch());
     return QJsonDocument::fromVariant(mapData).toJson();
 }
 
 QByteArray MqttCommunicationManagerBase::serializeSingleJSONValue(QVariant value) {
     QVariantMap mapData;
     mapData.insert(MQTT_SINGLE_VALUE_ATTR, value);
+    mapData.insert(MQTT_SENDER_DEVICE_ID_ATTR, deviceId());
+    mapData.insert(MQTT_TS, QDateTime::currentMSecsSinceEpoch());
     return QJsonDocument::fromVariant(mapData).toJson(QJsonDocument::Compact);
 }
 
