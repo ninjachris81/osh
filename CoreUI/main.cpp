@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
     engine.addImportPath(":/qml");
 
-    const QUrl m_redirectUri(QStringLiteral("qrc:/qml/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

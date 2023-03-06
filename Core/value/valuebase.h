@@ -32,6 +32,8 @@ public:
 
     static QLatin1String PROPERTY_VALUE_TYPE;
     static QLatin1String PROPERTY_VALUE_TIMEOUT;
+    static QLatin1String PROPERTY_ALWAYS_EMIT;
+    static QLatin1String PROPERTY_PERSIST;
 
     ValueBase();
     explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
@@ -45,6 +47,8 @@ public:
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 
     ValueBase* withPersist(bool persist);
+
+    ValueBase* withAlwaysEmit(bool alwaysEmit);
 
     bool persist();
 
