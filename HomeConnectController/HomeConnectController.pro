@@ -5,10 +5,11 @@
 #-------------------------------------------------
 
 QT -= gui
-QT += serialport
-QT += serialbus
+QT += network
+QT += xmlpatterns
 
-TARGET = RS485RelayController
+
+TARGET = HomeConnectController
 TEMPLATE = lib
 #CONFIG += staticlib
 
@@ -26,10 +27,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    rs485relaycontroller.cpp
+    homeconnectcontroller.cpp
 
 HEADERS += \
-        rs485relaycontroller.h
+    homeconnectcontroller.h
 
 unix {
     target.path = /usr/lib

@@ -46,6 +46,8 @@ public:
 
     void stop();
 
+    void executeTask(ProcessorTaskBase* task);
+
 private:
     QMap<ProcessorTaskBase::ProcessorTaskType, ProcessorExecutorBase*> m_processorExecutors;
     QMap<QString, ProcessorTaskBase*> m_processorTasks;
@@ -63,6 +65,7 @@ private:
 
 private slots:
     void executeTasks();
+    void onTriggerScriptTask();
 
 signals:
 

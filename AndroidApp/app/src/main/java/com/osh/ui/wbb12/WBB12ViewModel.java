@@ -3,6 +3,7 @@ package com.osh.ui.wbb12;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.osh.actor.ValueActor;
 import com.osh.value.DoubleValue;
 import com.osh.value.IntegerValue;
 import com.osh.value.ValueBase;
@@ -31,6 +32,8 @@ public class WBB12ViewModel extends ViewModel {
                 if (item instanceof DoubleValue) {
                     setValue(liveData, (ValueBase) item);
                 } else if (item instanceof IntegerValue) {
+                    setValue(liveData, (ValueBase) item);
+                } else if (item instanceof ValueActor) {
                     setValue(liveData, (ValueBase) item);
                 } else {
                     // TODO: error

@@ -146,6 +146,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 				act = datamodel.addShutterActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), actor.isTiltSupport(), actor.getFullCloseDuration());
 			} else if (actor.getClassType().equals("ToggleActor")) {
 				act = datamodel.addToggleActor(valueGroup, actor.getId());
+			} else if (actor.getClassType().equals("ValueActor")) {
+				act = datamodel.addValueActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
 			} else {
 				log.error("Unknown class type: " + actor.getClassType());
 			}

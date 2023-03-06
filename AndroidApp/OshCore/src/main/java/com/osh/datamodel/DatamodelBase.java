@@ -13,6 +13,7 @@ import com.osh.actor.ActorBase;
 import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
 import com.osh.actor.ToggleActor;
+import com.osh.actor.ValueActor;
 import com.osh.datamodel.meta.KnownArea;
 import com.osh.datamodel.meta.KnownRoom;
 import com.osh.device.KnownDevice;
@@ -100,6 +101,14 @@ public class DatamodelBase extends Identifyable {
 		actors.put(actor.getFullId(), actor);
 		return actor;
 	}
+
+	public ValueActor addValueActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout) {
+		ValueActor actor = new ValueActor(valueGroup, id, valueType);
+		actor.withValueTimeout(timeout);
+		actors.put(actor.getFullId(), actor);
+		return actor;
+	}
+
 
 	public BooleanValue addBooleanValue(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout) {
 	    BooleanValue value = new BooleanValue(valueGroup, id, valueType);

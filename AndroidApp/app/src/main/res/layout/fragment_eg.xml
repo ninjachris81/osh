@@ -127,6 +127,16 @@
             app:layout_constraintStart_toStartOf="@+id/labelFEG"
             app:layout_constraintTop_toBottomOf="@+id/labelFEG" />
 
+        <ImageView
+            android:id="@+id/lightBackgroundFEG"
+            android:layout_width="62dp"
+            android:layout_height="220dp"
+            android:layout_marginStart="-12dp"
+            android:layout_marginTop="-100dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintStart_toStartOf="@+id/labelFEG"
+            app:layout_constraintTop_toBottomOf="@+id/labelFEG"></ImageView>
+
         <TextView
             android:id="@+id/labelHFE"
             android:layout_width="wrap_content"

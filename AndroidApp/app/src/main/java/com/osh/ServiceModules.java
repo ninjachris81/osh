@@ -75,8 +75,8 @@ public class ServiceModules {
 
     @Provides
     @Singleton
-    static IWBB12Service provideWBB12Manager(IDatamodelService datamodelService, IValueService valueManager) {
-        return new WBB12ServiceImpl(datamodelService, valueManager);
+    static IWBB12Service provideWBB12Manager(IDatamodelService datamodelService, IValueService valueManager, IActorService actorService) {
+        return new WBB12ServiceImpl(datamodelService, valueManager, actorService);
     }
 
 }

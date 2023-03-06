@@ -72,7 +72,7 @@ QStringList DeviceRegistry::getProfileTokens(QString id) {
 }
 
 QString DeviceRegistry::extractId(QString fullUrl) {
-    QUrl url(fullUrl);
+    QUrl m_redirectUri(fullUrl);
     return url.host();
 }
 

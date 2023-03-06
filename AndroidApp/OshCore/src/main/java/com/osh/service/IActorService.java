@@ -10,4 +10,6 @@ public interface IActorService extends IMqttSupport {
 	void registerActor(ActorBase actorBase);
 
     void publishCmd(ActorBase actor, ActorCmds actorCmd);
+
+    ActorBase getActor(String fullId);
 }

@@ -6,6 +6,8 @@
 #include <QResource>
 #include <QThread>
 
+#include "actor/scripttriggeractor.h"
+#include "helpers.h"
 #include "macros.h"
 #include "value/server/servervaluemanager.h"
 #include "shared/actor_qt.h"
@@ -82,7 +84,29 @@ void ModelProcessorManager::postInit() {
 
     m_processorTasks = m_dmManager->datamodel()->processorTasks();
 
+    // connect script actors
+    for (ActorBase *actor : m_dmManager->datamodel()->actors()) {
+        if (actor->inherits(ScriptTriggerActor::staticMetaObject.className())) {
+            ScriptTriggerActor *scriptTriggerActor = static_cast<ScriptTriggerActor*>(actor);
+
+            Helpers::safeConnect(scriptTriggerActor, &ScriptTriggerActor::triggerScript, this, &ModelProcessorManager::onTriggerScriptTask, SIGNAL(triggerScript()), SLOT(onTriggerScriptTask()));
+        }
+    }
+
     start();
+}
+
+void ModelProcessorManager::onTriggerScriptTask() {
+    iInfo() << Q_FUNC_INFO;
+
+    ScriptTriggerActor *scriptTriggerActor = static_cast<ScriptTriggerActor*>(sender());
+    QString taskId = scriptTriggerActor->rawValue().toString();
+
+    if (m_processorTasks.contains(taskId)) {
+        executeTask(m_processorTasks.value(taskId));
+    } else {
+        iWarning() << "Invalid processor task" << taskId;
+    }
 }
 
 QString ModelProcessorManager::id() {
@@ -116,15 +140,9 @@ void ModelProcessorManager::executeTasks() {
         while(it.hasNext()) {
             it.next();
 
-            ProcessorExecutorBase* executor = m_processorExecutors.value(it.value()->taskType());
-
             if (it.value()->taskTriggerType() == ProcessorTaskBase::PTTT_ONLY_ONCE) {
                 if (m_isFirstRun) {
-                    QVariant result = executor->execute(it.value());
-                    //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-                    if (it.value()->publishResult()) {
-                        publishScriptResult(it.key(), result);
-                    }
+                    executeTask(it.value());
                 }
             }
         }
@@ -136,22 +154,28 @@ void ModelProcessorManager::executeTasks() {
     while(it.hasNext()) {
         it.next();
 
-        ProcessorExecutorBase* executor = m_processorExecutors.value(it.value()->taskType());
-
         switch(it.value()->taskTriggerType()) {
         case ProcessorTaskBase::PTTT_INTERVAL:
             if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
-                QVariant result = executor->execute(it.value());
-                //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-                if (it.value()->publishResult()) {
-                    publishScriptResult(it.key(), result);
-                }
+                executeTask(it.value());
             }
             break;
         case ProcessorTaskBase::PTTT_TRIGGER:
             // will triggered externally
             break;
         }
+    }
+}
+
+void ModelProcessorManager::executeTask(ProcessorTaskBase* task) {
+    iDebug() << Q_FUNC_INFO;
+
+    ProcessorExecutorBase* executor = m_processorExecutors.value(task->taskType());
+
+    QVariant result = executor->execute(task);
+    //QVariant result = it.value()->run(&m_engine, m_commonScripts);
+    if (task->publishResult()) {
+        publishScriptResult(task->id(), result);
     }
 }
 

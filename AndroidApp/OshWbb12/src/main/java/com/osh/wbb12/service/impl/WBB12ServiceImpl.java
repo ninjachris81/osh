@@ -1,6 +1,8 @@
 package com.osh.wbb12.service.impl;
 
+import com.osh.actor.ActorBase;
 import com.osh.communication.MessageBase;
+import com.osh.service.IActorService;
 import com.osh.service.IDatamodelService;
 import com.osh.service.IValueService;
 import com.osh.value.DoubleValue;
@@ -115,23 +117,27 @@ public class WBB12ServiceImpl implements IWBB12Service {
     }
 
 
-    protected LinkedHashMap<String, WBB12Format> wbb12InputFormats = new LinkedHashMap<>();
-    protected IValueService valueManager;
+    protected LinkedHashMap<String, WBB12Format> wbb12Formats = new LinkedHashMap<>();
+
+    protected IValueService valueService;
+
+    protected IActorService actorService;
 
     protected final ValueGroup wbb12ValueGroup = new ValueGroup("wbb12");
 
     @Override
     public Set<String> getWBB12Keys() {
-        return wbb12InputFormats.keySet();
+        return wbb12Formats.keySet();
     }
 
     @Override
     public ValueBase getWBB12Value(String fullId) {
-        return valueManager.getValue(fullId);
+        return valueService.getValue(fullId);
     }
 
-    public WBB12ServiceImpl(IDatamodelService datamodelService, IValueService valueManager) {
-        this.valueManager = valueManager;
+    public WBB12ServiceImpl(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
+        this.valueService = valueService;
+        this.actorService = actorService;
 
         datamodelService.loadedState().addItemChangeListener(isLoaded -> {
             if (isLoaded) {
@@ -241,21 +247,20 @@ public class WBB12ServiceImpl implements IWBB12Service {
 
         log.info("Registering WBB12 input " + mqttName);
 
-        ValueBase val = valueManager.getValue(ValueBase.getFullId(wbb12ValueGroup.getId(), mqttName));
-        if (val == null) {
+        ValueBase val = valueService.getValue(ValueBase.getFullId(wbb12ValueGroup.getId(), mqttName));
+        if (val != null) {
+            if (wbb12Formats.containsValue(val.getFullId())) {
+                throw new UnsupportedOperationException("Cannot register multiple times");
+            }
+
+            wbb12Formats.put(val.getFullId(), new WBB12Format(false, unit, enumType));
+
+            val.addItemChangeListener(item -> {
+                log.debug("WBB12 Value changed: " + item);
+            });
+        } else {
             log.warn("Unable to find value in datamodel: " + mqttName);
         }
-
-        if (wbb12InputFormats.containsValue(val.getFullId())) {
-            throw new UnsupportedOperationException("Cannot register multiple times");
-        }
-
-        wbb12InputFormats.put(val.getFullId(), new WBB12Format(false, unit, enumType));
-        valueManager.registerValue(val);
-
-        val.addItemChangeListener(item -> {
-            log.debug("WBB12 Value changed: " + item);
-        });
     }
 
     private void registerHoldingRegister(WBB12_Holding_Registers reg, WBB12Unit unit, boolean isDouble, boolean canWrite) {
@@ -270,27 +275,31 @@ public class WBB12ServiceImpl implements IWBB12Service {
 
         log.info("Registering WBB12 holding " + mqttName);
 
-        ValueBase val;
-        if (isDouble) {
-            val = new DoubleValue(wbb12ValueGroup, mqttName, ValueType.VT_HEAT_PUMP_DATA);
+        ValueBase val = null;
+        
+        if (canWrite) {
+            val = actorService.getActor(ValueBase.getFullId(wbb12ValueGroup.getId(), mqttName));
         } else {
-            val = new IntegerValue(wbb12ValueGroup, mqttName, ValueType.VT_HEAT_PUMP_DATA);
+            val = valueService.getValue(ValueBase.getFullId(wbb12ValueGroup.getId(), mqttName));
         }
 
-        if (wbb12InputFormats.containsValue(val.getFullId())) {
-            throw new UnsupportedOperationException("Cannot register multiple times");
+        if (val != null) {
+            if (wbb12Formats.containsKey(val.getFullId())) {
+                throw new UnsupportedOperationException("Cannot register multiple times");
+            }
+
+            wbb12Formats.put(val.getFullId(), new WBB12Format(canWrite, unit, enumType));
+
+            val.addItemChangeListener(item -> {
+                log.debug("WBB12 Value changed: " + item);
+            });
+        } else {
+            log.warn("Unable to find actor/value in datamodel: " + mqttName);
         }
-
-        wbb12InputFormats.put(val.getFullId(), new WBB12Format(canWrite, unit, enumType));
-        valueManager.registerValue(val);
-
-        val.addItemChangeListener(item -> {
-            log.debug("WBB12 Value changed: " + item);
-        });
     }
 
     @Override
     public WBB12Format getWBB12InputFormat(String fullId) {
-        return wbb12InputFormats.get(fullId);
+        return wbb12Formats.get(fullId);
     }
 }

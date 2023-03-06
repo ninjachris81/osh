@@ -47,7 +47,7 @@ void DatamodelManager::init(LocalConfig* config) {
     QString datamodelLoaderName = config->getString("datamodel.loader", TestDatamodelLoader::LOADER_TYPE_NAME);
 
     if (datamodelLoaderName == HttpDataModelLoader::LOADER_TYPE_NAME) {
-        m_datamodelLoader = new HttpDataModelLoader(QUrl(config->getString("datamodel.url", "http://localhost/datamodel")));
+        m_datamodelLoader = new HttpDataModelLoader(m_redirectUri(config->getString("datamodel.url", "http://localhost/datamodel")));
     } else if (datamodelLoaderName == FileDataModelLoader::LOADER_TYPE_NAME) {
         m_datamodelLoader = new FileDataModelLoader(config->getString("datamodel.filePath", "datamodel.json"));
     } else if (datamodelLoaderName == TestDatamodelLoader::LOADER_TYPE_NAME) {

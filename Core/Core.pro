@@ -39,6 +39,7 @@ SOURCES += \
         actor/cameraactor.cpp \
         actor/digitalactor.cpp \
         actor/dooractor.cpp \
+        actor/scripttriggeractor.cpp \
         actor/shutteractor.cpp \
         actor/toggleactor.cpp \
         actor/valueactor.cpp \
@@ -120,6 +121,7 @@ HEADERS += \
         actor/cameraactor.h \
         actor/digitalactor.h \
         actor/dooractor.h \
+        actor/scripttriggeractor.h \
         actor/shutteractor.h \
         actor/toggleactor.h \
         actor/valueactor.h \

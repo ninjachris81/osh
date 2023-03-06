@@ -13,6 +13,8 @@ SUBDIRS += \
     CoreUI \
     DoorUnlockController \
     DoorUnlockService \
+    HomeConnectController \
+    HomeConnectService \
     KMTronicRelayController \
     KMTronicRelayService \
     MCP23017InputController \
@@ -64,3 +66,6 @@ OnvifService.depends = Core OnvifController QMqttCommunicationManager
 
 ShutterController.depends = Core
 ShutterService.depends = Core ShutterController QMqttCommunicationManager
+
+HomeConnectController.depends = Core
+HomeConnectService.depends = Core HomeConnectController QMqttCommunicationManager

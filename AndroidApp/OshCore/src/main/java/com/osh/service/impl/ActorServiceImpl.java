@@ -33,7 +33,7 @@ public class ActorServiceImpl implements IActorService {
 
 	@Override
 	public void registerActor(ActorBase actor) {
-		actors.put(actor.getId(), actor);
+		actors.put(actor.getFullId(), actor);
 		valueService.registerValue(actor);
 	}
 
@@ -41,6 +41,11 @@ public class ActorServiceImpl implements IActorService {
 	public void publishCmd(ActorBase actor, ActorCmds actorCmd) {
 		ActorMessage msg = new ActorMessage(actor, actorCmd);
 		communicationService.sendMessage(msg);
+	}
+
+	@Override
+	public ActorBase getActor(String fullId) {
+		return actors.get(fullId);
 	}
 
 	@Override
