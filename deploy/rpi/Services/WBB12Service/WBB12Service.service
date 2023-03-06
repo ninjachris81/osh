@@ -1,5 +1,5 @@
 [Unit]
-Description=OSH OBIS Service
+Description=OSH WBB12 Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
 After=network.target
@@ -10,13 +10,13 @@ After=network.target
 #Type=forking
 Type=simple
 
-WorkingDirectory=/etc/osh/OBISService
+WorkingDirectory=/etc/osh/WBB12Service
 
 #User=root
 
 ## here we can set custom environment variables
-ExecStart=/etc/osh/deploy/rpi/Services/OBISService/start.sh
-ExecStop=/etc/osh/deploy/rpi/Services/OBISService/stop.sh
+ExecStart=/etc/osh/deploy/rpi/Services/WBB12Service/start.sh
+ExecStop=/etc/osh/deploy/rpi/Services/WBB12Service/stop.sh
 
 # Useful during debugging; remove it once the service is working
 #StandardOutput=file:/var/log/osh_rs485_relay_service.log
