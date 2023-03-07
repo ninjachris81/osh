@@ -46,6 +46,7 @@ import com.osh.log.LogFacade;
 import com.osh.log.LogMessage;
 import com.osh.log.LogMessage.MsgType;
 import com.osh.processor.ScriptResultMessage;
+import com.osh.service.IDeviceDiscoveryService;
 import com.osh.time.SystemtimeMessage;
 import com.osh.utils.IObservableBoolean;
 import com.osh.utils.ObservableBoolean;
@@ -66,9 +67,12 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 		return connectedState;
 	}
 
-	public MqttCommunicationServiceImpl(IApplicationConfig appConfig) {
+	private String deviceId;
+
+	public MqttCommunicationServiceImpl(IApplicationConfig appConfig, IDeviceDiscoveryService deviceDiscoveryService) {
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.appConfig = appConfig;
+		this.deviceId = deviceDiscoveryService.getDeviceId();
 	}
 
     private Mqtt3AsyncClient mqttClient;
@@ -215,7 +219,10 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	    case MESSAGE_TYPE_VALUE:
 	        return serializeSingleJSONValue(((ValueMessage) msg).getRawValue());
 	    case MESSAGE_TYPE_ACTOR:
-	        return serializeSingleJSONValue(((ActorMessage) msg).getCmd().ordinal());
+			Map<String, Object> map = new HashMap<>();
+			map.put(MqttConstants.MQTT_SINGLE_VALUE_ATTR, ((ActorMessage) msg).getRawValue());
+			map.put(MQTT_ACTOR_CMD_ATTR, ((ActorMessage) msg).getCmd().getValue());
+	        return serializeJSONMap(map);
 	    case MESSAGE_TYPE_ACTOR_CONFIG:
 	        return serializeJSONMap(((ActorConfigMessage) msg).getValues());
 	    case MESSAGE_TYPE_SYSTEM_TIME:
@@ -261,19 +268,22 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 			LogFacade.w(TAG, "Unsupported data type: " + value.getClass());
 		}
 	}
-	
-	private String serializeSingleJSONValue(Object value) throws JSONException {
+
+	private String serializeJSONMap(Map<String, Object> values) throws JSONException {
 		JSONObject obj = new JSONObject();
-		serializeSingleJSONValue(MqttConstants.MQTT_SINGLE_VALUE_ATTR, value, obj);
-		return obj.toString();
-	}
-	
-	private String serializeJSONMap(Map<String, Object> value) throws JSONException {
-		JSONObject obj = new JSONObject();
-		for (String key : value.keySet()) {
-			serializeSingleJSONValue(key, value.get(key), obj);
+
+		obj.put(MQTT_SENDER_DEVICE_ID_ATTR, deviceId);
+		obj.put(MQTT_TS, System.currentTimeMillis());
+
+		for (String key : values.keySet()) {
+			obj.put(key, values.get(key));
 		}
 		return obj.toString();
+	}
+	private String serializeSingleJSONValue(Object value) throws JSONException {
+		Map<String, Object> map = new HashMap<>();
+		map.put(MqttConstants.MQTT_SINGLE_VALUE_ATTR, value);
+		return serializeJSONMap(map);
 	}
 
 	private void registerMessageType(MessageBase.MESSAGE_TYPE messageType, boolean isRetained, String mqttTypePath, int mqttPathLevels) {

@@ -22,6 +22,9 @@ public enum ActorCmds {
 
     private final int value;
 
+    public int getValue() {
+        return value;
+    }
     ActorCmds(int value) {
         this.value = value;
     }

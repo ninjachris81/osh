@@ -4,7 +4,10 @@ import com.osh.service.IActorService;
 import com.osh.service.ICommunicationService;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
+import com.osh.service.IDeviceDiscoveryManagerBase;
+import com.osh.service.IDeviceDiscoveryService;
 import com.osh.service.impl.ActorServiceImpl;
+import com.osh.service.impl.ClientDeviceDiscoveryServiceImpl;
 import com.osh.service.impl.DatabaseServiceImpl;
 import com.osh.service.impl.DatamodelServiceImpl;
 import com.osh.service.impl.MqttCommunicationServiceImpl;
@@ -63,8 +66,8 @@ public class ServiceModules {
 
     @Provides
     @Singleton
-    static ICommunicationService provideCommunicationManager(IApplicationConfig applicationConfig) {
-        return new MqttCommunicationServiceImpl(applicationConfig);
+    static ICommunicationService provideCommunicationManager(IApplicationConfig applicationConfig, IDeviceDiscoveryService deviceDiscoveryService) {
+        return new MqttCommunicationServiceImpl(applicationConfig, deviceDiscoveryService);
     }
 
     @Provides
@@ -77,6 +80,12 @@ public class ServiceModules {
     @Singleton
     static IWBB12Service provideWBB12Manager(IDatamodelService datamodelService, IValueService valueManager, IActorService actorService) {
         return new WBB12ServiceImpl(datamodelService, valueManager, actorService);
+    }
+
+    @Provides
+    @Singleton
+    static IDeviceDiscoveryService provideDeviceDiscoveryService() {
+        return new ClientDeviceDiscoveryServiceImpl();
     }
 
 }

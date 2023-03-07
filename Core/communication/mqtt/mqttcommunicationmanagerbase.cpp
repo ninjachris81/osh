@@ -265,7 +265,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     }
     case MessageBase::MESSAGE_TYPE_ACTOR: {
         ActorMessage* actorMessage = static_cast<ActorMessage*>(&message);
-        return serializeSingleJSONValue(actorMessage->cmd());
+        QVariantMap map;
+        map.insert(MQTT_SINGLE_VALUE_ATTR, actorMessage->rawValue());
+        map.insert(MQTT_ACTOR_CMD_ATTR, actorMessage->cmd());
+        return serializeJSONValue(map);
     }
     case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
         ActorConfigMessage* actorConfigMessage = static_cast<ActorConfigMessage*>(&message);
@@ -308,7 +311,7 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
 QByteArray MqttCommunicationManagerBase::serializeJSONValue(QVariantMap mapData) {
     mapData.insert(MQTT_SENDER_DEVICE_ID_ATTR, deviceId());
     mapData.insert(MQTT_TS, QDateTime::currentMSecsSinceEpoch());
-    return QJsonDocument::fromVariant(mapData).toJson();
+    return QJsonDocument::fromVariant(mapData).toJson(QJsonDocument::Compact);
 }
 
 QByteArray MqttCommunicationManagerBase::serializeSingleJSONValue(QVariant value) {
