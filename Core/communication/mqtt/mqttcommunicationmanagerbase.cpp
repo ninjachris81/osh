@@ -317,9 +317,7 @@ QByteArray MqttCommunicationManagerBase::serializeJSONValue(QVariantMap mapData)
 QByteArray MqttCommunicationManagerBase::serializeSingleJSONValue(QVariant value) {
     QVariantMap mapData;
     mapData.insert(MQTT_SINGLE_VALUE_ATTR, value);
-    mapData.insert(MQTT_SENDER_DEVICE_ID_ATTR, deviceId());
-    mapData.insert(MQTT_TS, QDateTime::currentMSecsSinceEpoch());
-    return QJsonDocument::fromVariant(mapData).toJson(QJsonDocument::Compact);
+    return serializeJSONValue(mapData);
 }
 
 /*

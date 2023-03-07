@@ -4,6 +4,7 @@ import static com.osh.communication.mqtt.MqttConstants.MQTT_ACTOR_CMD_ATTR;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_BASE_PATH;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_PATH_SEP;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_SENDER_DEVICE_ID_ATTR;
+import static com.osh.communication.mqtt.MqttConstants.MQTT_SINGLE_VALUE_ATTR;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_TS;
 
 import java.nio.ByteBuffer;
@@ -327,10 +328,14 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	            return new ValueMessage(firstLevelPath.get(0), firstLevelPath.get(1), rawValue);
 	        }
 	        case MESSAGE_TYPE_ACTOR: {
-				ActorCmds cmd = ActorCmds.of(Integer.parseInt(parseSingleValue(rawValue).toString()));
-				Object val = rawValue.get(MQTT_ACTOR_CMD_ATTR);
-
-	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), val, cmd);
+				if (rawValue.containsKey(MQTT_ACTOR_CMD_ATTR)) {
+					ActorCmds cmd = ActorCmds.of(Integer.parseInt(rawValue.get(MQTT_ACTOR_CMD_ATTR).toString()));
+					Object value = rawValue.get(MQTT_SINGLE_VALUE_ATTR);
+					return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), value, cmd);
+				} else {
+					LogFacade.w(TAG, "Cmd attribute missing: " + rawValue.toString());
+					return null;
+				}
 	        }
 	        case MESSAGE_TYPE_DEVICE_DISCOVERY: {
 	            return new DeviceDiscoveryMessage(firstLevelPath.get(0), firstLevelPath.get(1));
@@ -367,7 +372,7 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	    if (value.containsKey(MqttConstants.MQTT_SINGLE_VALUE_ATTR)) {
 	        return value.get(MqttConstants.MQTT_SINGLE_VALUE_ATTR);
 	    } else {
-	    	throw new IllegalArgumentException("Key not found " + MqttConstants.MQTT_SINGLE_VALUE_ATTR);
+	    	return null;
 	    }
 	}
 

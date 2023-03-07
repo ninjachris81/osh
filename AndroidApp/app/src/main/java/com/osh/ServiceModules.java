@@ -4,7 +4,6 @@ import com.osh.service.IActorService;
 import com.osh.service.ICommunicationService;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
-import com.osh.service.IDeviceDiscoveryManagerBase;
 import com.osh.service.IDeviceDiscoveryService;
 import com.osh.service.impl.ActorServiceImpl;
 import com.osh.service.impl.ClientDeviceDiscoveryServiceImpl;
