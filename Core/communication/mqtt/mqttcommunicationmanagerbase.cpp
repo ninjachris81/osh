@@ -91,7 +91,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
                 msg = new ActorMessage(firstLevelPath.first(), firstLevelPath.at(1), actorVal, static_cast<ACTOR_CMDS>(actorCmd.toInt()));
                 break;
             } else {
-                iWarning() << "Invalid payload value" << value;
+                iWarning() << "Invalid payload value" << value << messageType;
                 return nullptr;
             }
         }
@@ -105,7 +105,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
                 msg = new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong());
                 break;
             } else {
-                iWarning() << "Invalid payload value" << value;
+                iWarning() << "Invalid payload value" << value << messageType;
                 return nullptr;
             }
         }
@@ -115,7 +115,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
                 msg = new SystemtimeMessage(timeVal.toLongLong());
                 break;
             } else {
-                iWarning() << "Invalid payload value" << value;
+                iWarning() << "Invalid payload value" << value << messageType;
                 return nullptr;
             }
         }
@@ -125,7 +125,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
                 msg = new SystemWarningMessage(firstLevelPath.first(), swVal.toString());
                 break;
             } else {
-                iWarning() << "Invalid payload value" << value;
+                iWarning() << "Invalid payload value" << value << messageType;
                 return nullptr;
             }
         }
@@ -139,7 +139,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
                 msg = new LogMessage(firstLevelPath.first(), LogManager::stringToMsgType(firstLevelPath.at(1)), logVal.toString());
                 break;
             } else {
-                iWarning() << "Invalid payload value" << value;
+                iWarning() << "Invalid payload value" << value << messageType;
                 return nullptr;
             }
         }
