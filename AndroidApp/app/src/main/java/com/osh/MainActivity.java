@@ -143,19 +143,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void testShutterUp() {
-        ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_UP);
-        communicationService.sendMessage(msg);
-    }
-
-    public void testShutterStop() {
-        ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_STOP);
-        communicationService.sendMessage(msg);
-    }
-
-    public void testShutterDown() {
-        ActorMessage msg = new ActorMessage("allShutters0", "4", ActorCmds.ACTOR_CMD_DOWN);
-        communicationService.sendMessage(msg);
-    }
 }
 

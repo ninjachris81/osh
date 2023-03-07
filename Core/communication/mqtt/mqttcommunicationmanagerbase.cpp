@@ -65,8 +65,14 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
     if (info.mqttPathLevels == firstLevelPath.size()) {
         QVariantMap value = parseJSONPayload(payload);
 
-        QString senderDeviceId = value.value(MQTT_SENDER_DEVICE_ID_ATTR, "").toString();
-        qint64 ts = value.value(MQTT_TS, 0).toLongLong();
+        QString senderDeviceId;
+        if (value.contains(MQTT_SENDER_DEVICE_ID_ATTR)) {
+            senderDeviceId = value.value(MQTT_SENDER_DEVICE_ID_ATTR, "").toString();
+        }
+        qint64 ts;
+        if (value.contains(MQTT_TS)) {
+            ts = value.value(MQTT_TS, 0).toLongLong();
+        }
 
         MessageBase* msg;
 
@@ -78,7 +84,6 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             break;
         }
         case MessageBase::MESSAGE_TYPE_ACTOR: {
-            QVariantMap value = parseJSONPayload(payload);
             QVariant actorVal = value.value(MQTT_SINGLE_VALUE_ATTR);
             QVariant actorCmd = value.value(MQTT_ACTOR_CMD_ATTR);
 

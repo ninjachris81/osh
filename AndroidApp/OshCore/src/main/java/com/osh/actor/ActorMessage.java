@@ -3,22 +3,18 @@ package com.osh.actor;
 import static com.osh.value.ValueBase.VALUE_SEPARATOR;
 
 import com.osh.communication.MessageBase;
+import com.osh.value.ValueMessage;
 
-public class ActorMessage extends MessageBase {
-	
-	private String actorGroupId;
-	private String actorId;
+public class ActorMessage extends ValueMessage {
 	private ActorCmds cmd;
 	
-	public ActorMessage(String actorGroupId, String actorId, ActorCmds cmd) {
-		super();
-		this.actorGroupId = actorGroupId;
-		this.actorId = actorId;
+	public ActorMessage(String actorGroupId, String actorId, Object value, ActorCmds cmd) {
+		super(actorGroupId, actorId, value);
 		this.cmd = cmd;
 	}
 
-	public ActorMessage(ActorBase actor, ActorCmds actorCmd) {
-		this(actor.getValueGroup().getId(), actor.getId(), actorCmd);
+	public ActorMessage(ActorBase actor, Object value, ActorCmds actorCmd) {
+		this(actor.getValueGroup().getId(), actor.getId(), value, actorCmd);
 	}
 
 	@Override
@@ -26,30 +22,9 @@ public class ActorMessage extends MessageBase {
 		return MESSAGE_TYPE.MESSAGE_TYPE_ACTOR;
 	}
 
-	@Override
-	public String getFirstLevelId() {
-		return actorGroupId;
-	}
-
-	@Override
-	public String getSecondLevelId() {
-		return actorId;
-	}
-
-	public String getActorGroupId() {
-		return actorGroupId;
-	}
-
-	public String getActorId() {
-		return actorId;
-	}
 
 	public ActorCmds getCmd() {
 		return cmd;
-	}
-
-	public String getFullId() {
-		return actorGroupId + VALUE_SEPARATOR + actorId;
 	}
 
 }

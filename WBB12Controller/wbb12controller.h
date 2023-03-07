@@ -339,7 +339,6 @@ protected slots:
     void onRequestSetValue();
 
 private:
-    QString generateMqttName(QString enumName);
     WBB12_Holding_Registers getHolding(QString name);
 
     void registerInput(WBB12_Input_Registers reg, qint64 retrieveInterval, QVariant::Type type, WBB12_DataFormat dataFormat);

@@ -72,7 +72,7 @@
 #define MQTT_SINGLE_VALUE_ATTR "v"
 #define MQTT_ACTOR_CMD_ATTR "c"
 #define MQTT_SENDER_DEVICE_ID_ATTR "s"
-#define MQTT_TS "ts"
+#define MQTT_TS "t"
 
 #define MQTT_JSON_MAX_LENGTH 256
 

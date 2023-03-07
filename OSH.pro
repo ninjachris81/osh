@@ -24,6 +24,8 @@ SUBDIRS += \
     OnvifController \
     OnvifService \
     QMqttCommunicationManager \
+    RS485EnergyMeterController \
+    RS485EnergyMeterService \
     RS485RelayController \
     RS485RelayService \
     ShutterController \
@@ -69,3 +71,6 @@ ShutterService.depends = Core ShutterController QMqttCommunicationManager
 
 HomeConnectController.depends = Core
 HomeConnectService.depends = Core HomeConnectController QMqttCommunicationManager
+
+RS485EnergyMeterController.depends = Core CoreSerial
+RS485EnergyMeterService.depends = Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager

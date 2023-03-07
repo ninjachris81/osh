@@ -1,7 +1,10 @@
 package com.osh.service.impl;
 
+import static com.osh.communication.mqtt.MqttConstants.MQTT_ACTOR_CMD_ATTR;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_BASE_PATH;
 import static com.osh.communication.mqtt.MqttConstants.MQTT_PATH_SEP;
+import static com.osh.communication.mqtt.MqttConstants.MQTT_SENDER_DEVICE_ID_ATTR;
+import static com.osh.communication.mqtt.MqttConstants.MQTT_TS;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -297,6 +300,16 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	    if (info.mqttPathLevels == firstLevelPath.size()) {
 	        Map<String, Object> rawValue = parseJSONPayload(payload);
 
+			String deviceId = "";
+			if (rawValue.containsKey(MQTT_SENDER_DEVICE_ID_ATTR)) {
+				deviceId = rawValue.get(MQTT_SENDER_DEVICE_ID_ATTR).toString();
+			}
+
+			long ts = 0;
+			if (rawValue.containsKey(MQTT_TS)) {
+				ts =  ((Number)rawValue.get(MQTT_TS)).longValue();
+			}
+
 			LogFacade.d(TAG,info.messageType + " " +  rawValue);
 
 	        switch (info.messageType) {
@@ -304,7 +317,10 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	            return new ValueMessage(firstLevelPath.get(0), firstLevelPath.get(1), rawValue);
 	        }
 	        case MESSAGE_TYPE_ACTOR: {
-	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), ActorCmds.of(Integer.parseInt(parseSingleValue(rawValue).toString())));
+				ActorCmds cmd = ActorCmds.of(Integer.parseInt(parseSingleValue(rawValue).toString()));
+				Object val = rawValue.get(MQTT_ACTOR_CMD_ATTR);
+
+	        	return new ActorMessage(firstLevelPath.get(0), firstLevelPath.get(1), val, cmd);
 	        }
 	        case MESSAGE_TYPE_DEVICE_DISCOVERY: {
 	            return new DeviceDiscoveryMessage(firstLevelPath.get(0), firstLevelPath.get(1));

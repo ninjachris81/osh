@@ -55,5 +55,9 @@ public class ValueMessage extends MessageBase {
 	public Object getRawValue() {
 		return rawValue;
 	}
+
+	public String getFullId() {
+		return ValueBase.getFullId(valueGroupId, valueId);
+	}
 	
 }

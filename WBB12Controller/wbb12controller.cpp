@@ -263,15 +263,6 @@ void WBB12Controller::onErrorOccurred() {
     Q_EMIT(controllerDisconnected());
 }
 
-QString WBB12Controller::generateMqttName(QString enumName) {
-    QStringList parts = enumName.toLower().split('_', QString::SkipEmptyParts);
-    for (int i=1; i<parts.size(); ++i) {
-        parts[i].replace(0, 1, parts[i][0].toUpper());
-    }
-
-    return parts.join("");
-}
-
 WBB12Controller::WBB12_Holding_Registers WBB12Controller::getHolding(QString name) {
     QString enumName;
 
@@ -298,7 +289,7 @@ void WBB12Controller::registerInput(WBB12_Input_Registers reg, qint64 retrieveIn
     val.retrieveInterval = retrieveInterval;
     val.type = type;
     val.dataFormat = dataFormat;
-    val.mqttName = generateMqttName(QVariant::fromValue(reg).toString());
+    val.mqttName = Helpers::generateMqttNameFromConstant(QVariant::fromValue(reg).toString());
     iDebug() << Q_FUNC_INFO << reg << "->" << val.mqttName;
 
     m_inputRegisters.insert(reg, val);
@@ -313,7 +304,7 @@ void WBB12Controller::registerHolding(WBB12_Holding_Registers reg, qint64 retrie
     val.retrieveInterval = retrieveInterval;
     val.type = type;
     val.dataFormat = dataFormat;
-    val.mqttName = generateMqttName(QVariant::fromValue(reg).toString());
+    val.mqttName = Helpers::generateMqttNameFromConstant(QVariant::fromValue(reg).toString());
 
     m_holdingRegisters.insert(reg, val);
     m_lastHoldingReadings.insert(reg, 0);
