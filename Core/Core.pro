@@ -79,6 +79,7 @@ SOURCES += \
         meta/itemmetainfo.cpp \
         meta/metainfosupport.cpp \
         processor/processortaskbase.cpp \
+        processor/processorvariable.cpp \
         processor/scriptresultmessage.cpp \
         serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
@@ -164,6 +165,7 @@ HEADERS += \
         meta/metainfosupport.h \
         processor/processortaskbase.h \
         processor/processortaskfactory.h \
+        processor/processorvariable.h \
         processor/scriptresultmessage.h \
         serializableidentifyable.h \
         shared/actor.h \

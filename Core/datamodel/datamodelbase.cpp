@@ -132,8 +132,17 @@ StringValue* DatamodelBase::addStringValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
+ProcessorVariable* DatamodelBase::addProcessorVariable(QString id, QString value) {
+    ProcessorVariable *var = new ProcessorVariable(id, value);
+    m_processorVariables.insert(var->id(), var);
+}
+
 ProcessorTaskBase* DatamodelBase::addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool isEnabled) {
     if (m_processorTaskFactory != nullptr) {
+        for (ProcessorVariable* var : m_processorVariables.values()) {
+            var->replaceScriptCode(scriptCode);
+        }
+
         ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
         processorNode->setEnabled(isEnabled);
         if (processorNode != nullptr) {

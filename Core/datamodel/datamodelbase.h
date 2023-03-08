@@ -8,6 +8,7 @@
 
 #include "actor/toggleactor.h"
 #include "actor/valueactor.h"
+#include "processor/processorvariable.h"
 #include "sharedlib.h"
 
 #include "device/knowndevice.h"
@@ -60,6 +61,7 @@ public:
     LongValue* addLongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     StringValue* addStringValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    ProcessorVariable* addProcessorVariable(QString id, QString value);
     ProcessorTaskBase* addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false, bool isEnabled = true);
     KnownRoom* addKnownRoom(KnownArea *knownArea, QString id, QString name);
 
@@ -76,6 +78,7 @@ protected:
     QMap<QString, KnownRoom*> m_knownRooms;
     QMap<QString, KnownArea*> m_knownAreas;
 
+    QMap<QString, ProcessorVariable*> m_processorVariables;
     QMap<QString, ProcessorTaskBase*> m_processorTasks;
 
 private:

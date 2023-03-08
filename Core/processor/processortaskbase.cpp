@@ -9,6 +9,7 @@ QLatin1String ProcessorTaskBase::PROPERTY_SCRIPT_CODE = QLatin1String("scriptCod
 QLatin1String ProcessorTaskBase::PROPERTY_RUN_CONDITION = QLatin1String("runCondition");
 QLatin1String ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL =QLatin1String("scheduleInterval");
 QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publishResult");
+QLatin1String ProcessorTaskBase::PROPERTY_ENABLED = QLatin1String("enabled");
 
 ProcessorTaskBase::ProcessorTaskBase() : QObject() {
 }

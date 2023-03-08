@@ -1,6 +1,7 @@
 #include "dbdatamodelloader.h"
 #include "qsqlerror.h"
 #include "qsqlrecord.h"
+#include "processor/processorvariable.h"
 
 #include <QSqlQuery>
 #include <QSqlField>
@@ -39,6 +40,7 @@ DatamodelBase *DBDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactor
 
         if (options.loadProcessorTasks) {
             datamodel->setProcessorTaskFactory(processorTaskFactory);
+            loadProcessorVariables(datamodel);
             loadProcessorTasks(datamodel);
         }
 
@@ -147,6 +149,23 @@ void DBDatamodelLoader::loadKnownDevices(DynamicDatamodel *datamodel) {
     if (query.exec("SELECT * FROM dm_known_devices")) {
         while (query.next()) {
             datamodel->addKnownDevice(query.value(SerializableIdentifyable::PROPERTY_ID).toString(), query.value(KnownDevice::PROPERTY_SERVICE_ID).toString(), query.value(KnownDevice::PROPERTY_NAME).toString());
+        }
+    } else {
+        iWarning() << query.lastError();
+    }
+}
+
+void DBDatamodelLoader::loadProcessorVariables(DynamicDatamodel *datamodel) {
+    iInfo() << Q_FUNC_INFO;
+
+    QSqlQuery query(*m_databaseManager->db());
+
+    if (query.exec("SELECT * FROM dm_processor_variables")) {
+        while (query.next()) {
+            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            QString value = query.value(ProcessorVariable::PROPERTY_VALUE).toString();
+
+            datamodel->addProcessorVariable(id, value);
         }
     } else {
         iWarning() << query.lastError();

@@ -37,6 +37,7 @@ private:
     void loadValueGroups(DynamicDatamodel *datamodel);
     void loadValues(DynamicDatamodel *datamodel);
     void loadActors(DynamicDatamodel *datamodel);
+    void loadProcessorVariables(DynamicDatamodel *datamodel);
     void loadProcessorTasks(DynamicDatamodel *datamodel);
     void loadKnownDevices(DynamicDatamodel *datamodel);
 
