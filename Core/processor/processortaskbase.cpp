@@ -13,8 +13,8 @@ QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publis
 ProcessorTaskBase::ProcessorTaskBase() : QObject() {
 }
 
-ProcessorTaskBase::ProcessorTaskBase(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent)
-    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult)
+ProcessorTaskBase::ProcessorTaskBase(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent)
+    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult), m_enabled(enabled)
 {
 
 }
@@ -58,6 +58,10 @@ bool ProcessorTaskBase::publishResult() {
     return m_publishResult;
 }
 
+bool ProcessorTaskBase::isEnabled() {
+    return m_enabled;
+}
+
 qint64 ProcessorTaskBase::lastExecution() {
     return m_lastExecution;
 }
@@ -74,4 +78,8 @@ void ProcessorTaskBase::setLastResult(QVariant lastResult) {
 void ProcessorTaskBase::setLastExecutionNow() {
     m_lastExecution = QDateTime::currentMSecsSinceEpoch();
     Q_EMIT(lastExecutionChanged());
+}
+
+void ProcessorTaskBase::setEnabled(bool enabled) {
+    m_enabled = enabled;
 }

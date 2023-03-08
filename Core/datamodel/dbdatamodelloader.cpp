@@ -167,8 +167,9 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
             QString runCondition = query.value(ProcessorTaskBase::PROPERTY_RUN_CONDITION).toString();
             qint64 scheduleInterval = query.value(ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL).toLongLong();
             bool publishResult = query.value(ProcessorTaskBase::PROPERTY_PUBLISH_RESULT).toBool();
+            bool isEnabled = query.value(ProcessorTaskBase::PROPERTY_ENABLED).toBool();
 
-            datamodel->addProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+            datamodel->addProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, isEnabled);
         }
     } else {
         iWarning() << query.lastError();

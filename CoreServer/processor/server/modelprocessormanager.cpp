@@ -170,12 +170,16 @@ void ModelProcessorManager::executeTasks() {
 void ModelProcessorManager::executeTask(ProcessorTaskBase* task) {
     iDebug() << Q_FUNC_INFO;
 
-    ProcessorExecutorBase* executor = m_processorExecutors.value(task->taskType());
+    if (task->isEnabled()) {
+        ProcessorExecutorBase* executor = m_processorExecutors.value(task->taskType());
 
-    QVariant result = executor->execute(task);
-    //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-    if (task->publishResult()) {
-        publishScriptResult(task->id(), result);
+        QVariant result = executor->execute(task);
+        //QVariant result = it.value()->run(&m_engine, m_commonScripts);
+        if (task->publishResult()) {
+            publishScriptResult(task->id(), result);
+        }
+    } else {
+        iDebug() << "Skipping task, since it's not enabled" << task->id();
     }
 }
 

@@ -19,6 +19,7 @@ public:
     static QLatin1String PROPERTY_RUN_CONDITION;
     static QLatin1String PROPERTY_SCHEDULE_INTERVAL;
     static QLatin1String PROPERTY_PUBLISH_RESULT;
+    static QLatin1String PROPERTY_ENABLED;
 
     enum ProcessorTaskTriggerType {
         PTTT_INTERVAL = 0,
@@ -32,7 +33,7 @@ public:
     };
 
     ProcessorTaskBase();
-    explicit ProcessorTaskBase(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, QObject *parent = nullptr);
+    explicit ProcessorTaskBase(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, bool enabled = true, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -47,12 +48,14 @@ public:
     ProcessorTaskType taskType();
     ProcessorTaskTriggerType taskTriggerType();
     bool publishResult();
+    bool isEnabled();
 
     qint64 lastExecution();
     QVariant lastResult();
 
     void setLastResult(QVariant lastResult);
     void setLastExecutionNow();
+    void setEnabled(bool enabled);
 
 protected:
     ProcessorTaskType m_processorTaskType = PTT_JS;
@@ -62,6 +65,7 @@ protected:
     QString m_runCondition;
     qint64 m_scheduleInterval;
     bool m_publishResult = false;
+    bool m_enabled = true;
 
     qint64 m_lastExecution = 0;
     QVariant m_lastResult;
