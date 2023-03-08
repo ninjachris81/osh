@@ -61,16 +61,29 @@ QVariant NativeProcessorTask::run() {
         return false;
     }
 
-    switch(m_nativeFunction) {
-    case NFT_INIT_SWITCH_LOGIC:
-        return m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
-    case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
-        return m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
-    case NFT_APPLY_SHUTTER_LOGIC:
-        return m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt());
-    default:
-        break;
+    if (checkRunCondition()) {
+        switch(m_nativeFunction) {
+        case NFT_INIT_SWITCH_LOGIC:
+            m_lastResult = m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
+            break;
+        case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
+            m_lastResult = m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
+            break;
+        case NFT_APPLY_SHUTTER_LOGIC:
+            m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt());
+            break;
+        default:
+            break;
+        }
+
+        Q_EMIT(lastResultChanged());
+
+        setLastExecutionNow();
+
+        return m_lastResult;
     }
+
+    return false;
 }
 
 void NativeProcessorTask::setCommonScripts(CommonScripts* commonScripts) {
@@ -93,6 +106,11 @@ void NativeProcessorTask::addNativeParam(QVariant value) {
 
 QVariantList NativeProcessorTask::nativeParams() {
     return m_nativeParams;
+}
+
+bool NativeProcessorTask::checkRunCondition() {
+    // TODO
+    return true;
 }
 
 QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::NativeFunctionType nativeFunction) {

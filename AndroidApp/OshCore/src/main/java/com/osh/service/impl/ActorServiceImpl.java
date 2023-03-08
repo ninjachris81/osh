@@ -39,7 +39,13 @@ public class ActorServiceImpl implements IActorService {
 
 	@Override
 	public void publishCmd(ActorBase actor, ActorCmds actorCmd) {
-		ActorMessage msg = new ActorMessage(actor, actor.getValue(), actorCmd);
+		ActorMessage msg = new ActorMessage(actor, null, actorCmd);
+		communicationService.sendMessage(msg);
+	}
+
+	@Override
+	public void publishCmd(ActorBase actor, ActorCmds actorCmd, Object value) {
+		ActorMessage msg = new ActorMessage(actor, value, actorCmd);
 		communicationService.sendMessage(msg);
 	}
 

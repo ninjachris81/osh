@@ -40,6 +40,7 @@ public:
 
     //Q_INVOKABLE void publishValue(QString fullId, QVariant value);
     Q_INVOKABLE void publishCmd(QString fullId, int cmd, QString reason);
+    Q_INVOKABLE void publishCmd(QString fullId, int cmd, QVariant value, QString reason);
 
     Q_INVOKABLE void setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState = true);
     Q_INVOKABLE bool getIntervalState(QString key);
@@ -57,6 +58,7 @@ private:
 
     //void publishValue(ValueBase* val, QVariant value);
     void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason);
+    void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason);
 
 signals:
 

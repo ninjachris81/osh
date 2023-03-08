@@ -266,7 +266,9 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     case MessageBase::MESSAGE_TYPE_ACTOR: {
         ActorMessage* actorMessage = static_cast<ActorMessage*>(&message);
         QVariantMap map;
-        map.insert(MQTT_SINGLE_VALUE_ATTR, actorMessage->rawValue());
+        if (actorMessage->rawValue().isValid()) {
+            map.insert(MQTT_SINGLE_VALUE_ATTR, actorMessage->rawValue());
+        }
         map.insert(MQTT_ACTOR_CMD_ATTR, actorMessage->cmd());
         return serializeJSONValue(map);
     }

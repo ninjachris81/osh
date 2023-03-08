@@ -39,6 +39,8 @@ public:
     static QList<QVariant::Type> paramTypeList(NativeFunctionType nativeFunction);
 
 private:
+    bool checkRunCondition();
+
     NativeFunctionType m_nativeFunction = NFT_INVALID;
     QVariantList m_nativeParams;
 

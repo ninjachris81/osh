@@ -221,7 +221,9 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	        return serializeSingleJSONValue(((ValueMessage) msg).getRawValue());
 	    case MESSAGE_TYPE_ACTOR:
 			Map<String, Object> map = new HashMap<>();
-			map.put(MqttConstants.MQTT_SINGLE_VALUE_ATTR, ((ActorMessage) msg).getRawValue());
+			if (((ActorMessage) msg).getRawValue() != null) {
+				map.put(MqttConstants.MQTT_SINGLE_VALUE_ATTR, ((ActorMessage) msg).getRawValue());
+			}
 			map.put(MQTT_ACTOR_CMD_ATTR, ((ActorMessage) msg).getCmd().getValue());
 	        return serializeJSONMap(map);
 	    case MESSAGE_TYPE_ACTOR_CONFIG:

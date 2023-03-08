@@ -323,6 +323,11 @@ void CommonScripts::publishCmd(QString fullId, int cmd, QString reason) {
     publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
 }
 
+void CommonScripts::publishCmd(QString fullId, int cmd, QVariant value, QString reason) {
+    ActorBase* actor = m_datamodel->actors().value(fullId);
+    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), value, reason);
+}
+
 /*
 void CommonScripts::publishValue(ValueBase* val, QVariant value) {
     val->updateValue(value);
@@ -331,8 +336,15 @@ void CommonScripts::publishValue(ValueBase* val, QVariant value) {
 */
 
 void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
+    iDebug() << actor->fullId() << cmd << reason;
     //actor->triggerCmd(cmd, reason);
     m_actorManager->publishCmd(actor, cmd);
+}
+
+void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason) {
+    iDebug() << actor->fullId() << cmd << value << reason;
+    //actor->triggerCmd(cmd, reason);
+    m_actorManager->publishCmd(actor, cmd, value);
 }
 
 void CommonScripts::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {
@@ -393,9 +405,12 @@ bool CommonScripts::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, 
 
     if (from == to) return 0;
 
-    if (to < from) {
-        to += 24 * 60 * 60 * 1000;
+    qint64 now = QTime::currentTime().msecsSinceStartOfDay();
+    if (from < to) {
+        // normal case
+        return now > from && now < to;
+    } else {
+        // day limit
+        return now > from || now < to;
     }
-
-    return QTime::currentTime().msecsSinceStartOfDay() > from && QTime::currentTime().msecsSinceStartOfDay() < to;
 }

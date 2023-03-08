@@ -31,6 +31,8 @@ public:
 
     void publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd);
 
+    void publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd, QVariant value);
+
     //void onCmdTriggered(ActorBase *actor, actor::ACTOR_CMDS cmd);
 
     ActorBase* getActor(QString fullId);
