@@ -29,7 +29,7 @@ public:
 
     Q_INVOKABLE bool applyMotionLogic(QString radarFullId, QString pirFullId, QString motionFullId);
 
-    Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
+    Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
     Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 

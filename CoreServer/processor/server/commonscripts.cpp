@@ -277,10 +277,12 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
     return true;
 }
 
-bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
+bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actors().value(shutterFullId));
+    EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->values().value(shutterModeFullId));
 
     Q_ASSERT(shutterActor != nullptr);
+    Q_ASSERT(shutterMode != nullptr);
 
     bool motionActive = false;
     if (!motionFullId.isEmpty()) {
@@ -290,7 +292,7 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullI
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
-    if (shutterActor->isValid() && shutterActor->getConfig(ShutterActor::CONFIG_OPERATION_MODE, SHUTTER_OPERATION_MODE_AUTO) == SHUTTER_OPERATION_MODE_AUTO) {
+    if (shutterActor->isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
             // down: check is motion active
             if (!motionActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {

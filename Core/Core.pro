@@ -30,9 +30,6 @@ DEFINES += PROCESSOR_NATIVE_SUPPORT
 
 SOURCES += \
         actor/actorbase.cpp \
-        actor/actorconfig.cpp \
-        actor/actorconfigmanager.cpp \
-        actor/actorconfigmessage.cpp \
         actor/actormanager.cpp \
         actor/actormessage.cpp \
         actor/audioplaybackactor.cpp \
@@ -113,9 +110,6 @@ SOURCES += \
 
 HEADERS += \
         actor/actorbase.h \
-        actor/actorconfig.h \
-        actor/actorconfigmanager.h \
-        actor/actorconfigmessage.h \
         actor/actormanager.h \
         actor/actormessage.h \
         actor/audioplaybackactor.h \

@@ -8,15 +8,18 @@ class OrnoWe514 : public QObject {
 
 public:
     enum OrnoWe514_Input_Registers {
-        FREQUENCY = 130,
+        COMM_ADDRESS = 0x110,
+        COMM_BAUD_RATE = 0x111,
 
-        PHASE_VOLTAGE_V1 = 131,
-        PHASE_VOLTAGE_V2 = 132,
-        PHASE_VOLTAGE_V3 = 133,
+        FREQUENCY = 0x130,
 
-        PHASE_CURRENT_I1 = 139,
-        PHASE_CURRENT_I2 = 140,
-        PHASE_CURRENT_I3 = 141,
+        PHASE_VOLTAGE_V1 = 0x131,
+        PHASE_VOLTAGE_V2 = 0x132,
+        PHASE_VOLTAGE_V3 = 0x133,
+
+        PHASE_CURRENT_I1 = 0x139,
+        PHASE_CURRENT_I2 = 0x140,
+        PHASE_CURRENT_I3 = 0x141,
     };
     Q_ENUM(OrnoWe514_Input_Registers)
 };

@@ -25,13 +25,15 @@ void RS485EnergyMeterController::init() {
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialPortNameParameter, m_config->getString(this, "serial.port", "COM1"));
-    m_modbusClient.setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
+    m_modbusClient.setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::EvenParity);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud9600);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
     m_modbusClient.setTimeout(500);
     m_modbusClient.setNumberOfRetries(1);
 
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_ADDRESS, QVariant::Int, 1);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_BAUD_RATE, QVariant::Int, 1);
     registerInput(OrnoWe514::OrnoWe514_Input_Registers::FREQUENCY, QVariant::Int, 0.01);
     registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V2, QVariant::Int, 0.01);
@@ -109,7 +111,7 @@ void RS485EnergyMeterController::onStateChanged() {
 void RS485EnergyMeterController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO << m_modbusClient.errorString();
 
-    m_warnManager->raiseWarning("Relay connection disconnected");
+    m_warnManager->raiseWarning("RS485 connection disconnected");
     m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }

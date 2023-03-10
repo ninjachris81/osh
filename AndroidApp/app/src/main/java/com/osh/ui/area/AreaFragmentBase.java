@@ -17,7 +17,9 @@ import com.osh.datamodel.meta.KnownRoom;
 import com.osh.service.IActorService;
 import com.osh.service.IDatamodelService;
 import com.osh.service.IValueService;
+import com.osh.ui.components.ShutterModeButton;
 import com.osh.value.BooleanValue;
+import com.osh.value.EnumValue;
 
 public abstract class AreaFragmentBase extends Fragment {
 
@@ -67,11 +69,13 @@ public abstract class AreaFragmentBase extends Fragment {
         });
     }
 
-    protected void initRoomShutter(View root, String shutterValueGroup, String shutterActorId, int buttonResId) {
-        ToggleButton button = root.findViewById(buttonResId);
+    protected void initRoomShutter(View root, String shutterValueGroup, String shutterActorId, String shutterModeValueGroup, String shutterModeId, int buttonResId) {
+        ShutterModeButton modeButton = root.findViewById(buttonResId);
 
         ShutterActor shutterActor = (ShutterActor) datamodelService.getDatamodel().getActor(shutterActorId, shutterValueGroup);
+        EnumValue shutterMode = (EnumValue) datamodelService.getDatamodel().getValue(shutterModeId, shutterModeValueGroup);
 
+        /*
         shutterActor.addItemChangeListener(item -> {
             int progress = item.getValue(0);
             activity.runOnUiThread(() -> {
@@ -79,9 +83,29 @@ public abstract class AreaFragmentBase extends Fragment {
                 button.setChecked(progress == 100);
             });
         }, true);
+         */
 
-        button.setOnClickListener(view -> {
-            actorService.publishCmd(shutterActor, button.isChecked() ? ActorCmds.ACTOR_CMD_DOWN : ActorCmds.ACTOR_CMD_UP);
+        shutterMode.addItemChangeListener(item -> {
+            activity.runOnUiThread(() -> {
+                modeButton.setAuto(item.getValue(ShutterActor.SHUTTER_OPERATION_MODE_AUTO) == ShutterActor.SHUTTER_OPERATION_MODE_AUTO);
+            });
+        }, true);
+
+        modeButton.setAutoClickListener(view -> {
+            shutterMode.updateValue(ShutterActor.SHUTTER_OPERATION_MODE_AUTO);
+            valueService.publishValue(shutterMode);
+        });
+
+        modeButton.setUpClickListener(view -> {
+            shutterMode.updateValue(ShutterActor.SHUTTER_OPERATION_MODE_MANUAL);
+            valueService.publishValue(shutterMode);
+            //actorService.publishCmd(shutterActor, ActorCmds.ACTOR_CMD_UP);
+        });
+
+        modeButton.setDownClickListener(view -> {
+            shutterMode.updateValue(ShutterActor.SHUTTER_OPERATION_MODE_MANUAL);
+            valueService.publishValue(shutterMode);
+            //actorService.publishCmd(shutterActor, ActorCmds.ACTOR_CMD_DOWN);
         });
     }
 }

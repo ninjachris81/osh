@@ -5,7 +5,7 @@ NativeProcessorTask::NativeProcessorTask() : ProcessorTaskBase() {
 
 }
 
-NativeProcessorTask::NativeProcessorTask(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent) : ProcessorTaskBase(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, parent)
+NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent) : ProcessorTaskBase(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, parent)
 {
 
     if (scriptCode.startsWith("CommonScripts.") && scriptCode.endsWith(")")) {
@@ -70,7 +70,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
             break;
         case NFT_APPLY_SHUTTER_LOGIC:
-            m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt());
+            m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt());
             break;
         default:
             break;
@@ -120,7 +120,7 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
     case NativeProcessorTask::NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::Int;
     case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC:
-        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::Int;
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::Int;
     default:
         return QList<QVariant::Type>();
     }

@@ -13,6 +13,7 @@
 
 #include "device/knowndevice.h"
 #include "actor/actorbase.h"
+#include "value/enumvalue.h"
 #include "value/valuegroup.h"
 #include "value/valuebase.h"
 #include "value/doublevalue.h"
@@ -54,15 +55,16 @@ public:
     ValueGroup* addValueGroup(QString id);
     ToggleActor* addToggleActor(ValueGroup* valueGroup, QString id);
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync);
-    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration);
+    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration);
     ValueActor* addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     LongValue* addLongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     DoubleValue* addDoubleValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     StringValue* addStringValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
+    EnumValue* addEnumValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, int enumCount, ValueBase::VALUE_TIMEOUT timeout);
     ProcessorVariable* addProcessorVariable(QString id, QString value);
-    ProcessorTaskBase* addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false, bool isEnabled = true);
+    ProcessorTaskBase* addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false, bool isEnabled = true);
     KnownRoom* addKnownRoom(KnownArea *knownArea, QString id, QString name);
 
     KnownArea* addKnownArea(QString id, QString name);

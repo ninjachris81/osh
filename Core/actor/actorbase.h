@@ -23,17 +23,11 @@ public:
 
     virtual bool isAsync() = 0;
 
-    void setConfig(QVariantMap values);
-    QVariant getConfig(QString key, QVariant defaultValue);
-    QStringList configKeys();
-
 Q_SIGNALS:
     void cmdTriggered(actor::ACTOR_CMDS cmd);
 
 protected:
     virtual void _triggerCmd(actor::ACTOR_CMDS cmd);
-
-    QVariantMap m_configValues;
 
 public slots:
 };

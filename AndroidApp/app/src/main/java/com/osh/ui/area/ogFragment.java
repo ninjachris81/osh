@@ -40,22 +40,23 @@ public class ogFragment extends AreaFragmentBase {
         String relayValueGroupId= "allRelays0";
         String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
+        String shutterModeValueGroupId = "shutterModes0";
 
         initRoom(root, "sz", R.id.labelSZ);
         initRoomLight(root, relayValueGroupId, "16", toggleValueGroupId, "8", R.id.lightSZ);
-        initRoomShutter(root, shutterValueGroupId, "6", R.id.shutterSZ);
+        initRoomShutter(root, shutterValueGroupId, "6", shutterModeValueGroupId, "6", R.id.shutterSZ);
 
         initRoom(root, "uz", R.id.labelUZ);
         initRoomLight(root, relayValueGroupId, "17", toggleValueGroupId, "9", R.id.lightUZ);
-        initRoomShutter(root, shutterValueGroupId, "7", R.id.shutterUZ);
+        initRoomShutter(root, shutterValueGroupId, "7", shutterModeValueGroupId, "7", R.id.shutterUZ);
 
         initRoom(root, "b", R.id.labelB);
         initRoomLight(root, relayValueGroupId, "18", toggleValueGroupId, "10", R.id.lightB);
-        initRoomShutter(root, shutterValueGroupId, "8", R.id.shutterB1);
+        initRoomShutter(root, shutterValueGroupId, "8", shutterModeValueGroupId, "8", R.id.shutterB1);
 
         initRoom(root, "wz", R.id.labelWZ);
         initRoomLight(root, relayValueGroupId, "19", toggleValueGroupId, "11", R.id.lightWZ);
-        initRoomShutter(root, shutterValueGroupId, "9", R.id.shutterWZ1);
+        initRoomShutter(root, shutterValueGroupId, "9", shutterModeValueGroupId, "9", R.id.shutterWZ1);
 
         initRoom(root, "fog", R.id.labelFOG);
         initRoomLight(root, relayValueGroupId, "20", toggleValueGroupId, "12", R.id.lightFOG);

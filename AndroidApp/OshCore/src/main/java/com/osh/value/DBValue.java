@@ -24,6 +24,9 @@ public class DBValue {
     @DatabaseField
     String comment;
 
+    @DatabaseField
+    int enumCount;
+
     public String getId() {
         return id;
     }
@@ -46,5 +49,9 @@ public class DBValue {
 
     public String getComment() {
         return comment;
+    }
+
+    public int getEnumCount() {
+        return enumCount;
     }
 }

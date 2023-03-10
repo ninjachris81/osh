@@ -13,6 +13,7 @@ class SHARED_LIB_EXPORT ProcessorTaskBase : public QObject, public SerializableI
 public:
     static qint64 INTERVAL_REALTIME;
 
+    static QLatin1String PROPERTY_GROUP_ID;
     static QLatin1String PROPERTY_TASK_TYPE;
     static QLatin1String PROPERTY_TASK_TRIGGER_TYPE;
     static QLatin1String PROPERTY_SCRIPT_CODE;
@@ -33,7 +34,7 @@ public:
     };
 
     ProcessorTaskBase();
-    explicit ProcessorTaskBase(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, bool enabled = true, QObject *parent = nullptr);
+    explicit ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, bool enabled = true, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -49,6 +50,7 @@ public:
     ProcessorTaskTriggerType taskTriggerType();
     bool publishResult();
     bool isEnabled();
+    QString groupId();
 
     qint64 lastExecution();
     QVariant lastResult();
@@ -66,6 +68,7 @@ protected:
     qint64 m_scheduleInterval;
     bool m_publishResult = false;
     bool m_enabled = true;
+    QString m_groupId;
 
     qint64 m_lastExecution = 0;
     QVariant m_lastResult;

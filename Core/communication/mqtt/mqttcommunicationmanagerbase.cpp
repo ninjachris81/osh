@@ -9,7 +9,6 @@
 #include "time/systemtimemessage.h"
 #include "warn/systemwarningmessage.h"
 #include "actor/actormessage.h"
-#include "actor/actorconfigmessage.h"
 #include "controller/controllermessage.h"
 #include "controller/controllermanager.h"
 #include "log/logmessage.h"
@@ -26,7 +25,6 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
 
     registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, false, MQTT_MESSAGE_TYPE_AC, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR_CONFIG, true, MQTT_MESSAGE_TYPE_AO, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1);
@@ -94,10 +92,6 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
                 iWarning() << "Invalid payload value" << value << messageType;
                 return nullptr;
             }
-        }
-        case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
-            msg = new ActorConfigMessage(firstLevelPath.first(), firstLevelPath.at(1), value);
-            break;
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
             QVariant ddVal = parseSingleValue(value);
@@ -187,13 +181,13 @@ void MqttCommunicationManagerBase::onMqttConnected() {
     } else {
         switch(managerRegistration()->instanceRole()) {
         case ManagerRegistration::SERVER:
-            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_AO);
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC);
             break;
         case ManagerRegistration::CLIENT:
             subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
             break;
         case ManagerRegistration::GUI:
-            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO << MQTT_MESSAGE_TYPE_AO);
+            subscribeChannels(QStringList() << MQTT_MESSAGE_TYPE_VA << MQTT_MESSAGE_TYPE_DD << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_SW << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_SR << MQTT_MESSAGE_TYPE_LO);
             break;
         default:
             iWarning() << "Unsupported instance role";
@@ -271,10 +265,6 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         }
         map.insert(MQTT_ACTOR_CMD_ATTR, actorMessage->cmd());
         return serializeJSONValue(map);
-    }
-    case MessageBase::MESSAGE_TYPE_ACTOR_CONFIG: {
-        ActorConfigMessage* actorConfigMessage = static_cast<ActorConfigMessage*>(&message);
-        return serializeJSONValue(actorConfigMessage->values());
     }
     case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {
         SystemtimeMessage* systimeMessage = static_cast<SystemtimeMessage*>(&message);

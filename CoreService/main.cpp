@@ -13,7 +13,6 @@
 #include "datamodel/datamodelmanager.h"
 #include "processor/server/modelprocessormanager.h"
 #include "actor/actormanager.h"
-#include "actor/actorconfigmanager.h"
 #include "log/logmanager.h"
 #include "database/databasemanager.h"
 #include "database/simpledatabasemanager.h"
@@ -43,7 +42,6 @@ int main(int argc, char *argv[])
     datamodelManager.setProcessorTaskFactory(&modelProcessor);
     LogManager logManager;
     ActorManager actorManager;
-    ActorConfigManager actorConfigManager;
     DatabaseManager databaseManager;
     SimpleDatabaseManager simpleDatabaseManager;
 
@@ -59,7 +57,6 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&actorManager);
-    managerRegistration.registerManager(&actorConfigManager);
     managerRegistration.registerManager(&modelProcessor);
     managerRegistration.registerManager(&logManager);
     managerRegistration.registerManager(&databaseManager);

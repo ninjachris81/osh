@@ -20,6 +20,7 @@ import com.osh.device.KnownDevice;
 import com.osh.processor.ProcessorTask;
 import com.osh.value.BooleanValue;
 import com.osh.value.DoubleValue;
+import com.osh.value.EnumValue;
 import com.osh.value.IntegerValue;
 import com.osh.value.LongValue;
 import com.osh.value.StringValue;
@@ -144,6 +145,14 @@ public class DatamodelBase extends Identifyable {
 		values.put(value.getFullId(), value);
 		return value;
 	}
+
+	public EnumValue addEnumValue(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, int enumCount) {
+		EnumValue value = new EnumValue(valueGroup, id, valueType, enumCount);
+		value.withValueTimeout(timeout);
+		values.put(value.getFullId(), value);
+		return value;
+	}
+
 
 	public ValueBase addValue(ValueBase value) {
 	    values.put(value.getId(), value);

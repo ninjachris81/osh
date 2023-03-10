@@ -1,6 +1,8 @@
 package com.osh;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -70,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 .with(this) // Provide the activity context
                 .setDefaultColor(Color.BLACK)
                 .inflate(R.menu.bottom_nav_menu, bottomNav.getMenu());
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        int lastNavId = sharedPref.getInt(getString(R.string.main_last_nav), -1);
+        if (lastNavId != -1) {
+            bottomNav.setSelectedItemId(lastNavId);
+        }
     }
 
     private final NavigationBarView.OnItemSelectedListener navListener = item -> {
@@ -94,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         // It will help to replace the
         // one fragment to other.
         if (selectedFragment != null) {
+            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+            sharedPref.edit().putInt(getString(R.string.main_last_nav), selectedFragment.get item.getItemId()).apply();
+
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, selectedFragment).commit();
         }
         return true;

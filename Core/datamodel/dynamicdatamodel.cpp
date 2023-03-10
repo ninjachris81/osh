@@ -157,7 +157,7 @@ void DynamicDatamodel::addActor(QString typeName, ValueGroup *valueGroup, QStrin
                         properties.value(DigitalActor::PROPERTY_IS_ASYNC).toBool());
     } else if (typeName == "ShutterActor") {
         addShutterActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
-                        properties.value(ShutterActor::PROPERTY_TILT_SUPPORT).toBool(), properties.value(ShutterActor::PROPERTY_FULL_CLOSE_DURATION).toInt() );
+                        properties.value(ShutterActor::PROPERTY_TILT_SUPPORT).toBool(), properties.value(ShutterActor::PROPERTY_FULL_CLOSE_DURATION).toInt(), properties.value(ShutterActor::PROPERTY_FULL_TILT_DURATION).toInt());
     } else if (typeName == "ToggleActor") {
         addToggleActor(valueGroup, id);
     } else if (typeName == "ValueActor") {
@@ -171,15 +171,17 @@ void DynamicDatamodel::addValue(QString typeName, ValueGroup *valueGroup, QStrin
     ValueBase* val;
 
     if (typeName == "BooleanValue") {
-        val = addBooleanValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+        val = addBooleanValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(ValueBase::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "IntegerValue") {
-        val = addIntegerValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+        val = addIntegerValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(ValueBase::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "LongValue") {
-        val = addLongValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+        val = addLongValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(ValueBase::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "DoubleValue") {
-        val = addDoubleValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+        val = addDoubleValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(ValueBase::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "StringValue") {
-        val = addStringValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+        val = addStringValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(ValueBase::PROPERTY_VALUE_TIMEOUT).toInt()));
+    } else if (typeName == "EnumValue") {
+        val = addEnumValue(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), properties.value(EnumValue::PROPERTY_ENUM_COUNT).toInt(), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(ValueBase::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else {
         iWarning() << "Unknown value type" << typeName;
     }

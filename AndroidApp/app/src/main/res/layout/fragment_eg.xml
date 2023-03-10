@@ -141,6 +141,7 @@
             android:id="@+id/labelHFE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
             android:layout_marginBottom="-300dp"
             android:text="NAME"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -156,74 +157,80 @@
             app:layout_constraintStart_toEndOf="@+id/labelHFE"
             app:layout_constraintTop_toTopOf="@+id/labelHFE" />
 
-        <ToggleButton
+        <TextView
+            android:id="@+id/labelNFE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="-310dp"
+            android:text="NAME"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/lightNFE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/labelNFE"
+            app:layout_constraintTop_toBottomOf="@+id/labelNFE" />
+
+        <com.osh.ui.components.ShutterModeButton
             android:id="@+id/shutterEZ"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="-22dp"
-            android:layout_marginTop="85dp"
-            android:rotation="-90"
-            android:rotationY="30"
-            android:text="ToggleButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ToggleButton
-            android:id="@+id/shutterAZ"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="-22dp"
-            android:layout_marginTop="235dp"
-            android:rotation="-90"
-            android:rotationY="30"
-            android:text="ToggleButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ToggleButton
-            android:id="@+id/shutterHFE"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="-22dp"
-            android:layout_marginTop="400dp"
-            android:rotation="-90"
-            android:rotationY="30"
-            android:text="ToggleButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ToggleButton
-            android:id="@+id/shutterK"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="2dp"
             android:layout_marginTop="60dp"
-            android:layout_marginEnd="-22dp"
-            android:rotation="90"
-            android:rotationY="-30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.osh.ui.components.ShutterModeButton
+            android:id="@+id/shutterAZ"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="230dp"
+            android:text="ToggleButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.osh.ui.components.ShutterModeButton
+            android:id="@+id/shutterHFE"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="370dp"
+            android:text="ToggleButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.osh.ui.components.ShutterModeButton
+            android:id="@+id/shutterK"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="2dp"
             android:text="ToggleButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ToggleButton
+        <com.osh.ui.components.ShutterModeButton
             android:id="@+id/shutterVZ"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="170dp"
-            android:layout_marginEnd="-22dp"
-            android:rotation="90"
-            android:rotationY="-30"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="149dp"
+            android:layout_marginEnd="2dp"
             android:text="ToggleButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ToggleButton
+        <com.osh.ui.components.ShutterModeButton
             android:id="@+id/shutterWC"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="290dp"
-            android:layout_marginEnd="-22dp"
-            android:rotation="90"
-            android:rotationY="-30"
+            android:layout_width="32dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="260dp"
+            android:layout_marginEnd="2dp"
             android:text="ToggleButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -40,6 +40,6 @@
     <string name="db_name">db_name</string>
     <string name="db_username">db_username</string>
     <string name="db_password">db_password</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="area_last_tab">area_last_tab</string>
+    <string name="main_last_nav">main_last_nav</string>
 </resources>

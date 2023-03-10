@@ -123,6 +123,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 				val = datamodel.addDoubleValue(valueGroup, value.getId(), ValueType.of(value.getValueType()), ValueBase.VALUE_TIMEOUT.of(value.getValueTimeout()));
 			} else if (value.getClassType().equals("StringValue")) {
 				val = datamodel.addStringValue(valueGroup, value.getId(), ValueType.of(value.getValueType()), ValueBase.VALUE_TIMEOUT.of(value.getValueTimeout()));
+			} else if (value.getClassType().equals("EnumValue")) {
+				val = datamodel.addEnumValue(valueGroup, value.getId(), ValueType.of(value.getValueType()), ValueBase.VALUE_TIMEOUT.of(value.getValueTimeout()), value.getEnumCount());
 			} else {
 				log.error("Unknown class type: " + value.getClassType());
 			}
