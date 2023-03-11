@@ -139,6 +139,8 @@ EnumValue* DatamodelBase::addEnumValue(ValueGroup* valueGroup, QString id, VALUE
 ProcessorVariable* DatamodelBase::addProcessorVariable(QString id, QString value) {
     ProcessorVariable *var = new ProcessorVariable(id, value);
     m_processorVariables.insert(var->id(), var);
+    Q_EMIT(datamodelContentChanged());
+    return var;
 }
 
 ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool isEnabled) {
