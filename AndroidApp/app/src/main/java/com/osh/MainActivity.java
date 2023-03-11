@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         // one fragment to other.
         if (selectedFragment != null) {
             SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-            sharedPref.edit().putInt(getString(R.string.main_last_nav), selectedFragment.get item.getItemId()).apply();
+            sharedPref.edit().putInt(getString(R.string.main_last_nav), item.getItemId()).apply();
 
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, selectedFragment).commit();
         }

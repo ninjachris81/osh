@@ -26,7 +26,7 @@ import com.osh.value.BooleanValue;
 public class egFragment extends AreaFragmentBase {
 
 
-    protected egFragment() {
+    public egFragment() {
     }
 
     public egFragment(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {

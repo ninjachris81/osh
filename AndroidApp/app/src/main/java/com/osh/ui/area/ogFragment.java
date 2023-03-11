@@ -19,7 +19,7 @@ import com.osh.service.IValueService;
  */
 public class ogFragment extends AreaFragmentBase {
 
-    protected ogFragment() {
+    public ogFragment() {
     }
 
     public ogFragment(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {

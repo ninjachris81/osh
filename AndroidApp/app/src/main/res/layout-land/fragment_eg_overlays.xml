@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.area.egFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/base_layout_eg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="700dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/labelEZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="120dp"
+                android:layout_marginBottom="120dp"
+                android:text="NAME"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Switch
+                android:id="@+id/lightEZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/labelEZ"
+                app:layout_constraintTop_toBottomOf="@+id/labelEZ" />
+
+            <TextView
+                android:id="@+id/labelK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="80dp"
+                android:text="NAME"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/lightK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/labelK"
+                app:layout_constraintTop_toBottomOf="@+id/labelK" />
+
+            <TextView
+                android:id="@+id/labelAZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="340dp"
+                android:layout_marginBottom="120dp"
+                android:text="NAME"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Switch
+                android:id="@+id/lightAZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="@+id/labelAZ"
+                app:layout_constraintTop_toTopOf="@+id/labelAZ" />
+
+            <TextView
+                android:id="@+id/labelVZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="240dp"
+                android:text="NAME"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/lightVZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/labelVZ"
+                app:layout_constraintTop_toBottomOf="@+id/labelVZ" />
+
+            <TextView
+                android:id="@+id/labelWC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="380dp"
+                android:text="NAME"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/lightWC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/labelWC"
+                app:layout_constraintTop_toBottomOf="@+id/labelWC" />
+
+            <TextView
+                android:id="@+id/labelFEG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-50dp"
+                android:text="NAME"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/lightFEG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/labelFEG"
+                app:layout_constraintTop_toBottomOf="@+id/labelFEG" />
+
+            <ImageView
+                android:id="@+id/lightBackgroundFEG"
+                android:layout_width="430dp"
+                android:layout_height="153dp"
+                android:layout_marginStart="-200dp"
+                android:layout_marginTop="-100dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintStart_toStartOf="@+id/labelFEG"
+                app:layout_constraintTop_toBottomOf="@+id/labelFEG"></ImageView>
+
+            <TextView
+                android:id="@+id/labelHFE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="110dp"
+                android:layout_marginTop="70dp"
+                android:text="NAME"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/lightHFE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/labelHFE"
+                app:layout_constraintTop_toBottomOf="@+id/labelHFE" />
+
+            <TextView
+                android:id="@+id/labelNFE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="65dp"
+                android:layout_marginBottom="100dp"
+                android:text="NAME"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Switch
+                android:id="@+id/lightNFE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@+id/labelNFE"
+                app:layout_constraintTop_toBottomOf="@+id/labelNFE" />
+
+            <com.osh.ui.components.ShutterModeButton
+                android:id="@+id/shutterEZ"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="-55dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/labelEZ"
+                app:singleLine="true" />
+
+            <com.osh.ui.components.ShutterModeButton
+                android:id="@+id/shutterAZ"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="-50dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/labelAZ"
+                app:singleLine="true" />
+
+            <com.osh.ui.components.ShutterModeButton
+                android:id="@+id/shutterNFE"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="-65dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/labelNFE"
+                app:singleLine="true" />
+
+            <com.osh.ui.components.ShutterModeButton
+                android:id="@+id/shutterK"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="-55dp"
+                app:layout_constraintStart_toStartOf="@+id/labelK"
+                app:layout_constraintTop_toTopOf="parent"
+                app:singleLine="true" />
+
+            <com.osh.ui.components.ShutterModeButton
+                android:id="@+id/shutterVZ"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="-60dp"
+                app:layout_constraintStart_toStartOf="@+id/labelVZ"
+                app:layout_constraintTop_toTopOf="parent"
+                app:singleLine="true" />
+
+            <com.osh.ui.components.ShutterModeButton
+                android:id="@+id/shutterWC"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="-50dp"
+                app:layout_constraintStart_toStartOf="@+id/labelWC"
+                app:layout_constraintTop_toTopOf="parent"
+                app:singleLine="true" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="700dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</FrameLayout>

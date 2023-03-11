@@ -19,7 +19,7 @@ import com.osh.service.IValueService;
  */
 public class basementFragment extends AreaFragmentBase {
 
-    protected basementFragment() {
+    public basementFragment() {
     }
 
     public basementFragment(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {

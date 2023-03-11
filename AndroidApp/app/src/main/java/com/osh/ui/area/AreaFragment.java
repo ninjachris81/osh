@@ -28,11 +28,12 @@ public class AreaFragment extends Fragment {
 
     AreaPagerAdapter areaPagerAdapter;
 
-    private final IDatamodelService datamodelService;
+    private IDatamodelService datamodelService;
 
-    private final IValueService valueService;
+    private IValueService valueService;
 
-    private final IActorService actorService;
+    private IActorService actorService;
+
 
     public AreaFragment(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
         this.datamodelService = datamodelService;

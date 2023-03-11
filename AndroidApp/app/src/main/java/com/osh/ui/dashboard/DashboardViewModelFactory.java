@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.osh.service.IValueService;
 
-public class DashboardViewModelFactory  implements ViewModelProvider.Factory {
+public class DashboardViewModelFactory implements ViewModelProvider.Factory {
 
     private final IValueService valueManager;
 
