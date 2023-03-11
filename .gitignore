@@ -14,6 +14,7 @@ RS485RelayService/RS485RelayService
 MCP23017InputService/MCP23017InputService
 ShutterService/ShutterService
 WBB12Service/WBB12Service
+RS485EnergyMeterService/RS485EnergyMeterService
 Makefile
 .qmake.stash
 /AndroidApp/app/google-services.json
