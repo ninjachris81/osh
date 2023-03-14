@@ -6,6 +6,8 @@
 #include <QResource>
 #include <QThread>
 
+#include "actor/scripttriggeractor.h"
+#include "helpers.h"
 #include "macros.h"
 #include "value/server/servervaluemanager.h"
 #include "shared/actor_qt.h"
@@ -26,19 +28,19 @@ ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(pare
     connect(&m_scheduleTimer, &QTimer::timeout, this, &ModelProcessorManager::executeTasks);
 }
 
-ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
 
     switch(taskType) {
         case ProcessorTaskBase::PTT_JS:
 #ifdef PROCESSOR_JS_SUPPORT
-            return new JSProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+            return new JSProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
 #else
             qWarning("JS Processor task not supported");
 #endif
             break;
         case ProcessorTaskBase::PTT_NATIVE:
 #ifdef IS_OSH_CORE_SERVICE
-            return new NativeProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+            return new NativeProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
 #else
             qWarning("Native Processor task not supported");
 #endif
@@ -82,7 +84,29 @@ void ModelProcessorManager::postInit() {
 
     m_processorTasks = m_dmManager->datamodel()->processorTasks();
 
+    // connect script actors
+    for (ActorBase *actor : m_dmManager->datamodel()->actors()) {
+        if (actor->inherits(ScriptTriggerActor::staticMetaObject.className())) {
+            ScriptTriggerActor *scriptTriggerActor = static_cast<ScriptTriggerActor*>(actor);
+
+            Helpers::safeConnect(scriptTriggerActor, &ScriptTriggerActor::triggerScript, this, &ModelProcessorManager::onTriggerScriptTask, SIGNAL(triggerScript()), SLOT(onTriggerScriptTask()));
+        }
+    }
+
     start();
+}
+
+void ModelProcessorManager::onTriggerScriptTask() {
+    iInfo() << Q_FUNC_INFO;
+
+    ScriptTriggerActor *scriptTriggerActor = static_cast<ScriptTriggerActor*>(sender());
+    QString taskId = scriptTriggerActor->rawValue().toString();
+
+    if (m_processorTasks.contains(taskId)) {
+        executeTask(m_processorTasks.value(taskId));
+    } else {
+        iWarning() << "Invalid processor task" << taskId;
+    }
 }
 
 QString ModelProcessorManager::id() {
@@ -111,28 +135,29 @@ void ModelProcessorManager::stop() {
 void ModelProcessorManager::executeTasks() {
     QMapIterator<QString, ProcessorTaskBase*> it(m_processorTasks);
 
+    // first, execute all only once's
+    if (m_isFirstRun) {
+        while(it.hasNext()) {
+            it.next();
+
+            if (it.value()->taskTriggerType() == ProcessorTaskBase::PTTT_ONLY_ONCE) {
+                if (m_isFirstRun) {
+                    executeTask(it.value());
+                }
+            }
+        }
+
+        m_isFirstRun = false;
+    }
+
+
     while(it.hasNext()) {
         it.next();
-
-        ProcessorExecutorBase* executor = m_processorExecutors.value(it.value()->taskType());
 
         switch(it.value()->taskTriggerType()) {
         case ProcessorTaskBase::PTTT_INTERVAL:
             if (QDateTime::currentMSecsSinceEpoch() > it.value()->lastExecution() + it.value()->scheduleInterval()) {
-                QVariant result = executor->execute(it.value());
-                //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-                if (it.value()->publishResult()) {
-                    publishScriptResult(it.key(), result);
-                }
-            }
-            break;
-        case ProcessorTaskBase::PTTT_ONLY_ONCE:
-            if (m_isFirstRun) {
-                QVariant result = executor->execute(it.value());
-                //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-                if (it.value()->publishResult()) {
-                    publishScriptResult(it.key(), result);
-                }
+                executeTask(it.value());
             }
             break;
         case ProcessorTaskBase::PTTT_TRIGGER:
@@ -140,8 +165,22 @@ void ModelProcessorManager::executeTasks() {
             break;
         }
     }
+}
 
-    m_isFirstRun = false;
+void ModelProcessorManager::executeTask(ProcessorTaskBase* task) {
+    iDebug() << Q_FUNC_INFO;
+
+    if (task->isEnabled()) {
+        ProcessorExecutorBase* executor = m_processorExecutors.value(task->taskType());
+
+        QVariant result = executor->execute(task);
+        //QVariant result = it.value()->run(&m_engine, m_commonScripts);
+        if (task->publishResult()) {
+            publishScriptResult(task->id(), result);
+        }
+    } else {
+        iDebug() << "Skipping task, since it's not enabled" << task->id();
+    }
 }
 
 void ModelProcessorManager::publishScriptResult(QString taskId, QVariant value) {

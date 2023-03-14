@@ -32,6 +32,8 @@ public:
 
     static QLatin1String PROPERTY_VALUE_TYPE;
     static QLatin1String PROPERTY_VALUE_TIMEOUT;
+    static QLatin1String PROPERTY_ALWAYS_EMIT;
+    static QLatin1String PROPERTY_PERSIST;
 
     ValueBase();
     explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
@@ -46,11 +48,13 @@ public:
 
     ValueBase* withPersist(bool persist);
 
+    ValueBase* withAlwaysEmit(bool alwaysEmit);
+
     bool persist();
 
     static QString getFullId(QString valueGroupId, QString valueId);
 
-    bool updateValue(QVariant newValue);
+    bool updateValue(QVariant newValue, bool emitChange = true);
 
     virtual QVariant _updateValue(QVariant newValue) = 0;
 
@@ -85,12 +89,14 @@ public:
 private slots:
     void onUpdateSignalRate();
 
+protected:
+    bool m_alwaysEmit = true;
+
 private:
     VALUE_TYPE m_valueType;
     ValueGroup* m_valueGroup;
     QVariant m_value;
     qint64 m_lastUpdate = 0;
-    bool m_alwaysEmit = true;
     bool m_persist = false;
 
     qint64 m_lastMaintenance = 0;

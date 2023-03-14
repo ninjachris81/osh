@@ -11,7 +11,6 @@
 #include "datamodel/datamodelmanager.h"
 #include "shuttercontroller.h"
 #include "actor/actormanager.h"
-#include "actor/actorconfigmanager.h"
 #include "log/logmanager.h"
 #include "actor/shutteractor.h"
 #include "shared/mqtt_qt.h"
@@ -33,10 +32,9 @@ int main(int argc, char *argv[])
     DatamodelManager datamodelManager(false, false, true, true, false, false);
     ClientValueManager valueManager;
     ActorManager actorManager;
-    ActorConfigManager actorConfigManager;
     LogManager logManager;
 
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_AO);
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -45,7 +43,6 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
-    managerRegistration.registerManager(&actorConfigManager);
     managerRegistration.registerManager(&databaseManager);
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);

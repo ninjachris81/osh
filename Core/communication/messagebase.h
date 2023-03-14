@@ -16,7 +16,6 @@ public:
         MESSAGE_TYPE_UNKNOWN,
         MESSAGE_TYPE_VALUE,
         MESSAGE_TYPE_ACTOR,
-        MESSAGE_TYPE_ACTOR_CONFIG,
         MESSAGE_TYPE_DEVICE_DISCOVERY,
         MESSAGE_TYPE_SYSTEM_TIME,
         MESSAGE_TYPE_SYSTEM_WARNING,
@@ -32,6 +31,17 @@ public:
     virtual QString getFirstLevelId() = 0;
 
     virtual QString getSecondLevelId() = 0;
+
+
+    void setSenderDeviceId(QString senderDeviceId);
+    void setTs(qint64 ts);
+
+    QString senderDeviceId();
+    qint64 ts();
+
+private:
+    QString m_senderDeviceId;
+    qint64 m_ts;
 
 signals:
 

@@ -19,18 +19,17 @@ public:
     #define SHUTTER_TILT_OPENED 0
     #define SHUTTER_TILE_CLOSED 100
 
-    static QLatin1String CONFIG_TILT_SUPPORT;
-    static QLatin1String CONFIG_FULL_CLOSE_DURATION;
-    static QLatin1String CONFIG_FULL_TILT_DURATION;
-
-    static int CONFIG_FULL_CLOSE_DURATION_DEFAULT;
-    static int CONFIG_FULL_TILT_DURATION_DEFAULT;
+    #define SHUTTER_OPERATION_MODE_AUTO     0
+    #define SHUTTER_OPERATION_MODE_MANUAL   1
 
     static QLatin1String PROPERTY_TILT_SUPPORT;
     static QLatin1String PROPERTY_FULL_CLOSE_DURATION;
+    static QLatin1String PROPERTY_FULL_TILT_DURATION;
+
+    static QLatin1String CONFIG_OPERATION_MODE;
 
     explicit ShutterActor();
-    explicit ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
+    explicit ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, int fullTiltDuration, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 
@@ -43,9 +42,12 @@ public:
     // 0 = open, 100 = closed
     void updateTiltPattern(unsigned char tiltState);
 
-    unsigned char getCloseState();
-    unsigned char getTiltState();
+    unsigned char closeState();
+    unsigned char tiltState();
 
+    bool tiltSupport();
+    int fullCloseDuration();
+    int fullTiltDuration();
 
 protected:
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
@@ -55,6 +57,11 @@ protected:
     int setTiltState(int state, unsigned char tiltState);
     unsigned char getCloseState(int state);
     unsigned char getTiltState(int state);
+
+    bool m_tiltSupport = false;
+    int m_fullCloseDuration = 20000;
+    int m_fullTiltDuration = 2000;
+
 
 signals:
 

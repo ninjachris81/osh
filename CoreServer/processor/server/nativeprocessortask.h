@@ -13,12 +13,13 @@ class SHARED_LIB_EXPORT NativeProcessorTask : public ProcessorTaskBase
 public:
     enum NativeFunctionType {
         NFT_INVALID = 0,
-        NFT_APPLY_SWITCH_LOGIC = 1,
-        NFT_APPLY_SHUTTER_LOGIC = 2
+        NFT_INIT_SWITCH_LOGIC = 10,
+        NFT_APPLY_SWITCH_TIMEOUT_LOGIC = 11,
+        NFT_APPLY_SHUTTER_LOGIC = 21
     };
 
     NativeProcessorTask();
-    explicit NativeProcessorTask(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, QObject *parent = nullptr);
+    explicit NativeProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, QObject *parent = nullptr);
 
     /*virtual*/ void serialize(QJsonObject &obj) override;
 
@@ -38,6 +39,8 @@ public:
     static QList<QVariant::Type> paramTypeList(NativeFunctionType nativeFunction);
 
 private:
+    bool checkRunCondition();
+
     NativeFunctionType m_nativeFunction = NFT_INVALID;
     QVariantList m_nativeParams;
 

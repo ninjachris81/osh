@@ -1,5 +1,8 @@
 #include <QCoreApplication>
 
+#include "actor/actormanager.h"
+#include "database/databasemanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
 #include "controller/controllermanager.h"
@@ -28,9 +31,12 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
+    DatabaseManager databaseManager;
+    DatamodelManager datamodelManager(false, false, true, true, false, false);
+    ActorManager actorManager;
     LogManager logManager;
 
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_VA  << MQTT_MESSAGE_TYPE_AC);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -38,26 +44,18 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&systimeManager);
     managerRegistration.registerManager(&syswarnManager);
     managerRegistration.registerManager(&valueManager);
+    managerRegistration.registerManager(&databaseManager);
+    managerRegistration.registerManager(&datamodelManager);
+    managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    AudioController audioController(&controllerManager, config.getString(&clientManager, "audioGroupId", "egAudio0"));
+    QString audioGroupId = config.getString(&clientManager, "audioGroupId", "egAudio0");
+    AudioController audioController(&controllerManager, audioGroupId);
     controllerManager.registerController(&audioController);
 
     managerRegistration.init(&config);
 
-    QList<ValueBase*> values;
-
-    ValueGroup actorGroup(audioController.id());
-    for (quint8 i=0;i<audioController.channelCount();i++) {
-        qDebug() << "Init value" << i;
-        BooleanValue* value = new BooleanValue(&actorGroup, QString::number(i), VALTYPE_SWITCH);
-        value->withValueTimeout(ValueBase::VT_MID);
-        values.append(value);
-        audioController.bindValue(value);
-        valueManager.registerValue(value);
-    }
-
-    audioController.bindCommunicationManager(&commManager);
+    audioController.loadAudioActors(datamodelManager.datamodel());
 
     return a.exec();
 }

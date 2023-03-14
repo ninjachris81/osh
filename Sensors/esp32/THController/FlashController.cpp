@@ -11,6 +11,8 @@ void FlashController::init() {
   EEPROM.begin(EEPROM_SIZE);
   m_index = EEPROM.read(EEPROM_ADDRESS);
 
+  //setIndex(25);
+
   LOG_PRINT(F("Using index "));
   LOG_PRINTLN(m_index);
 }

@@ -14,7 +14,7 @@ class SHARED_LIB_EXPORT JSProcessorTask : public ProcessorTaskBase
 public:
 
     JSProcessorTask();
-    explicit JSProcessorTask(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, QObject *parent = nullptr);
+    explicit JSProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, bool enabled = true, QObject *parent = nullptr);
 
     /*virtual*/ void serialize(QJsonObject &obj) override;
 

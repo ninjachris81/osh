@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+QLatin1String ActorBase::PROPERTY_IS_ASYNC = QLatin1String("isAsync");
+QLatin1String ActorBase::PROPERTY_PRIORITY = QLatin1String("priority");
+
 ActorBase::ActorBase() : ValueBase() {
 }
 
@@ -32,15 +35,7 @@ void ActorBase::_triggerCmd(actor::ACTOR_CMDS cmd) {
 
 }
 
-void ActorBase::setConfig(QVariantMap values) {
-    m_configValues = values;
-}
-
-QVariant ActorBase::getConfig(QString key, QVariant defaultValue) {
-    return m_configValues.value(key, defaultValue);
-}
-
-
-QStringList ActorBase::configKeys() {
-    return m_configValues.keys();
+ActorBase* ActorBase::withPriority(int priority) {
+    this->m_priority = priority;
+    return this;
 }

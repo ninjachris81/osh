@@ -3,18 +3,20 @@
 
 qint64 ProcessorTaskBase::INTERVAL_REALTIME = 0;
 
+QLatin1String ProcessorTaskBase::PROPERTY_GROUP_ID = QLatin1String("groupId");
 QLatin1String ProcessorTaskBase::PROPERTY_TASK_TYPE = QLatin1String("taskType");
 QLatin1String ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE = QLatin1String("taskTriggerType");
 QLatin1String ProcessorTaskBase::PROPERTY_SCRIPT_CODE = QLatin1String("scriptCode");
 QLatin1String ProcessorTaskBase::PROPERTY_RUN_CONDITION = QLatin1String("runCondition");
 QLatin1String ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL =QLatin1String("scheduleInterval");
 QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publishResult");
+QLatin1String ProcessorTaskBase::PROPERTY_ENABLED = QLatin1String("enabled");
 
 ProcessorTaskBase::ProcessorTaskBase() : QObject() {
 }
 
-ProcessorTaskBase::ProcessorTaskBase(QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, QObject *parent)
-    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult)
+ProcessorTaskBase::ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent)
+    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_scriptCode(scriptCode), m_runCondition(runCondition), m_scheduleInterval(scheduleInterval), m_publishResult(publishResult), m_enabled(enabled), m_groupId(groupId)
 {
 
 }
@@ -58,12 +60,20 @@ bool ProcessorTaskBase::publishResult() {
     return m_publishResult;
 }
 
+bool ProcessorTaskBase::isEnabled() {
+    return m_enabled;
+}
+
 qint64 ProcessorTaskBase::lastExecution() {
     return m_lastExecution;
 }
 
 QVariant ProcessorTaskBase::lastResult() {
     return m_lastResult;
+}
+
+QString ProcessorTaskBase::groupId() {
+    return m_groupId;
 }
 
 void ProcessorTaskBase::setLastResult(QVariant lastResult) {
@@ -74,4 +84,8 @@ void ProcessorTaskBase::setLastResult(QVariant lastResult) {
 void ProcessorTaskBase::setLastExecutionNow() {
     m_lastExecution = QDateTime::currentMSecsSinceEpoch();
     Q_EMIT(lastExecutionChanged());
+}
+
+void ProcessorTaskBase::setEnabled(bool enabled) {
+    m_enabled = enabled;
 }

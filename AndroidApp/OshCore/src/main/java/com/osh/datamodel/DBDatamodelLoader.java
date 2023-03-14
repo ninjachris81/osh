@@ -20,12 +20,13 @@ public class DBDatamodelLoader extends DatamodelLoaderBase {
 
 	@Override
 	public DatamodelBase load() {
-		return datamodelService.findById(datamodelName, EnumSet.noneOf(LOAD_MODIFIERS.class));
+		//return datamodelService.findById(datamodelName, EnumSet.noneOf(LOAD_MODIFIERS.class));
+		return null;
 	}
 
 	@Override
 	public void save(DatamodelBase datamodel) {
-		datamodelService.save((DBDatamodel) datamodel);
+		//datamodelService.save((DBDatamodel) datamodel);
 	}
 
 	@Override

@@ -20,7 +20,9 @@ public class MqttConstants {
 	public static final String MQTT_MESSAGE_TYPE_DU = "du";        // door unlock
 
 	public static final String MQTT_SINGLE_VALUE_ATTR = "v";
-
+	public static final String MQTT_ACTOR_CMD_ATTR = "c";
+	public static final String MQTT_SENDER_DEVICE_ID_ATTR = "s";
+	public static final String MQTT_TS = "t";
 
 
 }

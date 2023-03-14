@@ -21,13 +21,15 @@ public:
 
     Q_INVOKABLE bool applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs);
 
-    Q_INVOKABLE bool applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, quint64 triggerTimeoutMs);
+    Q_INVOKABLE bool initSwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString toggleActorFullId);
+
+    Q_INVOKABLE bool applySwitchTimeoutLogic(QString toggleActorFullId, quint64 triggerTimeoutMs);
 
     Q_INVOKABLE bool applyTempValveLogic(QString tempFullId, QString tempTargetFullId, QString tempValveActorFullId, int adjustIntervalMs, double fullDeltaThresholdTemp = 5.0, int factorIntervalMs = 10000);
 
     Q_INVOKABLE bool applyMotionLogic(QString radarFullId, QString pirFullId, QString motionFullId);
 
-    Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
+    Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
     Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
@@ -38,10 +40,15 @@ public:
 
     //Q_INVOKABLE void publishValue(QString fullId, QVariant value);
     Q_INVOKABLE void publishCmd(QString fullId, int cmd, QString reason);
+    Q_INVOKABLE void publishCmd(QString fullId, int cmd, QVariant value, QString reason);
 
     Q_INVOKABLE void setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState = true);
     Q_INVOKABLE bool getIntervalState(QString key);
     Q_INVOKABLE void clearInterval(QString key);
+
+private slots:
+    void onInitSwitchLogic_inputSensorValueChanged();
+    void onInitSwitchLogic_toggleActorValueChanged();
 
 private:
     DatamodelBase* m_datamodel;
@@ -51,6 +58,7 @@ private:
 
     //void publishValue(ValueBase* val, QVariant value);
     void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason);
+    void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason);
 
 signals:
 

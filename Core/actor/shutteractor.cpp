@@ -1,20 +1,16 @@
 #include "shutteractor.h"
 
-QLatin1String ShutterActor::CONFIG_TILT_SUPPORT = QLatin1String("tiltSupport");
-QLatin1String ShutterActor::CONFIG_FULL_CLOSE_DURATION = QLatin1String("fullCloseDuration");
-QLatin1String ShutterActor::CONFIG_FULL_TILT_DURATION = QLatin1String("fullTiltDuration");
-
 QLatin1String ShutterActor::PROPERTY_TILT_SUPPORT = QLatin1String("tiltSupport");
 QLatin1String ShutterActor::PROPERTY_FULL_CLOSE_DURATION = QLatin1String("fullCloseDuration");
+QLatin1String ShutterActor::PROPERTY_FULL_TILT_DURATION = QLatin1String("fullTiltDuration");
 
-int ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT = 20000;
-int ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT = 2000;
+QLatin1String ShutterActor::CONFIG_OPERATION_MODE = QLatin1String("operationMode");
 
 ShutterActor::ShutterActor() : ActorBase() {
 }
 
-ShutterActor::ShutterActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent)
-    : ActorBase(valueGroup, id, valueType, parent)
+ShutterActor::ShutterActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, int fullTiltDuration, QObject *parent)
+    : ActorBase(valueGroup, id, valueType, parent), m_tiltSupport(tiltSupport), m_fullCloseDuration(fullCloseDuration), m_fullTiltDuration(fullTiltDuration)
 {
 
 }
@@ -76,7 +72,7 @@ void ShutterActor::updateClosePattern(unsigned char closeState) {
 }
 
 void ShutterActor::updateTiltPattern(unsigned char tiltState) {
-    if (!getConfig(CONFIG_TILT_SUPPORT, false).toBool()) {
+    if (!m_tiltSupport) {
         iWarning() << "Tilt not supported";
         return;
     }
@@ -109,10 +105,24 @@ unsigned char ShutterActor::getTiltState(int state) {
     return v >> 8;
 }
 
-unsigned char ShutterActor::getCloseState() {
+unsigned char ShutterActor::closeState() {
     return getCloseState(rawValue().toInt());
 }
 
-unsigned char ShutterActor::getTiltState() {
+unsigned char ShutterActor::tiltState() {
     return getTiltState(rawValue().toInt());
 }
+
+
+bool ShutterActor::tiltSupport() {
+    return m_tiltSupport;
+}
+
+int ShutterActor::fullCloseDuration() {
+    return m_fullCloseDuration;
+}
+
+int ShutterActor::fullTiltDuration() {
+    return m_fullTiltDuration;
+}
+

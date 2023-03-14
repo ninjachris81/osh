@@ -26,6 +26,8 @@ public:
     QString valueId();
     QVariant rawValue();
 
+    QString fullId();
+
 protected:
     QString m_valueGroupId;
     QString m_valueId;

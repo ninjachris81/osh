@@ -77,6 +77,8 @@ dependencies {
 
     implementation 'org.apache.commons:commons-lang3:3.9'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     implementation 'net.steamcrafted:materialiconlib:1.1.5'
 
     /*

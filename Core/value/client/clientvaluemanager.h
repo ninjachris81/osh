@@ -21,7 +21,10 @@ public:
 
     void registerValue(ValueBase* value) override;
 
+    void registerForMaintenance(ValueBase* value);
+
 private:
+    QMap<QString, ValueBase*> m_maintenanceValues;
     QTimer m_maintenanceTimer;
 
 private slots:

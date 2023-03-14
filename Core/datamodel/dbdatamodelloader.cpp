@@ -1,6 +1,7 @@
 #include "dbdatamodelloader.h"
 #include "qsqlerror.h"
 #include "qsqlrecord.h"
+#include "processor/processorvariable.h"
 
 #include <QSqlQuery>
 #include <QSqlField>
@@ -39,6 +40,7 @@ DatamodelBase *DBDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactor
 
         if (options.loadProcessorTasks) {
             datamodel->setProcessorTaskFactory(processorTaskFactory);
+            loadProcessorVariables(datamodel);
             loadProcessorTasks(datamodel);
         }
 
@@ -153,6 +155,23 @@ void DBDatamodelLoader::loadKnownDevices(DynamicDatamodel *datamodel) {
     }
 }
 
+void DBDatamodelLoader::loadProcessorVariables(DynamicDatamodel *datamodel) {
+    iInfo() << Q_FUNC_INFO;
+
+    QSqlQuery query(*m_databaseManager->db());
+
+    if (query.exec("SELECT * FROM dm_processor_variables")) {
+        while (query.next()) {
+            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            QString value = query.value(ProcessorVariable::PROPERTY_VALUE).toString();
+
+            datamodel->addProcessorVariable(id, value);
+        }
+    } else {
+        iWarning() << query.lastError();
+    }
+}
+
 void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
     iInfo() << Q_FUNC_INFO;
 
@@ -160,6 +179,7 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
 
     if (query.exec("SELECT * FROM dm_processor_tasks")) {
         while (query.next()) {
+            QString groupId = query.value(ProcessorTaskBase::PROPERTY_GROUP_ID).toString();
             QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
             ProcessorTaskBase::ProcessorTaskType taskType = static_cast<ProcessorTaskBase::ProcessorTaskType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TYPE).toInt());
             ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType = static_cast<ProcessorTaskBase::ProcessorTaskTriggerType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE).toInt());
@@ -167,8 +187,9 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
             QString runCondition = query.value(ProcessorTaskBase::PROPERTY_RUN_CONDITION).toString();
             qint64 scheduleInterval = query.value(ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL).toLongLong();
             bool publishResult = query.value(ProcessorTaskBase::PROPERTY_PUBLISH_RESULT).toBool();
+            bool isEnabled = query.value(ProcessorTaskBase::PROPERTY_ENABLED).toBool();
 
-            datamodel->addProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+            datamodel->addProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, isEnabled);
         }
     } else {
         iWarning() << query.lastError();

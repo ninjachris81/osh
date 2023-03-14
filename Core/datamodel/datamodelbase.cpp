@@ -37,6 +37,25 @@ QMap<QString, ActorBase*> DatamodelBase::actors() {
     return m_actors;
 }
 
+ActorBase* DatamodelBase::actor(QString actorFullId) {
+    return m_actors.value(actorFullId);
+}
+
+QMap<QString, ActorBase*> DatamodelBase::actors(QString valueGroupId) {
+    QMap<QString, ActorBase*> returnMap;
+
+    QMapIterator<QString, ActorBase*> it(m_actors);
+    while (it.hasNext()) {
+        it.next();
+
+        if (it.value()->valueGroup()->id() == valueGroupId) {
+            returnMap.insert(it.key(), it.value());
+        }
+    }
+
+    return returnMap;
+}
+
 QMap<QString, KnownRoom*> DatamodelBase::knownRooms() {
     return m_knownRooms;
 }
@@ -55,6 +74,14 @@ ValueGroup* DatamodelBase::addValueGroup(QString id) {
     return valueGroup;
 }
 
+ToggleActor* DatamodelBase::addToggleActor(ValueGroup* valueGroup, QString id) {
+    ToggleActor* actor = new ToggleActor(valueGroup, id);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+
 DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync) {
     DigitalActor* actor = new DigitalActor(valueGroup, id, valueType, isAsync);
     actor->withValueTimeout(timeout);
@@ -63,13 +90,25 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     return actor;
 }
 
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration) {
-    ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType);
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration) {
+    ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType, tiltSupport, fullCloseDuration, fullTiltDuration);
     actor->withValueTimeout(timeout);
-    QVariantMap config;
-    config.insert(ShutterActor::CONFIG_TILT_SUPPORT, tiltSupport);
-    config.insert(ShutterActor::CONFIG_FULL_CLOSE_DURATION, fullCloseDuration);
-    actor->setConfig(config);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    ValueActor* actor = new ValueActor(valueGroup, id, valueType);
+    actor->withValueTimeout(timeout);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceId, QString audioActivationRelayId) {
+    AudioPlaybackActor* actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceId, audioActivationRelayId);
+    actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());
     return actor;
@@ -115,9 +154,29 @@ StringValue* DatamodelBase::addStringValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
-ProcessorTaskBase* DatamodelBase::addProcessorTask(QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
+EnumValue* DatamodelBase::addEnumValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, int enumCount, ValueBase::VALUE_TIMEOUT timeout) {
+    EnumValue* value = new EnumValue(valueGroup, id, valueType, enumCount);
+    value->withValueTimeout(timeout);
+    m_values.insert(value->fullId(), value);
+    Q_EMIT(datamodelContentChanged());
+    return value;
+}
+
+ProcessorVariable* DatamodelBase::addProcessorVariable(QString id, QString value) {
+    ProcessorVariable *var = new ProcessorVariable(id, value);
+    m_processorVariables.insert(var->id(), var);
+    Q_EMIT(datamodelContentChanged());
+    return var;
+}
+
+ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool isEnabled) {
     if (m_processorTaskFactory != nullptr) {
-        ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+        for (ProcessorVariable* var : m_processorVariables.values()) {
+            var->replaceScriptCode(scriptCode);
+        }
+
+        ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+        processorNode->setEnabled(isEnabled);
         if (processorNode != nullptr) {
             m_processorTasks.insert(processorNode->id(), processorNode);
             Q_EMIT(datamodelContentChanged());

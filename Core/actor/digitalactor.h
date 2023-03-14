@@ -15,8 +15,6 @@ class SHARED_LIB_EXPORT DigitalActor : public ActorBase
     Q_OBJECT
 public:
 
-    static QLatin1String PROPERTY_IS_ASYNC;
-
     explicit DigitalActor();
     explicit DigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, QObject *parent = nullptr);
 

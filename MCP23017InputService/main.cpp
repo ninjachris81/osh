@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
         qDebug() << "Init value" << valueGroup->id() << i;
         BooleanValue* value = static_cast<BooleanValue*>(valueManager.getValue(valueGroup, QString::number(i)));
         Q_ASSERT(value != nullptr);
+        valueManager.registerForMaintenance(value);
         inputController.bindValue(value);
     }
 

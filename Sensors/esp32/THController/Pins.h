@@ -22,3 +22,7 @@
 #define PIN_RELAY_UP 18
 #define PIN_RELAY_DOWN 19
 #define PIN_KY002_SENSOR 32
+
+// AHT20
+// SCL: 22
+// SDA: 21

@@ -3,4 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="actionBarSizeOsh">10dp</dimen>
+
+    <dimen name="seek_bar_thickness">4dp</dimen>
+    <dimen name="seek_bar_thumb_size">20dp</dimen>
+    <dimen name="shutter_mode_button_spacing">1dp</dimen>
 </resources>

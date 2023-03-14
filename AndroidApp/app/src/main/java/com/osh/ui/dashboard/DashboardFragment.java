@@ -12,8 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.osh.MainActivity;
 import com.osh.databinding.FragmentDashboardBinding;
-import com.osh.value.IValueManager;
-import com.osh.value.ValueManager;
+import com.osh.service.IValueService;
 
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
@@ -21,13 +20,13 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
-    private final IValueManager valueManager;
+    private final IValueService valueManager;
 
-    public DashboardFragment(IValueManager valueManager) {
+    public DashboardFragment(IValueService valueManager) {
         this.valueManager = valueManager;
     }
 
-    public static Fragment newInstance(IValueManager valueManager) {
+    public static Fragment newInstance(IValueService valueManager) {
         return new DashboardFragment(valueManager);
     }
 
@@ -38,33 +37,6 @@ public class DashboardFragment extends Fragment {
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        final MaterialIconView relayUpIcon = binding.relayUpIcon;
-        dashboardViewModel.getRelayUp().observe(getViewLifecycleOwner(), isActive -> {
-            relayUpIcon.setVisibility(isActive ? View.VISIBLE : View.INVISIBLE);
-        });
-
-        final MaterialIconView relayDownIcon = binding.relayDownIcon;
-        dashboardViewModel.getRelayDown().observe(getViewLifecycleOwner(), isActive -> {
-            relayDownIcon.setVisibility(isActive ? View.VISIBLE : View.INVISIBLE);
-        });
-
-        MainActivity activity = (MainActivity) getActivity();
-
-        final Button shutterUp = binding.buttonUp;
-        shutterUp.setOnClickListener(e -> {
-            activity.testShutterUp();
-        });
-
-        final Button shutterStop = binding.buttonStop;
-        shutterStop.setOnClickListener(e -> {
-            activity.testShutterStop();
-        });
-
-        final Button shutterDown = binding.buttonDown;
-        shutterDown.setOnClickListener(e -> {
-            activity.testShutterDown();
-        });
 
         return root;
     }

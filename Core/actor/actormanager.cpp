@@ -21,6 +21,9 @@ void ActorManager::init(LocalConfig* config) {
 
     REQUIRE_MANAGER(CommunicationManagerBase);
     m_commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
+
+    REQUIRE_MANAGER(ValueManagerBase);
+    m_valueManager = getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 }
 
 QString ActorManager::id() {
@@ -37,12 +40,18 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
 
     if (m_actors.contains(actorMessage->fullId())) {
         ActorBase* actor = m_actors.value(actorMessage->fullId());
+
+        if (actorMessage->cmd() == actor::ACTOR_CMD_SET_VALUE) {
+            actor->updateValue(actorMessage->rawValue(), false);
+        }
+
         actor->triggerCmd(actorMessage->cmd(), "Message received");
 
+        /*
         if (!actor->isAsync()) {        // only publish if value is set synchronously
             iDebug() << "Publish value";
             getManager<ClientValueManager>(ClientValueManager::MANAGER_ID)->publishValue(actor);
-        }
+        }*/
     } else {
         iWarning() << "Invalid actor" << actorMessage->fullId();
     }
@@ -64,7 +73,14 @@ void ActorManager::registerActor(ActorBase* actor, ValueManagerBase *valueManage
 void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << actor->fullId();
 
-    ActorMessage msg(actor->valueGroup()->id(), actor->id(), cmd);
+    ActorMessage msg(actor->valueGroup()->id(), actor->id(), QVariant(), cmd);
+    m_commManager->sendMessage(msg);
+}
+
+void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd, QVariant value) {
+    iDebug() << Q_FUNC_INFO << actor->fullId();
+
+    ActorMessage msg(actor->valueGroup()->id(), actor->id(), value, cmd);
     m_commManager->sendMessage(msg);
 }
 

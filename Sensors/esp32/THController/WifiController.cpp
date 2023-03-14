@@ -25,7 +25,7 @@ void WifiController::init() {
   WiFi.setHostname(hostname.c_str());
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   while (WiFi.status() != WL_CONNECTED) {
-     delay(500);
+     delay(100);
      LOG_PRINTLN(F("Connecting to WiFi.."));
   }
   LOG_PRINT(F("Connected to WiFi, IP "));

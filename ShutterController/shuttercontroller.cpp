@@ -61,7 +61,7 @@ void ShutterController::onCmdTriggered(actor::ACTOR_CMDS cmd) {
     case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
     case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
     case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
-        if (shutterActor->getConfig(ShutterActor::CONFIG_TILT_SUPPORT, false).toBool()) {
+        if (shutterActor->tiltSupport()) {
             insertShutterMovements(shutterActor, cmd);
         } else {
             iWarning() << "Tilt not supported";
@@ -128,22 +128,22 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
         m_actorManager->publishCmd(m_actorsDown.value(shutterActor), actor::ACTOR_CMD_OFF);
         break;
     case actor::ACTOR_CMD_UP:
-        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt(), false, true, isInit);
+        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->fullCloseDuration(), false, true, isInit);
         break;
     case actor::ACTOR_CMD_DOWN:
-        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt(), true, true, isInit);
+        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->fullCloseDuration(), true, true, isInit);
         break;
     case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
         // first, all down
-        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_CLOSE_DURATION, ShutterActor::CONFIG_FULL_CLOSE_DURATION_DEFAULT).toInt(), true, true, isInit);
+        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->fullCloseDuration(), true, true, isInit);
         // then, turn open
-        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt(), false, false, isInit);
+        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->fullTiltDuration(), false, false, isInit);
         break;
     case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
-        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt(), false, false, isInit);
+        insertShutterMovement(shutterActor, m_actorsDown.value(shutterActor), shutterActor->fullTiltDuration(), false, false, isInit);
         break;
     case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
-        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->getConfig(ShutterActor::CONFIG_FULL_TILT_DURATION, ShutterActor::CONFIG_FULL_TILT_DURATION_DEFAULT).toInt(), false, false, isInit);
+        insertShutterMovement(shutterActor, m_actorsUp.value(shutterActor), shutterActor->fullTiltDuration(), false, false, isInit);
         break;
     case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
     case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:

@@ -35,4 +35,11 @@
     <string name="settings">Settings</string>
     <string name="mqtt_port_key">mqtt_port_key</string>
     <string name="mqtt_host_key">mqtt_host_key</string>
+    <string name="db_host">db_host</string>
+    <string name="db_port">db_port</string>
+    <string name="db_name">db_name</string>
+    <string name="db_username">db_username</string>
+    <string name="db_password">db_password</string>
+    <string name="area_last_tab">area_last_tab</string>
+    <string name="main_last_nav">main_last_nav</string>
 </resources>

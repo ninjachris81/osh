@@ -31,8 +31,14 @@ void ClientValueManager::registerValue(ValueBase* value) {
     Helpers::safeConnect(value, &ValueBase::valueChanged, this, &ClientValueManager::_onValueChanged, SIGNAL(valueChanged), SLOT(onValueChanged));
 }
 
+void ClientValueManager::registerForMaintenance(ValueBase* value) {
+    iInfo() << Q_FUNC_INFO << value->fullId();
+
+    m_maintenanceValues.insert(value->fullId(), value);
+}
+
 void ClientValueManager::maintainValues() {
-    QMapIterator<QString, ValueBase*> it(m_knownValues);
+    QMapIterator<QString, ValueBase*> it(m_maintenanceValues);
 
     while(it.hasNext()) {
         it.next();

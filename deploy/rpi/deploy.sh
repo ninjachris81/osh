@@ -120,6 +120,16 @@ case "$1" in
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
+   OBISService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "CoreSerial"
+      buildOSHLib "OBISController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
    RS485RelayService )
       BUILD_TARGET=$1
       printInfos
@@ -127,6 +137,16 @@ case "$1" in
       buildOSHLib "Core"
       buildOSHLib "CoreSerial"
       buildOSHLib "RS485RelayController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
+   RS485EnergyMeterService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "CoreSerial"
+      buildOSHLib "RS485EnergyMeterController"
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;

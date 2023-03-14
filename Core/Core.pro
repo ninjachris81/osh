@@ -30,16 +30,16 @@ DEFINES += PROCESSOR_NATIVE_SUPPORT
 
 SOURCES += \
         actor/actorbase.cpp \
-        actor/actorconfig.cpp \
-        actor/actorconfigmanager.cpp \
-        actor/actorconfigmessage.cpp \
         actor/actormanager.cpp \
         actor/actormessage.cpp \
         actor/audioplaybackactor.cpp \
         actor/cameraactor.cpp \
         actor/digitalactor.cpp \
         actor/dooractor.cpp \
+        actor/scripttriggeractor.cpp \
         actor/shutteractor.cpp \
+        actor/toggleactor.cpp \
+        actor/valueactor.cpp \
         communication/communicationmanagerbase.cpp \
         controller/audiocontrollerbase.cpp \
         controller/controllermanager.cpp \
@@ -76,6 +76,7 @@ SOURCES += \
         meta/itemmetainfo.cpp \
         meta/metainfosupport.cpp \
         processor/processortaskbase.cpp \
+        processor/processorvariable.cpp \
         processor/scriptresultmessage.cpp \
         serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
@@ -109,16 +110,16 @@ SOURCES += \
 
 HEADERS += \
         actor/actorbase.h \
-        actor/actorconfig.h \
-        actor/actorconfigmanager.h \
-        actor/actorconfigmessage.h \
         actor/actormanager.h \
         actor/actormessage.h \
         actor/audioplaybackactor.h \
         actor/cameraactor.h \
         actor/digitalactor.h \
         actor/dooractor.h \
+        actor/scripttriggeractor.h \
         actor/shutteractor.h \
+        actor/toggleactor.h \
+        actor/valueactor.h \
         communication/communicationmanagerbase.h \
         controller/audiocontrollerbase.h \
         controller/controllermanager.h \
@@ -158,6 +159,7 @@ HEADERS += \
         meta/metainfosupport.h \
         processor/processortaskbase.h \
         processor/processortaskfactory.h \
+        processor/processorvariable.h \
         processor/scriptresultmessage.h \
         serializableidentifyable.h \
         shared/actor.h \

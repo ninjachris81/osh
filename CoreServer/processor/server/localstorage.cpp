@@ -21,3 +21,15 @@ void LocalStorage::set(QString key, QVariant value) {
 void LocalStorage::unset(QString key) {
     m_values.remove(key);
 }
+
+void LocalStorage::setObject(QString key, QObject* obj) {
+    m_objects.insert(key, obj);
+}
+
+QObject* LocalStorage::getObject(QString key) {
+    return m_objects.value(key);
+}
+
+void LocalStorage::unsetObject(QString key) {
+    m_objects.remove(key);
+}

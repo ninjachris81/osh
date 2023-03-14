@@ -6,30 +6,22 @@
 #include "sharedlib.h"
 
 #include "communication/messagebase.h"
+#include "value/valuemessage.h"
 #include "shared/actor_qt.h"
 
 using namespace actor;
 
-class SHARED_LIB_EXPORT ActorMessage : public MessageBase
+class SHARED_LIB_EXPORT ActorMessage : public ValueMessage
 {
     Q_OBJECT
 public:
-    explicit ActorMessage(QString actorGroupId, QString actorId, ACTOR_CMDS cmd, QObject *parent = nullptr);
+    explicit ActorMessage(QString actorGroupId, QString actorId, QVariant rawValue, ACTOR_CMDS cmd, QObject *parent = nullptr);
 
-    /*virtual*/ MESSAGE_TYPE getMessageType();
+    /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
-    /*virtual*/ QString getFirstLevelId();
-
-    /*virtual*/ QString getSecondLevelId();
-
-    QString actorGroupId();
-    QString actorId();
-    QString fullId();
     ACTOR_CMDS cmd();
 
 protected:
-    QString m_actorGroupId;
-    QString m_actorId;
     ACTOR_CMDS m_cmd;
 
 signals:

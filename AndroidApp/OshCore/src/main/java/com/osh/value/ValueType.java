@@ -11,8 +11,19 @@ public enum ValueType {
     VT_RELAY_LIGHT(50),
     VT_RELAY_SHUTTER(51),
     VT_ALARM_SOUND(60),
-    VT_HEAT_PUMP_DATA(80);
+    VT_HEAT_PUMP_DATA(80),
+    VT_VIRTUAL_ACTOR(90);
 
+    private int value;
 	ValueType(int value) {
+        this.value = value;
 	}
+
+    public static ValueType of(int value) {
+        for (ValueType vt : ValueType.values()) {
+            if (vt.value == value) return vt;
+        }
+
+        return null;
+    }
 }

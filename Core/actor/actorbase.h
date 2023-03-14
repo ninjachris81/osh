@@ -13,25 +13,27 @@ class SHARED_LIB_EXPORT ActorBase : public ValueBase
 {
     Q_OBJECT
 public:
+    static QLatin1String PROPERTY_IS_ASYNC;
+    static QLatin1String PROPERTY_PRIORITY;
+
     explicit ActorBase();
     explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
     virtual bool cmdSupported(actor::ACTOR_CMDS cmd) = 0;
 
+    ActorBase* withPriority(int priority);
+
     virtual bool isAsync() = 0;
 
-    void setConfig(QVariantMap values);
-    QVariant getConfig(QString key, QVariant defaultValue);
-    QStringList configKeys();
+protected:
+    int m_priority = 0;
 
 Q_SIGNALS:
     void cmdTriggered(actor::ACTOR_CMDS cmd);
 
 protected:
     virtual void _triggerCmd(actor::ACTOR_CMDS cmd);
-
-    QVariantMap m_configValues;
 
 public slots:
 };

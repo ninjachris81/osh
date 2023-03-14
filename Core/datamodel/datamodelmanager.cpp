@@ -69,6 +69,14 @@ void DatamodelManager::init(LocalConfig* config) {
     m_datamodel = m_datamodelLoader->load(m_processorTaskFactory, m_loadingOptions);
     Q_ASSERT(m_datamodel != nullptr);
 
+    // check for unreplaced vars
+    for (ProcessorTaskBase *task : m_datamodel->processorTasks()) {
+        if (task->scriptCode().contains(ProcessorVariable::VARIABLE_PREFIX)) {
+            iWarning() << "Unreplaced processor variable in task" << task->id();
+            Q_ASSERT(false);
+        }
+    }
+
     m_isLoaded = true;
 
     iDebug() << "Datamodel loaded";

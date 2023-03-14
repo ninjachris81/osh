@@ -16,11 +16,9 @@ class SHARED_LIB_EXPORT AudioControllerSimulator : public AudioControllerBase
 public:
     explicit AudioControllerSimulator(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
-    /*virtual*/ quint8 channelCount() override;
-
-    /*virtual*/ void startPlayback(quint8 index) override;
-    /*virtual*/ void pausePlayback(quint8 index) override;
-    /*virtual*/ void stopPlayback(quint8 index) override;
+    /*virtual*/ void startPlayback(AudioPlaybackActor* audioActor) override;
+    /*virtual*/ void pausePlayback(AudioPlaybackActor* audioActor) override;
+    /*virtual*/ void stopPlayback(AudioPlaybackActor* audioActor) override;
 
 signals:
 

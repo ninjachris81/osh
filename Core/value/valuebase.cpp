@@ -8,11 +8,13 @@
 
 QLatin1String ValueBase::PROPERTY_VALUE_TYPE = QLatin1String("valueType");
 QLatin1String ValueBase::PROPERTY_VALUE_TIMEOUT = QLatin1String("valueTimeout");
+QLatin1String ValueBase::PROPERTY_ALWAYS_EMIT = QLatin1String("alwaysEmit");
+QLatin1String ValueBase::PROPERTY_PERSIST = QLatin1String("persist");
 
 ValueBase::ValueBase() : SerializableIdentifyable() {
 }
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : QObject(parent), SerializableIdentifyable (id), m_valueType(valueType), m_valueGroup(valueGroup), m_alwaysEmit(alwaysEmit)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : QObject(parent), SerializableIdentifyable (id), m_alwaysEmit(alwaysEmit), m_valueType(valueType), m_valueGroup(valueGroup)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 
@@ -54,6 +56,11 @@ ValueBase* ValueBase::withPersist(bool persist) {
     return this;
 }
 
+ValueBase* ValueBase::withAlwaysEmit(bool alwaysEmit) {
+    m_alwaysEmit = alwaysEmit;
+    return this;
+}
+
 bool ValueBase::persist() {
     return m_persist;
 }
@@ -70,7 +77,7 @@ void ValueBase::setValueGroup(ValueGroup* valueGroup) {
     m_valueGroup = valueGroup;
 }
 
-bool ValueBase::updateValue(QVariant newValue) {
+bool ValueBase::updateValue(QVariant newValue, bool emitChange) {
     iDebug() << Q_FUNC_INFO << newValue;
 
     m_currentSignalCount++;
@@ -79,8 +86,8 @@ bool ValueBase::updateValue(QVariant newValue) {
     m_value = _updateValue(newValue);
     //bool newValueApplied = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
-    if (m_alwaysEmit || isDifferent) {
-        qDebug() << "Value changed emit";
+    if (emitChange && (m_alwaysEmit || isDifferent)) {
+        iDebug() << "Value changed emit";
         Q_EMIT(valueChanged());
     }
     return isDifferent;

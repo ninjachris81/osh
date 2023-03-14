@@ -3,10 +3,8 @@ package com.osh.doorunlock;
 import android.util.Base64;
 
 import com.osh.communication.MessageBase;
-import com.osh.communication.mqtt.service.ICommunicationManager;
+import com.osh.service.ICommunicationService;
 import com.osh.log.LogFacade;
-import com.osh.manager.IManagerRegistration;
-import com.osh.manager.ManagerBase;
 import com.osh.user.User;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,22 +14,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
-
-public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager {
+public class DoorUnlockManager implements IDoorUnlockManager {
 
     private static final String TAG = DoorUnlockManager.class.getName();
 
     private static final String PSK = "q7XtfMBWAmKYWUekFPxS";
 
-    ICommunicationManager communicationManager;
+    ICommunicationService communicationManager;
 
     private CallbackListener callbackListener;
 
-    public DoorUnlockManager(IManagerRegistration managerRegistration, ICommunicationManager communicationManager) {
-        super("DoorUnlockManager", managerRegistration);
+    public DoorUnlockManager(ICommunicationService communicationManager) {
         this.communicationManager = communicationManager;
     }
 
@@ -45,10 +38,6 @@ public class DoorUnlockManager extends ManagerBase implements IDoorUnlockManager
         return MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK;
     }
 
-    @Override
-    public void initComplete() {
-
-    }
         @Override
     public void handleReceivedMessage(MessageBase msg) {
         if (msg instanceof DoorUnlockMessage) {

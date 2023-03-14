@@ -11,9 +11,16 @@ class SHARED_LIB_EXPORT EnumValue : public IntegerValue
 {
     Q_OBJECT
 public:
-    explicit EnumValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
+
+    static QLatin1String PROPERTY_ENUM_COUNT;
+
+    explicit EnumValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, int enumCount, bool alwaysEmit = true, QObject *parent = nullptr);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
+
+
+private:
+    int m_enumCount = 0;
 
 signals:
 

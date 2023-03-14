@@ -3,13 +3,13 @@ package com.osh.ui.wbb12;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.osh.wbb12.IWBB12Manager;
+import com.osh.wbb12.service.IWBB12Service;
 
 public class WBB12ViewModelFactory implements ViewModelProvider.Factory {
-    private IWBB12Manager wbb12Manager;
+    private IWBB12Service wbb12Manager;
 
 
-    public WBB12ViewModelFactory(IWBB12Manager wbb12Manager) {
+    public WBB12ViewModelFactory(IWBB12Service wbb12Manager) {
         this.wbb12Manager = wbb12Manager;
     }
 

@@ -107,6 +107,7 @@ void MQTTController::registerHandler(MQTTEventCallbackHandler* handler) {
 void MQTTController::publishSingleValue(String path, double value) {
   m_doc.clear();
   m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  m_doc[MQTT_SENDER_DEVICE_ID_ATTR] = m_clientId;
   String output;
   serializeJson(m_doc, output);
   client.publish(path.c_str(), output.c_str());
@@ -115,6 +116,7 @@ void MQTTController::publishSingleValue(String path, double value) {
 void MQTTController::publishSingleValue(String path, int value) {
   m_doc.clear();
   m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  m_doc[MQTT_SENDER_DEVICE_ID_ATTR] = m_clientId;
   String output;
   serializeJson(m_doc, output);
   client.publish(path.c_str(), output.c_str());
@@ -123,6 +125,7 @@ void MQTTController::publishSingleValue(String path, int value) {
 void MQTTController::publishSingleValue(String path, long value) {
   m_doc.clear();
   m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  m_doc[MQTT_SENDER_DEVICE_ID_ATTR] = m_clientId;
   String output;
   serializeJson(m_doc, output);
   client.publish(path.c_str(), output.c_str());
@@ -131,6 +134,7 @@ void MQTTController::publishSingleValue(String path, long value) {
 void MQTTController::publishSingleValue(String path, bool value) {
   m_doc.clear();
   m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  m_doc[MQTT_SENDER_DEVICE_ID_ATTR] = m_clientId;
   String output;
   serializeJson(m_doc, output);
   client.publish(path.c_str(), output.c_str());
@@ -139,6 +143,7 @@ void MQTTController::publishSingleValue(String path, bool value) {
 void MQTTController::publishSingleValue(String path, String value) {
   m_doc.clear();
   m_doc[MQTT_SINGLE_VALUE_ATTR] = value;
+  m_doc[MQTT_SENDER_DEVICE_ID_ATTR] = m_clientId;
   String output;
   serializeJson(m_doc, output);
   client.publish(path.c_str(), output.c_str());

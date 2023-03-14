@@ -1,6 +1,10 @@
 #include "commonscripts.h"
+#include "actor/toggleactor.h"
 
 #include <QDateTime>
+
+#include "helpers.h"
+#include "qsignalmapper.h"
 
 QLatin1String CommonScripts::INTERVAL_OFF_DURATIONS = QLatin1String("interval_off_durations_");
 QLatin1String CommonScripts::INTERVAL_ON_DURATIONS = QLatin1String("interval_on_durations_");
@@ -118,60 +122,73 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
     }
 }
 
-bool CommonScripts::applySwitchLogic(QString lightActorFullId, QString inputSensorFullId, quint64 triggerTimeoutMs) {
-    if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId)) {
-        ActorBase* lightActor = m_datamodel->actors().value(lightActorFullId);
-        ValueBase* inputSensor = m_datamodel->values().value(inputSensorFullId);
+bool CommonScripts::initSwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString toggleActorFullId) {
+    DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actors().value(lightActorFullId));
+    BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->values().value(inputSensorFullId));
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actors().value(toggleActorFullId));
 
-        QVariant actualValue = lightActor->rawValue();
-        QVariant expectedValue;
+    Q_ASSERT(lightRelayActor != nullptr);
+    Q_ASSERT(inputSensor != nullptr);
+    Q_ASSERT(toggleActor != nullptr);
 
-        QString lastTsInputKey = "lastTs_" + inputSensorFullId;
-        QString lastValueInputKey = "lastValue_" + inputSensorFullId;
+    m_localStorage->setObject("switch_toggle_actor_" + inputSensorFullId, toggleActor);
+    Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitSwitchLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_inputSensorValueChanged()));
 
-        bool inputTriggered = false;
-        QString triggerReason;
+    m_localStorage->setObject("switch_light_relay_" + toggleActorFullId, lightRelayActor);
+    Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_toggleActorValueChanged()));
 
-        if (inputSensor->isValid()) {
-            QVariant lastValue = m_localStorage->get(lastValueInputKey, false);
-            m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
+    return true;
+}
 
-            if (inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
-                // toggle off / on
-                inputTriggered = true;
-                iDebug() << "Input sensor triggered";
-                triggerReason = "Input trigger";
-                expectedValue = !actualValue.toBool();
-                m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
-                if (!expectedValue.toBool()) {
-                    // clear timer
-                    m_localStorage->set(lastTsInputKey, 0);
-                }
-            }
+void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
+    BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_localStorage->getObject("switch_toggle_actor_" + inputSensor->fullId()));
 
-            if (!inputTriggered) {
-                // check for timeout
-                quint64 lastContact = m_localStorage->get(lastTsInputKey, 0).toULongLong();
-                if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
-                    expectedValue = true;
-                } else {
-                    triggerReason = "Timeout";
-                    expectedValue = false;
-                }
-            }
+    QString lastInputValKey = "lastVal_" + inputSensor->fullId();
+    bool lastInputVal = m_localStorage->get(lastInputValKey, false).toBool();
+    if (lastInputVal != inputSensor->rawValue().toBool()) {
+        m_localStorage->set(lastInputValKey, inputSensor->rawValue().toBool());
 
-            // finally set the value
-            if (actualValue != expectedValue && expectedValue.isValid()) {
-                publishCmd(lightActorFullId, expectedValue.toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, triggerReason);
-            }
+        if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool()) {
+            publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "input sensor");
         }
-
-
-        return true;
-    } else {
-        iWarning() << "Invalid parameters" << lightActorFullId << inputSensorFullId;
-        return false;
     }
+}
+
+void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(sender());
+
+    DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("switch_light_relay_" + toggleActor->fullId()));
+
+    QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
+
+    if (toggleActor->rawValue().toBool()) {
+        m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+    } else {
+        m_localStorage->unset(lastTsInputKey);
+    }
+
+    publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
+}
+
+
+bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 triggerTimeoutMs) {
+    QString lastTsInputKey = "lastToggleTs_" + toggleActorFullId;
+
+    // check for timeout
+    quint64 lastOn = m_localStorage->get(lastTsInputKey, 0).toULongLong();
+    if (lastOn > 0 && QDateTime::currentMSecsSinceEpoch() - lastOn > triggerTimeoutMs) {
+        ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actors().value(toggleActorFullId));
+
+        if (toggleActor->rawValue().toBool()) {
+            m_localStorage->unset(lastTsInputKey);
+            publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "Timeout");
+        } else {
+            // hmm, already off
+        }
+    }
+
+    return true;
 }
 
 bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFullId, QString tempValveActorFullId, int adjustIntervalMs, double fullDeltaThresholdTemp, int factorIntervalMs) {
@@ -260,8 +277,12 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
     return true;
 }
 
-bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
-    ActorBase* shutterActor = m_datamodel->actors().value(shutterFullId);
+bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
+    ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actors().value(shutterFullId));
+    EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->values().value(shutterModeFullId));
+
+    Q_ASSERT(shutterActor != nullptr);
+    Q_ASSERT(shutterMode != nullptr);
 
     bool motionActive = false;
     if (!motionFullId.isEmpty()) {
@@ -271,18 +292,18 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString motionFullI
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
-    if (shutterActor->isValid()) {
+    if (shutterActor->isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
             // down: check is motion active
-            if (!motionActive && shutterActor->rawValue().toInt() != actor::ACTOR_CMD_DOWN) {
-                shutterActor->triggerCmd(actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+            if (!motionActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
+                publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
             } else {
                 iDebug() << "Room still active - pausing shutter actions";
             }
         } else {
             // up: just time-based
-            if (shutterActor->rawValue().toInt() != actor::ACTOR_CMD_UP) {
-                shutterActor->triggerCmd(actor::ACTOR_CMD_UP, "applyShutterLogic");
+            if (shutterActor->rawValue().toInt() != SHUTTER_OPENED) {
+                publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
             }
         }
         return true;
@@ -304,6 +325,11 @@ void CommonScripts::publishCmd(QString fullId, int cmd, QString reason) {
     publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
 }
 
+void CommonScripts::publishCmd(QString fullId, int cmd, QVariant value, QString reason) {
+    ActorBase* actor = m_datamodel->actors().value(fullId);
+    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), value, reason);
+}
+
 /*
 void CommonScripts::publishValue(ValueBase* val, QVariant value) {
     val->updateValue(value);
@@ -312,8 +338,15 @@ void CommonScripts::publishValue(ValueBase* val, QVariant value) {
 */
 
 void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
-    actor->triggerCmd(cmd, reason);
+    iDebug() << actor->fullId() << cmd << reason;
+    //actor->triggerCmd(cmd, reason);
     m_actorManager->publishCmd(actor, cmd);
+}
+
+void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason) {
+    iDebug() << actor->fullId() << cmd << value << reason;
+    //actor->triggerCmd(cmd, reason);
+    m_actorManager->publishCmd(actor, cmd, value);
 }
 
 void CommonScripts::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {
@@ -374,9 +407,12 @@ bool CommonScripts::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, 
 
     if (from == to) return 0;
 
-    if (to < from) {
-        to += 24 * 60 * 60 * 1000;
+    qint64 now = QTime::currentTime().msecsSinceStartOfDay();
+    if (from < to) {
+        // normal case
+        return now > from && now < to;
+    } else {
+        // day limit
+        return now > from || now < to;
     }
-
-    return QTime::currentTime().msecsSinceStartOfDay() > from && QTime::currentTime().msecsSinceStartOfDay() < to;
 }

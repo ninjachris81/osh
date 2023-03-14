@@ -46,7 +46,6 @@
 // types
 #define MQTT_MESSAGE_TYPE_VA            "va"        // value
 #define MQTT_MESSAGE_TYPE_AC            "ac"        // actor
-#define MQTT_MESSAGE_TYPE_AO            "ao"        // actor config
 #define MQTT_MESSAGE_TYPE_DD            "dd"        // device discovery
 #define MQTT_MESSAGE_TYPE_ST            "st"        // system time
 #define MQTT_MESSAGE_TYPE_SW            "sw"        // system warnings
@@ -70,6 +69,9 @@
 //#define MQTT_INVALID_PAYLOAD ' '
 
 #define MQTT_SINGLE_VALUE_ATTR "v"
+#define MQTT_ACTOR_CMD_ATTR "c"
+#define MQTT_SENDER_DEVICE_ID_ATTR "s"
+#define MQTT_TS "t"
 
 #define MQTT_JSON_MAX_LENGTH 256
 

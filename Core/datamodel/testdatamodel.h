@@ -9,7 +9,7 @@ class TestDatamodel : public DatamodelBase
 {
     Q_OBJECT
 public:
-    explicit TestDatamodel(QObject *parent = nullptr);
+    explicit TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject *parent = nullptr);
 
 signals:
 

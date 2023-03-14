@@ -1,7 +1,15 @@
 package com.osh.service;
 
-import com.osh.datamodel.DBDatamodel;
+import com.osh.datamodel.DatamodelBase;
+import com.osh.utils.IObservableBoolean;
 
-public interface IDatamodelService extends IDefaultService<DBDatamodel> {
+public interface IDatamodelService {
+
+	DatamodelBase getDatamodel();
+	
+	void save();
+
+	IObservableBoolean loadedState();
+
 
 }

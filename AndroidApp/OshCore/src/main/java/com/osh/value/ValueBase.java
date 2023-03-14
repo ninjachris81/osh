@@ -15,7 +15,20 @@ import java.util.Optional;
 public abstract class ValueBase<VALUE_TYPE extends ValueBase, NATIVE_TYPE> extends SerializableIdentifyable implements IObservableItem<VALUE_TYPE>, IObservableListenerHolder<VALUE_TYPE> {
 
 	public enum VALUE_TIMEOUT {
-		VT_NONE, VT_SHORT, VT_MID, VT_LONG
+		VT_NONE(0), VT_SHORT(5000), VT_MID(30000), VT_LONG(120000);
+
+		private int timeout;
+		VALUE_TIMEOUT(int timeout) {
+			this.timeout = timeout;
+		}
+
+		public static VALUE_TIMEOUT of(int timeout) {
+			for (VALUE_TIMEOUT vt : VALUE_TIMEOUT.values()) {
+				if (vt.timeout == timeout) return vt;
+			}
+
+			return null;
+		}
 	};
 
 	public static final String VALUE_SEPARATOR = ".";
@@ -118,11 +131,18 @@ public abstract class ValueBase<VALUE_TYPE extends ValueBase, NATIVE_TYPE> exten
 	}
 
 	public boolean updateValue(Object newValue) {
+		return updateValue(newValue, true);
+	}
+
+	public boolean updateValue(Object newValue, boolean invokeListeners) {
 	    currentSignalCount++;
 
 	    boolean isDifferent = value == null ? true : !(value).equals(newValue);
 	    value = _updateValue(newValue);
-		itemChanged();
+
+		if (invokeListeners) {
+			itemChanged();
+		}
 	    //bool newValueApplied = m_value == newValue;
 	    lastUpdate = System.currentTimeMillis();
 	    return isDifferent;
