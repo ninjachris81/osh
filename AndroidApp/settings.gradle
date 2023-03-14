@@ -16,6 +16,8 @@ dependencyResolutionManagement {
         }
 
         jcenter()
+
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "OSH"

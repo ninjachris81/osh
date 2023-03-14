@@ -1,5 +1,7 @@
 QT -= gui
 QT += mqtt
+QT += sql
+QT += multimedia
 
 CONFIG += c++11 console
 CONFIG -= app_bundle

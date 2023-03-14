@@ -2,6 +2,7 @@ package com.osh.ui.area;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -53,14 +54,17 @@ public abstract class AreaFragmentBase extends Fragment {
         label.setText(room.getName());
     }
 
-    protected void initRoomLight(View root, String lightRelayGroupId, String lightRelayActorId, String lightToggleGroupId, String lightToggleActorId, int lightResId) {
+    protected void initRoomLight(View root, String lightRelayGroupId, String lightRelayActorId, String lightToggleGroupId, String lightToggleActorId, int lightResId, int roomBackgroundResId) {
         Switch lightSwitch = root.findViewById(lightResId);
+        View roomBackground = root.findViewById(roomBackgroundResId);
 
         ToggleActor lightToggleActor = (ToggleActor) datamodelService.getDatamodel().getActor(lightToggleActorId, lightToggleGroupId);
         DigitalActor lightActor = (DigitalActor) datamodelService.getDatamodel().getActor(lightRelayActorId, lightRelayGroupId);
         lightActor.addItemChangeListener(isEnabled -> {
             activity.runOnUiThread(() -> {
-                lightSwitch.setChecked(isEnabled.getValue(false));
+                boolean enabled = isEnabled.getValue(false);
+                lightSwitch.setChecked(enabled);
+                roomBackground.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
             });
         }, true);
 
@@ -99,13 +103,13 @@ public abstract class AreaFragmentBase extends Fragment {
         modeButton.setUpClickListener(view -> {
             shutterMode.updateValue(ShutterActor.SHUTTER_OPERATION_MODE_MANUAL);
             valueService.publishValue(shutterMode);
-            //actorService.publishCmd(shutterActor, ActorCmds.ACTOR_CMD_UP);
+            actorService.publishCmd(shutterActor, ActorCmds.ACTOR_CMD_UP);
         });
 
         modeButton.setDownClickListener(view -> {
             shutterMode.updateValue(ShutterActor.SHUTTER_OPERATION_MODE_MANUAL);
             valueService.publishValue(shutterMode);
-            //actorService.publishCmd(shutterActor, ActorCmds.ACTOR_CMD_DOWN);
+            actorService.publishCmd(shutterActor, ActorCmds.ACTOR_CMD_DOWN);
         });
     }
 }

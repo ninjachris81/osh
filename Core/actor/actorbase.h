@@ -14,6 +14,7 @@ class SHARED_LIB_EXPORT ActorBase : public ValueBase
     Q_OBJECT
 public:
     static QLatin1String PROPERTY_IS_ASYNC;
+    static QLatin1String PROPERTY_PRIORITY;
 
     explicit ActorBase();
     explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
@@ -21,7 +22,12 @@ public:
     void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
     virtual bool cmdSupported(actor::ACTOR_CMDS cmd) = 0;
 
+    ActorBase* withPriority(int priority);
+
     virtual bool isAsync() = 0;
+
+protected:
+    int m_priority = 0;
 
 Q_SIGNALS:
     void cmdTriggered(actor::ACTOR_CMDS cmd);

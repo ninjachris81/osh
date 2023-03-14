@@ -1,9 +1,12 @@
 #include "audioplaybackactor.h"
 
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_ID = QLatin1String("audioDeviceId");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID = QLatin1String("audioActivationRelayId");
+
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ActorBase(valueGroup, id, valueType, parent)
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceId, QString audioActivationRelayId, QObject *parent) : ActorBase(valueGroup, id, valueType, parent), m_audioDeviceId(audioDeviceId), m_audioActivationRelayId(audioActivationRelayId)
 {
 
 }
@@ -11,7 +14,7 @@ AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
     case actor::ACTOR_CMD_START:
-    case actor::ACTOR_CMD_PAUSE:
+    //case actor::ACTOR_CMD_PAUSE:
     case actor::ACTOR_CMD_STOP:
         return true;
     default:
@@ -22,25 +25,41 @@ bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
 void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
     case actor::ACTOR_CMD_START:
-        updateValue(true);
         Q_EMIT(startPlaybackRequested());
         break;
+    /*
     case actor::ACTOR_CMD_PAUSE:
-        updateValue(false);
         Q_EMIT(pausePlaybackRequested());
         break;
+        */
     case actor::ACTOR_CMD_STOP:
-        updateValue(false);
         Q_EMIT(stopPlaybackRequested());
         break;
     }
 }
 
 QVariant AudioPlaybackActor::_updateValue(QVariant newValue) {
-    // TBD
-    return QVariant();
+    iDebug() << Q_FUNC_INFO << newValue;
+
+    if (newValue.canConvert(QVariant::String)) {
+        return QVariant::fromValue(newValue);
+    } else {
+        return QVariant();
+    }
 }
 
 bool AudioPlaybackActor::isAsync() {
     return true;
+}
+
+QString AudioPlaybackActor::audioDeviceId() {
+    return m_audioDeviceId;
+}
+
+QString AudioPlaybackActor::audioActivationRelayId() {
+    return m_audioActivationRelayId;
+}
+
+int AudioPlaybackActor::priority() {
+    return m_priority;
 }

@@ -7,18 +7,14 @@ AudioControllerSimulator::AudioControllerSimulator(ControllerManager *manager, Q
 
 }
 
-quint8 AudioControllerSimulator::channelCount() {
-    return 4;
+void AudioControllerSimulator::startPlayback(AudioPlaybackActor *audioActor) {
+    iDebug() << Q_FUNC_INFO << audioActor;
 }
 
-void AudioControllerSimulator::startPlayback(quint8 index) {
-    iDebug() << Q_FUNC_INFO << index;
+void AudioControllerSimulator::pausePlayback(AudioPlaybackActor *audioActor) {
+    iDebug() << Q_FUNC_INFO << audioActor;
 }
 
-void AudioControllerSimulator::pausePlayback(quint8 index) {
-    iDebug() << Q_FUNC_INFO << index;
-}
-
-void AudioControllerSimulator::stopPlayback(quint8 index) {
-    iDebug() << Q_FUNC_INFO << index;
+void AudioControllerSimulator::stopPlayback(AudioPlaybackActor *audioActor) {
+    iDebug() << Q_FUNC_INFO << audioActor;
 }

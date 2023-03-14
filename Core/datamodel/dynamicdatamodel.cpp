@@ -152,18 +152,26 @@ template <typename K, typename T, typename SETUP_FUNC> void DynamicDatamodel::de
 }
 
 void DynamicDatamodel::addActor(QString typeName, ValueGroup *valueGroup, QString id, QVariantMap properties) {
+    ActorBase* actor;
+
     if (typeName == "DigitalActor") {
-        addDigitalActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
+        actor = addDigitalActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
                         properties.value(DigitalActor::PROPERTY_IS_ASYNC).toBool());
     } else if (typeName == "ShutterActor") {
-        addShutterActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
+        actor =addShutterActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
                         properties.value(ShutterActor::PROPERTY_TILT_SUPPORT).toBool(), properties.value(ShutterActor::PROPERTY_FULL_CLOSE_DURATION).toInt(), properties.value(ShutterActor::PROPERTY_FULL_TILT_DURATION).toInt());
     } else if (typeName == "ToggleActor") {
-        addToggleActor(valueGroup, id);
+        actor = addToggleActor(valueGroup, id);
     } else if (typeName == "ValueActor") {
-        addValueActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+        actor = addValueActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
+    } else if (typeName == "AudioPlaybackActor") {
+        actor = addAudioPlaybackActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID).toString());
     } else {
         iWarning() << "Unsupported type name" << typeName;
+    }
+
+    if (properties.contains(ActorBase::PROPERTY_PRIORITY)) {
+        actor->withPriority(properties.value(ActorBase::PROPERTY_PRIORITY).toInt());
     }
 }
 
@@ -186,10 +194,10 @@ void DynamicDatamodel::addValue(QString typeName, ValueGroup *valueGroup, QStrin
         iWarning() << "Unknown value type" << typeName;
     }
 
-    if (properties.contains(DigitalActor::PROPERTY_ALWAYS_EMIT)) {
-        val->withAlwaysEmit(properties.value(DigitalActor::PROPERTY_ALWAYS_EMIT).toBool());
+    if (properties.contains(ValueBase::PROPERTY_ALWAYS_EMIT)) {
+        val->withAlwaysEmit(properties.value(ValueBase::PROPERTY_ALWAYS_EMIT).toBool());
     }
-    if (properties.contains(DigitalActor::PROPERTY_PERSIST)) {
-        val->withPersist(properties.value(DigitalActor::PROPERTY_PERSIST).toBool());
+    if (properties.contains(ValueBase::PROPERTY_PERSIST)) {
+        val->withPersist(properties.value(ValueBase::PROPERTY_PERSIST).toBool());
     }
 }

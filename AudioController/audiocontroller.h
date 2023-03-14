@@ -4,7 +4,10 @@
 #include <QObject>
 #include <QList>
 #include <QProcess>
+#include <QMutex>
 
+#include "actor/actormanager.h"
+#include "datamodel/datamodelbase.h"
 #include "sharedlib.h"
 
 #include "controller/audiocontrollerbase.h"
@@ -15,33 +18,47 @@ class SHARED_LIB_EXPORT AudioController : public AudioControllerBase
 {
     Q_OBJECT
 public:
+    struct AudioProcess {
+        AudioPlaybackActor* actor;
+        QProcess* process;
+    };
+
     explicit AudioController(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
     /*virtual*/ void init() override;
 
     /*virtual*/ void start() override;
 
-    /*virtual*/ quint8 channelCount() override;
+    void loadAudioActors(DatamodelBase *datamodel);
 
-    void startPlayback(quint8 channelIndex) override;
-    void pausePlayback(quint8 channelIndex) override;
-    void stopPlayback(quint8 channelIndex) override;
+    void startPlayback(AudioPlaybackActor *audioActor) override;
+    void pausePlayback(AudioPlaybackActor *audioActor) override;
+    void stopPlayback(AudioPlaybackActor *audioActor) override;
 
-    void bindCommunicationManager(CommunicationManagerBase *commManager);
+    void executeActivation(AudioPlaybackActor *audioActor, bool activate);
 
 private:
-    QProcess m_playbackProcess;
+    ValueGroup *m_audioGroup;
+
     QString m_playbackCmd;
-    QString m_playbackFile;
 
     CommunicationManagerBase* m_commManager;
+    ActorManager *m_actorManager;
+
+    bool validatePlaybackUrl(QString url);
+
+protected slots:
+    void onStartPlayback();
+    void onPausePlayback();
+    void onStopPlayback();
 
 signals:
-    void requestActivation(QString amplGroupId, QString amplActorId, bool activate);
 
 protected:
-    quint8 m_actorCount = 0;
-    QList<AudioPlaybackActor*> m_actorMappings;
+    QMap<AudioPlaybackActor*, DigitalActor*> m_actorRelayMappings;
+
+    QMap<QString, AudioProcess> m_playbackProcesses;
+    QMutex m_playbackProcessMutex;
 
 };
 

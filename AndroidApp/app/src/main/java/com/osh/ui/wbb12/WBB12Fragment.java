@@ -3,6 +3,7 @@ package com.osh.ui.wbb12;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,8 +18,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.osh.databinding.FragmentWbb12Binding;
 import com.osh.wbb12.service.IWBB12Service;
+
+import java.util.ArrayList;
 
 public class WBB12Fragment extends Fragment {
 
@@ -45,6 +55,46 @@ public class WBB12Fragment extends Fragment {
 
         binding = FragmentWbb12Binding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        final ArrayList<String> xVals = new ArrayList<>();
+        xVals.add("Consumption");
+
+        //binding.wbb12Consumption.setVisibleXRange(0, 100);
+        XAxis axisX = binding.wbb12Consumption.getXAxis();
+        //axisX.setAxisMinimum(0);
+        //axisX.setAxisMaximum(100);
+        axisX.setEnabled(false);
+        axisX.setValueFormatter(new IndexAxisValueFormatter(xVals));
+
+        binding.wbb12Consumption.getAxisRight().setEnabled(false);
+        YAxis axisLeft = binding.wbb12Consumption.getAxisLeft();
+        axisLeft.setAxisMaximum(110);
+        axisLeft.setAxisMinimum(-10);
+        axisLeft.setEnabled(false);
+        binding.wbb12Consumption.setDrawValueAboveBar(false);
+
+        binding.wbb12Consumption.getDescription().setEnabled(true);
+        binding.wbb12Consumption.getDescription().setText("Consumption");
+        binding.wbb12Consumption.getDescription().setTextSize(30);
+        binding.wbb12Consumption.getLegend().setEnabled(false);
+
+        ArrayList<BarEntry> values = new ArrayList<>();
+        BarEntry consumptionEntry = new BarEntry(0f, 0f);
+        BarDataSet set1 = new BarDataSet(values, "Consumption");
+        set1.addEntry(consumptionEntry);
+        BarData barData = new BarData(set1);
+        barData.setValueTextSize(30);
+        barData.setValueFormatter(new PercentFormatter());
+        barData.setDrawValues(true);
+        binding.wbb12Consumption.setData(barData);
+
+        wbb12ViewModel.wbb12Consumption.observe(getViewLifecycleOwner(), s -> {
+            consumptionEntry.setY(s);
+            binding.wbb12Consumption.animateY(200);
+            binding.wbb12Consumption.getData().notifyDataChanged();
+            binding.wbb12Consumption.notifyDataSetChanged();
+            binding.wbb12Consumption.invalidate();
+        });
 
         TableLayout wbb12Container = binding.wbb12Container;
 

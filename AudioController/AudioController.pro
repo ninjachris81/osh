@@ -1,4 +1,5 @@
 QT -= gui
+QT += multimedia
 
 TARGET = AudioController
 TEMPLATE = lib

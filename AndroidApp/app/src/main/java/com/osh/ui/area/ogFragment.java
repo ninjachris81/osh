@@ -43,26 +43,26 @@ public class ogFragment extends AreaFragmentBase {
         String shutterModeValueGroupId = "shutterModes0";
 
         initRoom(root, "sz", R.id.labelSZ);
-        initRoomLight(root, relayValueGroupId, "16", toggleValueGroupId, "8", R.id.lightSZ);
+        initRoomLight(root, relayValueGroupId, "16", toggleValueGroupId, "8", R.id.lightSZ, R.id.lightBackgroundSZ);
         initRoomShutter(root, shutterValueGroupId, "6", shutterModeValueGroupId, "6", R.id.shutterSZ);
 
         initRoom(root, "uz", R.id.labelUZ);
-        initRoomLight(root, relayValueGroupId, "17", toggleValueGroupId, "9", R.id.lightUZ);
+        initRoomLight(root, relayValueGroupId, "17", toggleValueGroupId, "9", R.id.lightUZ, R.id.lightBackgroundUZ);
         initRoomShutter(root, shutterValueGroupId, "7", shutterModeValueGroupId, "7", R.id.shutterUZ);
 
         initRoom(root, "b", R.id.labelB);
-        initRoomLight(root, relayValueGroupId, "18", toggleValueGroupId, "10", R.id.lightB);
+        initRoomLight(root, relayValueGroupId, "18", toggleValueGroupId, "10", R.id.lightB, R.id.lightBackgroundB);
         initRoomShutter(root, shutterValueGroupId, "8", shutterModeValueGroupId, "8", R.id.shutterB1);
 
         initRoom(root, "wz", R.id.labelWZ);
-        initRoomLight(root, relayValueGroupId, "19", toggleValueGroupId, "11", R.id.lightWZ);
+        initRoomLight(root, relayValueGroupId, "19", toggleValueGroupId, "11", R.id.lightWZ, R.id.lightBackgroundWZ);
         initRoomShutter(root, shutterValueGroupId, "9", shutterModeValueGroupId, "9", R.id.shutterWZ1);
 
         initRoom(root, "fog", R.id.labelFOG);
-        initRoomLight(root, relayValueGroupId, "20", toggleValueGroupId, "12", R.id.lightFOG);
+        initRoomLight(root, relayValueGroupId, "20", toggleValueGroupId, "12", R.id.lightFOG, R.id.lightBackgroundFOG);
 
         initRoom(root, "hfo", R.id.labelHFO);
-        initRoomLight(root, relayValueGroupId, "21", toggleValueGroupId, "13", R.id.lightHFO);
+        initRoomLight(root, relayValueGroupId, "21", toggleValueGroupId, "13", R.id.lightHFO, R.id.lightBackgroundHFO);
 
         return root;
     }

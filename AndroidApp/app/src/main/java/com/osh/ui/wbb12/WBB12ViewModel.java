@@ -17,6 +17,8 @@ public class WBB12ViewModel extends ViewModel {
     final List<MutableLiveData<String>> data = new ArrayList<>();
     final List<String> dataLabels = new ArrayList<>();
 
+    final MutableLiveData<Integer> wbb12Consumption;
+
     final IWBB12Service wbb12Manager;
 
     public WBB12ViewModel(IWBB12Service wbb12Manager) {
@@ -38,11 +40,18 @@ public class WBB12ViewModel extends ViewModel {
                 } else {
                     // TODO: error
                 }
-            });
+            }, true);
 
             data.add(liveData);
             dataLabels.add(wbb12Manager.getWBB12Value(key).getId());
         }
+
+        wbb12Consumption = new MutableLiveData<>();
+        IntegerValue cons = ((IntegerValue) wbb12Manager.getWBB12Value("wbb12.heatPumpConsumption"));
+        wbb12Consumption.postValue(cons.getValue(0));
+        cons.addItemChangeListener(item -> {
+            wbb12Consumption.postValue(item.getValue(0));
+        }, true);
     }
 
     public void setValue(MutableLiveData<String> liveData, ValueBase val) {

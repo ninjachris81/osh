@@ -37,6 +37,25 @@ QMap<QString, ActorBase*> DatamodelBase::actors() {
     return m_actors;
 }
 
+ActorBase* DatamodelBase::actor(QString actorFullId) {
+    return m_actors.value(actorFullId);
+}
+
+QMap<QString, ActorBase*> DatamodelBase::actors(QString valueGroupId) {
+    QMap<QString, ActorBase*> returnMap;
+
+    QMapIterator<QString, ActorBase*> it(m_actors);
+    while (it.hasNext()) {
+        it.next();
+
+        if (it.value()->valueGroup()->id() == valueGroupId) {
+            returnMap.insert(it.key(), it.value());
+        }
+    }
+
+    return returnMap;
+}
+
 QMap<QString, KnownRoom*> DatamodelBase::knownRooms() {
     return m_knownRooms;
 }
@@ -87,6 +106,13 @@ ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VAL
     return actor;
 }
 
+AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceId, QString audioActivationRelayId) {
+    AudioPlaybackActor* actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceId, audioActivationRelayId);
+    actor->withValueTimeout(timeout);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
 
 BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
     BooleanValue* value = new BooleanValue(valueGroup, id, valueType);
