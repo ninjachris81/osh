@@ -362,6 +362,7 @@
                         android:id="@+id/lightBackgroundHFO1"
                         android:layout_width="77dp"
                         android:layout_height="match_parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:src="@drawable/rectangle" />
 
                     <ImageView

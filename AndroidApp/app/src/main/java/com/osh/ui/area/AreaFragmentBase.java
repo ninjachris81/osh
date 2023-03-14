@@ -58,6 +58,10 @@ public abstract class AreaFragmentBase extends Fragment {
         Switch lightSwitch = root.findViewById(lightResId);
         View roomBackground = root.findViewById(roomBackgroundResId);
 
+        if (roomBackground == null) {
+            throw new RuntimeException("Room background not found " + lightToggleActorId);
+        }
+
         ToggleActor lightToggleActor = (ToggleActor) datamodelService.getDatamodel().getActor(lightToggleActorId, lightToggleGroupId);
         DigitalActor lightActor = (DigitalActor) datamodelService.getDatamodel().getActor(lightRelayActorId, lightRelayGroupId);
         lightActor.addItemChangeListener(isEnabled -> {
@@ -96,7 +100,7 @@ public abstract class AreaFragmentBase extends Fragment {
         }, true);
 
         modeButton.setAutoClickListener(view -> {
-            shutterMode.updateValue(ShutterActor.SHUTTER_OPERATION_MODE_AUTO);
+            shutterMode.updateValue(shutterMode.getValue(ShutterActor.SHUTTER_OPERATION_MODE_AUTO) == ShutterActor.SHUTTER_OPERATION_MODE_AUTO ? ShutterActor.SHUTTER_OPERATION_MODE_MANUAL : ShutterActor.SHUTTER_OPERATION_MODE_AUTO);
             valueService.publishValue(shutterMode);
         });
 

@@ -18,6 +18,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/lightBackgroundSZ"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
         <TextView
             android:id="@+id/labelSZ"
             android:layout_width="wrap_content"
@@ -35,6 +47,18 @@
             android:layout_marginTop="60dp"
             app:layout_constraintStart_toStartOf="@+id/labelSZ"
             app:layout_constraintTop_toBottomOf="@+id/labelSZ" />
+
+        <ImageView
+            android:id="@+id/lightBackgroundUZ"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
 
         <TextView
             android:id="@+id/labelUZ"
@@ -54,6 +78,43 @@
             app:layout_constraintStart_toStartOf="@+id/labelUZ"
             app:layout_constraintTop_toBottomOf="@+id/labelUZ" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lightBackgroundB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/lightBackgroundB1"
+                android:layout_width="163dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="21dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+            <ImageView
+                android:id="@+id/lightBackgroundB2"
+                android:layout_width="20dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="85dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
+                app:layout_constraintStart_toEndOf="@id/lightBackgroundB1"
+                app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"></ImageView>
+
+            <ImageView
+                android:id="@+id/lightBackgroundB3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lightBackgroundB2"
+                app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"></ImageView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/labelB"
             android:layout_width="wrap_content"
@@ -71,6 +132,36 @@
             android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="@+id/labelB"
             app:layout_constraintTop_toTopOf="@+id/labelB" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lightBackgroundWZ"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="21dp">
+
+            <ImageView
+                android:id="@+id/lightBackgroundWZ1"
+                android:layout_width="237dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="0dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/lightBackgroundWZ2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="7dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintBottom_toBottomOf="@id/lightBackgroundWZ1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lightBackgroundWZ1"
+                app:layout_constraintTop_toTopOf="@id/lightBackgroundWZ1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/labelWZ"
@@ -90,6 +181,12 @@
             app:layout_constraintStart_toStartOf="@+id/labelWZ"
             app:layout_constraintTop_toBottomOf="@+id/labelWZ" />
 
+        <ImageView
+            android:id="@+id/lightBackgroundFOG"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/rectangle"></ImageView>
+
         <TextView
             android:id="@+id/labelFOG"
             android:layout_width="wrap_content"
@@ -108,6 +205,29 @@
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="@+id/labelFOG"
             app:layout_constraintTop_toBottomOf="@+id/labelFOG" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lightBackgroundHFO"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/lightBackgroundHFO1"
+                android:layout_width="77dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/rectangle"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/lightBackgroundHFO2"
+                android:layout_width="0dp"
+                android:layout_height="87dp"
+                android:src="@drawable/rectangle"
+                app:layout_constraintBottom_toBottomOf="@id/lightBackgroundHFO1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lightBackgroundHFO1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/labelHFO"

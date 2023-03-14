@@ -2,18 +2,20 @@
 
 #include "helpers.h"
 
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_ID = QLatin1String("audioDeviceId");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS = QLatin1String("audioDeviceIds");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID = QLatin1String("audioActivationRelayId");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME = QLatin1String("audioVolume");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID = QLatin1String("audioVolumeId");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEFAULT_URL = QLatin1String("audioDefaultUrl");
 
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceId, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QObject *parent) : ActorBase(valueGroup, id, valueType, parent),
-    m_audioDeviceId(audioDeviceId), m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId)
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl, QObject *parent) : ActorBase(valueGroup, id, valueType, parent),
+    m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioDefaultUrl(audioDefaultUrl)
 {
-
+    m_audioDeviceIds = audioDeviceIds.split("\n");
+    updateValue(m_audioDefaultUrl, false);
 }
 
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
@@ -56,8 +58,8 @@ bool AudioPlaybackActor::isAsync() {
     return true;
 }
 
-QString AudioPlaybackActor::audioDeviceId() {
-    return m_audioDeviceId;
+QStringList AudioPlaybackActor::audioDeviceIds() {
+    return m_audioDeviceIds;
 }
 
 QString AudioPlaybackActor::audioActivationRelayId() {
@@ -70,6 +72,10 @@ float AudioPlaybackActor::audioVolume() {
 
 QString AudioPlaybackActor::audioVolumeId() {
     return m_audioVolumeId;
+}
+
+QString AudioPlaybackActor::audioDefaultUrl() {
+    return m_audioDefaultUrl;
 }
 
 AudioPlaybackActor* AudioPlaybackActor::withAudioVolumeValue(DoubleValue* volume) {

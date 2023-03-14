@@ -77,7 +77,6 @@ public class ShutterModeButton extends ChipGroup {
     }
 
     public void setAuto(boolean isAuto) {
-        autoSelection.setEnabled(!isAuto);
         autoSelection.setChecked(isAuto);
     }
 

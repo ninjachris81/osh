@@ -150,6 +150,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 				act = datamodel.addToggleActor(valueGroup, actor.getId());
 			} else if (actor.getClassType().equals("ValueActor")) {
 				act = datamodel.addValueActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
+			} else if (actor.getClassType().equals("AudioPlaybackActor")) {
+				act = datamodel.addAudioPlaybackActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
 			} else {
 				log.error("Unknown class type: " + actor.getClassType());
 			}

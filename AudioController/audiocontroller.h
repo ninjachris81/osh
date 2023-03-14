@@ -8,6 +8,7 @@
 #include <QMutex>
 
 #include "actor/actormanager.h"
+#include "audiooutputwrapper.h"
 #include "datamodel/datamodelbase.h"
 #include "qaudiodeviceinfo.h"
 #include "sharedlib.h"
@@ -41,18 +42,18 @@ private:
     CommunicationManagerBase* m_commManager;
     ActorManager *m_actorManager;
 
-    QMap<QString, QAudioOutput*> m_audioOutputs;
-    QMap<QString, QIODevice*> m_audioDevices;
-    QMap<QString, AudioPlaybackActor*> m_audioActors;
+    QMap<QString, QAudioDeviceInfo> m_availableDeviceInfos;
 
-    QIODevice* getMediaDevice(QString url);
+    QMap<QString, AudioOutputWrapper*> m_audioOutputs;
+    QMultiMap<AudioPlaybackActor*, AudioOutputWrapper*> m_audioOutputMappings;
+    //QMap<QString, QIODevice*> m_audioDevices;
+    //QMap<QString, AudioPlaybackActor*> m_audioActors;
+
+    void initAvailableDevices();
+    void initDevice(QString deviceName, AudioPlaybackActor *playbackActor);
 
     void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
     void _stop(AudioPlaybackActor *audioActor);
-
-private slots:
-    void onStateChanged(QAudio::State state);
-    void onNotify();
 
 protected slots:
     void onStartPlayback();

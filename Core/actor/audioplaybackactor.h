@@ -12,13 +12,14 @@ class SHARED_LIB_EXPORT AudioPlaybackActor : public ActorBase
 {
     Q_OBJECT
 public:
-    static QLatin1String PROPERTY_AUDIO_DEVICE_ID;
+    static QLatin1String PROPERTY_AUDIO_DEVICE_IDS;
     static QLatin1String PROPERTY_AUDIO_ACTIVATION_RELAY_ID;
     static QLatin1String PROPERTY_AUDIO_VOLUME;
     static QLatin1String PROPERTY_AUDIO_VOLUME_ID;
+    static QLatin1String PROPERTY_AUDIO_DEFAULT_URL;
 
     AudioPlaybackActor();
-    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceId, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QObject *parent = nullptr);
+    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 
@@ -28,16 +29,18 @@ public:
 
     AudioPlaybackActor* withAudioVolumeValue(DoubleValue* volume);
 
-    QString audioDeviceId();
+    QStringList audioDeviceIds();
     QString audioActivationRelayId();
     float audioVolume();
     QString audioVolumeId();
+    QString audioDefaultUrl();
 
 protected:
-    QString m_audioDeviceId = "";
+    QStringList m_audioDeviceIds;
     QString m_audioActivationRelayId = "";
     float m_audioVolume = 1;
     QString m_audioVolumeId = "";
+    QString m_audioDefaultUrl = "";
 
     DoubleValue* m_audioVolumeValue;
 

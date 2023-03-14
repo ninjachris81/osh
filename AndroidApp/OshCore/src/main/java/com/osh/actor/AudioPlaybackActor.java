@@ -1,8 +1,14 @@
 package com.osh.actor;
 
 import com.osh.SerializationSupport;
+import com.osh.value.ValueGroup;
+import com.osh.value.ValueType;
 
-public class AudioPlaybackActor extends ActorBase implements SerializationSupport {
+public class AudioPlaybackActor extends ActorBase {
+
+	public AudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType) {
+		super(valueGroup, id, valueType);
+	}
 
 	@Override
 	public boolean cmdSupported(ActorCmds cmd) {

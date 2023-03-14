@@ -18,6 +18,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/lightBackgroundEZ"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
         <TextView
             android:id="@+id/labelEZ"
             android:layout_width="wrap_content"
@@ -35,6 +47,18 @@
             android:layout_marginTop="60dp"
             app:layout_constraintStart_toStartOf="@+id/labelEZ"
             app:layout_constraintTop_toBottomOf="@+id/labelEZ" />
+
+        <ImageView
+            android:id="@+id/lightBackgroundK"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
 
         <TextView
             android:id="@+id/labelK"
@@ -54,6 +78,18 @@
             app:layout_constraintStart_toStartOf="@+id/labelK"
             app:layout_constraintTop_toBottomOf="@+id/labelK" />
 
+        <ImageView
+            android:id="@+id/lightBackgroundAZ"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
         <TextView
             android:id="@+id/labelAZ"
             android:layout_width="wrap_content"
@@ -71,6 +107,18 @@
             android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="@+id/labelAZ"
             app:layout_constraintTop_toTopOf="@+id/labelAZ" />
+
+        <ImageView
+            android:id="@+id/lightBackgroundVZ"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
 
         <TextView
             android:id="@+id/labelVZ"
@@ -90,6 +138,18 @@
             app:layout_constraintStart_toStartOf="@+id/labelVZ"
             app:layout_constraintTop_toBottomOf="@+id/labelVZ" />
 
+        <ImageView
+            android:id="@+id/lightBackgroundWC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="21dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
         <TextView
             android:id="@+id/labelWC"
             android:layout_width="wrap_content"
@@ -107,6 +167,12 @@
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="@+id/labelWC"
             app:layout_constraintTop_toBottomOf="@+id/labelWC" />
+
+        <ImageView
+            android:id="@+id/lightBackgroundFEG"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/rectangle"></ImageView>
 
         <TextView
             android:id="@+id/labelFEG"
@@ -128,14 +194,10 @@
             app:layout_constraintTop_toBottomOf="@+id/labelFEG" />
 
         <ImageView
-            android:id="@+id/lightBackgroundFEG"
-            android:layout_width="62dp"
-            android:layout_height="220dp"
-            android:layout_marginStart="-12dp"
-            android:layout_marginTop="-100dp"
-            android:src="@drawable/rectangle"
-            app:layout_constraintStart_toStartOf="@+id/labelFEG"
-            app:layout_constraintTop_toBottomOf="@+id/labelFEG"></ImageView>
+            android:id="@+id/lightBackgroundHFE"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/rectangle"></ImageView>
 
         <TextView
             android:id="@+id/labelHFE"
@@ -156,6 +218,12 @@
             android:layout_marginStart="30dp"
             app:layout_constraintStart_toEndOf="@+id/labelHFE"
             app:layout_constraintTop_toTopOf="@+id/labelHFE" />
+
+        <ImageView
+            android:id="@+id/lightBackgroundNFE"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/rectangle"></ImageView>
 
         <TextView
             android:id="@+id/labelNFE"

@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.osh.Identifyable;
 import com.osh.actor.ActorBase;
+import com.osh.actor.AudioPlaybackActor;
 import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
 import com.osh.actor.ToggleActor;
@@ -110,6 +111,12 @@ public class DatamodelBase extends Identifyable {
 		return actor;
 	}
 
+	public ActorBase addAudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout) {
+		AudioPlaybackActor actor = new AudioPlaybackActor(valueGroup, id, valueType);
+		actor.withValueTimeout(timeout);
+		actors.put(actor.getFullId(), actor);
+		return actor;
+	}
 
 	public BooleanValue addBooleanValue(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout) {
 	    BooleanValue value = new BooleanValue(valueGroup, id, valueType);

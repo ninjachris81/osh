@@ -12,13 +12,14 @@ AudioFileStream::AudioFileStream() :
 }
 
 // format - it is audio format to which we whant decode audio data
-bool AudioFileStream::init(const QAudioFormat& format)
+bool AudioFileStream::init(const QAudioFormat& format, QString filePath)
 {
     m_format = format;
     m_decoder.setAudioFormat(m_format);
 
     connect(&m_decoder, SIGNAL(bufferReady()), this, SLOT(bufferReady()));
     connect(&m_decoder, SIGNAL(finished()), this, SLOT(finished()));
+    connect(&m_decoder, SIGNAL(error(QAudioDecoder::Error)), this, SLOT(onError(QAudioDecoder::Error)));
 
     // Initialize buffers
     if (!m_output.open(QIODevice::ReadOnly) || !m_input.open(QIODevice::WriteOnly))
@@ -28,7 +29,20 @@ bool AudioFileStream::init(const QAudioFormat& format)
 
     isInited = true;
 
+    clear();
+
+    m_file.setFileName(filePath);
+
+    if (!m_file.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+
     return true;
+}
+bool AudioFileStream::open(OpenMode mode) {
+    play();
+    return QIODevice::open(mode);
 }
 
 // AudioOutput device (like speaker) call this function for get new audio data
@@ -67,17 +81,8 @@ qint64 AudioFileStream::writeData(const char* data, qint64 len)
 }
 
 // Start play audio file
-void AudioFileStream::play(const QString &filePath)
+void AudioFileStream::play()
 {
-    clear();
-
-    m_file.setFileName(filePath);
-
-    if (!m_file.open(QIODevice::ReadOnly))
-    {
-        return;
-    }
-
     m_decoder.setSourceDevice(&m_file);
     m_decoder.start();
 
@@ -129,4 +134,8 @@ void AudioFileStream::bufferReady() // SLOT
 void AudioFileStream::finished() // SLOT
 {
     isDecodingFinished = true;
+}
+
+void AudioFileStream::onError(QAudioDecoder::Error error) {
+    qDebug() << error;
 }

@@ -18,11 +18,14 @@ class SHARED_LIB_EXPORT AudioFileStream : public QIODevice
 
 public:
     AudioFileStream();
-    bool init(const QAudioFormat& format);
+    bool init(const QAudioFormat& format, QString filePath);
 
     enum State { Playing, Stopped };
 
-    void play(const QString &filePath);
+    void play();
+    /*virtual*/ bool open(OpenMode mode) override;
+
+
     void stop();
 
     bool atEnd() const override;
@@ -49,6 +52,8 @@ private:
 private slots:
     void bufferReady();
     void finished();
+
+    void onError(QAudioDecoder::Error error);
 
 signals:
     void stateChanged(AudioFileStream::State state);

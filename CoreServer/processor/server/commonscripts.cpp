@@ -47,10 +47,10 @@ bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue
 
 bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs) {
     if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId) && m_datamodel->values().contains(motionSensorFullId) && m_datamodel->values().contains(brightnessSensorFullId)) {
-        ActorBase* lightActor = m_datamodel->actors().value(lightActorFullId);
-        ValueBase* inputSensor = m_datamodel->values().value(inputSensorFullId);
-        ValueBase* motionSensor = m_datamodel->values().value(motionSensorFullId);
-        ValueBase* brightnessSensor = m_datamodel->values().value(brightnessSensorFullId);
+        ActorBase* lightActor = m_datamodel->actor(lightActorFullId);
+        ValueBase* inputSensor = m_datamodel->value(inputSensorFullId);
+        ValueBase* motionSensor = m_datamodel->value(motionSensorFullId);
+        ValueBase* brightnessSensor = m_datamodel->value(brightnessSensorFullId);
 
         QVariant actualValue = lightActor->rawValue();
         QVariant expectedValue;
@@ -123,9 +123,9 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
 }
 
 bool CommonScripts::initSwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString toggleActorFullId) {
-    DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actors().value(lightActorFullId));
-    BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->values().value(inputSensorFullId));
-    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actors().value(toggleActorFullId));
+    DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightActorFullId));
+    BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->value(inputSensorFullId));
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
 
     Q_ASSERT(lightRelayActor != nullptr);
     Q_ASSERT(inputSensor != nullptr);
@@ -178,7 +178,7 @@ bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 t
     // check for timeout
     quint64 lastOn = m_localStorage->get(lastTsInputKey, 0).toULongLong();
     if (lastOn > 0 && QDateTime::currentMSecsSinceEpoch() - lastOn > triggerTimeoutMs) {
-        ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actors().value(toggleActorFullId));
+        ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
 
         if (toggleActor->rawValue().toBool()) {
             m_localStorage->unset(lastTsInputKey);
@@ -196,12 +196,12 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
         QString valveKey = "temp_valve_" + tempValveActorFullId;
         QString lastAdjustKey = "temp_valve_last_adj_" + tempValveActorFullId;
         qlonglong lastAdjustMs = m_localStorage->get(lastAdjustKey, 0).toULongLong();
-        ActorBase* tempValve = m_datamodel->actors().value(tempValveActorFullId);
+        ActorBase* tempValve = m_datamodel->actor(tempValveActorFullId);
 
         if (lastAdjustMs == 0 || QDateTime::currentMSecsSinceEpoch() - lastAdjustMs > adjustIntervalMs) {
             if (m_datamodel->values().contains(tempFullId) && m_datamodel->values().contains(tempTargetFullId)) {
-                ValueBase* temp = m_datamodel->values().value(tempFullId);
-                ValueBase* targetTemp = m_datamodel->values().value(tempTargetFullId);
+                ValueBase* temp = m_datamodel->value(tempFullId);
+                ValueBase* targetTemp = m_datamodel->value(tempTargetFullId);
 
                 if (temp->isValid() && targetTemp->isValid()) {
                     double deltaTemp = targetTemp->rawValue().toDouble() - temp->rawValue().toDouble();
@@ -257,9 +257,9 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
 }
 
 bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QString motionFullId) {
-    ValueBase* radarVal = m_datamodel->values().value(radarFullId);
-    ValueBase* pirVal = m_datamodel->values().value(pirFullId);
-    ValueBase* motionVal = m_datamodel->values().value(motionFullId);
+    ValueBase* radarVal = m_datamodel->value(radarFullId);
+    ValueBase* pirVal = m_datamodel->value(pirFullId);
+    ValueBase* motionVal = m_datamodel->value(motionFullId);
 
     if (radarVal->isValid() && radarVal->rawValue().toBool()) {
         if (motionVal->updateValue(true)) {
@@ -278,21 +278,21 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
 }
 
 bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
-    ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actors().value(shutterFullId));
-    EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->values().value(shutterModeFullId));
+    ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
+    EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
 
     Q_ASSERT(shutterActor != nullptr);
     Q_ASSERT(shutterMode != nullptr);
 
     bool motionActive = false;
     if (!motionFullId.isEmpty()) {
-        ValueBase* motionVal = m_datamodel->values().value(motionFullId);
+        ValueBase* motionVal = m_datamodel->value(motionFullId);
         motionActive = motionVal->rawValue().toBool();
     }
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
-    if (shutterActor->isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
+    if (shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
             // down: check is motion active
             if (!motionActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
@@ -306,10 +306,8 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterMode
                 publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
             }
         }
-        return true;
     } else {
-        iWarning() << "Invalid parameters" << shutterFullId << motionFullId;
-        return false;
+        // set to manual
     }
 }
 
@@ -321,12 +319,12 @@ void CommonScripts::publishValue(QString fullId, QVariant value) {
 */
 
 void CommonScripts::publishCmd(QString fullId, int cmd, QString reason) {
-    ActorBase* actor = m_datamodel->actors().value(fullId);
+    ActorBase* actor = m_datamodel->actor(fullId);
     publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
 }
 
 void CommonScripts::publishCmd(QString fullId, int cmd, QVariant value, QString reason) {
-    ActorBase* actor = m_datamodel->actors().value(fullId);
+    ActorBase* actor = m_datamodel->actor(fullId);
     publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), value, reason);
 }
 
