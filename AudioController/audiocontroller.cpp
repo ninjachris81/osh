@@ -15,12 +15,10 @@ AudioController::AudioController(ControllerManager *manager, QString id, QObject
 void AudioController::init() {
     iDebug() << Q_FUNC_INFO;
 
-    m_playbackCmd = m_config->getString(this, "playbackCmd", "/usr/bin/aplay");
-
-    if (!QFile::exists(m_playbackCmd)) iWarning() << "Cmd file" << m_playbackCmd << "does not exist!";
-
     m_actorManager = m_manager->getManager<ActorManager>(ActorManager::MANAGER_ID);
     Q_ASSERT(m_actorManager != nullptr);
+
+    iInfo() << "Default output device" << QAudioDeviceInfo::defaultOutputDevice().deviceName();
 
     iInfo() << "Available audio devices:";
     for (QAudioDeviceInfo audioDeviceInfo : QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
@@ -42,6 +40,7 @@ void AudioController::loadAudioActors(DatamodelBase *datamodel) {
 
     for (ActorBase* actor : datamodel->actors(this->id())) {
         AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(actor);
+        iInfo() << "Init audio actor" << audioActor->fullId();
 
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::startPlaybackRequested, this, &AudioController::onStartPlayback, SIGNAL(startPlaybackRequested()), SLOT(onStartPlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::pausePlaybackRequested, this, &AudioController::onPausePlayback, SIGNAL(pausePlaybackRequested()), SLOT(onPausePlayback()));

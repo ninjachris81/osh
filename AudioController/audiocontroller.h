@@ -38,8 +38,6 @@ private:
     ValueGroup *m_audioGroup;
     QMutex m_mutex;
 
-    QString m_playbackCmd;
-
     CommunicationManagerBase* m_commManager;
     ActorManager *m_actorManager;
 
