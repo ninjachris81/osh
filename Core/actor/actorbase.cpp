@@ -39,3 +39,7 @@ ActorBase* ActorBase::withPriority(int priority) {
     this->m_priority = priority;
     return this;
 }
+
+int ActorBase::priority() {
+    return m_priority;
+}

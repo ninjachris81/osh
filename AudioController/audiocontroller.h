@@ -43,11 +43,12 @@ private:
 
     QMap<QString, QAudioOutput*> m_audioOutputs;
     QMap<QString, QIODevice*> m_audioDevices;
+    QMap<QString, AudioPlaybackActor*> m_audioActors;
 
     QIODevice* getMediaDevice(QString url);
 
-    void _start(QString deviceId, QIODevice *device, QAudioOutput *output);
-    void _stop(QString deviceId);
+    void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
+    void _stop(AudioPlaybackActor *audioActor);
 
 private slots:
     void onStateChanged(QAudio::State state);

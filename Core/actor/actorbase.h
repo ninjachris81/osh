@@ -23,6 +23,7 @@ public:
     virtual bool cmdSupported(actor::ACTOR_CMDS cmd) = 0;
 
     ActorBase* withPriority(int priority);
+    int priority();
 
     virtual bool isAsync() = 0;
 

@@ -2,17 +2,20 @@
 
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_ID = QLatin1String("audioDeviceId");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID = QLatin1String("audioActivationRelayId");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME = QLatin1String("audioVolume");
 
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceId, QString audioActivationRelayId, QObject *parent) : ActorBase(valueGroup, id, valueType, parent), m_audioDeviceId(audioDeviceId), m_audioActivationRelayId(audioActivationRelayId)
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceId, QString audioActivationRelayId, float audioVolume, QObject *parent) : ActorBase(valueGroup, id, valueType, parent),
+    m_audioDeviceId(audioDeviceId), m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume)
 {
 
 }
 
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
+    case actor::ACTOR_CMD_SET_VALUE:
     case actor::ACTOR_CMD_START:
     case actor::ACTOR_CMD_PAUSE:
     case actor::ACTOR_CMD_STOP:
@@ -58,6 +61,6 @@ QString AudioPlaybackActor::audioActivationRelayId() {
     return m_audioActivationRelayId;
 }
 
-int AudioPlaybackActor::priority() {
-    return m_priority;
+float AudioPlaybackActor::audioVolume() {
+    return m_audioVolume;
 }
