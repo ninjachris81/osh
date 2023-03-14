@@ -9,6 +9,7 @@ moc_*
 config.ini
 *.so
 *.so.*
+AudioService/AudioService
 CoreService/CoreService
 RS485RelayService/RS485RelayService
 MCP23017InputService/MCP23017InputService

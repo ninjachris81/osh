@@ -5,6 +5,7 @@
 #include <QList>
 #include <QAudioOutput>
 #include <QMediaPlayer>
+#include <QMutex>
 
 #include "actor/actormanager.h"
 #include "datamodel/datamodelbase.h"
@@ -35,6 +36,7 @@ public:
 
 private:
     ValueGroup *m_audioGroup;
+    QMutex m_mutex;
 
     QString m_playbackCmd;
 
@@ -42,8 +44,12 @@ private:
     ActorManager *m_actorManager;
 
     QMap<QString, QAudioOutput*> m_audioOutputs;
+    QMap<QString, QIODevice*> m_audioDevices;
 
     QIODevice* getMediaDevice(QString url);
+
+    void _start(QString deviceId, QIODevice *device, QAudioOutput *output);
+    void _stop(QString deviceId);
 
 private slots:
     void onStateChanged(QAudio::State state);
