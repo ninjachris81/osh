@@ -12,22 +12,18 @@ DEFINES += MAKE_SHARED_LIB
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        audiocontroller.cpp
+        audiocontroller.cpp \
+        audiofilestream.cpp
 
 HEADERS += \
     audiocontroller.h \
+    audiofilestream.h \
     sharedlib.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Core/release/ -lCore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Core/debug/ -lCore

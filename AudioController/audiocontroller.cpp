@@ -23,9 +23,12 @@ void AudioController::init() {
     Q_ASSERT(m_actorManager != nullptr);
 
     iInfo() << "Available audio devices:";
-
-    for (QAudioDeviceInfo audioDevice : QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
-        iInfo() << audioDevice.deviceName();
+    for (QAudioDeviceInfo audioDeviceInfo : QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
+        iInfo() << audioDeviceInfo.deviceName();
+        QAudioOutput* audioOutput = new QAudioOutput(audioDeviceInfo, audioDeviceInfo.preferredFormat());
+        connect(audioOutput, &QAudioOutput::stateChanged, this, &AudioController::onStateChanged);
+        connect(audioOutput, &QAudioOutput::notify, this, &AudioController::onNotify);
+        m_audioOutputs.insert(audioDeviceInfo.deviceName(), audioOutput);
     }
 }
 
@@ -48,22 +51,26 @@ void AudioController::loadAudioActors(DatamodelBase *datamodel) {
             Q_ASSERT(relayActor != nullptr);
             m_actorRelayMappings.insert(audioActor, relayActor);
         }
+
+        Q_ASSERT(m_audioOutputs.contains(audioActor->audioDeviceId()));
     }
 }
 
 void AudioController::onStartPlayback() {
     AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
 
-    if (m_playbackProcesses.contains(audioActor->audioDeviceId()) && m_playbackProcesses.value(audioActor->audioDeviceId()).actor->priority() > audioActor->priority()) {
-        iWarning() << "Higher prio process already running on device" << audioActor->audioDeviceId();
-    } else {
+    //if (m_audioOutputs.contains(audioActor->audioDeviceId()) && m_audioOutputs.value(audioActor->audioDeviceId()).actor->priority() > audioActor->priority()) {
+    //    iWarning() << "Higher prio process already running on device" << audioActor->audioDeviceId();
+    //} else {
         executeActivation(audioActor, true);
         startPlayback(audioActor);
-    }
+    //}
 }
 
 void AudioController::onPausePlayback() {
-    // currently not supported
+    AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
+    executeActivation(audioActor, false);
+    pausePlayback(audioActor);
 }
 
 void AudioController::onStopPlayback() {
@@ -73,52 +80,35 @@ void AudioController::onStopPlayback() {
 }
 
 void AudioController::startPlayback(AudioPlaybackActor *audioActor) {
-    QMutexLocker mutexLocker(&m_playbackProcessMutex);
     iInfo() << audioActor->id();
 
-    stopPlayback(audioActor);
-
-    if (audioActor->rawValue().isValid()) {
-        QString playbackUrl = audioActor->rawValue().toString();
-
-        if (validatePlaybackUrl(playbackUrl)) {
-#ifdef Q_OS_WIN
-            iWarning() << "Ignoring playback request (windows)" << playbackUrl;
-#else
-            QProcess* proc = new QProcess();
-            proc->start(m_playbackCmd, QStringList() << playbackUrl);
-            AudioProcess audioProcInfo;
-            audioProcInfo.process = proc;
-            audioProcInfo.actor = audioActor;
-            m_playbackProcesses.insert(audioActor->audioDeviceId(), audioProcInfo);
-#endif
-        } else {
-            iWarning() << "Playback file" << playbackUrl << "does not exist!";
-        }
+    QAudioOutput *output = m_audioOutputs.value(audioActor->audioDeviceId());
+    if (output->state() == QAudio::SuspendedState) {
+        output->resume();
     } else {
-        iWarning() << "Cannot playback - no url set";
+        output->stop();
+
+        if (audioActor->rawValue().isValid()) {
+            QIODevice *device = getMediaDevice(audioActor->rawValue().toString());
+
+            if (device != nullptr) {
+                output->start(device);
+            }
+        } else {
+            iWarning() << "Cannot playback - no url set";
+        }
     }
 }
 
 void AudioController::pausePlayback(AudioPlaybackActor *audioActor) {
-    QMutexLocker mutexLocker(&m_playbackProcessMutex);
-
     iInfo() << audioActor->id();
-
-    QProcess* proc = m_playbackProcesses.value(audioActor->audioDeviceId()).process;
-    proc->terminate();
-    proc->deleteLater();
-    m_playbackProcesses.remove(audioActor->audioDeviceId());
+    m_audioOutputs.value(audioActor->audioDeviceId())->suspend();
 }
 
 void AudioController::stopPlayback(AudioPlaybackActor *audioActor) {
-    QMutexLocker mutexLocker(&m_playbackProcessMutex);
     iInfo() << audioActor->id();
 
-    QProcess* proc = m_playbackProcesses.value(audioActor->audioDeviceId()).process;
-    proc->terminate();
-    proc->deleteLater();
-    m_playbackProcesses.remove(audioActor->audioDeviceId());
+    m_audioOutputs.value(audioActor->audioDeviceId())->stop();
 }
 
 void AudioController::executeActivation(AudioPlaybackActor *audioActor, bool activate) {
@@ -130,10 +120,25 @@ void AudioController::executeActivation(AudioPlaybackActor *audioActor, bool act
     }
 }
 
-bool AudioController::validatePlaybackUrl(QString url) {
+QIODevice* AudioController::getMediaDevice(QString url) {
     iDebug() << Q_FUNC_INFO << url;
 
-    // TODO: support others
+    if (QFile::exists(url) && url.endsWith(".wav")) {
+        // TODO: support others
+        QFile *file = new QFile(url);
+        return file;
+    } else {
+        iWarning() << "Unsupported file" << url;
+        return nullptr;
+    }
+}
 
-    return QFile::exists(url);
+void AudioController::onStateChanged(QAudio::State state) {
+    QAudioOutput* output = static_cast<QAudioOutput*>(sender());
+    iInfo() << Q_FUNC_INFO << output << state;
+}
+
+void AudioController::onNotify() {
+    QAudioOutput* output = static_cast<QAudioOutput*>(sender());
+    iDebug() << output->elapsedUSecs();
 }

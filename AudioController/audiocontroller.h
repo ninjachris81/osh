@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <QList>
-#include <QProcess>
-#include <QMutex>
+#include <QAudioOutput>
+#include <QMediaPlayer>
 
 #include "actor/actormanager.h"
 #include "datamodel/datamodelbase.h"
+#include "qaudiodeviceinfo.h"
 #include "sharedlib.h"
 
 #include "controller/audiocontrollerbase.h"
@@ -18,11 +19,6 @@ class SHARED_LIB_EXPORT AudioController : public AudioControllerBase
 {
     Q_OBJECT
 public:
-    struct AudioProcess {
-        AudioPlaybackActor* actor;
-        QProcess* process;
-    };
-
     explicit AudioController(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
     /*virtual*/ void init() override;
@@ -45,7 +41,13 @@ private:
     CommunicationManagerBase* m_commManager;
     ActorManager *m_actorManager;
 
-    bool validatePlaybackUrl(QString url);
+    QMap<QString, QAudioOutput*> m_audioOutputs;
+
+    QIODevice* getMediaDevice(QString url);
+
+private slots:
+    void onStateChanged(QAudio::State state);
+    void onNotify();
 
 protected slots:
     void onStartPlayback();
@@ -56,9 +58,6 @@ signals:
 
 protected:
     QMap<AudioPlaybackActor*, DigitalActor*> m_actorRelayMappings;
-
-    QMap<QString, AudioProcess> m_playbackProcesses;
-    QMutex m_playbackProcessMutex;
 
 };
 
