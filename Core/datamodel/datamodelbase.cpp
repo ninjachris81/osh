@@ -21,9 +21,29 @@ ValueGroup* DatamodelBase::valueGroup(QString id) {
     return m_valueGroups.value(id);
 }
 
+ValueBase* DatamodelBase::value(QString valueFullId) {
+    return m_values.value(valueFullId);
+}
+
 QMap<QString, ValueBase*> DatamodelBase::values() {
     return m_values;
 }
+
+QMap<QString, ValueBase*> DatamodelBase::values(QString valueGroupId) {
+    QMap<QString, ValueBase*> returnMap;
+
+    QMapIterator<QString, ValueBase*> it(m_values);
+    while (it.hasNext()) {
+        it.next();
+
+        if (it.value()->valueGroup()->id() == valueGroupId) {
+            returnMap.insert(it.key(), it.value());
+        }
+    }
+
+    return returnMap;
+}
+
 
 QMap<QString, KnownDevice*> DatamodelBase::knownDevices() {
     return m_knownDevices;
@@ -106,8 +126,8 @@ ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VAL
     return actor;
 }
 
-AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceId, QString audioActivationRelayId, float audioVolume) {
-    AudioPlaybackActor* actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceId, audioActivationRelayId, audioVolume);
+AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceId, QString audioActivationRelayId, float audioVolume, QString audioVolumeId) {
+    AudioPlaybackActor* actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceId, audioActivationRelayId, audioVolume, audioVolumeId);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());

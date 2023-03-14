@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    audioController.loadAudioActors(datamodelManager.datamodel());
+    audioController.loadAudioActors(datamodelManager.datamodel(), &valueManager);
 
     return a.exec();
 }

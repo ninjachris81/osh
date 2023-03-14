@@ -36,7 +36,7 @@ void AudioController::start() {
     iDebug() << Q_FUNC_INFO;
 }
 
-void AudioController::loadAudioActors(DatamodelBase *datamodel) {
+void AudioController::loadAudioActors(DatamodelBase *datamodel, ClientValueManager* valueManager) {
     iInfo() << Q_FUNC_INFO;
 
     for (ActorBase* actor : datamodel->actors(this->id())) {
@@ -46,15 +46,24 @@ void AudioController::loadAudioActors(DatamodelBase *datamodel) {
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::startPlaybackRequested, this, &AudioController::onStartPlayback, SIGNAL(startPlaybackRequested()), SLOT(onStartPlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::pausePlaybackRequested, this, &AudioController::onPausePlayback, SIGNAL(pausePlaybackRequested()), SLOT(onPausePlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::stopPlaybackRequested, this, &AudioController::onStopPlayback, SIGNAL(stopPlaybackRequested()), SLOT(onStopPlayback()));
+        Helpers::safeConnect(audioActor, &AudioPlaybackActor::volumeChanged, this, &AudioController::onVolumeChanged, SIGNAL(volumeChanged()), SLOT(onVolumeChanged()));
 
         if (!audioActor->audioActivationRelayId().isEmpty()) {
+            iInfo() << "Binding relay" << audioActor->audioActivationRelayId();
             DigitalActor* relayActor = static_cast<DigitalActor*>(datamodel->actor(audioActor->audioActivationRelayId()));
             Q_ASSERT(relayActor != nullptr);
             m_actorRelayMappings.insert(audioActor, relayActor);
         }
 
+        if (!audioActor->audioVolumeId().isEmpty()) {
+            iInfo() << "Binding volume" << audioActor->audioVolumeId();
+            DoubleValue* volumeValue = static_cast<DoubleValue*>(datamodel->value(audioActor->audioVolumeId()));
+            Q_ASSERT(volumeValue != nullptr);
+            audioActor->withAudioVolumeValue(volumeValue);
+            valueManager->registerForNotification(volumeValue);
+        }
+
         m_audioActors.insert(audioActor->audioDeviceId(), audioActor);
-        m_audioOutputs.value(audioActor->audioDeviceId())->setVolume(audioActor->audioVolume());
         Q_ASSERT(m_audioOutputs.contains(audioActor->audioDeviceId()));
     }
 }
@@ -111,6 +120,12 @@ void AudioController::stopPlayback(AudioPlaybackActor *audioActor) {
     _stop(audioActor);
 }
 
+void AudioController::onVolumeChanged() {
+    iInfo() << Q_FUNC_INFO;
+    AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
+    m_audioOutputs.value(audioActor->audioDeviceId())->setVolume(audioActor->audioVolume());
+}
+
 void AudioController::executeActivation(AudioPlaybackActor *audioActor, bool activate) {
     iInfo() << audioActor->id();
 
@@ -161,6 +176,7 @@ void AudioController::_start(AudioPlaybackActor *audioActor, QIODevice *device, 
 
     m_audioDevices.insert(audioActor->audioDeviceId(), device);
     device->open(QIODevice::ReadOnly);
+    output->setVolume(audioActor->audioVolume());
     output->start(device);
 }
 

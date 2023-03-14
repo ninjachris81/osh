@@ -23,8 +23,11 @@ public:
 
     void registerForMaintenance(ValueBase* value);
 
+    void registerForNotification(ValueBase* value);
+
 private:
     QMap<QString, ValueBase*> m_maintenanceValues;
+    QMap<QString, ValueBase*> m_notificationValues;
     QTimer m_maintenanceTimer;
 
 private slots:

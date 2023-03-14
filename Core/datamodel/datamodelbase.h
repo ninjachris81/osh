@@ -46,10 +46,14 @@ public:
     QList<ValueGroup*> valueGroups();
     ValueGroup* valueGroup(QString id);
 
+    ValueBase* value(QString valueFullId);
     QMap<QString, ValueBase*> values();
-    QMap<QString, ActorBase*> actors();
+    QMap<QString, ValueBase*> values(QString valueGroupId);
+
     ActorBase* actor(QString actorFullId);
+    QMap<QString, ActorBase*> actors();
     QMap<QString, ActorBase*> actors(QString valueGroupId);
+
     QMap<QString, KnownDevice *> knownDevices();
     QMap<QString, ProcessorTaskBase*> processorTasks();
     QMap<QString, KnownRoom*> knownRooms();
@@ -60,7 +64,7 @@ public:
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync);
     ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration);
     ValueActor* addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
-    AudioPlaybackActor* addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceId, QString audioActivationRelayId, float audioVolume);
+    AudioPlaybackActor* addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceId, QString audioActivationRelayId, float audioVolume, QString audioVolumeId);
 
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);

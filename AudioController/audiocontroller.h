@@ -26,7 +26,7 @@ public:
 
     /*virtual*/ void start() override;
 
-    void loadAudioActors(DatamodelBase *datamodel);
+    void loadAudioActors(DatamodelBase *datamodel, ClientValueManager *valueManager);
 
     void startPlayback(AudioPlaybackActor *audioActor) override;
     void pausePlayback(AudioPlaybackActor *audioActor) override;
@@ -58,6 +58,7 @@ protected slots:
     void onStartPlayback();
     void onPausePlayback();
     void onStopPlayback();
+    void onVolumeChanged();
 
 signals:
 

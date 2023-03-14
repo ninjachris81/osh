@@ -21,6 +21,13 @@ void ClientValueManager::init(LocalConfig *config) {
 
 void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {
     iDebug() << Q_FUNC_INFO;
+
+    if (m_notificationValues.contains(msg->fullId())) {
+        ValueBase* value = getValue(msg->valueGroupId(), msg->valueId());
+        value->updateValue(msg->rawValue());
+    } else {
+        iDebug() << "Ignoring update of value" << msg->fullId();
+    }
 }
 
 void ClientValueManager::registerValue(ValueBase* value) {
@@ -33,9 +40,14 @@ void ClientValueManager::registerValue(ValueBase* value) {
 
 void ClientValueManager::registerForMaintenance(ValueBase* value) {
     iInfo() << Q_FUNC_INFO << value->fullId();
-
     m_maintenanceValues.insert(value->fullId(), value);
 }
+
+void ClientValueManager::registerForNotification(ValueBase* value) {
+    iInfo() << Q_FUNC_INFO << value->fullId();
+    m_notificationValues.insert(value->fullId(), value);
+}
+
 
 void ClientValueManager::maintainValues() {
     QMapIterator<QString, ValueBase*> it(m_maintenanceValues);
