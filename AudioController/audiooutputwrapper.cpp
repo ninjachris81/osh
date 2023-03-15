@@ -58,10 +58,11 @@ void AudioOutputWrapper::_start(AudioPlaybackActor* audioActor, qint64 startPosi
     m_currentAudioActor= audioActor;
     Q_EMIT(requestDeactivation(m_currentAudioActor));
 
-    m_currentPlaybackDevice = getMediaDevice(audioActor->rawValue().toString());
+    qint64 startPositionHint = startPosition;
+    m_currentPlaybackDevice = getMediaDevice(audioActor->rawValue().toString(), startPositionHint);
     m_currentPlaybackDevice->open(QIODevice::ReadOnly);
-    if (startPosition > 0) {
-        m_currentPlaybackDevice->seek(startPosition);
+    if (startPositionHint > 0) {
+        m_currentPlaybackDevice->seek(startPositionHint);
     }
     this->setVolume(audioActor->audioVolume());
     this->start(m_currentPlaybackDevice);
@@ -164,13 +165,13 @@ void AudioOutputWrapper::previousPlayback(AudioPlaybackActor *audioActor) {
     }
 }
 
-QIODevice* AudioOutputWrapper::getMediaDevice(QString url) {
+QIODevice* AudioOutputWrapper::getMediaDevice(QString url, qint64 &startPositionHint) {
     iDebug() << Q_FUNC_INFO << url;
 
     if (QFile::exists(url) && url.endsWith(".wav")) {
         // TODO: support others
         QFile *file = new QFile(url);
-        file->seek(0x4e);
+        startPositionHint = 0x4e;
         return file;
     } else if (QFile::exists(url) && url.endsWith(".m3u")) {
         AudioPlaylist *playlist = new AudioPlaylist(url);

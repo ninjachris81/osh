@@ -28,7 +28,7 @@ private:
 
     QMap<AudioPlaybackActor*, qint64> m_playbackRequests;
 
-    QIODevice* getMediaDevice(QString url);
+    QIODevice* getMediaDevice(QString url, qint64 &startPositionHint);
 
     void checkStartNext();
 
