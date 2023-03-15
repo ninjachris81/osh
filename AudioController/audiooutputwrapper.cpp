@@ -1,5 +1,6 @@
 #include "audiooutputwrapper.h"
 #include "audiofilestream.h"
+#include "audioplaylist.h"
 
 #include <QFile>
 
@@ -135,6 +136,34 @@ void AudioOutputWrapper::cancelPlayback(AudioPlaybackActor *audioActor) {
     }
 }
 
+void AudioOutputWrapper::nextPlayback(AudioPlaybackActor *audioActor) {
+    iInfo() << Q_FUNC_INFO << audioActor->fullId();
+
+    if (m_currentPlaybackDevice != nullptr) {
+        if (m_currentPlaybackDevice->inherits(AudioPlaylist::staticMetaObject.className())) {
+            static_cast<AudioPlaylist*>(m_currentPlaybackDevice)->next();
+        } else {
+            iWarning() << "Current playback does not support method";
+        }
+    } else {
+      iWarning() << "No playback active";
+    }
+}
+
+void AudioOutputWrapper::previousPlayback(AudioPlaybackActor *audioActor) {
+    iInfo() << Q_FUNC_INFO << audioActor->fullId();
+
+    if (m_currentPlaybackDevice != nullptr) {
+        if (m_currentPlaybackDevice->inherits(AudioPlaylist::staticMetaObject.className())) {
+            static_cast<AudioPlaylist*>(m_currentPlaybackDevice)->previous();
+        } else {
+            iWarning() << "Current playback does not support method";
+        }
+    } else {
+      iWarning() << "No playback active";
+    }
+}
+
 QIODevice* AudioOutputWrapper::getMediaDevice(QString url) {
     iDebug() << Q_FUNC_INFO << url;
 
@@ -143,6 +172,9 @@ QIODevice* AudioOutputWrapper::getMediaDevice(QString url) {
         QFile *file = new QFile(url);
         file->seek(0x4e);
         return file;
+    } else if (QFile::exists(url) && url.endsWith(".m3u")) {
+        AudioPlaylist *playlist = new AudioPlaylist(url);
+        return playlist;
     } else if (QFile::exists(url) && url.endsWith(".mp3")) {
         AudioFileStream *stream = new AudioFileStream();
         stream->init(this->format(), url);

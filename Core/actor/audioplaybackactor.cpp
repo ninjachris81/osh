@@ -24,6 +24,8 @@ bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     case actor::ACTOR_CMD_START:
     case actor::ACTOR_CMD_PAUSE:
     case actor::ACTOR_CMD_STOP:
+    case actor::ACTOR_CMD_NEXT:
+    case actor::ACTOR_CMD_PREVIOUS:
         return true;
     default:
         return false;
@@ -40,6 +42,12 @@ void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
         break;
     case actor::ACTOR_CMD_STOP:
         Q_EMIT(stopPlaybackRequested());
+        break;
+    case actor::ACTOR_CMD_NEXT:
+        Q_EMIT(nextRequested());
+        break;
+    case actor::ACTOR_CMD_PREVIOUS:
+        Q_EMIT(previousRequested());
         break;
     }
 }

@@ -18,7 +18,11 @@
 #define ACTOR_SET_VALUE 9
 #define ACTOR_TRIGGER_SCRIPT 10
 
+#define ACTOR_NEXT      20
+#define ACTOR_PREVIOUS  21
+
 // specific ones
+
 #define ACTOR_SHUTTER_HALF_CLOSE        40      // half, but closed
 #define ACTOR_SHUTTER_HALF_OPEN         41      // half, but shutters open (see-thru)
 #define ACTOR_SHUTTER_FULL_OPEN         42      // full closed & shutters open (see-thru)

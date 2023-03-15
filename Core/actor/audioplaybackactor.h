@@ -56,6 +56,9 @@ signals:
 
     void volumeChanged();
 
+    void nextRequested();
+    void previousRequested();
+
 public slots:
 };
 

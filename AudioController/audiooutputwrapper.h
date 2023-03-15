@@ -15,6 +15,8 @@ public:
 
     void submitPlayback(AudioPlaybackActor *audioActor);
     void cancelPlayback(AudioPlaybackActor *audioActor);
+    void nextPlayback(AudioPlaybackActor *audioActor);
+    void previousPlayback(AudioPlaybackActor *audioActor);
 
     void _start(AudioPlaybackActor *audioActor, qint64 startPosition = 0);
     void _stop(AudioPlaybackActor *audioActor);

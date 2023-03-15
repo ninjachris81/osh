@@ -38,6 +38,8 @@ void AudioController::loadAudioActors(DatamodelBase *datamodel, ClientValueManag
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::pausePlaybackRequested, this, &AudioController::onPausePlayback, SIGNAL(pausePlaybackRequested()), SLOT(onPausePlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::stopPlaybackRequested, this, &AudioController::onStopPlayback, SIGNAL(stopPlaybackRequested()), SLOT(onStopPlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::volumeChanged, this, &AudioController::onVolumeChanged, SIGNAL(volumeChanged()), SLOT(onVolumeChanged()));
+        Helpers::safeConnect(audioActor, &AudioPlaybackActor::nextRequested, this, &AudioController::onNext, SIGNAL(nextRequested()), SLOT(onNext()));
+        Helpers::safeConnect(audioActor, &AudioPlaybackActor::previousRequested, this, &AudioController::onPrevious, SIGNAL(previousRequested()), SLOT(onPrevious()));
 
         if (!audioActor->audioActivationRelayId().isEmpty()) {
             iInfo() << "Binding relay" << audioActor->audioActivationRelayId();
@@ -162,3 +164,22 @@ void AudioController::executeActivation(AudioPlaybackActor *audioActor, bool act
     }
 }
 
+void AudioController::onNext() {
+    AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
+
+    QListIterator<AudioOutputWrapper*> it(m_audioOutputMappings.values(audioActor));
+    while (it.hasNext()) {
+        AudioOutputWrapper *output = it.next();
+        output->nextPlayback(audioActor);
+    }
+}
+
+void AudioController::onPrevious() {
+    AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
+
+    QListIterator<AudioOutputWrapper*> it(m_audioOutputMappings.values(audioActor));
+    while (it.hasNext()) {
+        AudioOutputWrapper *output = it.next();
+        output->previousPlayback(audioActor);
+    }
+}
