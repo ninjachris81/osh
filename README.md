@@ -21,3 +21,12 @@ Energy meter (Mobis based)
 Upcoming:
 Home Connect devices
 Solar Equipment
+
+
+**********************
+BUILDING
+**********************
+
+- check preconditions (Qt5.12+)
+- clone
+- git submodule update --init
