@@ -13,4 +13,6 @@ MPG123ProcessWrapper::MPG123ProcessWrapper(QString cmd, AudioPlaybackActor *acto
     } else {
         args << file;
     }
+
+    setArguments(args);
 }
