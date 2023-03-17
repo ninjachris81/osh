@@ -12,7 +12,8 @@
 #include "value/client/clientvaluemanager.h"
 #include "log/logmanager.h"
 //#include "actor/actormanager.h"
-#include "audiocontroller.h"
+//#include "audiocontroller.h"
+#include "audiocontroller2.h"
 #include "actor/digitalactor.h"
 #include "value/booleanvalue.h"
 #include "shared/mqtt_qt.h"
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&logManager);
 
     QString audioGroupId = config.getString(&clientManager, "audioGroupId", "egAudio0");
-    AudioController audioController(&controllerManager, audioGroupId);
+    AudioController2 audioController(&controllerManager, audioGroupId);
     controllerManager.registerController(&audioController);
 
     managerRegistration.init(&config);
