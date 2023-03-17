@@ -3,7 +3,7 @@
 #include <QFile>
 #include <QAudioDeviceInfo>
 
-#include "audiofilestream.h"
+#include "audiofiledevice.h"
 #include "audiooutputwrapper.h"
 #include "macros.h"
 #include "actor/actormessage.h"

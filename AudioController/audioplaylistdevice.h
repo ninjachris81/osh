@@ -1,5 +1,5 @@
-#ifndef AUDIOPLAYLIST_H
-#define AUDIOPLAYLIST_H
+#ifndef AUDIOPLAYLISTDEVICE_H
+#define AUDIOPLAYLISTDEVICE_H
 
 #include "qdir.h"
 #include "qrandom.h"
@@ -7,11 +7,11 @@
 #include <QIODevice>
 #include <QFile>
 
-class AudioPlaylist : public QIODevice
+class AudioPlaylistDevice : public QIODevice
 {
     Q_OBJECT
 public:
-    explicit AudioPlaylist(QString playlistUrl, QObject *parent = nullptr);
+    explicit AudioPlaylistDevice(QString playlistUrl, QObject *parent = nullptr);
 
     /*virtual*/ bool isSequential() const override {
         return !m_loop;
@@ -66,4 +66,4 @@ signals:
 
 };
 
-#endif // AUDIOPLAYLIST_H
+#endif // AUDIOPLAYLISTDEVICE_H

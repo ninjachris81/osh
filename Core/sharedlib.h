@@ -3,10 +3,14 @@
 
 #include <QtCore/QtGlobal>
 
-#if defined MAKE_SHARED_LIB
-    #define SHARED_LIB_EXPORT Q_DECL_EXPORT
+#ifndef QT_STATIC
+    #if defined(MAKE_SHARED_LIB)
+        #define SHARED_LIB_EXPORT Q_DECL_EXPORT
+    #else
+        #define SHARED_LIB_EXPORT Q_DECL_IMPORT
+    #endif
 #else
-    #define SHARED_LIB_EXPORT Q_DECL_IMPORT
+    #define SHARED_LIB_EXPORT
 #endif
 
 #endif // SHARED_LIB_GLOBAL_H

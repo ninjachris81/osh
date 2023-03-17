@@ -309,6 +309,8 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterMode
     } else {
         // set to manual
     }
+
+    return true;
 }
 
 /*

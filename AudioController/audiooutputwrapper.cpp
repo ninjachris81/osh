@@ -1,6 +1,7 @@
 #include "audiooutputwrapper.h"
-#include "audiofilestream.h"
-#include "audioplaylist.h"
+#include "audiofiledevice.h"
+#include "audioplaylistdevice.h"
+#include "audiostreamdevice.h"
 
 #include <QFile>
 
@@ -141,8 +142,8 @@ void AudioOutputWrapper::nextPlayback(AudioPlaybackActor *audioActor) {
     iInfo() << Q_FUNC_INFO << audioActor->fullId();
 
     if (m_currentPlaybackDevice != nullptr) {
-        if (m_currentPlaybackDevice->inherits(AudioPlaylist::staticMetaObject.className())) {
-            static_cast<AudioPlaylist*>(m_currentPlaybackDevice)->next();
+        if (m_currentPlaybackDevice->inherits(AudioPlaylistDevice::staticMetaObject.className())) {
+            static_cast<AudioPlaylistDevice*>(m_currentPlaybackDevice)->next();
         } else {
             iWarning() << "Current playback does not support method";
         }
@@ -155,8 +156,8 @@ void AudioOutputWrapper::previousPlayback(AudioPlaybackActor *audioActor) {
     iInfo() << Q_FUNC_INFO << audioActor->fullId();
 
     if (m_currentPlaybackDevice != nullptr) {
-        if (m_currentPlaybackDevice->inherits(AudioPlaylist::staticMetaObject.className())) {
-            static_cast<AudioPlaylist*>(m_currentPlaybackDevice)->previous();
+        if (m_currentPlaybackDevice->inherits(AudioPlaylistDevice::staticMetaObject.className())) {
+            static_cast<AudioPlaylistDevice*>(m_currentPlaybackDevice)->previous();
         } else {
             iWarning() << "Current playback does not support method";
         }
@@ -174,11 +175,13 @@ QIODevice* AudioOutputWrapper::getMediaDevice(QString url, qint64 &startPosition
         startPositionHint = 0x4e;
         return file;
     } else if (QFile::exists(url) && url.endsWith(".m3u")) {
-        AudioPlaylist *playlist = new AudioPlaylist(url);
+        AudioPlaylistDevice *playlist = new AudioPlaylistDevice(url);
         return playlist;
+    } else if (url.startsWith("http") || url.startsWith("https")) {
+        AudioStreamDevice *audioStream = new AudioStreamDevice(url);
+        return audioStream;
     } else if (QFile::exists(url) && url.endsWith(".mp3")) {
-        AudioFileStream *stream = new AudioFileStream();
-        stream->init(this->format(), url);
+        AudioFileDevice *stream = new AudioFileDevice(url, this->format());
         return stream;
     } else {
         iWarning() << "Unsupported file" << url;

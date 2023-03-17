@@ -13,15 +13,17 @@ DEFINES += MAKE_SHARED_LIB
 
 SOURCES += \
         audiocontroller.cpp \
-        audiofilestream.cpp \
+        audiofiledevice.cpp \
         audiooutputwrapper.cpp \
-        audioplaylist.cpp
+        audioplaylistdevice.cpp \
+        audiostreamdevice.cpp
 
 HEADERS += \
     audiocontroller.h \
-    audiofilestream.h \
+    audiofiledevice.h \
     audiooutputwrapper.h \
-    audioplaylist.h \
+    audioplaylistdevice.h \
+    audiostreamdevice.h \
     sharedlib.h
 
 unix {

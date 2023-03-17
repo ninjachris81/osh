@@ -1,4 +1,4 @@
-#include "audioplaylist.h"
+#include "audioplaylistdevice.h"
 #include "qdir.h"
 #include "qfileinfo.h"
 #include "qrandom.h"
@@ -8,13 +8,13 @@
 #include <QDebug>
 #include <QFile>
 
-AudioPlaylist::AudioPlaylist(QString playlistUrl, QObject *parent)
+AudioPlaylistDevice::AudioPlaylistDevice(QString playlistUrl, QObject *parent)
     : QIODevice{parent}, m_playlistUrl(playlistUrl)
 {
 
 }
 
-bool AudioPlaylist::open(OpenMode mode) {
+bool AudioPlaylistDevice::open(OpenMode mode) {
     if (mode == ReadOnly) {
         if (parsePlaylist()) {
             readNext();
@@ -30,11 +30,12 @@ bool AudioPlaylist::open(OpenMode mode) {
     }
 }
 
-void AudioPlaylist::close() {
+void AudioPlaylistDevice::close() {
     qDebug() << Q_FUNC_INFO;
+    QIODevice::close();
 }
 
-void AudioPlaylist::readNext() {
+void AudioPlaylistDevice::readNext() {
     // calculate next track index
     if (m_randomize) {
         m_currentTrack = m_rnd.bounded(m_tracks.size()-1);
@@ -73,7 +74,7 @@ void AudioPlaylist::readNext() {
     }
 }
 
-qint64 AudioPlaylist::readData(char *data, qint64 maxlen) {
+qint64 AudioPlaylistDevice::readData(char *data, qint64 maxlen) {
     if (m_currentFile.isReadable()) {
 
         qint64 dataRead = m_currentFile.read(data, maxlen);
@@ -88,15 +89,15 @@ qint64 AudioPlaylist::readData(char *data, qint64 maxlen) {
 
 }
 
-void AudioPlaylist::next() {
+void AudioPlaylistDevice::next() {
 
 }
 
-void AudioPlaylist::previous() {
+void AudioPlaylistDevice::previous() {
 
 }
 
-bool AudioPlaylist::parsePlaylist() {
+bool AudioPlaylistDevice::parsePlaylist() {
     const char kStandardM3uTextEncoding[] = "Windows-1250";
     const char kM3uHeader[] = "#EXTM3U";
     const auto kUniveralEndOfLineRegEx = QRegularExpression(QStringLiteral("\r\n|\r|\n"));
@@ -114,7 +115,7 @@ bool AudioPlaylist::parsePlaylist() {
 
         QByteArray byteArray = file.readAll();
         QString fileContents;
-        if (AudioPlaylist::isUtf8(byteArray.constData())) {
+        if (AudioPlaylistDevice::isUtf8(byteArray.constData())) {
             fileContents = QString::fromUtf8(byteArray);
         } else {
             // FIXME: replace deprecated QTextCodec with direct usage of libicu
@@ -154,7 +155,7 @@ bool AudioPlaylist::parsePlaylist() {
     return !m_tracks.isEmpty();
 }
 
-bool AudioPlaylist::isUtf8(const char* string) {
+bool AudioPlaylistDevice::isUtf8(const char* string) {
     if (!string) {
         return false;
     }

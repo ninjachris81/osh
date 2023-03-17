@@ -24,10 +24,10 @@ void OnvifController::init() {
     char* _scope="onvif://www.onvif.org/type/ptz";
     char* _endpoint="http://192.168.1.100/service/device";
     */
-    char* _xaddr="http://192.168.1.100/service";
-    char* _type="\"http://schemas.xmlsoap.org/ws/2006/02/devprof\":device";
-    char* _scope="onvif://www.onvif.org/type/ptz";
-    char* _endpoint="http://192.168.1.100/service/device";
+    char _xaddr[]="http://192.168.1.100/service";
+    char _type[]="\"http://schemas.xmlsoap.org/ws/2006/02/devprof\":device";
+    char _scope[]="onvif://www.onvif.org/type/ptz";
+    char _endpoint[]="http://192.168.1.100/service/device";
 
 
     iDebug() << "new discovery obj";

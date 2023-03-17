@@ -38,7 +38,7 @@ void DeviceRegistry::addDeviceServiceInfo(QString id, QList<Device::DeviceServic
     if (m_deviceMap.contains(id)) {
         DeviceRegistryEntry entry = m_deviceMap.value(id);
 
-        QListIterator it(deviceServiceInfo);
+        QListIterator<Device::DeviceServiceInfo> it(deviceServiceInfo);
 
         while(it.hasNext()) {
             Device::DeviceServiceInfo info = it.next();
