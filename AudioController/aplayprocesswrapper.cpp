@@ -7,5 +7,7 @@ APlayProcessWrapper::APlayProcessWrapper(QString cmd, AudioPlaybackActor *actor,
     QStringList args;
     args << "-D" << actor->audioDeviceIds().at(0);
 
+    args << actor->rawValue().toString();
+
     setArguments(args);
 }
