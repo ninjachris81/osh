@@ -107,12 +107,19 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
             proc->deleteLater();
         });
 
+        connect(proc, &QProcess::errorOccurred, [=](QProcess::ProcessError error){
+            iWarning() << "Process error" << error;
+            m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
+            proc->deleteLater();
+        });
+
         // set initially
         iInfo() << "Initially setting volume";
         m_volumeWrapper.setVolume(audioActor);
 
         m_runningProcesses.insert(audioDeviceId, proc);
 
+        iInfo() << "Launching" << proc->program() << proc->arguments();
         proc->start();
     } else {
         iWarning() << "Cannot playback - no url set";
