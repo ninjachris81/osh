@@ -101,7 +101,14 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
             proc = new MPG123ProcessWrapper(m_config->getString("mpg123", "/usr/bin/mpg123"), audioActor);
         }
 
+        connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
+            iInfo() << "Process finished with exit code" << exitCode << exitStatus;
+            m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
+            proc->deleteLater();
+        });
+
         // set initially
+        iInfo() << "Initially setting volume";
         m_volumeWrapper.setVolume(audioActor);
 
         m_runningProcesses.insert(audioDeviceId, proc);

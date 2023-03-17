@@ -1,7 +1,7 @@
 #include "mpg123processwrapper.h"
 
 MPG123ProcessWrapper::MPG123ProcessWrapper(QString cmd, AudioPlaybackActor *actor, QObject *parent)
-    : AudioProcessWrapperBase{parent}
+    : AudioProcessWrapperBase{actor, parent}
 {
     setProgram(cmd);
     QStringList args;
