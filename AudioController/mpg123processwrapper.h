@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QProcess>
 
-class MPG123ProcessWrapper : public AudioProcessWrapperBase
+class SHARED_LIB_EXPORT MPG123ProcessWrapper : public AudioProcessWrapperBase
 {
     Q_OBJECT
 public:

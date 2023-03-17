@@ -1,7 +1,7 @@
 #include "aplayprocesswrapper.h"
 
 APlayProcessWrapper::APlayProcessWrapper(QString cmd, AudioPlaybackActor *actor, QObject *parent)
-    : AudioProcessWrapperBase{actor->audioDeviceIds().at(0), parent}
+    : AudioProcessWrapperBase{parent}
 {
     setProgram(cmd);
     QStringList args;

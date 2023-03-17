@@ -12,6 +12,7 @@ DEFINES += MAKE_SHARED_LIB
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        amixervolumewrapper.cpp \
         aplayprocesswrapper.cpp \
         audiocontroller.cpp \
         audiocontroller2.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
         mpg123processwrapper.cpp
 
 HEADERS += \
+    amixervolumewrapper.h \
     aplayprocesswrapper.h \
     audiocontroller.h \
     audiocontroller2.h \
@@ -31,8 +33,7 @@ HEADERS += \
     audioplaylistdevice.h \
     audioprocesswrapperbase.h \
     audiostreamdevice.h \
-    mpg123processwrapper.h \
-    sharedlib.h
+    mpg123processwrapper.h
 
 unix {
     target.path = /usr/lib

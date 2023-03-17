@@ -101,6 +101,9 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
             proc = new MPG123ProcessWrapper(m_config->getString("mpg123", "/usr/bin/mpg123"), audioActor);
         }
 
+        // set initially
+        m_volumeWrapper.setVolume(audioActor);
+
         m_runningProcesses.insert(audioDeviceId, proc);
 
         proc->start();
@@ -129,9 +132,7 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
 void AudioController2::onVolumeChanged() {
     iInfo() << Q_FUNC_INFO;
     AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
-    if (m_runningProcesses.contains(audioActor->audioDeviceIds().at(0))) {
-        m_runningProcesses.value(audioActor->audioDeviceIds().at(0))->setVolume(audioActor->audioVolume());
-    }
+    m_volumeWrapper.setVolume(audioActor);
 }
 
 void AudioController2::executeActivation(AudioPlaybackActor *audioActor, bool activate) {

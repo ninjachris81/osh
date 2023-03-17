@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QProcess>
 
-class APlayProcessWrapper : public AudioProcessWrapperBase
+class SHARED_LIB_EXPORT APlayProcessWrapper : public AudioProcessWrapperBase
 {
     Q_OBJECT
 public:

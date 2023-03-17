@@ -9,6 +9,7 @@
 #include <QProcess>
 
 #include "actor/actormanager.h"
+#include "amixervolumewrapper.h"
 #include "datamodel/datamodelbase.h"
 #include "audioprocesswrapperbase.h"
 #include "qaudiodeviceinfo.h"
@@ -45,6 +46,7 @@ private:
 
     CommunicationManagerBase* m_commManager;
     ActorManager *m_actorManager;
+    AMixerVolumeWrapper m_volumeWrapper;
 
     void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
     void _stop(AudioPlaybackActor *audioActor);
