@@ -47,7 +47,13 @@ void AMixerVolumeWrapper::setVolume(AudioPlaybackActor *audioActor) {
         args << "cset" << "name='Speaker Playback Volume'";
         args << volumeStr;
 
-        QProcess::execute("/usr/bin/amixer", args);
+        QProcess proc;
+        proc.setProgram("/usr/bin/amixer");
+        proc.setArguments(args);
+        proc.start();
+        if (!proc.waitForFinished(1000)) {
+            qWarning() << "AMixer did not finish in time";
+        }
     } else {
         qWarning() << "Cannot find device mapping" << deviceId;
     }

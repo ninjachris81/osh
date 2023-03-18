@@ -143,7 +143,7 @@ void AudioController2::pausePlayback(AudioPlaybackActor *audioActor) {
 }
 
 void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
-    iInfo() << audioActor->id();
+    iInfo() << Q_FUNC_INFO << audioActor->id();
 
     if (m_runningProcesses.contains(audioActor->audioDeviceIds().at(0))) {
         iInfo() << "Terminating running process on" << audioActor->audioDeviceIds().at(0);
@@ -153,9 +153,10 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
 }
 
 void AudioController2::stopProcess(QString audioDeviceId) {
-    iDebug() << Q_FUNC_INFO << audioDeviceId;
+    iInfo() << Q_FUNC_INFO << audioDeviceId;
 
-    QProcess* proc = m_runningProcesses.value(audioDeviceId);
+    AudioProcessWrapperBase* proc = m_runningProcesses.value(audioDeviceId);
+
     proc->disconnect(this);
 
     proc->kill();
@@ -166,7 +167,7 @@ void AudioController2::stopProcess(QString audioDeviceId) {
 }
 
 void AudioController2::stopAllProcesses() {
-    iDebug() << Q_FUNC_INFO;
+    iInfo() << Q_FUNC_INFO;
 
     for (QString audioDeviceId : m_runningProcesses.keys()) {
         stopProcess(audioDeviceId);
