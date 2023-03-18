@@ -88,6 +88,7 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
         if (m_runningProcesses.contains(audioDeviceId)) {
             iInfo() << "Terminating running process on" << audioDeviceId;
             QProcess* proc = m_runningProcesses.value(audioDeviceId);
+            proc->kill();
             proc->terminate();
             proc->deleteLater();
         }
@@ -137,6 +138,7 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
     if (m_runningProcesses.contains(audioActor->audioDeviceIds().at(0))) {
         iInfo() << "Terminating running process on" << audioActor->audioDeviceIds().at(0);
         QProcess* proc = m_runningProcesses.value(audioActor->audioDeviceIds().at(0));
+        proc->kill();
         proc->terminate();
         proc->deleteLater();
     }
