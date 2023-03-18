@@ -157,9 +157,10 @@ void AudioController2::stopProcess(QString audioDeviceId) {
 
     AudioProcessWrapperBase* proc = m_runningProcesses.value(audioDeviceId);
 
-    proc->disconnect(this);
+    iInfo() << "Terminating process" << proc->processId();
 
-    proc->kill();
+    disconnect(proc, 0, this, 0);
+
     proc->terminate();
     proc->waitForFinished();
     delete proc;
