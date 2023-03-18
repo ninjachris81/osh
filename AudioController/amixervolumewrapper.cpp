@@ -36,9 +36,9 @@ void AMixerVolumeWrapper::setVolume(AudioPlaybackActor *audioActor) {
         QString volumeStr = QString::number(volumeInt) + "%";
 
         if (m_cardMap.value(deviceId).channelIndex == 0) {
-            volumeStr.prepend(",");
-        } else {
             volumeStr.append(",");
+        } else {
+            volumeStr.prepend(",");
         }
 
         qDebug() << "amixer" << cardId << volumeStr;
