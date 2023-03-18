@@ -54,6 +54,10 @@ private:
     void stopProcess(QString audioActorId);
     void stopAllProcesses();
 
+private slots:
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onProcessError(QProcess::ProcessError error);
+
 protected slots:
     void onStartPlayback();
     void onPausePlayback();

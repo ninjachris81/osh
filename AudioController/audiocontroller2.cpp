@@ -105,17 +105,8 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
             proc = new MPG123ProcessWrapper(m_config->getString("mpg123", "/usr/bin/mpg123"), audioActor);
         }
 
-        connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), [=](int exitCode, QProcess::ExitStatus exitStatus) {
-            iInfo() << "Process finished with exit code" << exitCode << exitStatus;
-            m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
-            proc->deleteLater();
-        });
-
-        connect(proc, &QProcess::errorOccurred, [=](QProcess::ProcessError error){
-            iWarning() << "Process error" << error;
-            m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
-            proc->deleteLater();
-        });
+        connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, &AudioController2::onProcessFinished);
+        connect(proc, &QProcess::errorOccurred, this, &AudioController2::onProcessError);
 
         // set initially
         iInfo() << "Initially setting volume";
@@ -128,6 +119,22 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
     } else {
         iWarning() << "Cannot playback - no url set";
     }
+}
+
+void AudioController2::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+    iInfo() << Q_FUNC_INFO << exitCode << exitStatus;
+
+    AudioProcessWrapperBase *proc = static_cast<AudioProcessWrapperBase*>(sender());
+    iInfo() << "Process finished with exit code" << exitCode << exitStatus;
+    m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
+    proc->deleteLater();
+}
+
+void AudioController2::onProcessError(QProcess::ProcessError error) {
+    iWarning() << Q_FUNC_INFO << error;
+    AudioProcessWrapperBase *proc = static_cast<AudioProcessWrapperBase*>(sender());
+    m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
+    proc->deleteLater();
 }
 
 void AudioController2::pausePlayback(AudioPlaybackActor *audioActor) {
@@ -149,10 +156,12 @@ void AudioController2::stopProcess(QString audioDeviceId) {
     iDebug() << Q_FUNC_INFO << audioDeviceId;
 
     QProcess* proc = m_runningProcesses.value(audioDeviceId);
+    proc->disconnect(this);
+
     proc->kill();
     proc->terminate();
     proc->waitForFinished();
-    proc->deleteLater();
+    delete proc;
     m_runningProcesses.remove(audioDeviceId);
 }
 
