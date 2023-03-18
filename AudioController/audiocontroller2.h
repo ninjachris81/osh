@@ -51,6 +51,9 @@ private:
     void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
     void _stop(AudioPlaybackActor *audioActor);
 
+    void stopProcess(QString audioActorId);
+    void stopAllProcesses();
+
 protected slots:
     void onStartPlayback();
     void onPausePlayback();

@@ -30,8 +30,7 @@ SOURCES += \
 
 HEADERS += \
         qmqttcommunicationmanager.h \
-        qmqttmessageconverter.h \
-        sharedlib.h
+        qmqttmessageconverter.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

@@ -81,16 +81,19 @@ void AudioController2::onStopPlayback() {
 void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
     iInfo() << audioActor->id();
 
+    if (audioActor->priority() >= 10) {
+        // stop all processes
+        iInfo() << "High prio playback - stopping all playbacks";
+        stopAllProcesses();
+    }
+
     if (audioActor->rawValue().isValid()) {
         QString audioDeviceId = audioActor->audioDeviceIds().at(0);
         QString url = audioActor->rawValue().toString();
 
         if (m_runningProcesses.contains(audioDeviceId)) {
             iInfo() << "Terminating running process on" << audioDeviceId;
-            QProcess* proc = m_runningProcesses.value(audioDeviceId);
-            proc->kill();
-            proc->terminate();
-            proc->deleteLater();
+            stopProcess(audioDeviceId);
         }
 
         AudioProcessWrapperBase *proc;
@@ -137,13 +140,29 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
 
     if (m_runningProcesses.contains(audioActor->audioDeviceIds().at(0))) {
         iInfo() << "Terminating running process on" << audioActor->audioDeviceIds().at(0);
-        QProcess* proc = m_runningProcesses.value(audioActor->audioDeviceIds().at(0));
-        proc->kill();
-        proc->terminate();
-        proc->deleteLater();
+        stopProcess(audioActor->audioDeviceIds().at(0));
     }
 
 }
+
+void AudioController2::stopProcess(QString audioDeviceId) {
+    iDebug() << Q_FUNC_INFO << audioDeviceId;
+
+    QProcess* proc = m_runningProcesses.value(audioDeviceId);
+    proc->kill();
+    proc->terminate();
+    proc->deleteLater();
+    m_runningProcesses.remove(audioDeviceId);
+}
+
+void AudioController2::stopAllProcesses() {
+    iDebug() << Q_FUNC_INFO;
+
+    for (QString audioDeviceId : m_runningProcesses.keys()) {
+        stopProcess(audioDeviceId);
+    }
+}
+
 
 void AudioController2::onVolumeChanged() {
     iInfo() << Q_FUNC_INFO;
