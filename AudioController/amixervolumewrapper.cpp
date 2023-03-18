@@ -4,14 +4,14 @@
 
 AMixerVolumeWrapper::AMixerVolumeWrapper(QObject *parent) : QObject(parent) {
 
-    addMapping("mono0_0", 1, 0);
-    addMapping("mono0_1", 1, 1);
+    addMapping("mono0_0_sv", 1, 0);
+    addMapping("mono0_1_sv", 1, 1);
 
-    addMapping("mono1_0", 2, 0);
-    addMapping("mono1_1", 2, 1);
+    addMapping("mono1_0_sv", 2, 0);
+    addMapping("mono1_1_sv", 2, 1);
 
-    addMapping("mono2_0", 3, 0);
-    addMapping("mono2_1", 3, 1);
+    addMapping("mono2_0_sv", 3, 0);
+    addMapping("mono2_1_sv", 3, 1);
 }
 
 void AMixerVolumeWrapper::addMapping(QString deviceId, int c, int channelIndex) {
