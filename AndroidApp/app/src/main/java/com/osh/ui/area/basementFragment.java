@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment;
 
 import com.osh.R;
 import com.osh.service.IActorService;
+import com.osh.service.IAudioActorService;
 import com.osh.service.IDatamodelService;
+import com.osh.service.IServiceContext;
 import com.osh.service.IValueService;
 
 /**
@@ -22,12 +24,12 @@ public class basementFragment extends AreaFragmentBase {
     public basementFragment() {
     }
 
-    public basementFragment(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
-        super(datamodelService, valueService, actorService);
+    public basementFragment(IServiceContext serviceContext, AreaViewModel areaViewModel) {
+        super(serviceContext, areaViewModel);
     }
 
-    public static basementFragment newInstance(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
-        return new basementFragment(datamodelService, valueService, actorService);
+    public static basementFragment newInstance(IServiceContext serviceContext, AreaViewModel areaViewModel) {
+        return new basementFragment(serviceContext, areaViewModel);
     }
 
 

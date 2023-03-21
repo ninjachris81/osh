@@ -20,6 +20,8 @@ public:
         bool loadValues = true;
         bool loadProcessorTasks = true;
         bool loadKnownDevices = true;
+
+        QStringList actorClassTypeFilter;
     };
 
     explicit DatamodelLoaderBase(QObject *parent = nullptr);

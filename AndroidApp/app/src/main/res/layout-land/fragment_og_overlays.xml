@@ -1,81 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.area.ogFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.osh.ui.area.AreaFragment.AreaOverlays" />
+
+        <variable
+            name="areaData"
+            type="com.osh.ui.area.AreaViewModel" />
+
+        <variable
+            name="roomSZ"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomUZ"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomB"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomWZ"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomFOG"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomHFO"
+            type="com.osh.ui.area.RoomViewModel" />
+    </data>
+
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/base_layout_og" />
+        tools:context=".ui.area.ogFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="460dp"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:scaleType="fitCenter"
+            android:src="@drawable/base_layout_og" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/roomSZ"
-                android:layout_width="292dp"
-                android:layout_height="208dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginBottom="0dp"
+                android:layout_width="306dp"
+                android:layout_height="192dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginBottom="26dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
-
-                <ImageView
-                    android:id="@+id/lightBackgroundSZ"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginBottom="21dp"
-                    android:src="@drawable/rectangle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"></ImageView>
 
                 <TextView
                     android:id="@+id/labelSZ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-80dp"
+                    android:text="@{roomSZ.name}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Switch
-                    android:id="@+id/lightSZ"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/backgroundSZ"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="@{roomSZ.backgroundVisible ? 1f : 0f}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"></ImageView>
 
                 <com.osh.ui.components.ShutterModeButton
                     android:id="@+id/shutterSZ"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginBottom="2dp"
+                    android:layout_width="@dimen/shutter_mode_button_width"
+                    android:layout_height="@dimen/shutter_mode_button_height"
+                    android:layout_marginBottom="@dimen/shutter_mode_button_wall_padding"
+                    android:visibility="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? View.VISIBLE : View.INVISIBLE}"
+                    app:isAuto="@{roomSZ.shutterIsAuto}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -84,141 +99,125 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/roomUZ"
-                android:layout_width="197dp"
-                android:layout_height="310dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="0dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="216dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginBottom="17dp"
+                app:layout_constraintBottom_toTopOf="@id/roomSZ"
+                app:layout_constraintStart_toStartOf="@id/roomSZ"
                 app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/lightBackgroundUZ"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="21dp"
-                    android:src="@drawable/rectangle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"></ImageView>
 
                 <TextView
                     android:id="@+id/labelUZ"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="80dp"
+                    android:text="@{roomUZ.name}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Switch
-                    android:id="@+id/lightUZ"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/backgroundUZ"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="@{roomUZ.backgroundVisible ? 1f : 0f}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"></ImageView>
 
                 <com.osh.ui.components.ShutterModeButton
                     android:id="@+id/shutterUZ"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? View.VISIBLE : View.INVISIBLE}"
+                    app:isAuto="@{roomUZ.shutterIsAuto}"
+                    android:layout_width="@dimen/shutter_mode_button_width"
+                    android:layout_height="@dimen/shutter_mode_button_height"
+                    android:layout_marginTop="@dimen/shutter_mode_button_wall_padding"
                     app:singleLine="true" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/roomB"
-                android:layout_width="0dp"
-                android:layout_height="195dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="323dp"
+                android:layout_height="168dp"
+                android:layout_marginStart="19dp"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="@id/roomFOG"
                 app:layout_constraintStart_toEndOf="@id/roomUZ"
                 app:layout_constraintTop_toTopOf="@+id/roomUZ">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lightBackgroundB"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/lightBackgroundB1"
-                        android:layout_width="163dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginTop="21dp"
-                        android:src="@drawable/rectangle"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-                    <ImageView
-                        android:id="@+id/lightBackgroundB2"
-                        android:layout_width="20dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="85dp"
-                        android:src="@drawable/rectangle"
-                        app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
-                        app:layout_constraintStart_toEndOf="@id/lightBackgroundB1"
-                        app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"></ImageView>
-
-                    <ImageView
-                        android:id="@+id/lightBackgroundB3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:src="@drawable/rectangle"
-                        app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/lightBackgroundB2"
-                        app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"></ImageView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/labelB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
+                    android:text="@{roomB.name}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Switch
-                    android:id="@+id/lightB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/labelB" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/backgroundB"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="@{roomB.backgroundVisible ? 1f : 0f}"
+                    >
+
+                    <ImageView
+                        android:id="@+id/lightBackgroundB1"
+                        android:layout_width="177dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/lightBackgroundB2"
+                        android:layout_width="20dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="83dp"
+                        app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
+                        app:layout_constraintStart_toEndOf="@id/lightBackgroundB1"
+                        app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"/>
+
+                    <ImageView
+                        android:id="@+id/lightBackgroundB3"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/lightBackgroundB2"
+                        app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.osh.ui.components.ShutterModeButton
                     android:id="@+id/shutterB1"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_width="@dimen/shutter_mode_button_width"
+                    android:layout_height="@dimen/shutter_mode_button_height"
+                    android:layout_marginTop="@dimen/shutter_mode_button_wall_padding"
                     android:layout_marginEnd="140dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:visibility="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? View.VISIBLE : View.INVISIBLE}"
+                    app:isAuto="@{roomB.shutterIsAuto}"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:singleLine="true" />
 
                 <com.osh.ui.components.ShutterModeButton
                     android:id="@+id/shutterB2"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginStart="190dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="@dimen/shutter_mode_button_width"
+                    android:layout_height="@dimen/shutter_mode_button_height"
+                    android:layout_marginTop="@dimen/shutter_mode_button_wall_padding"
+                    android:layout_marginStart="180dp"
+                    android:visibility="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? View.VISIBLE : View.INVISIBLE}"
+                    app:isAuto="@{roomB.shutterIsAuto}"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -227,26 +226,34 @@
                 android:id="@+id/roomWZ"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="21dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/roomSZ"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/roomSZ"
                 app:layout_constraintTop_toTopOf="@id/roomSZ">
 
+                <TextView
+                    android:id="@+id/labelWZ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{roomWZ.name}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lightBackgroundWZ"
-                    android:layout_marginBottom="21dp"
+                    android:id="@+id/backgroundWZ"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:alpha="@{roomWZ.backgroundVisible ? 1f : 0f}"
+                    >
 
                     <ImageView
                         android:id="@+id/lightBackgroundWZ1"
-                        android:layout_width="237dp"
+                        android:layout_width="234dp"
                         android:layout_height="0dp"
-                        android:layout_marginStart="0dp"
-                        android:src="@drawable/rectangle"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -255,41 +262,21 @@
                         android:id="@+id/lightBackgroundWZ2"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginEnd="7dp"
-                        android:src="@drawable/rectangle"
+                        android:layout_marginTop="53dp"
                         app:layout_constraintBottom_toBottomOf="@id/lightBackgroundWZ1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/lightBackgroundWZ1"
                         app:layout_constraintTop_toTopOf="@id/lightBackgroundWZ1" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/labelWZ"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-80dp"
-
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Switch
-                    android:id="@+id/lightWZ"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <com.osh.ui.components.ShutterModeButton
                     android:id="@+id/shutterWZ1"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="2dp"
+                    android:layout_width="@dimen/shutter_mode_button_width"
+                    android:layout_height="@dimen/shutter_mode_button_height"
+                    android:layout_marginBottom="@dimen/shutter_mode_button_wall_padding"
                     android:layout_marginEnd="190dp"
+                    android:visibility="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? View.VISIBLE : View.INVISIBLE}"
+                    app:isAuto="@{roomWZ.shutterIsAuto}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -297,10 +284,12 @@
 
                 <com.osh.ui.components.ShutterModeButton
                     android:id="@+id/shutterWZ2"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="2dp"
+                    android:layout_width="@dimen/shutter_mode_button_width"
+                    android:layout_height="@dimen/shutter_mode_button_height"
+                    android:layout_marginBottom="@dimen/shutter_mode_button_wall_padding"
                     android:layout_marginStart="240dp"
+                    android:visibility="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? View.VISIBLE : View.INVISIBLE}"
+                    app:isAuto="@{roomWZ.shutterIsAuto}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -310,100 +299,83 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/roomFOG"
-                android:layout_width="371dp"
-                android:layout_height="95dp"
-                android:layout_marginTop="21dp"
-                app:layout_constraintStart_toEndOf="@id/roomUZ"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginBottom="18dp"
+                app:layout_constraintBottom_toTopOf="@id/roomSZ"
+                app:layout_constraintEnd_toEndOf="@id/roomB"
+                app:layout_constraintStart_toStartOf="@id/roomB"
                 app:layout_constraintTop_toBottomOf="@id/roomB">
-
-                <ImageView
-                    android:id="@+id/lightBackgroundFOG"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/rectangle"></ImageView>
 
                 <TextView
                     android:id="@+id/labelFOG"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-50dp"
+                    android:text="@{roomFOG.name}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Switch
-                    android:id="@+id/lightFOG"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="@+id/labelFOG"
-                    app:layout_constraintTop_toBottomOf="@+id/labelFOG" />
+                <ImageView
+                    android:id="@+id/backgroundFOG"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="@{roomFOG.backgroundVisible ? 1f : 0f}"
+                    />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/roomHFO"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="-50dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginEnd="19dp"
+                android:layout_marginBottom="-53dp"
                 app:layout_constraintBottom_toBottomOf="@id/roomFOG"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/roomFOG"
                 app:layout_constraintTop_toTopOf="@id/roomB">
 
+                <TextView
+                    android:id="@+id/labelHFO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="@{roomHFO.name}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lightBackgroundHFO"
+                    android:id="@+id/backgroundHFO"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:alpha="@{roomHFO.backgroundVisible ? 1f : 0f}"
+                    >
 
                     <ImageView
                         android:id="@+id/lightBackgroundHFO1"
-                        android:layout_width="77dp"
+                        android:layout_width="85dp"
                         android:layout_height="match_parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:src="@drawable/rectangle" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <ImageView
                         android:id="@+id/lightBackgroundHFO2"
                         android:layout_width="0dp"
-                        android:layout_height="87dp"
-                        android:src="@drawable/rectangle"
+                        android:layout_height="79dp"
                         app:layout_constraintBottom_toBottomOf="@id/lightBackgroundHFO1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/lightBackgroundHFO1" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/labelHFO"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="66dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <Switch
-                    android:id="@+id/lightHFO"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/labelHFO" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </FrameLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="460dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
-</FrameLayout>
+</layout>

@@ -1,7 +1,6 @@
 package com.osh.datamodel;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -91,8 +90,8 @@ public class DatamodelBase extends Identifyable {
 	    actors.put(actor.getFullId(), actor);
 	    return actor;
 	}
-	public ShutterActor addShutterActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, boolean tiltSupport, int fullCloseDuration) {
-		ShutterActor actor = new ShutterActor(valueGroup, id, valueType);
+	public ShutterActor addShutterActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, boolean tiltSupport, long fullCloseDuration, long fullTiltDuration) {
+		ShutterActor actor = new ShutterActor(valueGroup, id, valueType, tiltSupport, fullCloseDuration, fullTiltDuration);
 		actor.withValueTimeout(timeout);
 		actors.put(actor.getFullId(), actor);
 		return actor;
@@ -111,8 +110,8 @@ public class DatamodelBase extends Identifyable {
 		return actor;
 	}
 
-	public ActorBase addAudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout) {
-		AudioPlaybackActor actor = new AudioPlaybackActor(valueGroup, id, valueType);
+	public ActorBase addAudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, String audioDeviceIds, String audioActivationRelayId, float audioVolume, String audioVolumeId, String audioDefaultUrl) {
+		AudioPlaybackActor actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceIds, audioActivationRelayId, audioVolume, audioVolumeId, audioDefaultUrl);
 		actor.withValueTimeout(timeout);
 		actors.put(actor.getFullId(), actor);
 		return actor;

@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.osh.datamodel.meta.KnownArea;
 import com.osh.service.IActorService;
+import com.osh.service.IAudioActorService;
 import com.osh.service.IDatamodelService;
+import com.osh.service.IServiceContext;
 import com.osh.service.IValueService;
 
 import java.util.ArrayList;
@@ -18,19 +20,17 @@ public class AreaPagerAdapter extends FragmentStatePagerAdapter {
     List<Fragment> fragments = new ArrayList<>();
     List<KnownArea> knownAreas = new ArrayList<>();
 
-    private final IDatamodelService datamodelService;
+    private final AreaViewModel areaViewModel;
 
-    private final IValueService valueService;
+    private final IServiceContext serviceContext;
 
-    private final IActorService actorService;
-
-    public AreaPagerAdapter(@NonNull FragmentManager fm, IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
+    public AreaPagerAdapter(@NonNull FragmentManager fm, IServiceContext serviceContext, AreaViewModel areaViewModel) {
         super(fm);
-        this.datamodelService = datamodelService;
-        this.valueService = valueService;
-        this.actorService = actorService;
+        this.serviceContext = serviceContext;
 
-        datamodelService.loadedState().addItemChangeListener(isLoaded -> {
+        this.areaViewModel = areaViewModel;
+
+        serviceContext.getDatamodelService().loadedState().addItemChangeListener(isLoaded -> {
             if (isLoaded) {
                 initFragments();
             }
@@ -43,13 +43,13 @@ public class AreaPagerAdapter extends FragmentStatePagerAdapter {
         fragments.clear();
         knownAreas.clear();
 
-        for (KnownArea knownArea : datamodelService.getDatamodel().getKnownAreas()) {
+        for (KnownArea knownArea : serviceContext.getDatamodelService().getDatamodel().getKnownAreas()) {
             if (knownArea.getId().equals("basement")) {
-                registerFragment(basementFragment.newInstance(datamodelService, valueService, actorService), knownArea);
+                registerFragment(basementFragment.newInstance(serviceContext, areaViewModel), knownArea);
             } else if (knownArea.getId().equals("eg")) {
-                registerFragment(egFragment.newInstance(datamodelService, valueService, actorService), knownArea);
+                registerFragment(egFragment.newInstance(serviceContext, areaViewModel), knownArea);
             } else if (knownArea.getId().equals("og")) {
-                registerFragment(ogFragment.newInstance(datamodelService, valueService, actorService), knownArea);
+                registerFragment(ogFragment.newInstance(serviceContext, areaViewModel), knownArea);
             }
         }
     }

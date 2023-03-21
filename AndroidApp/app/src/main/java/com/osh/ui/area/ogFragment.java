@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.osh.R;
+import com.osh.databinding.FragmentOgBinding;
 import com.osh.service.IActorService;
+import com.osh.service.IAudioActorService;
 import com.osh.service.IDatamodelService;
+import com.osh.service.IServiceContext;
 import com.osh.service.IValueService;
 
 /**
@@ -19,15 +23,16 @@ import com.osh.service.IValueService;
  */
 public class ogFragment extends AreaFragmentBase {
 
+    private FragmentOgBinding binding;
     public ogFragment() {
     }
 
-    public ogFragment(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
-        super(datamodelService, valueService, actorService);
+    public ogFragment(IServiceContext serviceContext, AreaViewModel areaViewModel) {
+        super(serviceContext, areaViewModel);
     }
 
-    public static ogFragment newInstance(IDatamodelService datamodelService, IValueService valueService, IActorService actorService) {
-        return new ogFragment(datamodelService, valueService, actorService);
+    public static ogFragment newInstance(IServiceContext serviceContext, AreaViewModel areaViewModel) {
+        return new ogFragment(serviceContext, areaViewModel);
     }
 
 
@@ -35,36 +40,44 @@ public class ogFragment extends AreaFragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_og, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_og, container, false);
 
         String relayValueGroupId= "allRelays0";
         String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
         String shutterModeValueGroupId = "shutterModes0";
 
-        initRoom(root, "sz", R.id.labelSZ);
-        initRoomLight(root, relayValueGroupId, "16", toggleValueGroupId, "8", R.id.lightSZ, R.id.lightBackgroundSZ);
-        initRoomShutter(root, shutterValueGroupId, "6", shutterModeValueGroupId, "6", R.id.shutterSZ);
+        binding.setRoomSZ(buildRoom(initRoom(binding.getRoot(), "sz", R.id.backgroundSZ)
+                .withLight(relayValueGroupId, "16", toggleValueGroupId, "8")
+                .withShutter(shutterValueGroupId, "6", shutterModeValueGroupId, "6", R.id.shutterSZ))
+                .getRoomModel());
 
-        initRoom(root, "uz", R.id.labelUZ);
-        initRoomLight(root, relayValueGroupId, "17", toggleValueGroupId, "9", R.id.lightUZ, R.id.lightBackgroundUZ);
-        initRoomShutter(root, shutterValueGroupId, "7", shutterModeValueGroupId, "7", R.id.shutterUZ);
+        binding.setRoomUZ(buildRoom(initRoom(binding.getRoot(), "uz", R.id.backgroundUZ)
+                .withLight(relayValueGroupId, "17", toggleValueGroupId, "9")
+                .withShutter(shutterValueGroupId, "7", shutterModeValueGroupId, "7", R.id.shutterUZ))
+                .getRoomModel());
 
-        initRoom(root, "b", R.id.labelB);
-        initRoomLight(root, relayValueGroupId, "18", toggleValueGroupId, "10", R.id.lightB, R.id.lightBackgroundB);
-        initRoomShutter(root, shutterValueGroupId, "8", shutterModeValueGroupId, "8", R.id.shutterB1);
+        binding.setRoomB(buildRoom(initRoom(binding.getRoot(), "b", R.id.backgroundB)
+                .withLight(relayValueGroupId, "18", toggleValueGroupId, "10")
+                .withShutter(shutterValueGroupId, "8", shutterModeValueGroupId, "8", R.id.shutterB1))
+                .getRoomModel());
 
-        initRoom(root, "wz", R.id.labelWZ);
-        initRoomLight(root, relayValueGroupId, "19", toggleValueGroupId, "11", R.id.lightWZ, R.id.lightBackgroundWZ);
-        initRoomShutter(root, shutterValueGroupId, "9", shutterModeValueGroupId, "9", R.id.shutterWZ1);
+        binding.setRoomWZ(buildRoom(initRoom(binding.getRoot(), "wz", R.id.backgroundWZ)
+                .withLight(relayValueGroupId, "19", toggleValueGroupId, "11")
+                .withShutter(shutterValueGroupId, "9", shutterModeValueGroupId, "9", R.id.shutterWZ1))
+                .getRoomModel());
 
-        initRoom(root, "fog", R.id.labelFOG);
-        initRoomLight(root, relayValueGroupId, "20", toggleValueGroupId, "12", R.id.lightFOG, R.id.lightBackgroundFOG);
+        binding.setRoomFOG(buildRoom(initRoom(binding.getRoot(), "fog", R.id.backgroundFOG)
+                .withLight(relayValueGroupId, "20", toggleValueGroupId, "12"))
+                .getRoomModel());
 
-        initRoom(root, "hfo", R.id.labelHFO);
-        initRoomLight(root, relayValueGroupId, "21", toggleValueGroupId, "13", R.id.lightHFO, R.id.lightBackgroundHFO);
+        binding.setRoomHFO(buildRoom(initRoom(binding.getRoot(), "hfo", R.id.backgroundHFO)
+                .withLight(relayValueGroupId, "21", toggleValueGroupId, "13"))
+                .getRoomModel());
 
-        return root;
+        binding.setAreaData(areaViewModel);
+
+        return binding.getRoot();
     }
 
 

@@ -1,17 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.area.ogFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.osh.ui.area.AreaFragment.AreaOverlays" />
+
+        <variable
+            name="areaData"
+            type="com.osh.ui.area.AreaViewModel" />
+
+        <variable
+            name="roomSZ"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomUZ"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomB"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomWZ"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomFOG"
+            type="com.osh.ui.area.RoomViewModel" />
+
+        <variable
+            name="roomHFO"
+            type="com.osh.ui.area.RoomViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.area.ogFragment">
 
-        <include layout="@layout/fragment_og_overlays"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                layout="@layout/fragment_og_overlays"
+                app:areaData="@{areaData}"
+                app:roomB="@{roomB}"
+                app:roomFOG="@{roomFOG}"
+                app:roomHFO="@{roomHFO}"
+                app:roomSZ="@{roomSZ}"
+                app:roomUZ="@{roomUZ}"
+                app:roomWZ="@{roomWZ}" />
 
-</FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>

@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.osh.actor.ActorBase;
 import com.osh.actor.DBActor;
+import com.osh.actor.DBAudioActor;
 import com.osh.datamodel.DatamodelBase;
 import com.osh.datamodel.DynamicDatamodel;
 import com.osh.datamodel.meta.KnownArea;
@@ -18,6 +19,7 @@ import com.osh.service.IDatamodelService;
 import com.osh.service.IValueService;
 import com.osh.utils.IObservableBoolean;
 import com.osh.utils.ObservableBoolean;
+import com.osh.value.DBShutterActor;
 import com.osh.value.DBValue;
 import com.osh.value.ValueBase;
 import com.osh.value.ValueGroup;
@@ -27,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +45,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 	protected Dao<DBValue, String> valueDao;
 
 	protected Dao<DBActor, String> actorDao;
+	protected Dao<DBAudioActor, String> audioActorDao;
+	protected Dao<DBShutterActor, String> shutterActorDao;
 
 	protected Dao<KnownRoom, String> knownRoomsDao;
 
@@ -68,8 +74,7 @@ public class DatamodelServiceImpl implements IDatamodelService {
 
 		loadedState = new ObservableBoolean(false);
 
-		executorService = Executors.newFixedThreadPool(2);
-
+		executorService = Executors.newFixedThreadPool(1);
 		executorService.submit(new Runnable() {
 			@Override
 			public void run() {
@@ -89,6 +94,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 		valueGroupDao = DaoManager.createDao(databaseService.getConnectionSource(), ValueGroup.class);
 		valueDao = DaoManager.createDao(databaseService.getConnectionSource(), DBValue.class);
 		actorDao = DaoManager.createDao(databaseService.getConnectionSource(), DBActor.class);
+		audioActorDao = DaoManager.createDao(databaseService.getConnectionSource(), DBAudioActor.class);
+		shutterActorDao = DaoManager.createDao(databaseService.getConnectionSource(), DBShutterActor.class);
 		knownRoomsDao = DaoManager.createDao(databaseService.getConnectionSource(), KnownRoom.class);
 		knownAreaDao = DaoManager.createDao(databaseService.getConnectionSource(), KnownArea.class);
 		knownRoomValuesDao = DaoManager.createDao(databaseService.getConnectionSource(), KnownRoomValues.class);
@@ -145,13 +152,25 @@ public class DatamodelServiceImpl implements IDatamodelService {
 			if (actor.getClassType().equals("DigitalActor")) {
 				act = datamodel.addDigitalActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), actor.isAsync());
 			} else if (actor.getClassType().equals("ShutterActor")) {
-				act = datamodel.addShutterActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), actor.isTiltSupport(), actor.getFullCloseDuration());
+				List<DBShutterActor> matchList = shutterActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroup", valueGroup.getId()));
+				if (matchList.size() == 1) {
+					DBShutterActor shutterActor = matchList.get(0);
+					act = datamodel.addShutterActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), shutterActor.isShutterTiltSupport(), shutterActor.getShutterFullCloseDuration(), shutterActor.getShutterFullTiltDuration());
+				} else {
+					throw new RuntimeException("Unexpected mapping of actor " + actor.getId());
+				}
 			} else if (actor.getClassType().equals("ToggleActor")) {
 				act = datamodel.addToggleActor(valueGroup, actor.getId());
 			} else if (actor.getClassType().equals("ValueActor")) {
 				act = datamodel.addValueActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
 			} else if (actor.getClassType().equals("AudioPlaybackActor")) {
-				act = datamodel.addAudioPlaybackActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
+				List<DBAudioActor> matchList = audioActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroup", valueGroup.getId()));
+				if (matchList.size() == 1) {
+					DBAudioActor audioActor = matchList.get(0);
+					act = datamodel.addAudioPlaybackActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), audioActor.getAudioDeviceIds(), audioActor.getAudioActivationRelayId(), audioActor.getAudioVolume(), audioActor.getAudioVolumeId(), audioActor.getAudioDefaultUrl());
+				} else {
+					throw new RuntimeException("Unexpected mapping of actor " + actor.getId());
+				}
 			} else {
 				log.error("Unknown class type: " + actor.getClassType());
 			}

@@ -1,7 +1,9 @@
 package com.osh.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.osh.actor.ActorBase;
 import com.osh.actor.ActorCmds;
@@ -52,6 +54,11 @@ public class ActorServiceImpl implements IActorService {
 	@Override
 	public ActorBase getActor(String fullId) {
 		return actors.get(fullId);
+	}
+
+	@Override
+	public List<ActorBase> getActors(Class<? extends ActorBase> classFilter) {
+		return actors.values().stream().filter(a -> a.getClass().equals(classFilter)).collect(Collectors.toList());
 	}
 
 	@Override

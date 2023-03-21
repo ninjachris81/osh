@@ -1,13 +1,27 @@
 package com.osh.actor;
 
-import com.osh.SerializationSupport;
 import com.osh.value.ValueGroup;
 import com.osh.value.ValueType;
 
 public class AudioPlaybackActor extends ActorBase {
 
-	public AudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType) {
+	private final String audioDeviceIds;
+
+	private final String audioActivationRelayId;
+
+	private final float audioVolume;
+
+	private final String audioVolumeId;
+
+	private final String audioDefaultUrl;
+
+	public AudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, String audioDeviceIds, String audioActivationRelayId, float audioVolume, String audioVolumeId, String audioDefaultUrl) {
 		super(valueGroup, id, valueType);
+		this.audioDeviceIds = audioDeviceIds;
+		this.audioActivationRelayId = audioActivationRelayId;
+		this.audioVolume = audioVolume;
+		this.audioVolumeId = audioVolumeId;
+		this.audioDefaultUrl = audioDefaultUrl;
 	}
 
 	@Override

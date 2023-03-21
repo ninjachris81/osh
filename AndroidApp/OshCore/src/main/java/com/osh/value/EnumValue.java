@@ -8,4 +8,9 @@ public class EnumValue extends IntegerValue {
         super(valueGroup, id, valueType);
         this.enumCount = enumCount;
     }
+
+    @Override
+    protected Integer _updateValue(Object newValue) {
+        return super._updateValue(newValue);
+    }
 }

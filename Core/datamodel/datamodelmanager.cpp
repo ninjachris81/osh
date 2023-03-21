@@ -14,7 +14,7 @@
 
 QLatin1String DatamodelManager::MANAGER_ID = QLatin1String("DatamodelManager");
 
-DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, QObject *parent) : ManagerBase(parent)
+DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, QStringList actorClassTypeFilter, QObject *parent) : ManagerBase(parent)
 {
     m_loadingOptions.loadKnownAreas = loadKnownAreas;
     m_loadingOptions.loadKnownRooms = loadKnownRooms;
@@ -22,6 +22,7 @@ DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, boo
     m_loadingOptions.loadValues = loadValues;
     m_loadingOptions.loadProcessorTasks = loadProcessorTasks;
     m_loadingOptions.loadKnownDevices = loadKnownDevices;
+    m_loadingOptions.actorClassTypeFilter = actorClassTypeFilter;
 
     m_datamodel = new EmptyDatamodel();
 }

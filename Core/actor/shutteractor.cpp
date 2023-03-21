@@ -1,8 +1,8 @@
 #include "shutteractor.h"
 
-QLatin1String ShutterActor::PROPERTY_TILT_SUPPORT = QLatin1String("tiltSupport");
-QLatin1String ShutterActor::PROPERTY_FULL_CLOSE_DURATION = QLatin1String("fullCloseDuration");
-QLatin1String ShutterActor::PROPERTY_FULL_TILT_DURATION = QLatin1String("fullTiltDuration");
+QLatin1String ShutterActor::PROPERTY_TILT_SUPPORT = QLatin1String("shutterTiltSupport");
+QLatin1String ShutterActor::PROPERTY_FULL_CLOSE_DURATION = QLatin1String("shutterFullCloseDuration");
+QLatin1String ShutterActor::PROPERTY_FULL_TILT_DURATION = QLatin1String("shutterFullTiltDuration");
 
 QLatin1String ShutterActor::CONFIG_OPERATION_MODE = QLatin1String("operationMode");
 

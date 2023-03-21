@@ -8,11 +8,16 @@ public class ShutterActor extends ActorBase<ShutterActor, Integer> implements Se
 
     public static final int SHUTTER_OPERATION_MODE_AUTO = 0;
     public static final int SHUTTER_OPERATION_MODE_MANUAL = 1;
+    private final boolean tiltSupport;
+    private final long fullCloseDuration;
+    private final long fullTiltDuration;
 
-    public ShutterActor(ValueGroup valueGroup, String id, ValueType valueType) {
+    public ShutterActor(ValueGroup valueGroup, String id, ValueType valueType, boolean tiltSupport, long fullCloseDuration, long fullTiltDuration) {
         super(valueGroup, id, valueType);
+        this.tiltSupport = tiltSupport;
+        this.fullCloseDuration = fullCloseDuration;
+        this.fullTiltDuration = fullTiltDuration;
     }
-
     @Override
     public boolean cmdSupported(ActorCmds cmd) {
         switch(cmd) {
@@ -42,5 +47,17 @@ public class ShutterActor extends ActorBase<ShutterActor, Integer> implements Se
         } else {
             return null;
         }
+    }
+
+    public boolean isTiltSupport() {
+        return tiltSupport;
+    }
+
+    public long getFullCloseDuration() {
+        return fullCloseDuration;
+    }
+
+    public long getFullTiltDuration() {
+        return fullTiltDuration;
     }
 }

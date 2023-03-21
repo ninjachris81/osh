@@ -11,8 +11,8 @@
 #include "database/databasemanager.h"
 #include "datamodel/datamodelmanager.h"
 #include "log/logmanager.h"
-#include "actor/actormanager.h"
-#include "actor/digitalactor.h"
+//#include "actor/actormanager.h"
+//#include "actor/digitalactor.h"
 #include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
     DatamodelManager datamodelManager(false, false, true, true, false, false);
-    ActorManager actorManager;
+    //ActorManager actorManager;
     LogManager logManager;
 
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&databaseManager);
     managerRegistration.registerManager(&datamodelManager);
-    managerRegistration.registerManager(&actorManager);
+    //managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
     HomeConnectController homeConnectController(&controllerManager, config.getString("valueGroupID", "hcs"));

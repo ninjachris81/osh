@@ -13,9 +13,9 @@
         android:title="@string/title_dashboard" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        app:materialIcon="bell"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_area"
+        app:materialIcon="layers"
+        android:title="@string/title_area" />
 
     <item
         android:id="@+id/navigation_wbb12"

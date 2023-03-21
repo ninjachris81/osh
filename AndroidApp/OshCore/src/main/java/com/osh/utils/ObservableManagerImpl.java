@@ -2,11 +2,12 @@ package com.osh.utils;
 
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ObservableManagerImpl<ITEM_TYPE> implements IObservableManager<ITEM_TYPE>, IObservableListenerHolder<ITEM_TYPE> {
 
-    private final List<IItemChangeListener<ITEM_TYPE>> listeners = new ArrayList<>();
+    private final List<IItemChangeListener<ITEM_TYPE>> listeners = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public void addItemChangeListener(IItemChangeListener<ITEM_TYPE> listener) {

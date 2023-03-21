@@ -27,7 +27,7 @@ DatamodelBase *DBDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactor
         }
 
         if (options.loadActors) {
-            loadActors(datamodel);
+            loadActors(datamodel, options.actorClassTypeFilter);
         }
 
         if (options.loadValues) {
@@ -122,17 +122,27 @@ void DBDatamodelLoader::loadValues(DynamicDatamodel *datamodel) {
     }
 }
 
-void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel) {
+void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter) {
     iInfo() << Q_FUNC_INFO;
 
     QSqlQuery query(*m_databaseManager->db());
 
-    if (query.exec("SELECT * FROM dm_actors")) {
+    QString whereClause;
+    if (!classTypeFilter.isEmpty()) {
+        whereClause = "WHERE ";
+
+        for (QString classType : classTypeFilter) {
+            whereClause.append("ac.\"classType\"='" + classType + "' AND ");
+        }
+        whereClause.chop(5);
+    }
+
+    if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac.id = aca.id and ac.\"valueGroup\" = aca.\"valueGroup\" FULL OUTER JOIN dm_actors_shutter acs ON ac.id = acs.id and ac.\"valueGroup\" = acs.\"valueGroup\" " + whereClause)) {
         while (query.next()) {
             QString classType;
             QString valueGroup;
             QString id;
-            QVariantMap values = collectValues(query, classType, valueGroup, id);
+            QVariantMap values = collectValues(query, classType, valueGroup, id, "dm_actors");
             ValueGroup* vg = datamodel->valueGroup(valueGroup);
             datamodel->addActor(classType, vg, id, values);
         }
@@ -197,23 +207,35 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
 }
 
 
-QVariantMap DBDatamodelLoader::collectValues(QSqlQuery &query, QString &classType, QString &valueGroup, QString &id) {
+QVariantMap DBDatamodelLoader::collectValues(QSqlQuery &query, QString &classType, QString &valueGroup, QString &id, QString tableName) {
     iInfo() << Q_FUNC_INFO;
 
     QVariantMap returnMap;
     QSqlRecord record = query.record();
 
     for (int i = 0;i<record.count();i++) {
-        if (record.field(i).name() == SerializableIdentifyable::PROPERTY_CLASSTYPE) {
+        if ( record.field(i).name() == SerializableIdentifyable::PROPERTY_CLASSTYPE) {
             classType = query.value(i).toString();
         } else if (record.field(i).name() == SerializableIdentifyable::PROPERTY_VALUE_GROUP) {
-            valueGroup = query.value(i).toString();
+            if (tableName.isEmpty() || (!tableName.isEmpty() && record.field(i).tableName() == tableName)) {
+                valueGroup = query.value(i).toString();
+            } else {
+                // ignore
+            }
         } else if (record.field(i).name() == SerializableIdentifyable::PROPERTY_ID) {
-            id = query.value(i).toString();
+            if (tableName.isEmpty() || (!tableName.isEmpty() && record.field(i).tableName() == tableName)) {
+                id = query.value(i).toString();
+            } else {
+                // ignore
+            }
         } else {
             returnMap.insert(record.field(i).name(), query.value(i));
         }
     }
+
+    Q_ASSERT(!classType.isEmpty());
+    Q_ASSERT(!valueGroup.isEmpty());
+    Q_ASSERT(!id.isEmpty());
 
     return returnMap;
 };

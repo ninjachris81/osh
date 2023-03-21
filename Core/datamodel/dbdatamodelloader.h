@@ -30,13 +30,13 @@ signals:
 private:
     DatabaseManager *m_databaseManager = nullptr;
 
-    QVariantMap collectValues(QSqlQuery &query, QString &classType, QString &valueGroup, QString &id);
+    QVariantMap collectValues(QSqlQuery &query, QString &classType, QString &valueGroup, QString &id, QString tableName = "");
 
     void loadKnownAreas(DynamicDatamodel *datamodel);
     void loadKnownRooms(DynamicDatamodel *datamodel);
     void loadValueGroups(DynamicDatamodel *datamodel);
     void loadValues(DynamicDatamodel *datamodel);
-    void loadActors(DynamicDatamodel *datamodel);
+    void loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter);
     void loadProcessorVariables(DynamicDatamodel *datamodel);
     void loadProcessorTasks(DynamicDatamodel *datamodel);
     void loadKnownDevices(DynamicDatamodel *datamodel);

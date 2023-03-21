@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.osh.R;
@@ -78,6 +81,16 @@ public class ShutterModeButton extends ChipGroup {
 
     public void setAuto(boolean isAuto) {
         autoSelection.setChecked(isAuto);
+    }
+
+    @BindingAdapter("isAuto")
+    public static void setAuto(ShutterModeButton view, boolean newValue) {
+        view.setAuto(newValue);
+    }
+
+    @InverseBindingAdapter(attribute = "isAuto")
+    public static boolean getAuto(ShutterModeButton view) {
+        return view.autoSelection.isChecked();
     }
 
     public void setAutoClickListener(OnClickListener listener) {

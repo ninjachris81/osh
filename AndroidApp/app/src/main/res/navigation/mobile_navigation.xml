@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.osh.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_area"
+        android:name="com.osh.ui.area.AreaFragment"
+        android:label="@string/title_area"
+        tools:layout="@layout/fragment_area" />
 
     <fragment
         android:id="@+id/navigation_wbb12"

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false);
+    DatamodelManager datamodelManager(false, false, true, true, false, false, QStringList() << DigitalActor::staticMetaObject.className());
     ActorManager actorManager;
     LogManager logManager;
 

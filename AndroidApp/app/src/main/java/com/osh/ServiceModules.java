@@ -1,11 +1,14 @@
 package com.osh;
 
 import com.osh.service.IActorService;
+import com.osh.service.IAudioActorService;
 import com.osh.service.ICommunicationService;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
 import com.osh.service.IDeviceDiscoveryService;
+import com.osh.service.IServiceContext;
 import com.osh.service.impl.ActorServiceImpl;
+import com.osh.service.impl.AudioActorServiceImpl;
 import com.osh.service.impl.ClientDeviceDiscoveryServiceImpl;
 import com.osh.service.impl.DatabaseServiceImpl;
 import com.osh.service.impl.DatamodelServiceImpl;
@@ -14,6 +17,7 @@ import com.osh.config.IApplicationConfig;
 import com.osh.doorunlock.DoorUnlockManager;
 import com.osh.doorunlock.IDoorUnlockManager;
 import com.osh.service.IValueService;
+import com.osh.service.impl.ServiceContextImpl;
 import com.osh.service.impl.ValueServiceImpl;
 import com.osh.wbb12.service.IWBB12Service;
 import com.osh.wbb12.service.impl.WBB12ServiceImpl;
@@ -53,13 +57,19 @@ public class ServiceModules {
 
     @Provides
     @Singleton
-    static IActorService provideActorManager(ICommunicationService communicationService, IValueService valueService) {
+    static IActorService provideActorService(ICommunicationService communicationService, IValueService valueService) {
         return new ActorServiceImpl(communicationService, valueService);
     }
 
     @Provides
     @Singleton
-    static IValueService provideValueManager(ICommunicationService communicationManager) {
+    static IAudioActorService provideAudioActorService(ICommunicationService communicationService, IActorService actorService, IDatamodelService datamodelService) {
+        return new AudioActorServiceImpl(communicationService, actorService, datamodelService);
+    }
+
+    @Provides
+    @Singleton
+    static IValueService provideValueService(ICommunicationService communicationManager) {
         return new ValueServiceImpl(communicationManager);
     }
 
@@ -86,5 +96,12 @@ public class ServiceModules {
     static IDeviceDiscoveryService provideDeviceDiscoveryService() {
         return new ClientDeviceDiscoveryServiceImpl();
     }
+
+    @Provides
+    @Singleton
+    static IServiceContext provideServiceContext(IActorService actorService, IAudioActorService audioActorService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
+        return new ServiceContextImpl(actorService, audioActorService, doorUnlockManager, valueService, databaseService, datamodelService, communicationService);
+    }
+
 
 }

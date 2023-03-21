@@ -17,10 +17,12 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.osh.actor.ActorCmds;
 import com.osh.actor.ActorMessage;
 import com.osh.service.IActorService;
+import com.osh.service.IAudioActorService;
 import com.osh.service.ICommunicationService;
 import com.osh.doorunlock.IDoorUnlockManager;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
+import com.osh.service.IServiceContext;
 import com.osh.ui.area.AreaFragment;
 import com.osh.ui.dashboard.DashboardFragment;
 import com.osh.ui.home.HomeFragment;
@@ -40,25 +42,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends AppCompatActivity {
 
     @Inject
-    ICommunicationService communicationService;
-
-    @Inject
-    IActorService actorService;
-
-    @Inject
-    IDoorUnlockManager doorUnlockManager;
-
-    @Inject
     IWBB12Service wbb12Service;
 
     @Inject
-    IValueService valueService;
-
-    @Inject
-    IDatabaseService databaseService;
-
-    @Inject
-    IDatamodelService datamodelService;
+    IServiceContext serviceContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = HomeFragment.newInstance();
                 break;
             case R.id.navigation_dashboard:
-                selectedFragment = DashboardFragment.newInstance(valueService);
+                selectedFragment = DashboardFragment.newInstance(serviceContext);
                 break;
-            case R.id.navigation_notifications:
-                selectedFragment = AreaFragment.newInstance(datamodelService, valueService, actorService);
+            case R.id.navigation_area:
+                selectedFragment = AreaFragment.newInstance(serviceContext);
                 break;
             case R.id.navigation_wbb12:
                 selectedFragment = WBB12Fragment.newInstance(wbb12Service);
@@ -126,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
         Drawable dbOffIcon = MaterialDrawableBuilder.with(this).setIcon(MaterialDrawableBuilder.IconValue.DATABASE_MINUS).setColor(Color.WHITE).build();
 
         MenuItem mqttConnectedStateIcon = menu.findItem(R.id.mqtt_connected_state_icon);
-        communicationService.connectedState().addItemChangeListener(connectedState -> {
+        serviceContext.getCommunicationService().connectedState().addItemChangeListener(connectedState -> {
             runOnUiThread(() -> {
                 mqttConnectedStateIcon.setIcon(connectedState ? wifiOnIcon : wifiOffIcon);
             });
         }, true);
 
         MenuItem dbConnectedStateIcon = menu.findItem(R.id.db_connected_state_icon);
-        datamodelService.loadedState().addItemChangeListener(loadedState -> {
+        serviceContext.getDatamodelService().loadedState().addItemChangeListener(loadedState -> {
             runOnUiThread(() -> {
                 dbConnectedStateIcon.setIcon(loadedState ? dbOnIcon : dbOffIcon);
             });

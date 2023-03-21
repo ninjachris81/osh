@@ -2,7 +2,7 @@
 
 DatamodelManagerUI * DatamodelManagerUI::m_qmlInstance = nullptr;
 
-DatamodelManagerUI::DatamodelManagerUI(QObject *parent) : DatamodelManager(true, true, true, true, true, true, parent)
+DatamodelManagerUI::DatamodelManagerUI(QObject *parent) : DatamodelManager(true, true, true, true, true, true, QStringList(), parent)
 {
     m_qmlInstance = this;
 }

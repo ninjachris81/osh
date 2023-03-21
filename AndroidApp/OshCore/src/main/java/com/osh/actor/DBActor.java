@@ -26,12 +26,6 @@ public class DBActor {
     boolean isAsync;
 
     @DatabaseField
-    boolean tiltSupport;
-
-    @DatabaseField
-    int fullCloseDuration;
-
-    @DatabaseField
     String comment;
 
     public String getId() {
@@ -56,14 +50,6 @@ public class DBActor {
 
     public boolean isAsync() {
         return isAsync;
-    }
-
-    public boolean isTiltSupport() {
-        return tiltSupport;
-    }
-
-    public int getFullCloseDuration() {
-        return fullCloseDuration;
     }
 
     public String getComment() {

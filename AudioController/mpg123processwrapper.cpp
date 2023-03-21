@@ -10,6 +10,7 @@ MPG123ProcessWrapper::MPG123ProcessWrapper(QString cmd, AudioPlaybackActor *acto
     QString file = actor->rawValue().toString();
     if (file.endsWith(".m3u")) {
         args << "--list" << file;
+        args << "--random";
     } else {
         args << file;
     }
