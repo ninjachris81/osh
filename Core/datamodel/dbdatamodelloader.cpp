@@ -134,7 +134,7 @@ void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList clas
         for (QString classType : classTypeFilter) {
             whereClause.append("ac.\"classType\"='" + classType + "' OR ");
         }
-        whereClause.chop(5);
+        whereClause.chop(4);
     }
 
     if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac.id = aca.id and ac.\"valueGroup\" = aca.\"valueGroup\" FULL OUTER JOIN dm_actors_shutter acs ON ac.id = acs.id and ac.\"valueGroup\" = acs.\"valueGroup\" " + whereClause)) {
