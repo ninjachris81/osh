@@ -44,6 +44,20 @@ public class egFragment extends AreaFragmentBase {
         //View root = super.onCreateView(inflater, container, savedInstanceState);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_eg, container, false);
 
+        binding.setAreaData(areaViewModel);
+
+        serviceContext.getDatamodelService().loadedState().addItemChangeListener(item -> {
+            if (item.booleanValue()) {
+                getActivity().runOnUiThread(() -> {
+                    loadArea();
+                });
+            }
+        }, true);
+
+        return binding.getRoot();
+    }
+
+    private void loadArea() {
         String relayValueGroupId= "allRelays0";
         String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
@@ -92,9 +106,6 @@ public class egFragment extends AreaFragmentBase {
 
         // TODO: NFE SHUTTER
 
-        binding.setAreaData(areaViewModel);
-
-        return binding.getRoot();
     }
 
 }

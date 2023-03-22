@@ -8,6 +8,7 @@ import com.osh.actor.DBActor;
 import com.osh.actor.DBAudioActor;
 import com.osh.datamodel.DatamodelBase;
 import com.osh.datamodel.DynamicDatamodel;
+import com.osh.datamodel.meta.AudioPlaybackSource;
 import com.osh.datamodel.meta.KnownArea;
 import com.osh.datamodel.meta.KnownRoom;
 import com.osh.datamodel.meta.KnownRoomActors;
@@ -46,6 +47,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 
 	protected Dao<DBActor, String> actorDao;
 	protected Dao<DBAudioActor, String> audioActorDao;
+
+	protected Dao<AudioPlaybackSource, String> audioPlaybackSourceDao;
 	protected Dao<DBShutterActor, String> shutterActorDao;
 
 	protected Dao<KnownRoom, String> knownRoomsDao;
@@ -95,6 +98,7 @@ public class DatamodelServiceImpl implements IDatamodelService {
 		valueDao = DaoManager.createDao(databaseService.getConnectionSource(), DBValue.class);
 		actorDao = DaoManager.createDao(databaseService.getConnectionSource(), DBActor.class);
 		audioActorDao = DaoManager.createDao(databaseService.getConnectionSource(), DBAudioActor.class);
+		audioPlaybackSourceDao = DaoManager.createDao(databaseService.getConnectionSource(), AudioPlaybackSource.class);
 		shutterActorDao = DaoManager.createDao(databaseService.getConnectionSource(), DBShutterActor.class);
 		knownRoomsDao = DaoManager.createDao(databaseService.getConnectionSource(), KnownRoom.class);
 		knownAreaDao = DaoManager.createDao(databaseService.getConnectionSource(), KnownArea.class);
@@ -173,6 +177,10 @@ public class DatamodelServiceImpl implements IDatamodelService {
 				}
 			} else {
 				log.error("Unknown class type: " + actor.getClassType());
+			}
+
+			for (AudioPlaybackSource audioPlaybackSource : audioPlaybackSourceDao.queryForAll()) {
+				datamodel.addAudioPlaybackSource(audioPlaybackSource);
 			}
 			
 			actorService.registerActor(act);

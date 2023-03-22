@@ -10,6 +10,8 @@ public interface IServiceContext {
 
     IAudioActorService getAudioActorService();
 
+    IAudioSourceService getAudioSourceService();
+
     IDoorUnlockManager getDoorUnlockManager();
 
     IValueService getValueService();

@@ -2,6 +2,7 @@ package com.osh;
 
 import com.osh.service.IActorService;
 import com.osh.service.IAudioActorService;
+import com.osh.service.IAudioSourceService;
 import com.osh.service.ICommunicationService;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
@@ -9,6 +10,7 @@ import com.osh.service.IDeviceDiscoveryService;
 import com.osh.service.IServiceContext;
 import com.osh.service.impl.ActorServiceImpl;
 import com.osh.service.impl.AudioActorServiceImpl;
+import com.osh.service.impl.AudioSourceServiceImpl;
 import com.osh.service.impl.ClientDeviceDiscoveryServiceImpl;
 import com.osh.service.impl.DatabaseServiceImpl;
 import com.osh.service.impl.DatamodelServiceImpl;
@@ -69,6 +71,12 @@ public class ServiceModules {
 
     @Provides
     @Singleton
+    static IAudioSourceService provideAudioSourceService(IDatamodelService datamodelService) {
+        return new AudioSourceServiceImpl(datamodelService);
+    }
+
+    @Provides
+    @Singleton
     static IValueService provideValueService(ICommunicationService communicationManager) {
         return new ValueServiceImpl(communicationManager);
     }
@@ -99,8 +107,8 @@ public class ServiceModules {
 
     @Provides
     @Singleton
-    static IServiceContext provideServiceContext(IActorService actorService, IAudioActorService audioActorService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
-        return new ServiceContextImpl(actorService, audioActorService, doorUnlockManager, valueService, databaseService, datamodelService, communicationService);
+    static IServiceContext provideServiceContext(IActorService actorService, IAudioActorService audioActorService, IAudioSourceService audioSourceService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
+        return new ServiceContextImpl(actorService, audioActorService, audioSourceService, doorUnlockManager, valueService, databaseService, datamodelService, communicationService);
     }
 
 

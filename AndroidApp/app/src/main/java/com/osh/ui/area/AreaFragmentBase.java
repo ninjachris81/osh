@@ -20,7 +20,7 @@ public abstract class AreaFragmentBase extends Fragment {
 
     protected final Map<String, RoomAdapter> roomAdapters = new HashMap<>();
 
-    private IServiceContext serviceContext;
+    protected IServiceContext serviceContext;
     protected AreaViewModel areaViewModel;
     private FragmentActivity activity;
     protected AreaFragmentBase() {

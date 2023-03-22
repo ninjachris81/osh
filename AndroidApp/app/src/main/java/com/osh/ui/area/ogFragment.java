@@ -42,6 +42,21 @@ public class ogFragment extends AreaFragmentBase {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_og, container, false);
 
+        binding.setAreaData(areaViewModel);
+
+        serviceContext.getDatamodelService().loadedState().addItemChangeListener(item -> {
+            if (item.booleanValue()) {
+                getActivity().runOnUiThread(() -> {
+                    loadArea();
+                });
+            }
+        }, true);
+
+        return binding.getRoot();
+    }
+
+    private void loadArea() {
+
         String relayValueGroupId= "allRelays0";
         String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
@@ -75,11 +90,7 @@ public class ogFragment extends AreaFragmentBase {
                 .withLight(relayValueGroupId, "21", toggleValueGroupId, "13"))
                 .getRoomModel());
 
-        binding.setAreaData(areaViewModel);
-
-        return binding.getRoot();
     }
-
 
 
 }

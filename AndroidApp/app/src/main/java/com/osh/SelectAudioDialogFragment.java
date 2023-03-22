@@ -15,12 +15,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.osh.actor.AudioPlaybackActor;
+import com.osh.datamodel.meta.AudioPlaybackSource;
 import com.osh.datamodel.meta.KnownRoom;
 import com.osh.ui.area.RoomViewModel;
+import com.osh.ui.components.AudioPlaybackActorArrayAdapter;
+import com.osh.ui.components.AudioPlaybackSourceArrayAdapter;
+import com.osh.ui.components.TextImageSpinnerArrayAdapter;
+import com.osh.ui.components.TextSpinnerArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +38,33 @@ import java.util.List;
  */
 public class SelectAudioDialogFragment extends DialogFragment {
 
+    public interface StartAudioCallbackHandler {
+        void startPlayback(AudioPlaybackActor actor, AudioPlaybackSource source);
+    }
+
+    public interface StopAudioCallbackhandler {
+        void stopPlayback(AudioPlaybackActor actor);
+    }
+
     public static final String TAG = "SelectAudioDialogFragment";
     private static final String ARG_ROOM = "room";
 
     // TODO: Rename and change types of parameters
     private RoomViewModel roomViewModel;
 
-    private AutoCompleteTextView audioActorSpinner;
-
     private List<AudioPlaybackActor> audioActors;
 
-    private List<KnownRoom> knownRooms;
+    private AudioPlaybackActorArrayAdapter audioActorArrayAdapter;
+
+    private List<AudioPlaybackSource> audioPlaybackSources;
+
+    private AudioPlaybackSourceArrayAdapter audioSourceArrayAdapter;
+
+    private AutoCompleteTextView audioActorSpinner;
+    private AutoCompleteTextView audioSourceSpinner;
+
+    private StartAudioCallbackHandler startPlaybackCallbackHandler;
+    private StopAudioCallbackhandler stopAudioCallbackhandler;
 
     public SelectAudioDialogFragment() {
         // Required empty public constructor
@@ -78,6 +100,28 @@ public class SelectAudioDialogFragment extends DialogFragment {
 
         View returnView = inflater.inflate(R.layout.fragment_select_audio_dialog, container, false);
         audioActorSpinner = (AutoCompleteTextView) returnView.findViewById(R.id.audio_actors);
+        audioSourceSpinner = (AutoCompleteTextView) returnView.findViewById(R.id.audio_sources);
+
+        Button startBtn = returnView.findViewById(R.id.start_btn);
+        startBtn.setOnClickListener(view -> {
+            String actorId = audioActorSpinner.getText().toString();
+            String sourceName = audioSourceSpinner.getText().toString();
+            if (!actorId.isEmpty() && !sourceName.isEmpty()) {
+                AudioPlaybackActor actor = audioActors.stream().filter(audioPlaybackActor -> audioPlaybackActor.getId().equals(actorId)).findFirst().get();
+                AudioPlaybackSource source = audioPlaybackSources.stream().filter(audioPlaybackSource -> audioPlaybackSource.getName().equals(sourceName)).findFirst().get();
+                startPlaybackCallbackHandler.startPlayback(actor, source);
+            }
+        });
+
+        Button stopBtn = returnView.findViewById(R.id.stop_btn);
+        stopBtn.setOnClickListener(view -> {
+            String actorId = audioActorSpinner.getText().toString();
+            if (!actorId.isEmpty()) {
+                AudioPlaybackActor actor = audioActors.stream().filter(audioPlaybackActor -> audioPlaybackActor.getId().equals(actorId)).findFirst().get();
+                stopAudioCallbackhandler.stopPlayback(actor);
+            }
+        });
+
         return returnView;
     }
 
@@ -92,16 +136,23 @@ public class SelectAudioDialogFragment extends DialogFragment {
         params.height = (int) getResources().getDimension(R.dimen.audio_dialog_height);
         window.setAttributes(params);
 
-        List<String> spinnerArray = new ArrayList<String>();
-        for (AudioPlaybackActor actor : audioActors) {
-            spinnerArray.add(actor.getId());
-        }
-
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.spinner_dropdown_item, spinnerArray);
-        audioActorSpinner.setAdapter(spinnerArrayAdapter);
+        audioActorArrayAdapter = new AudioPlaybackActorArrayAdapter(view.getContext(), R.layout.spinner_dropdown_item, audioActors, audioActorSpinner, true);
+        audioSourceArrayAdapter = new AudioPlaybackSourceArrayAdapter(view.getContext(), R.layout.spinner_dropdown_item_with_image, audioPlaybackSources, audioSourceSpinner, true);
     }
 
     public void setAudioActors(List<AudioPlaybackActor> audioActors) {
         this.audioActors = audioActors;
-   }
+    }
+
+    public void setAudioPlaybackSources(List<AudioPlaybackSource> audioPlaybackSources) {
+        this.audioPlaybackSources = audioPlaybackSources;
+    }
+
+    public void setStartCallback(StartAudioCallbackHandler startPlaybackCallbackHandler) {
+        this.startPlaybackCallbackHandler = startPlaybackCallbackHandler;
+    }
+
+    public void setStopAudioCallbackhandler(StopAudioCallbackhandler stopAudioCallbackhandler) {
+        this.stopAudioCallbackhandler = stopAudioCallbackhandler;
+    }
 }

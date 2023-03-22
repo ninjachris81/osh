@@ -3,6 +3,7 @@ package com.osh.service.impl;
 import com.osh.doorunlock.IDoorUnlockManager;
 import com.osh.service.IActorService;
 import com.osh.service.IAudioActorService;
+import com.osh.service.IAudioSourceService;
 import com.osh.service.ICommunicationService;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
@@ -12,15 +13,17 @@ import com.osh.service.IValueService;
 public class ServiceContextImpl implements IServiceContext {
     private final IActorService actorService;
     private final IAudioActorService audioActorService;
+    private final IAudioSourceService audioSourceService;
     private final IDoorUnlockManager doorUnlockManager;
     private final IValueService valueService;
     private final IDatabaseService databaseService;
     private final IDatamodelService datamodelService;
     private final ICommunicationService communicationService;
 
-    public ServiceContextImpl(IActorService actorService, IAudioActorService audioActorService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
+    public ServiceContextImpl(IActorService actorService, IAudioActorService audioActorService, IAudioSourceService audioSourceService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
         this.actorService = actorService;
         this.audioActorService = audioActorService;
+        this.audioSourceService = audioSourceService;
         this.doorUnlockManager = doorUnlockManager;
         this.valueService = valueService;
         this.databaseService = databaseService;
@@ -36,6 +39,11 @@ public class ServiceContextImpl implements IServiceContext {
     @Override
     public IAudioActorService getAudioActorService() {
         return this.audioActorService;
+    }
+
+    @Override
+    public IAudioSourceService getAudioSourceService() {
+        return audioSourceService;
     }
 
     @Override

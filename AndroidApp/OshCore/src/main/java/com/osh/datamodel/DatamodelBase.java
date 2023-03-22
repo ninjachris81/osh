@@ -1,5 +1,9 @@
 package com.osh.datamodel;
 
+import android.provider.MediaStore;
+
+import androidx.collection.LongSparseArray;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +18,7 @@ import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
 import com.osh.actor.ToggleActor;
 import com.osh.actor.ValueActor;
+import com.osh.datamodel.meta.AudioPlaybackSource;
 import com.osh.datamodel.meta.KnownArea;
 import com.osh.datamodel.meta.KnownRoom;
 import com.osh.device.KnownDevice;
@@ -30,19 +35,20 @@ import com.osh.value.ValueType;
 
 public class DatamodelBase extends Identifyable {
 	
-	protected Map<String, ValueGroup> valueGroups = new HashMap<>();
+	protected final Map<String, ValueGroup> valueGroups = new HashMap<>();
 	
-	protected Map<String, KnownDevice> knownDevices = new HashMap<>();
+	protected final Map<String, KnownDevice> knownDevices = new HashMap<>();
 	
-	protected Map<String, KnownRoom> knownRooms = new HashMap<>();
+	protected final Map<String, KnownRoom> knownRooms = new HashMap<>();
 
-	protected Map<String, KnownArea> knownAreas = new HashMap<>();
+	protected final Map<String, KnownArea> knownAreas = new HashMap<>();
 
-	protected Map<String, ValueBase> values = new HashMap<>();
+	protected final Map<String, ValueBase> values = new HashMap<>();
 	
-    protected Map<String, ActorBase> actors = new HashMap<>();
+    protected final Map<String, ActorBase> actors = new HashMap<>();
 
-    protected Map<String, ProcessorTask> processorTasks = new HashMap<>();
+    protected final Map<String, ProcessorTask> processorTasks = new HashMap<>();
+	protected final Map<String, AudioPlaybackSource> audioPlaybackSources = new HashMap<>();
 
 	public DatamodelBase(String id) {
 		super(id);
@@ -71,7 +77,11 @@ public class DatamodelBase extends Identifyable {
 	public Map<String, ProcessorTask> getProcessorTasks() {
 		return processorTasks;
 	}
-	
+
+	public Map<String, AudioPlaybackSource> getAudioPlaybackSources() {
+		return audioPlaybackSources;
+	}
+
 	public KnownDevice addKnownDevice(String id, String serviceId, String name) {
 	    KnownDevice device = new KnownDevice(id, serviceId, name);
 	    knownDevices.put(device.getFullId(), device);
@@ -212,4 +222,7 @@ public class DatamodelBase extends Identifyable {
 		return ka;
     }
 
+	public void addAudioPlaybackSource(AudioPlaybackSource audioPlaybackSource) {
+		this.audioPlaybackSources.put(audioPlaybackSource.getName(), audioPlaybackSource);
+	}
 }

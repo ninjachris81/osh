@@ -87,8 +87,16 @@ public class RoomAdapter {
                     break;
                 case AUDIO:
                     SelectAudioDialogFragment dialog = SelectAudioDialogFragment.newInstance(model);
-                    dialog.show(fragmentManager, SelectAudioDialogFragment.TAG);            // getChildFragmentManager()
                     dialog.setAudioActors(serviceContext.getAudioActorService().getAudioActorsByRoom(model.getRoom().getId()));
+                    dialog.setAudioPlaybackSources(serviceContext.getAudioSourceService().getAudioPlaybackSources());
+                    dialog.setStartCallback((actor, source) -> {
+                        serviceContext.getActorService().publishCmd(actor, ActorCmds.ACTOR_CMD_SET_VALUE, source.getSourceUrl());
+                        serviceContext.getActorService().publishCmd(actor, ActorCmds.ACTOR_CMD_START);
+                    });
+                    dialog.setStopAudioCallbackhandler((actor) -> {
+                        serviceContext.getActorService().publishCmd(actor, ActorCmds.ACTOR_CMD_STOP);
+                    });
+                    dialog.show(fragmentManager, SelectAudioDialogFragment.TAG);
                     break;
             }
         });
