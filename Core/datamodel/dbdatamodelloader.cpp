@@ -132,7 +132,7 @@ void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList clas
         whereClause = "WHERE ";
 
         for (QString classType : classTypeFilter) {
-            whereClause.append("ac.\"classType\"='" + classType + "' AND ");
+            whereClause.append("ac.\"classType\"='" + classType + "' OR ");
         }
         whereClause.chop(5);
     }
