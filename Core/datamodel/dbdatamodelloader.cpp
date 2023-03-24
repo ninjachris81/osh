@@ -123,7 +123,7 @@ void DBDatamodelLoader::loadValues(DynamicDatamodel *datamodel) {
 }
 
 void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter) {
-    iInfo() << Q_FUNC_INFO;
+    iInfo() << Q_FUNC_INFO << classTypeFilter;
 
     QSqlQuery query(*m_databaseManager->db());
 
@@ -132,12 +132,12 @@ void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList clas
         whereClause = " WHERE ";
 
         for (QString classType : classTypeFilter) {
-            whereClause.append("ac.\"classType\"='" + classType + "' OR ");
+            whereClause.append("ac.\"" + ValueBase::PROPERTY_CLASSTYPE + "\"='" + classType + "' OR ");
         }
         whereClause.chop(4);
     }
 
-    if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac.id = aca.id and ac.\"valueGroup\" = aca.\"valueGroup\" FULL OUTER JOIN dm_actors_shutter acs ON ac.id = acs.id and ac.\"valueGroup\" = acs.\"valueGroup\"" + whereClause)) {
+    if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac." + ValueBase::PROPERTY_ID + " = aca.id and ac.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\" = aca.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\" FULL OUTER JOIN dm_actors_shutter acs ON ac." + ValueBase::PROPERTY_ID + " = acs." + ValueBase::PROPERTY_ID + " and ac.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\" = acs.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\"" + whereClause)) {
         while (query.next()) {
             QString classType;
             QString valueGroup;

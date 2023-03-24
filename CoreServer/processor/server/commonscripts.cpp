@@ -123,6 +123,8 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
 }
 
 bool CommonScripts::initSwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString toggleActorFullId) {
+    iDebug() << lightActorFullId << inputSensorFullId << toggleActorFullId;
+
     DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightActorFullId));
     BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->value(inputSensorFullId));
     ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));

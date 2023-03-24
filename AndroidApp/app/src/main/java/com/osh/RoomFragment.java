@@ -26,6 +26,9 @@ import com.osh.ui.area.RoomViewModel;
 import com.osh.ui.components.ShutterModeButton;
 import com.osh.value.EnumValue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RoomFragment#newInstance} factory method to
@@ -33,20 +36,41 @@ import com.osh.value.EnumValue;
  */
 public class RoomFragment extends Fragment {
 
+    public class ShutterInfo {
+        public String shutterValueGroupId;
+        public String shutterId;
+        public String shutterModeValueGroupId;
+        public String shutterModeId;
+
+        public ShutterInfo(String shutterValueGroupId, String shutterId, String shutterModeValueGroupId, String shutterModeId) {
+            this.shutterValueGroupId = shutterValueGroupId;
+            this.shutterId = shutterId;
+            this.shutterModeValueGroupId = shutterModeValueGroupId;
+            this.shutterModeId = shutterModeId;
+        }
+    }
+
+    public class LightInfo {
+        public String lightRelayValueGroupId;
+        public String lightRelayId;
+        public String lightToggleValueGroupId;
+        public String lightToggleId;
+
+        public LightInfo(String lightRelayValueGroupId, String lightRelayId, String lightToggleValueGroupId, String lightToggleId) {
+            this.lightRelayValueGroupId = lightRelayValueGroupId;
+            this.lightRelayId = lightRelayId;
+            this.lightToggleValueGroupId = lightToggleValueGroupId;
+            this.lightToggleId = lightToggleId;
+        }
+    }
+
     private AreaViewModel areaViewModel;
     private IServiceContext serviceContext;
     private FragmentRoomBinding binding;
-    private String shutterValueGroupId;
-    private String shutterId;
-    private String shutterModeValueGroupId;
-    private String shutterModeId;
-    private boolean hasShutter = false;
 
-    private String lightRelayValueGroupId;
-    private String lightRelayId;
-    private String lightToggleValueGroupId;
-    private String lightToggleId;
-    private boolean hasLight = false;
+    private List<ShutterInfo> shutterInfos = new ArrayList<>();
+
+    private List<LightInfo> lightInfos = new ArrayList<>();
 
     private RoomViewModel roomViewModel;
     private View roomBackground;
@@ -85,7 +109,7 @@ public class RoomFragment extends Fragment {
             bindLight();
         }
 
-        if (hasShutter) {
+        if (shutterCount > 0) {
             bindShutter();
         }
 
@@ -95,11 +119,7 @@ public class RoomFragment extends Fragment {
         return binding.getRoot();
     }
     public RoomFragment withLight(String lightRelayValueGroupId, String lightRelayId, String lightToggleValueGroupId, String lightToggleId) {
-        this.lightRelayValueGroupId = lightRelayValueGroupId;
-        this.lightRelayId = lightRelayId;
-        this.lightToggleValueGroupId = lightToggleValueGroupId;
-        this.lightToggleId = lightToggleId;
-        this.hasLight = true;
+        lightInfos.add(new LightInfo(lightRelayValueGroupId, lightRelayId, lightToggleValueGroupId, lightToggleId));
         return this;
     }
 
@@ -145,11 +165,7 @@ public class RoomFragment extends Fragment {
     }
 
     public RoomFragment withShutter(String shutterValueGroupId, String shutterId, String shutterModeValueGroupId, String shutterModeId) {
-        this.shutterValueGroupId = shutterValueGroupId;
-        this.shutterId = shutterId;
-        this.shutterModeValueGroupId = shutterModeValueGroupId;
-        this.shutterModeId = shutterModeId;
-        this.hasShutter = true;
+        shutterInfos.add(new ShutterInfo(shutterValueGroupId, shutterId, shutterModeValueGroupId, shutterModeId));
         return this;
     }
 
