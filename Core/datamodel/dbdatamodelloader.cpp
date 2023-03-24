@@ -129,7 +129,7 @@ void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList clas
 
     QString whereClause;
     if (!classTypeFilter.isEmpty()) {
-        whereClause = "WHERE ";
+        whereClause = " WHERE ";
 
         for (QString classType : classTypeFilter) {
             whereClause.append("ac.\"classType\"='" + classType + "' OR ");
@@ -137,7 +137,7 @@ void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList clas
         whereClause.chop(4);
     }
 
-    if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac.id = aca.id and ac.\"valueGroup\" = aca.\"valueGroup\" FULL OUTER JOIN dm_actors_shutter acs ON ac.id = acs.id and ac.\"valueGroup\" = acs.\"valueGroup\" " + whereClause)) {
+    if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac.id = aca.id and ac.\"valueGroup\" = aca.\"valueGroup\" FULL OUTER JOIN dm_actors_shutter acs ON ac.id = acs.id and ac.\"valueGroup\" = acs.\"valueGroup\"" + whereClause)) {
         while (query.next()) {
             QString classType;
             QString valueGroup;
@@ -216,7 +216,7 @@ QVariantMap DBDatamodelLoader::collectValues(QSqlQuery &query, QString &classTyp
     for (int i = 0;i<record.count();i++) {
         if ( record.field(i).name() == SerializableIdentifyable::PROPERTY_CLASSTYPE) {
             classType = query.value(i).toString();
-        } else if (record.field(i).name() == SerializableIdentifyable::PROPERTY_VALUE_GROUP) {
+        } else if (record.field(i).name() == SerializableIdentifyable::PROPERTY_VALUE_GROUP_ID) {
             if (tableName.isEmpty() || (!tableName.isEmpty() && record.field(i).tableName() == tableName)) {
                 valueGroup = query.value(i).toString();
             } else {

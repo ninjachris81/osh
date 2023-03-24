@@ -1,4 +1,4 @@
-package com.osh.value;
+package com.osh.actor;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -10,7 +10,7 @@ public class DBShutterActor {
     String id;
 
     @DatabaseField(uniqueCombo = true)
-    String valueGroup;
+    String valueGroupId;
 
     @DatabaseField
     boolean shutterTiltSupport;
@@ -25,8 +25,8 @@ public class DBShutterActor {
         return id;
     }
 
-    public String getValueGroup() {
-        return valueGroup;
+    public String getValueGroupId() {
+        return valueGroupId;
     }
 
     public boolean isShutterTiltSupport() {

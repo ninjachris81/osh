@@ -54,7 +54,7 @@ void DynamicDatamodel::deserialize(QByteArray data) {
     deserializeMap(doc.object(), "valueGroups", m_valueGroups, [](ValueGroup* newInstance, QJsonObject) { return newInstance->id(); });
 
     deserializeMap(doc.object(), "values", m_values, [this](ValueBase* newInstance, QJsonObject obj) {
-        QString valueGroupId = obj.value("valueGroup").toString();
+        QString valueGroupId = obj.value("valueGroupId").toString();
 
         if (m_valueGroups.contains(valueGroupId)) {
             newInstance->setValueGroup(m_valueGroups.value(valueGroupId));
@@ -65,7 +65,7 @@ void DynamicDatamodel::deserialize(QByteArray data) {
     });
 
     deserializeMap(doc.object(), "actors", m_actors, [this](ActorBase* newInstance, QJsonObject obj) {
-        QString valueGroupId = obj.value("valueGroup").toString();
+        QString valueGroupId = obj.value("valueGroupId").toString();
 
         if (m_valueGroups.contains(valueGroupId)) {
             newInstance->setValueGroup(m_valueGroups.value(valueGroupId));
@@ -165,7 +165,7 @@ void DynamicDatamodel::addActor(QString typeName, ValueGroup *valueGroup, QStrin
     } else if (typeName == "ValueActor") {
         actor = addValueActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "AudioPlaybackActor") {
-        actor = addAudioPlaybackActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_VOLUME).toFloat(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_DEFAULT_URL).toString());
+        actor = addAudioPlaybackActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_VOLUME).toFloat(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_URL).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_URL_ID).toString());
     } else {
         iWarning() << "Unsupported type name" << typeName;
     }

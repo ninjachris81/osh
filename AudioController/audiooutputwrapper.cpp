@@ -60,7 +60,7 @@ void AudioOutputWrapper::_start(AudioPlaybackActor* audioActor, qint64 startPosi
     Q_EMIT(requestDeactivation(m_currentAudioActor));
 
     qint64 startPositionHint = startPosition;
-    m_currentPlaybackDevice = getMediaDevice(audioActor->rawValue().toString(), startPositionHint);
+    m_currentPlaybackDevice = getMediaDevice(audioActor->audioUrl(), startPositionHint);
     m_currentPlaybackDevice->open(QIODevice::ReadOnly);
     if (startPositionHint > 0) {
         m_currentPlaybackDevice->seek(startPositionHint);

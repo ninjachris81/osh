@@ -20,7 +20,7 @@ import com.osh.service.IDatamodelService;
 import com.osh.service.IValueService;
 import com.osh.utils.IObservableBoolean;
 import com.osh.utils.ObservableBoolean;
-import com.osh.value.DBShutterActor;
+import com.osh.actor.DBShutterActor;
 import com.osh.value.DBValue;
 import com.osh.value.ValueBase;
 import com.osh.value.ValueGroup;
@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -112,7 +111,7 @@ public class DatamodelServiceImpl implements IDatamodelService {
 		}
 
 		for (KnownRoom knownRoom : knownRoomsDao.queryForAll()) {
-			KnownArea knownArea = datamodel.getKnownArea(knownRoom.getKnownAreaString());
+			KnownArea knownArea = datamodel.getKnownArea(knownRoom.getKnownAreaId());
 			datamodel.addKnownRoom(knownArea, knownRoom.getId(), knownRoom.getName());
 		}
 
@@ -121,7 +120,7 @@ public class DatamodelServiceImpl implements IDatamodelService {
 		}
 
 		for (DBValue value : valueDao.queryForAll()) {
-			ValueGroup valueGroup = datamodel.getValueGroup(value.getValueGroup());
+			ValueGroup valueGroup = datamodel.getValueGroup(value.getValueGroupId());
 			ValueBase val = null;
 
 			if (value.getClassType().equals("BooleanValue")) {
@@ -150,13 +149,13 @@ public class DatamodelServiceImpl implements IDatamodelService {
 		}
 
 		for (DBActor actor : actorDao.queryForAll()) {
-			ValueGroup valueGroup = datamodel.getValueGroup(actor.getValueGroup());
+			ValueGroup valueGroup = datamodel.getValueGroup(actor.getValueGroupId());
 			ActorBase act = null;
 
 			if (actor.getClassType().equals("DigitalActor")) {
 				act = datamodel.addDigitalActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), actor.isAsync());
 			} else if (actor.getClassType().equals("ShutterActor")) {
-				List<DBShutterActor> matchList = shutterActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroup", valueGroup.getId()));
+				List<DBShutterActor> matchList = shutterActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroupId", valueGroup.getId()));
 				if (matchList.size() == 1) {
 					DBShutterActor shutterActor = matchList.get(0);
 					act = datamodel.addShutterActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), shutterActor.isShutterTiltSupport(), shutterActor.getShutterFullCloseDuration(), shutterActor.getShutterFullTiltDuration());
@@ -168,10 +167,10 @@ public class DatamodelServiceImpl implements IDatamodelService {
 			} else if (actor.getClassType().equals("ValueActor")) {
 				act = datamodel.addValueActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
 			} else if (actor.getClassType().equals("AudioPlaybackActor")) {
-				List<DBAudioActor> matchList = audioActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroup", valueGroup.getId()));
+				List<DBAudioActor> matchList = audioActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroupId", valueGroup.getId()));
 				if (matchList.size() == 1) {
 					DBAudioActor audioActor = matchList.get(0);
-					act = datamodel.addAudioPlaybackActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), audioActor.getAudioDeviceIds(), audioActor.getAudioActivationRelayId(), audioActor.getAudioVolume(), audioActor.getAudioVolumeId(), audioActor.getAudioDefaultUrl());
+					act = datamodel.addAudioPlaybackActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), audioActor.getAudioDeviceIds(), audioActor.getAudioActivationRelayId(), audioActor.getAudioVolume(), audioActor.getAudioVolumeId(), audioActor.getAudioUrl(), audioActor.getAudioUrlId());
 				} else {
 					throw new RuntimeException("Unexpected mapping of actor " + actor.getId());
 				}

@@ -8,6 +8,9 @@ public class ShutterActor extends ActorBase<ShutterActor, Integer> implements Se
 
     public static final int SHUTTER_OPERATION_MODE_AUTO = 0;
     public static final int SHUTTER_OPERATION_MODE_MANUAL = 1;
+
+    public static final int SHUTTER_STATE_OPENED = 0;
+    public static final int SHUTTER_STATE_CLOSED = 100;
     private final boolean tiltSupport;
     private final long fullCloseDuration;
     private final long fullTiltDuration;
@@ -59,5 +62,12 @@ public class ShutterActor extends ActorBase<ShutterActor, Integer> implements Se
 
     public long getFullTiltDuration() {
         return fullTiltDuration;
+    }
+
+    public String getStateAsString() {
+        if (this.value == null) return "";
+        if (this.value == SHUTTER_STATE_OPENED) return "Opened";
+        if (this.value == SHUTTER_STATE_CLOSED) return "Closed";
+        return this.value + " %";
     }
 }

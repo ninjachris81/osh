@@ -13,7 +13,7 @@ public:
 
     static QLatin1String PROPERTY_ID;
     static QLatin1String PROPERTY_CLASSTYPE;
-    static QLatin1String PROPERTY_VALUE_GROUP;
+    static QLatin1String PROPERTY_VALUE_GROUP_ID;
 
     /*virtual*/ void serialize(QJsonObject &obj);
 

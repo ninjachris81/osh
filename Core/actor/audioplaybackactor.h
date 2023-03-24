@@ -7,6 +7,7 @@
 
 #include "actorbase.h"
 #include "value/doublevalue.h"
+#include "value/stringvalue.h"
 
 class SHARED_LIB_EXPORT AudioPlaybackActor : public ActorBase
 {
@@ -16,10 +17,18 @@ public:
     static QLatin1String PROPERTY_AUDIO_ACTIVATION_RELAY_ID;
     static QLatin1String PROPERTY_AUDIO_VOLUME;
     static QLatin1String PROPERTY_AUDIO_VOLUME_ID;
-    static QLatin1String PROPERTY_AUDIO_DEFAULT_URL;
+    static QLatin1String PROPERTY_AUDIO_URL;
+    static QLatin1String PROPERTY_AUDIO_URL_ID;
+
+    enum AudioPlaybackState {
+        STOPPED = 0,
+        PLAYING = 1,
+        PAUSED = 2,
+        ERROR = 10
+    };
 
     AudioPlaybackActor();
-    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl, QObject *parent = nullptr);
+    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 
@@ -29,25 +38,34 @@ public:
 
     AudioPlaybackActor* withAudioVolumeValue(DoubleValue* volume);
 
+    AudioPlaybackActor* withAudioUrlValue(StringValue* url);
+
+    AudioPlaybackState playbackState();
+    void setPlaybackState(AudioPlaybackState state);
+
     QStringList audioDeviceIds();
     QString audioActivationRelayId();
     float audioVolume();
     QString audioVolumeId();
-    QString audioDefaultUrl();
+    QString audioUrl();
+    QString audioUrlId();
 
 protected:
     QStringList m_audioDeviceIds;
     QString m_audioActivationRelayId = "";
     float m_audioVolume = 1;
     QString m_audioVolumeId = "";
-    QString m_audioDefaultUrl = "";
+    QString m_audioUrl = "";
+    QString m_audioUrlId = "";
 
     DoubleValue* m_audioVolumeValue;
+    StringValue* m_audioUrlValue;
 
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
 
 protected slots:
     void onVolumeChanged();
+    void onUrlChanged();
 
 signals:
     void startPlaybackRequested();
@@ -55,6 +73,7 @@ signals:
     void pausePlaybackRequested();
 
     void volumeChanged();
+    void urlChanged();
 
     void nextRequested();
     void previousRequested();

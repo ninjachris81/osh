@@ -6,16 +6,17 @@ QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS = QLatin1String("aud
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID = QLatin1String("audioActivationRelayId");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME = QLatin1String("audioVolume");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID = QLatin1String("audioVolumeId");
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEFAULT_URL = QLatin1String("audioDefaultUrl");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL = QLatin1String("audioUrl");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL_ID = QLatin1String("audioUrlId");
 
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl, QObject *parent) : ActorBase(valueGroup, id, valueType, parent),
-    m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioDefaultUrl(audioDefaultUrl)
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QObject *parent) : ActorBase(valueGroup, id, valueType, parent),
+    m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioUrl(audioUrl), m_audioUrlId(audioUrlId)
 {
     m_audioDeviceIds = audioDeviceIds.split("\n");
-    updateValue(m_audioDefaultUrl, false);
+    updateValue(m_audioUrl, false);
 }
 
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
@@ -55,11 +56,19 @@ void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
 QVariant AudioPlaybackActor::_updateValue(QVariant newValue) {
     iDebug() << Q_FUNC_INFO << newValue;
 
-    if (newValue.canConvert(QVariant::String)) {
+    if (newValue.canConvert(QVariant::Int)) {
         return QVariant::fromValue(newValue);
     } else {
         return QVariant();
     }
+}
+
+AudioPlaybackActor::AudioPlaybackState AudioPlaybackActor::playbackState() {
+    return static_cast<AudioPlaybackState>(rawValue().toInt());
+}
+
+void AudioPlaybackActor::setPlaybackState(AudioPlaybackState state) {
+    updateValue(state);
 }
 
 bool AudioPlaybackActor::isAsync() {
@@ -82,8 +91,12 @@ QString AudioPlaybackActor::audioVolumeId() {
     return m_audioVolumeId;
 }
 
-QString AudioPlaybackActor::audioDefaultUrl() {
-    return m_audioDefaultUrl;
+QString AudioPlaybackActor::audioUrl() {
+    return m_audioUrl;
+}
+
+QString AudioPlaybackActor::audioUrlId() {
+    return m_audioUrlId;
 }
 
 AudioPlaybackActor* AudioPlaybackActor::withAudioVolumeValue(DoubleValue* volume) {
@@ -94,8 +107,24 @@ AudioPlaybackActor* AudioPlaybackActor::withAudioVolumeValue(DoubleValue* volume
     }
 
     m_audioVolumeValue = volume;
+    if (m_audioVolumeValue->rawValue().isValid()) m_audioVolume = m_audioVolumeValue->rawValue().toFloat();
 
     Helpers::safeConnect(m_audioVolumeValue, &DoubleValue::valueChanged, this, &AudioPlaybackActor::onVolumeChanged, SIGNAL(valueChanged()), SLOT(onVolumeChanged()));
+
+    return this;
+}
+
+AudioPlaybackActor* AudioPlaybackActor::withAudioUrlValue(StringValue* url) {
+    iDebug() << Q_FUNC_INFO << url->fullId();
+
+    if (url->valueType() != value::VALTYPE_SOUND_URL) {
+        iWarning() << "Value" << url->fullId() << "has wrong value type";
+    }
+
+    m_audioUrlValue = url;
+    if (m_audioUrlValue->rawValue().isValid()) m_audioUrl = m_audioUrlValue->rawValue().toString();
+
+    Helpers::safeConnect(m_audioUrlValue, &StringValue::valueChanged, this, &AudioPlaybackActor::onUrlChanged, SIGNAL(valueChanged()), SLOT(onUrlChanged()));
     return this;
 }
 
@@ -104,3 +133,7 @@ void AudioPlaybackActor::onVolumeChanged() {
     Q_EMIT(volumeChanged());
 }
 
+void AudioPlaybackActor::onUrlChanged() {
+    m_audioUrl = m_audioUrlValue->rawValue().toString();
+    Q_EMIT(urlChanged());
+}

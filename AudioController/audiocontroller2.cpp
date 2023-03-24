@@ -40,6 +40,7 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::pausePlaybackRequested, this, &AudioController2::onPausePlayback, SIGNAL(pausePlaybackRequested()), SLOT(onPausePlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::stopPlaybackRequested, this, &AudioController2::onStopPlayback, SIGNAL(stopPlaybackRequested()), SLOT(onStopPlayback()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::volumeChanged, this, &AudioController2::onVolumeChanged, SIGNAL(volumeChanged()), SLOT(onVolumeChanged()));
+        Helpers::safeConnect(audioActor, &AudioPlaybackActor::urlChanged, this, &AudioController2::onUrlChanged, SIGNAL(urlChanged()), SLOT(onUrlChanged()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::nextRequested, this, &AudioController2::onNext, SIGNAL(nextRequested()), SLOT(onNext()));
         Helpers::safeConnect(audioActor, &AudioPlaybackActor::previousRequested, this, &AudioController2::onPrevious, SIGNAL(previousRequested()), SLOT(onPrevious()));
 
@@ -56,6 +57,14 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
             Q_ASSERT(volumeValue != nullptr);
             audioActor->withAudioVolumeValue(volumeValue);
             valueManager->registerForNotification(volumeValue);
+        }
+
+        if (!audioActor->audioUrlId().isEmpty()) {
+            iInfo() << "Binding url" << audioActor->audioUrlId();
+            StringValue* urlValue = static_cast<StringValue*>(datamodel->value(audioActor->audioUrlId()));
+            Q_ASSERT(urlValue != nullptr);
+            audioActor->withAudioUrlValue(urlValue);
+            valueManager->registerForNotification(urlValue);
         }
 
         m_playbackActors.insert(audioActor->id(), audioActor);
@@ -87,9 +96,9 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
         stopAllProcesses();
     }
 
-    if (audioActor->rawValue().isValid()) {
+    if (!audioActor->audioUrl().isEmpty()) {
         QString audioDeviceId = audioActor->audioDeviceIds().at(0);
-        QString url = audioActor->rawValue().toString();
+        QString url = audioActor->audioUrl();
 
         if (m_runningProcesses.contains(audioDeviceId)) {
             iInfo() << "Terminating running process on" << audioDeviceId;
@@ -115,6 +124,7 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
         m_runningProcesses.insert(audioDeviceId, proc);
 
         iInfo() << "Launching" << proc->program() << proc->arguments();
+        audioActor->setPlaybackState(AudioPlaybackActor::PLAYING);
         proc->start();
     } else {
         iWarning() << "Cannot playback - no url set";
@@ -126,6 +136,7 @@ void AudioController2::onProcessFinished(int exitCode, QProcess::ExitStatus exit
 
     AudioProcessWrapperBase *proc = static_cast<AudioProcessWrapperBase*>(sender());
     iInfo() << "Process finished with exit code" << exitCode << exitStatus;
+    proc->audioActor()->setPlaybackState(AudioPlaybackActor::STOPPED);
     m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
     proc->deleteLater();
 }
@@ -133,6 +144,7 @@ void AudioController2::onProcessFinished(int exitCode, QProcess::ExitStatus exit
 void AudioController2::onProcessError(QProcess::ProcessError error) {
     iWarning() << Q_FUNC_INFO << error;
     AudioProcessWrapperBase *proc = static_cast<AudioProcessWrapperBase*>(sender());
+    proc->audioActor()->setPlaybackState(AudioPlaybackActor::ERROR);
     m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
     proc->deleteLater();
 }
@@ -149,7 +161,6 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
         iInfo() << "Terminating running process on" << audioActor->audioDeviceIds().at(0);
         stopProcess(audioActor->audioDeviceIds().at(0));
     }
-
 }
 
 void AudioController2::stopProcess(QString audioDeviceId) {
@@ -180,6 +191,12 @@ void AudioController2::onVolumeChanged() {
     iInfo() << Q_FUNC_INFO;
     AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
     m_volumeWrapper.setVolume(audioActor);
+}
+
+void AudioController2::onUrlChanged() {
+    iInfo() << Q_FUNC_INFO;
+    AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
+    // TODO: restart proc
 }
 
 void AudioController2::executeActivation(AudioPlaybackActor *audioActor, bool activate) {

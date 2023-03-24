@@ -126,8 +126,8 @@ ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VAL
     return actor;
 }
 
-AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl) {
-    AudioPlaybackActor* actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceIds, audioActivationRelayId, audioVolume, audioVolumeId, audioDefaultUrl);
+AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId) {
+    AudioPlaybackActor* actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceIds, audioActivationRelayId, audioVolume, audioVolumeId, audioUrl, audioUrlId);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());

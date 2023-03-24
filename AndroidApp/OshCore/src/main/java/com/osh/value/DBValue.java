@@ -13,7 +13,7 @@ public class DBValue {
     String classType;
 
     @DatabaseField(uniqueCombo = true)
-    String valueGroup;
+    String valueGroupId;
 
     @DatabaseField
     int valueType;
@@ -35,8 +35,8 @@ public class DBValue {
         return classType;
     }
 
-    public String getValueGroup() {
-        return valueGroup;
+    public String getValueGroupId() {
+        return valueGroupId;
     }
 
     public int getValueType() {

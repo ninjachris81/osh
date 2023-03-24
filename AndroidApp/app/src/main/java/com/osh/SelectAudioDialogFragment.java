@@ -47,10 +47,6 @@ public class SelectAudioDialogFragment extends DialogFragment {
     }
 
     public static final String TAG = "SelectAudioDialogFragment";
-    private static final String ARG_ROOM = "room";
-
-    // TODO: Rename and change types of parameters
-    private RoomViewModel roomViewModel;
 
     private List<AudioPlaybackActor> audioActors;
 
@@ -78,20 +74,14 @@ public class SelectAudioDialogFragment extends DialogFragment {
      * @return A new instance of fragment SelectAudioDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SelectAudioDialogFragment newInstance(RoomViewModel roomViewModel) {
+    public static SelectAudioDialogFragment newInstance() {
         SelectAudioDialogFragment fragment = new SelectAudioDialogFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_ROOM, roomViewModel);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            roomViewModel = (RoomViewModel) getArguments().getSerializable(ARG_ROOM);
-        }
     }
 
     @Override
@@ -155,4 +145,5 @@ public class SelectAudioDialogFragment extends DialogFragment {
     public void setStopAudioCallbackhandler(StopAudioCallbackhandler stopAudioCallbackhandler) {
         this.stopAudioCallbackhandler = stopAudioCallbackhandler;
     }
+
 }

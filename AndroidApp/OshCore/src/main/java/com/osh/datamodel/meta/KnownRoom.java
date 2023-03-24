@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.osh.SerializableIdentifyable;
-import com.osh.SerializationSupport;
 import com.osh.actor.ActorBase;
 import com.osh.datamodel.ItemMetaInfo;
 import com.osh.value.ValueBase;
@@ -19,8 +17,8 @@ public class KnownRoom {
     @DatabaseField(canBeNull = false)
 	private String name;
 
-	@DatabaseField(canBeNull = false, columnName = "knownArea")
-	private String knownAreaString;
+	@DatabaseField(canBeNull = false, columnName = "knownAreaId")
+	private String knownAreaId;
 	private KnownArea knownArea;
 
     private Map<String, ActorBase> actors = new HashMap<>();
@@ -41,8 +39,8 @@ public class KnownRoom {
 		return id;
 	}
 
-	public String getKnownAreaString() {
-		return knownAreaString;
+	public String getKnownAreaId() {
+		return knownAreaId;
 	}
 
 	public KnownArea getKnownArea() {

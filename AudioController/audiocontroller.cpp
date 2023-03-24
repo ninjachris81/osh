@@ -118,7 +118,7 @@ void AudioController::onStopPlayback() {
 void AudioController::startPlayback(AudioPlaybackActor *audioActor) {
     iInfo() << audioActor->id();
 
-    if (audioActor->rawValue().isValid()) {
+    if (!audioActor->audioUrl().isEmpty()) {
         QListIterator<AudioOutputWrapper*> it(m_audioOutputMappings.values(audioActor));
         while (it.hasNext()) {
             AudioOutputWrapper *output = it.next();

@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 
@@ -91,6 +94,73 @@ public class ShutterModeButton extends ChipGroup {
     @InverseBindingAdapter(attribute = "isAuto")
     public static boolean getAuto(ShutterModeButton view) {
         return view.autoSelection.isChecked();
+    }
+
+    @BindingAdapter("android:layout_marginBottom")
+    public static void setMarginBottom(ShutterModeButton view, float value) {
+        if (value > 0) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                ((ConstraintLayout.LayoutParams) layoutParams).bottomMargin = (int) value;
+            }
+            view.setLayoutParams(layoutParams);
+        }
+    }
+
+    @BindingAdapter("android:layout_marginTop")
+    public static void setMarginTop(ShutterModeButton view, float value) {
+        if (value > 0) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                ((ConstraintLayout.LayoutParams) layoutParams).topMargin = (int) value;
+            }
+            view.setLayoutParams(layoutParams);
+        }
+    }
+
+    @BindingAdapter("app:layout_constraintBottom_toBottomOf")
+    public static void setContraintBottom(ShutterModeButton view, String constraint) {
+        if (!constraint.isEmpty()) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                ConstraintLayout parentLayout = (ConstraintLayout) view.getParent();
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(parentLayout);
+
+                if (constraint.equals("parent")) {
+                    constraintSet.connect(view.getId(), ConstraintSet.BOTTOM, parentLayout.getId(), constraintSet.BOTTOM);
+                }
+
+                constraintSet.applyToLayoutParams(view.getId(), (ConstraintLayout.LayoutParams) layoutParams);
+            }
+            view.setLayoutParams(layoutParams);
+        }
+    }
+
+    @BindingAdapter("app:layout_constraintTop_toTopOf")
+    public static void setContraintTop(ShutterModeButton view, String constraint) {
+        if (!constraint.isEmpty()) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                ConstraintLayout parentLayout = (ConstraintLayout) view.getParent();
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(parentLayout);
+
+                if (constraint.equals("parent")) {
+                    constraintSet.connect(view.getId(), ConstraintSet.TOP, parentLayout.getId(), constraintSet.TOP);
+                }
+
+                constraintSet.applyToLayoutParams(view.getId(), (ConstraintLayout.LayoutParams) layoutParams);
+            }
+            view.setLayoutParams(layoutParams);
+        }
+    }
+
+    @BindingAdapter("clickEnabled")
+    public static void setClickEnabled(ShutterModeButton view, boolean enable) {
+        for (int i = 0; i<view.getChildCount();i++) {
+            view.getChildAt(i).setClickable(enable);
+        }
     }
 
     public void setAutoClickListener(OnClickListener listener) {

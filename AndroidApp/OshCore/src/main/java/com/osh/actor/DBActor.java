@@ -2,7 +2,6 @@ package com.osh.actor;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.osh.value.ValueGroup;
 
 @DatabaseTable(tableName = "dm_actors")
 public class DBActor {
@@ -14,7 +13,7 @@ public class DBActor {
     String classType;
 
     @DatabaseField(uniqueCombo = true)
-    String valueGroup;
+    String valueGroupId;
 
     @DatabaseField
     int valueType;
@@ -36,8 +35,8 @@ public class DBActor {
         return classType;
     }
 
-    public String getValueGroup() {
-        return valueGroup;
+    public String getValueGroupId() {
+        return valueGroupId;
     }
 
     public int getValueType() {

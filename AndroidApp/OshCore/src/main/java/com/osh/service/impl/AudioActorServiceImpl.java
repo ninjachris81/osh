@@ -11,7 +11,11 @@ import com.osh.service.IAudioActorService;
 import com.osh.service.ICommunicationService;
 import com.osh.service.IDatabaseService;
 import com.osh.service.IDatamodelService;
+import com.osh.value.DoubleValue;
+import com.osh.value.StringValue;
+import com.osh.value.ValueBase;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +52,33 @@ public class AudioActorServiceImpl implements IAudioActorService {
 
     private void registerAudioActors() {
         for (ActorBase actor : actorService.getActors(AudioPlaybackActor.class)) {
-            audioActors.put(actor.getFullId(), (AudioPlaybackActor) actor);
+            registerAudioActor((AudioPlaybackActor) actor);
         }
+    }
+
+    private void registerAudioActor(AudioPlaybackActor audioPlaybackActor) {
+        if (!StringUtils.isEmpty(audioPlaybackActor.getAudioVolumeId())) {
+            ValueBase value = datamodelService.getDatamodel().getValue(audioPlaybackActor.getAudioVolumeId());
+            if (value instanceof DoubleValue) {
+                DoubleValue volume = (DoubleValue) value;
+                audioPlaybackActor.setVolumeValue(volume);
+            } else {
+                throw new RuntimeException("Unexpected value type: " + value);
+            }
+        }
+
+        if (!StringUtils.isEmpty(audioPlaybackActor.getAudioUrlId())) {
+            ValueBase value = datamodelService.getDatamodel().getValue(audioPlaybackActor.getAudioUrlId());
+            if (value instanceof StringValue) {
+                StringValue url = (StringValue) value;
+                audioPlaybackActor.setUrlValue(url);
+            } else {
+                throw new RuntimeException("Unexpected value type: " + value);
+            }
+        }
+
+
+        audioActors.put(audioPlaybackActor.getFullId(), audioPlaybackActor);
     }
 
     @Override

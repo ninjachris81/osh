@@ -1,9 +1,5 @@
 package com.osh.datamodel;
 
-import android.provider.MediaStore;
-
-import androidx.collection.LongSparseArray;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -120,8 +116,8 @@ public class DatamodelBase extends Identifyable {
 		return actor;
 	}
 
-	public ActorBase addAudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, String audioDeviceIds, String audioActivationRelayId, float audioVolume, String audioVolumeId, String audioDefaultUrl) {
-		AudioPlaybackActor actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceIds, audioActivationRelayId, audioVolume, audioVolumeId, audioDefaultUrl);
+	public ActorBase addAudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, String audioDeviceIds, String audioActivationRelayId, float audioVolume, String audioVolumeId, String audioUrl, String audioUrlId) {
+		AudioPlaybackActor actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceIds, audioActivationRelayId, audioVolume, audioVolumeId, audioUrl, audioUrlId);
 		actor.withValueTimeout(timeout);
 		actors.put(actor.getFullId(), actor);
 		return actor;
@@ -209,7 +205,10 @@ public class DatamodelBase extends Identifyable {
 	}
 
 	public ValueBase getValue(String valueId, String valueGroupId) {
-		return values.get(ValueBase.getFullId(valueGroupId, valueId));
+		return getValue(ValueBase.getFullId(valueGroupId, valueId));
+	}
+	public ValueBase getValue(String fullId) {
+		return values.get(fullId);
 	}
 
 	public ActorBase getActor(String actorId, String valueGroupId) {
@@ -225,4 +224,5 @@ public class DatamodelBase extends Identifyable {
 	public void addAudioPlaybackSource(AudioPlaybackSource audioPlaybackSource) {
 		this.audioPlaybackSources.put(audioPlaybackSource.getName(), audioPlaybackSource);
 	}
+
 }

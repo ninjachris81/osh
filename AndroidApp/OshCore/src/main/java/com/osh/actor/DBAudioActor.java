@@ -10,7 +10,7 @@ public class DBAudioActor {
     String id;
 
     @DatabaseField(uniqueCombo = true)
-    String valueGroup;
+    String valueGroupId;
 
     @DatabaseField
     String audioDeviceIds;
@@ -25,14 +25,17 @@ public class DBAudioActor {
     String audioVolumeId;
 
     @DatabaseField
-    String audioDefaultUrl;
+    String audioUrl;
+
+    @DatabaseField
+    String audioUrlId;
 
     public String getId() {
         return id;
     }
 
-    public String getValueGroup() {
-        return valueGroup;
+    public String getValueGroupId() {
+        return valueGroupId;
     }
 
     public String getAudioDeviceIds() {
@@ -51,7 +54,11 @@ public class DBAudioActor {
         return audioVolumeId;
     }
 
-    public String getAudioDefaultUrl() {
-        return audioDefaultUrl;
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public String getAudioUrlId() {
+        return audioUrlId;
     }
 }

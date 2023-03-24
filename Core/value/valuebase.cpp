@@ -27,7 +27,7 @@ void ValueBase::serialize(QJsonObject &obj) {
 
     obj.insert("valueType", m_valueType);
     obj.insert("alwaysEmit", m_alwaysEmit);
-    obj.insert("valueGroup", m_valueGroup->id());
+    obj.insert("valueGroupId", m_valueGroup->id());
 }
 
 void ValueBase::deserialize(QJsonObject obj) {

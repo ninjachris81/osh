@@ -99,11 +99,11 @@ void ShutterController::onMaintenance() {
             // update value
             double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
             double duration = movement.duration;
-            int percentage = qBound(0, (int) ((elapsedTime / duration) * 100), 100);
+            int percentage = qBound(SHUTTER_STATE_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_STATE_CLOSED);
 
             // border handling
-            if (percentage > 95) percentage = 100;
-            if (percentage < 5) percentage = 0;
+            if (percentage > 95) percentage = SHUTTER_STATE_CLOSED;
+            if (percentage < 5) percentage = SHUTTER_STATE_OPENED;
 
             // invert
             if (!movement.directionDown) {

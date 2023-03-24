@@ -11,39 +11,6 @@
         <variable
             name="areaData"
             type="com.osh.ui.area.AreaViewModel" />
-
-        <variable
-            name="roomEZ"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomK"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomAZ"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomVZ"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomWC"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomFEG"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomHFE"
-            type="com.osh.ui.area.RoomViewModel" />
-
-        <variable
-            name="roomNFE"
-            type="com.osh.ui.area.RoomViewModel" />
-
     </data>
 
     <FrameLayout
@@ -55,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include layout="@layout/fragment_eg_overlays" app:areaData="@{areaData}" app:roomEZ="@{roomEZ}" app:roomK="@{roomK}" app:roomAZ="@{roomAZ}" app:roomVZ="@{roomVZ}" app:roomWC="@{roomWC}" app:roomFEG="@{roomFEG}" app:roomHFE="@{roomHFE}" app:roomNFE="@{roomNFE}" />
+            <include layout="@layout/fragment_eg_overlays" app:areaData="@{areaData}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

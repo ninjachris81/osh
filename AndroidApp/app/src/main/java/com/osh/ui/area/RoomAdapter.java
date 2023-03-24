@@ -53,6 +53,10 @@ public class RoomAdapter {
             model.shutterIsAuto.set(item.getValue(ShutterActor.SHUTTER_OPERATION_MODE_AUTO) == ShutterActor.SHUTTER_OPERATION_MODE_AUTO);
         }, true);
 
+        shutterActor.addItemChangeListener(item -> {
+            model.shutterState.set(item.getStateAsString());
+        }, true);
+
         modeButton.setAutoClickListener(view -> {
             shutterMode.updateValue(shutterMode.getValue(ShutterActor.SHUTTER_OPERATION_MODE_AUTO) == ShutterActor.SHUTTER_OPERATION_MODE_AUTO ? ShutterActor.SHUTTER_OPERATION_MODE_MANUAL : ShutterActor.SHUTTER_OPERATION_MODE_AUTO);
             serviceContext.getValueService().publishValue(shutterMode);
@@ -86,15 +90,17 @@ public class RoomAdapter {
                     serviceContext.getActorService().publishCmd(lightToggleActor, ActorCmds.ACTOR_CMD_TOGGLE);
                     break;
                 case AUDIO:
-                    SelectAudioDialogFragment dialog = SelectAudioDialogFragment.newInstance(model);
+                    SelectAudioDialogFragment dialog = SelectAudioDialogFragment.newInstance();
                     dialog.setAudioActors(serviceContext.getAudioActorService().getAudioActorsByRoom(model.getRoom().getId()));
                     dialog.setAudioPlaybackSources(serviceContext.getAudioSourceService().getAudioPlaybackSources());
                     dialog.setStartCallback((actor, source) -> {
                         serviceContext.getActorService().publishCmd(actor, ActorCmds.ACTOR_CMD_SET_VALUE, source.getSourceUrl());
                         serviceContext.getActorService().publishCmd(actor, ActorCmds.ACTOR_CMD_START);
+                        model.activePlayback.set(actor);
                     });
                     dialog.setStopAudioCallbackhandler((actor) -> {
                         serviceContext.getActorService().publishCmd(actor, ActorCmds.ACTOR_CMD_STOP);
+                        //model.activePlayback.set(null);
                     });
                     dialog.show(fragmentManager, SelectAudioDialogFragment.TAG);
                     break;
@@ -109,6 +115,10 @@ public class RoomAdapter {
         });
 
         setBackgroundForOverlay(roomBackground);
+    }
+
+    protected void bindAudio() {
+
     }
 
     protected void setBackgroundForOverlay(View roomBackground) {

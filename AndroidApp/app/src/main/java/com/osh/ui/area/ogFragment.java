@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.osh.R;
+import com.osh.RoomFragment;
 import com.osh.databinding.FragmentOgBinding;
 import com.osh.service.IActorService;
 import com.osh.service.IAudioActorService;
@@ -56,40 +57,17 @@ public class ogFragment extends AreaFragmentBase {
     }
 
     private void loadArea() {
-
         String relayValueGroupId= "allRelays0";
         String toggleValueGroupId = "lightToggles0";
         String shutterValueGroupId = "allShutters0";
         String shutterModeValueGroupId = "shutterModes0";
 
-        binding.setRoomSZ(buildRoom(initRoom(binding.getRoot(), "sz", R.id.backgroundSZ)
-                .withLight(relayValueGroupId, "16", toggleValueGroupId, "8")
-                .withShutter(shutterValueGroupId, "6", shutterModeValueGroupId, "6", R.id.shutterSZ))
-                .getRoomModel());
-
-        binding.setRoomUZ(buildRoom(initRoom(binding.getRoot(), "uz", R.id.backgroundUZ)
-                .withLight(relayValueGroupId, "17", toggleValueGroupId, "9")
-                .withShutter(shutterValueGroupId, "7", shutterModeValueGroupId, "7", R.id.shutterUZ))
-                .getRoomModel());
-
-        binding.setRoomB(buildRoom(initRoom(binding.getRoot(), "b", R.id.backgroundB)
-                .withLight(relayValueGroupId, "18", toggleValueGroupId, "10")
-                .withShutter(shutterValueGroupId, "8", shutterModeValueGroupId, "8", R.id.shutterB1))
-                .getRoomModel());
-
-        binding.setRoomWZ(buildRoom(initRoom(binding.getRoot(), "wz", R.id.backgroundWZ)
-                .withLight(relayValueGroupId, "19", toggleValueGroupId, "11")
-                .withShutter(shutterValueGroupId, "9", shutterModeValueGroupId, "9", R.id.shutterWZ1))
-                .getRoomModel());
-
-        binding.setRoomFOG(buildRoom(initRoom(binding.getRoot(), "fog", R.id.backgroundFOG)
-                .withLight(relayValueGroupId, "20", toggleValueGroupId, "12"))
-                .getRoomModel());
-
-        binding.setRoomHFO(buildRoom(initRoom(binding.getRoot(), "hfo", R.id.backgroundHFO)
-                .withLight(relayValueGroupId, "21", toggleValueGroupId, "13"))
-                .getRoomModel());
-
+        getChildFragmentManager().beginTransaction().replace(R.id.roomSZ, new RoomFragment(serviceContext , areaViewModel, "sz", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_BOTTOM).withLight(relayValueGroupId, "16", toggleValueGroupId, "8").withShutter(shutterValueGroupId, "6", shutterModeValueGroupId, "6")).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.roomUZ, new RoomFragment(serviceContext , areaViewModel, "uz", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_TOP).withLight(relayValueGroupId, "17", toggleValueGroupId, "9").withShutter(shutterValueGroupId, "7", shutterModeValueGroupId, "7")).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.roomB, new RoomFragment(serviceContext , areaViewModel, "b", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_TOP).withLight(relayValueGroupId, "18", toggleValueGroupId, "10").withShutter(shutterValueGroupId, "8", shutterModeValueGroupId, "8")).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.roomWZ, new RoomFragment(serviceContext , areaViewModel, "wz", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_BOTTOM).withLight(relayValueGroupId, "19", toggleValueGroupId, "11").withShutter(shutterValueGroupId, "9", shutterModeValueGroupId, "9")).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.roomFOG, new RoomFragment(serviceContext , areaViewModel, "fog", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_BOTTOM).withLight(relayValueGroupId, "20", toggleValueGroupId, "12")).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.roomHFO, new RoomFragment(serviceContext , areaViewModel, "hfo", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_BOTTOM).withLight(relayValueGroupId, "21", toggleValueGroupId, "13")).commit();
     }
 
 

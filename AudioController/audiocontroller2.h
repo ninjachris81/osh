@@ -63,6 +63,7 @@ protected slots:
     void onPausePlayback();
     void onStopPlayback();
     void onVolumeChanged();
+    void onUrlChanged();
 
     void onNext();
     void onPrevious();

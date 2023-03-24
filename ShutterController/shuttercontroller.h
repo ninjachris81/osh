@@ -17,6 +17,10 @@ class SHARED_LIB_EXPORT ShutterController : public ControllerBase
     Q_OBJECT
 
 public:
+
+#define SHUTTER_STATE_OPENED 0
+#define SHUTTER_STATE_CLOSED 100
+
     enum ShutterState {
         ShutterInitializing,
         ShutterUp,
