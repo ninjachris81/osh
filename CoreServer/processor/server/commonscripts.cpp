@@ -166,6 +166,9 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
 
     for (quint8 index = 0; index<255; index++) {
         DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("switch_light_relay_" + toggleActor->fullId() + "_" + index));
+        if (lightRelayActor == nullptr) {
+            break;
+        }
 
         QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
 
