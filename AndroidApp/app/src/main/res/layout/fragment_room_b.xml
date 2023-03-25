@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.osh.ui.area.AreaFragment.AreaOverlays" />
+        <import type="com.osh.ui.area.RoomViewModel.RoomPosition" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="areaData"
+            type="com.osh.ui.area.AreaViewModel" />
+
+        <variable
+            name="roomData"
+            type="com.osh.ui.area.RoomViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/roomRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/roomLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{roomData.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/infoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{areaData.currentOverlay == AreaOverlays.SENSORS ? (roomData.temperature + "°\n" + roomData.humidity + "%") : "" }'
+            android:visibility="@{areaData.currentOverlay == AreaOverlays.SENSORS ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/roomLabel" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/roomBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="@{roomData.backgroundVisible ? 1f : 0f}"
+            >
+
+            <ImageView
+                android:id="@+id/lightBackgroundB1"
+                android:layout_width="177dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/lightBackgroundB2"
+                android:layout_width="20dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="83dp"
+                app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
+                app:layout_constraintStart_toEndOf="@id/lightBackgroundB1"
+                app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"/>
+
+            <ImageView
+                android:id="@+id/lightBackgroundB3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/lightBackgroundB1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/lightBackgroundB2"
+                app:layout_constraintTop_toTopOf="@id/lightBackgroundB1"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/shutterLabel0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text='@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? roomData.shutterStates[0] : "" }'
+            app:layout_constraintEnd_toEndOf="@id/shutterModeButtonB0"
+            app:layout_constraintStart_toStartOf="@id/shutterModeButtonB0"
+            app:layout_constraintTop_toBottomOf="@id/shutterModeButtonB0" />
+
+        <com.osh.ui.components.ShutterModeButton
+            android:id="@+id/shutterModeButtonB0"
+            android:layout_width="@dimen/shutter_mode_button_width"
+            android:layout_height="@dimen/shutter_mode_button_height"
+            android:layout_marginStart="-160dp"
+            android:layout_marginTop="@dimen/shutter_mode_button_wall_padding"
+            android:visibility="gone"
+            android:alpha="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? 1 : 0 }"
+            clickEnabled="@{areaData.currentOverlay == AreaOverlays.SHUTTERS}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:isAuto="@{roomData.shutterAutoModes[0]}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:singleLine="true" />
+
+        <TextView
+            android:id="@+id/shutterLabel1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text='@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? roomData.shutterStates[1] : "" }'
+            app:layout_constraintEnd_toEndOf="@id/shutterModeButtonB1"
+            app:layout_constraintStart_toStartOf="@id/shutterModeButtonB1"
+            app:layout_constraintTop_toBottomOf="@id/shutterModeButtonB1" />
+
+        <com.osh.ui.components.ShutterModeButton
+            android:id="@+id/shutterModeButtonB1"
+            android:layout_width="@dimen/shutter_mode_button_width"
+            android:layout_height="@dimen/shutter_mode_button_height"
+            android:layout_marginStart="190dp"
+            android:layout_marginTop="@dimen/shutter_mode_button_wall_padding"
+            android:visibility="gone"
+            android:alpha="@{areaData.currentOverlay == AreaOverlays.SHUTTERS ? 1 : 0 }"
+            clickEnabled="@{areaData.currentOverlay == AreaOverlays.SHUTTERS}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:isAuto="@{roomData.shutterAutoModes[1]}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:singleLine="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -122,22 +122,26 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
     }
 }
 
-bool CommonScripts::initSwitchLogic(QString lightActorFullId, QString inputSensorFullId, QString toggleActorFullId) {
-    iDebug() << lightActorFullId << inputSensorFullId << toggleActorFullId;
+bool CommonScripts::initSwitchLogic(QString lightRelayActorFullIds, QString inputSensorFullId, QString toggleActorFullId) {
+    iDebug() << lightRelayActorFullIds << inputSensorFullId << toggleActorFullId;
 
-    DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightActorFullId));
     BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->value(inputSensorFullId));
     ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
 
-    Q_ASSERT(lightRelayActor != nullptr);
     Q_ASSERT(inputSensor != nullptr);
     Q_ASSERT(toggleActor != nullptr);
 
     m_localStorage->setObject("switch_toggle_actor_" + inputSensorFullId, toggleActor);
     Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitSwitchLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_inputSensorValueChanged()));
-
-    m_localStorage->setObject("switch_light_relay_" + toggleActorFullId, lightRelayActor);
     Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_toggleActorValueChanged()));
+
+    quint8 index = 0;
+    for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", QString::SkipEmptyParts)) {
+        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightRelayActorFullId));
+        Q_ASSERT(lightRelayActor != nullptr);
+        m_localStorage->setObject("switch_light_relay_" + toggleActorFullId + "_" + index, lightRelayActor);
+        index++;
+    }
 
     return true;
 }
@@ -160,17 +164,19 @@ void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
 void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
     ToggleActor* toggleActor = static_cast<ToggleActor*>(sender());
 
-    DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("switch_light_relay_" + toggleActor->fullId()));
+    for (quint8 index = 0; index<255; index++) {
+        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("switch_light_relay_" + toggleActor->fullId() + "_" + index));
 
-    QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
+        QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
 
-    if (toggleActor->rawValue().toBool()) {
-        m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
-    } else {
-        m_localStorage->unset(lastTsInputKey);
+        if (toggleActor->rawValue().toBool()) {
+            m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+        } else {
+            m_localStorage->unset(lastTsInputKey);
+        }
+
+        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
     }
-
-    publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
 }
 
 

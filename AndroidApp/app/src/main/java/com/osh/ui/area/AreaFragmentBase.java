@@ -18,11 +18,8 @@ import java.util.Map;
 
 public abstract class AreaFragmentBase extends Fragment {
 
-    protected final Map<String, RoomAdapter> roomAdapters = new HashMap<>();
-
     protected IServiceContext serviceContext;
     protected AreaViewModel areaViewModel;
-    private FragmentActivity activity;
     protected AreaFragmentBase() {
     }
 
@@ -34,18 +31,6 @@ public abstract class AreaFragmentBase extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.activity = getActivity();
-    }
-
-    protected RoomAdapterBuilder initRoom(View root, String roomId, int roomBackgroundResId) {
-        KnownRoom room = serviceContext.getDatamodelService().getDatamodel().getKnownRoom(roomId);
-        return RoomAdapterBuilder.newAdapter(root, serviceContext, areaViewModel, getChildFragmentManager(), room, roomBackgroundResId);
-    }
-
-    protected RoomAdapter buildRoom(RoomAdapterBuilder builder) {
-        RoomAdapter adapter = builder.build();
-        roomAdapters.put(adapter.getRoomModel().getRoom().getId(), adapter);
-        return adapter;
     }
 
 }
