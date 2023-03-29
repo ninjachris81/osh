@@ -3,7 +3,6 @@ package com.osh;
 import androidx.fragment.app.FragmentManager;
 
 import com.osh.databinding.FragmentRoomBBinding;
-import com.osh.databinding.FragmentRoomWzBinding;
 import com.osh.service.IServiceContext;
 import com.osh.ui.area.AreaViewModel;
 import com.osh.ui.area.RoomViewModel;
@@ -26,6 +25,9 @@ public class RoomFragmentB extends RoomFragmentBase<FragmentRoomBBinding> {
     protected void setBindingData() {
         binding.setAreaData(areaViewModel);
         binding.setRoomData(roomViewModel);
-        roomViewModel.initBindingArrays(shutterInfos.size());
+        roomViewModel.initShutters(shutterInfos.size());
+        roomViewModel.initTemperatures(sensorInfos.temperatureIds.size());
+        roomViewModel.initHumidities(sensorInfos.humidityIds.size());
+        roomViewModel.initWindowStates(sensorInfos.windowStateIds.size());
     }
 }

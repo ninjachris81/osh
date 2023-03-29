@@ -6,13 +6,13 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "dm_known_rooms_actors")
 public class KnownRoomActors {
 
-    @DatabaseField
+    @DatabaseField(columnName = "room_id")
     String roomId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "actor_id")
     String actorId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "value_group_id")
     String valueGroupId;
 
     public String getRoomId() {

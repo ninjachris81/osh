@@ -1,6 +1,6 @@
 #include "knowndevice.h"
 
-QLatin1String KnownDevice::PROPERTY_SERVICE_ID = QLatin1String("serviceId");
+QLatin1String KnownDevice::PROPERTY_SERVICE_ID = QLatin1String("service_id");
 QLatin1String KnownDevice::PROPERTY_NAME = QLatin1String("name");
 
 KnownDevice::KnownDevice() : DeviceBase() {

@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-QLatin1String ActorBase::PROPERTY_IS_ASYNC = QLatin1String("isAsync");
+QLatin1String ActorBase::PROPERTY_IS_ASYNC = QLatin1String("is_async");
 QLatin1String ActorBase::PROPERTY_PRIORITY = QLatin1String("priority");
 
 ActorBase::ActorBase() : ValueBase() {

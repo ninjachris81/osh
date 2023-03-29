@@ -193,22 +193,22 @@ void MQTTController::handleCallback(char* topic, byte* payload, unsigned int len
         if (!error) {
           serializeJsonPretty(m_doc, Serial);
           
-          if (m_doc.containsKey(MQTT_SINGLE_VALUE_ATTR)) {
-            if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<int>()) {
+          if (m_doc.containsKey(MQTT_ACTOR_CMD_ATTR)) {
+            if (m_doc[MQTT_ACTOR_CMD_ATTR].is<int>()) {
               LOG_PRINTLN(F("int"));
-              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<int>());
-            } else if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<signed long>()) {
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_ACTOR_CMD_ATTR].as<int>());
+            } else if (m_doc[MQTT_ACTOR_CMD_ATTR].is<signed long>()) {
               LOG_PRINTLN(F("long"));
-              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<signed long>());
-            } else if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<double>()) {
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_ACTOR_CMD_ATTR].as<signed long>());
+            } else if (m_doc[MQTT_ACTOR_CMD_ATTR].is<double>()) {
               LOG_PRINTLN(F("double"));
-              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<double>());
-            } else if (m_doc[MQTT_SINGLE_VALUE_ATTR].is<bool>()) {
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_ACTOR_CMD_ATTR].as<double>());
+            } else if (m_doc[MQTT_ACTOR_CMD_ATTR].is<bool>()) {
               LOG_PRINTLN(F("bool"));
-              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_SINGLE_VALUE_ATTR].as<bool>());
+              m_callbackHandlers[i]->onMsgReceived(myTopic, m_doc[MQTT_ACTOR_CMD_ATTR].as<bool>());
             } else {
               LOG_PRINTLN(F("string"));
-              m_callbackHandlers[i]->onMsgReceived(myTopic, String(m_doc[MQTT_SINGLE_VALUE_ATTR].as<const char*>()));
+              m_callbackHandlers[i]->onMsgReceived(myTopic, String(m_doc[MQTT_ACTOR_CMD_ATTR].as<const char*>()));
             }
           } else {
             LOG_PRINTLN(F("missing value attribute"));

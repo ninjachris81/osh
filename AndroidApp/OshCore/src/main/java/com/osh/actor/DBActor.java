@@ -9,19 +9,19 @@ public class DBActor {
     @DatabaseField(uniqueCombo = true)
     String id;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "class_type")
     String classType;
 
-    @DatabaseField(uniqueCombo = true)
+    @DatabaseField(uniqueCombo = true, columnName = "value_group_id")
     String valueGroupId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "value_type")
     int valueType;
 
-    @DatabaseField
+    @DatabaseField(columnName = "value_timeout")
     int valueTimeout;
 
-    @DatabaseField
+    @DatabaseField(columnName = "is_async")
     boolean isAsync;
 
     @DatabaseField

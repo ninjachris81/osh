@@ -18,13 +18,14 @@ import com.osh.actor.ActorCmds;
 import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
 import com.osh.actor.ToggleActor;
-import com.osh.databinding.FragmentRoomBinding;
 import com.osh.service.IServiceContext;
 import com.osh.ui.area.AreaViewModel;
 import com.osh.ui.area.RoomViewModel;
 import com.osh.ui.components.ShutterModeButton;
+import com.osh.value.BooleanValue;
 import com.osh.value.DoubleValue;
 import com.osh.value.EnumValue;
+import com.osh.value.ValueBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,17 +64,9 @@ public abstract class RoomFragmentBase<BINDING_TYPE extends ViewDataBinding> ext
     }
 
     public class SensorInfo {
-        public String temperatureValueGroupId;
-        public String temperatureId;
-        public String humidityValueGroupId;
-        public String humidityId;
-
-        public SensorInfo(String temperatureValueGroupId, String temperatureId, String humidityValueGroupId, String humidityId) {
-            this.temperatureValueGroupId = temperatureValueGroupId;
-            this.temperatureId = temperatureId;
-            this.humidityValueGroupId = humidityValueGroupId;
-            this.humidityId = humidityId;
-        }
+        public final List<String> temperatureIds = new ArrayList<>();
+        public final List<String> humidityIds = new ArrayList<>();
+        public final List<String> windowStateIds = new ArrayList<>();
     }
 
     protected AreaViewModel areaViewModel;
@@ -86,7 +79,7 @@ public abstract class RoomFragmentBase<BINDING_TYPE extends ViewDataBinding> ext
 
     private List<LightInfo> lightInfos = new ArrayList<>();
 
-    private List<SensorInfo> sensorInfos = new ArrayList<>();
+    protected final SensorInfo sensorInfos = new SensorInfo();
 
     protected RoomViewModel roomViewModel;
     private View roomBackground;
@@ -139,9 +132,18 @@ public abstract class RoomFragmentBase<BINDING_TYPE extends ViewDataBinding> ext
             bindShutter(shutterInfos.get(i), shutterModeButtons.get(i), i);
         }
 
-        for (SensorInfo sensorInfo : sensorInfos) {
-            bindSensor(sensorInfo);
+        for (int i = 0;i<sensorInfos.temperatureIds.size();i++) {
+            bindTemperatureSensor(sensorInfos.temperatureIds.get(i), i);
         }
+
+        for (int i = 0;i<sensorInfos.humidityIds.size();i++) {
+            bindHumiditySensor(sensorInfos.humidityIds.get(i), i);
+        }
+
+        for (int i = 0;i<sensorInfos.windowStateIds.size();i++) {
+            bindWindowState(sensorInfos.windowStateIds.get(i), i);
+        }
+
 
         return binding.getRoot();
     }
@@ -152,26 +154,52 @@ public abstract class RoomFragmentBase<BINDING_TYPE extends ViewDataBinding> ext
         return this;
     }
 
-    public RoomFragmentBase withSensor(String temperatureValueGroupId, String temperatureId, String humidityValueGroupId, String humidityId) {
-        sensorInfos.add(new SensorInfo(temperatureValueGroupId, temperatureId, humidityValueGroupId, humidityId));
+    public RoomFragmentBase withTemperature(String valueGroupId, String id) {
+        sensorInfos.temperatureIds.add(ValueBase.getFullId(valueGroupId, id));
         return this;
     }
 
-    protected void bindSensor(SensorInfo sensorInfo) {
-        DoubleValue tempVal = (DoubleValue) serviceContext.getDatamodelService().getDatamodel().getValue(sensorInfo.temperatureId, sensorInfo.temperatureValueGroupId);
+    public RoomFragmentBase withHumidity(String valueGroupId, String id) {
+        sensorInfos.humidityIds.add(ValueBase.getFullId(valueGroupId, id));
+        return this;
+    }
+    public RoomFragmentBase withWindowState(String valueGroupId, String id) {
+        sensorInfos.windowStateIds.add(ValueBase.getFullId(valueGroupId, id));
+        return this;
+    }
+
+    protected void bindTemperatureSensor(String temperatureId, int index) {
+        DoubleValue tempVal = (DoubleValue) serviceContext.getDatamodelService().getDatamodel().getValue(temperatureId);
         if (tempVal != null) {
             tempVal.addItemChangeListener(item -> {
-                roomViewModel.temperature.set(item.getValue(-1.0));
+                roomViewModel.temperatures.get(index).set(item.getValue(-1.0));
             }, true);
+        } else {
+            throw new RuntimeException("Sensor value not found: " +temperatureId);
         }
+    }
 
-        DoubleValue humVal = (DoubleValue) serviceContext.getDatamodelService().getDatamodel().getValue(sensorInfo.humidityId, sensorInfo.humidityValueGroupId);
+    protected  void bindHumiditySensor(String humidityId, int index) {
+        DoubleValue humVal = (DoubleValue) serviceContext.getDatamodelService().getDatamodel().getValue(humidityId);
         if (humVal != null) {
             humVal.addItemChangeListener(item -> {
-                roomViewModel.humidity.set(item.getValue(-1.0));
+                roomViewModel.humidities.get(index).set(item.getValue(-1.0));
             }, true);
+        } else {
+            throw new RuntimeException("Sensor value not found: " + humidityId);
         }
+    }
 
+
+    protected void bindWindowState(String windowStateId, int index) {
+        BooleanValue stateVal = (BooleanValue) serviceContext.getValueService().getValue(windowStateId);
+        if (stateVal != null) {
+            stateVal.addItemChangeListener(item -> {
+                roomViewModel.windowStates.get(index).set(item.getValue(false));
+            });
+        } else {
+            throw new RuntimeException("Sensor value not found: " + windowStateId);
+        }
     }
 
     protected void bindLight(LightInfo lightInfo) {

@@ -17,7 +17,7 @@ public class KnownArea {
     @DatabaseField(canBeNull = false)
     private String name;
 
-    @DatabaseField
+    @DatabaseField(columnName = "display_order")
     private int displayOrder;
 
     private Map<String, ActorBase> actors = new HashMap<>();

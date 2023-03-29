@@ -155,7 +155,7 @@ public class DatamodelServiceImpl implements IDatamodelService {
 			if (actor.getClassType().equals("DigitalActor")) {
 				act = datamodel.addDigitalActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), actor.isAsync());
 			} else if (actor.getClassType().equals("ShutterActor")) {
-				List<DBShutterActor> matchList = shutterActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroupId", valueGroup.getId()));
+				List<DBShutterActor> matchList = shutterActorDao.queryForFieldValues(Map.of("id", actor.getId(), "value_group_id", valueGroup.getId()));
 				if (matchList.size() == 1) {
 					DBShutterActor shutterActor = matchList.get(0);
 					act = datamodel.addShutterActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), shutterActor.isShutterTiltSupport(), shutterActor.getShutterFullCloseDuration(), shutterActor.getShutterFullTiltDuration());
@@ -167,7 +167,7 @@ public class DatamodelServiceImpl implements IDatamodelService {
 			} else if (actor.getClassType().equals("ValueActor")) {
 				act = datamodel.addValueActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
 			} else if (actor.getClassType().equals("AudioPlaybackActor")) {
-				List<DBAudioActor> matchList = audioActorDao.queryForFieldValues(Map.of("id", actor.getId(), "valueGroupId", valueGroup.getId()));
+				List<DBAudioActor> matchList = audioActorDao.queryForFieldValues(Map.of("id", actor.getId(), "value_group_id", valueGroup.getId()));
 				if (matchList.size() == 1) {
 					DBAudioActor audioActor = matchList.get(0);
 					act = datamodel.addAudioPlaybackActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()), audioActor.getAudioDeviceIds(), audioActor.getAudioActivationRelayId(), audioActor.getAudioVolume(), audioActor.getAudioVolumeId(), audioActor.getAudioUrl(), audioActor.getAudioUrlId());

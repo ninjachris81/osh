@@ -17,7 +17,7 @@ public class KnownRoom {
     @DatabaseField(canBeNull = false)
 	private String name;
 
-	@DatabaseField(canBeNull = false, columnName = "knownAreaId")
+	@DatabaseField(canBeNull = false, columnName = "known_area_id")
 	private String knownAreaId;
 	private KnownArea knownArea;
 

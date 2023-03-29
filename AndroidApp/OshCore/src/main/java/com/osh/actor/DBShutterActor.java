@@ -9,16 +9,16 @@ public class DBShutterActor {
     @DatabaseField(uniqueCombo = true)
     String id;
 
-    @DatabaseField(uniqueCombo = true)
+    @DatabaseField(uniqueCombo = true, columnName = "value_group_id")
     String valueGroupId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "shutter_tilt_support")
     boolean shutterTiltSupport;
 
-    @DatabaseField
+    @DatabaseField(columnName = "shutter_full_close_duration")
     long shutterFullCloseDuration;
 
-    @DatabaseField
+    @DatabaseField(columnName = "shutter_full_tilt_duration")
     long shutterFullTiltDuration;
 
     public String getId() {

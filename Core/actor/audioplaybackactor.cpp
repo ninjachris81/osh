@@ -2,12 +2,12 @@
 
 #include "helpers.h"
 
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS = QLatin1String("audioDeviceIds");
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID = QLatin1String("audioActivationRelayId");
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME = QLatin1String("audioVolume");
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID = QLatin1String("audioVolumeId");
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL = QLatin1String("audioUrl");
-QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL_ID = QLatin1String("audioUrlId");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS = QLatin1String("audio_device_ids");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID = QLatin1String("audio_activation_relay_id");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME = QLatin1String("audio_volume");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID = QLatin1String("audio_volume_id");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL = QLatin1String("audio_url");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL_ID = QLatin1String("audio_url_id");
 
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }

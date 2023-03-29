@@ -13,13 +13,20 @@ import java.sql.Blob;
 public class AudioPlaybackSource {
 
     @DatabaseField(id = true)
-    private String name;
+    private String id;
 
     @DatabaseField(canBeNull = false)
+    private String name;
+
+    @DatabaseField(canBeNull = false, columnName = "source_url")
     private String sourceUrl;
 
-    @DatabaseField(dataType = DataType.BYTE_ARRAY)
+    @DatabaseField(dataType = DataType.BYTE_ARRAY, columnName = "image_icon")
     private byte[] imageIcon;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;

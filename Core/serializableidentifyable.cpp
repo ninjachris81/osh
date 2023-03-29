@@ -1,8 +1,8 @@
 #include "serializableidentifyable.h"
 
 QLatin1String SerializableIdentifyable::PROPERTY_ID = QLatin1String("id");
-QLatin1String SerializableIdentifyable::PROPERTY_CLASSTYPE = QLatin1String("classType");
-QLatin1String SerializableIdentifyable::PROPERTY_VALUE_GROUP_ID = QLatin1String("valueGroupId");
+QLatin1String SerializableIdentifyable::PROPERTY_CLASSTYPE = QLatin1String("class_type");
+QLatin1String SerializableIdentifyable::PROPERTY_VALUE_GROUP_ID = QLatin1String("value_group_id");
 
 SerializableIdentifyable::SerializableIdentifyable(QString id) : Identifyable(id)
 {

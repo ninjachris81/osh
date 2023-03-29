@@ -11,6 +11,10 @@ SUBDIRS += \
     CoreServiceSimulator \
     CoreSimulation \
     CoreUI \
+    DoorAudioController \
+    DoorAudioService \
+    DoorInputController \
+    DoorInputService \
     DoorUnlockController \
     DoorUnlockService \
     HomeConnectController \
@@ -56,6 +60,12 @@ RS485RelayService.depends = Core RS485RelayController QMqttCommunicationManager
 
 WBB12Controller.depends = Core CoreSerial
 WBB12Service.depends = Core WBB12Controller QMqttCommunicationManager
+
+DoorAudioController.depends = Core
+DoorAudioService.depends = Core DoorAudioController QMqttCommunicationManager
+
+DoorInputController.depends = Core
+DoorInputService.depends = Core DoorInputController QMqttCommunicationManager
 
 DoorUnlockController.depends = Core
 DoorUnlockService.depends = Core DoorUnlockController QMqttCommunicationManager

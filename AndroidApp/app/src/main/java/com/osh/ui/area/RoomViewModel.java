@@ -1,22 +1,12 @@
 package com.osh.ui.area;
 
-import android.database.Observable;
-import android.view.View;
-
-import androidx.concurrent.futures.CallbackToFutureAdapter;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableDouble;
 import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableFloat;
-import androidx.databinding.ObservableInt;
 import androidx.lifecycle.ViewModel;
 
 import com.osh.actor.AudioPlaybackActor;
-import com.osh.actor.DigitalActor;
-import com.osh.actor.ShutterActor;
 import com.osh.datamodel.meta.KnownRoom;
-import com.osh.ui.components.ShutterModeButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,9 +30,10 @@ public class RoomViewModel extends ViewModel implements Serializable {
     public final List<ObservableField<String>> shutterStates = new ArrayList<>();
     public final ObservableField<RoomPosition> roomPosition = new ObservableField<>(RoomPosition.POSITION_TOP);
 
-    public final ObservableDouble temperature = new ObservableDouble(-1);
+    public final List<ObservableDouble> temperatures = new ArrayList<>();
 
-    public final ObservableDouble humidity = new ObservableDouble(-1);
+    public final List<ObservableDouble> humidities = new ArrayList<>();
+    public final List<ObservableBoolean> windowStates = new ArrayList<>();
 
     public RoomViewModel(KnownRoom room) {
         this.room = room;
@@ -53,10 +44,28 @@ public class RoomViewModel extends ViewModel implements Serializable {
         return room;
     }
 
-    public void initBindingArrays(int shutterCount) {
-        for (int i = 0;i<shutterCount;i++) {
+    public void initShutters(int count) {
+        for (int i = 0;i<count;i++) {
             shutterAutoModes.add(new ObservableBoolean(false));
             shutterStates.add(new ObservableField<>(""));
+        }
+    }
+
+    public void initTemperatures(int count) {
+        for (int i = 0;i<count;i++) {
+            temperatures.add(new ObservableDouble(-1f));
+        }
+    }
+
+    public void initHumidities(int count) {
+        for (int i = 0;i<count;i++) {
+            humidities.add(new ObservableDouble(-1f));
+        }
+    }
+
+    public void initWindowStates(int count) {
+        for (int i = 0;i<count;i++) {
+            windowStates.add(new ObservableBoolean(false));
         }
     }
 

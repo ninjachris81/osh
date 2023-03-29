@@ -3,13 +3,13 @@
 
 qint64 ProcessorTaskBase::INTERVAL_REALTIME = 0;
 
-QLatin1String ProcessorTaskBase::PROPERTY_GROUP_ID = QLatin1String("groupId");
-QLatin1String ProcessorTaskBase::PROPERTY_TASK_TYPE = QLatin1String("taskType");
-QLatin1String ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE = QLatin1String("taskTriggerType");
-QLatin1String ProcessorTaskBase::PROPERTY_SCRIPT_CODE = QLatin1String("scriptCode");
-QLatin1String ProcessorTaskBase::PROPERTY_RUN_CONDITION = QLatin1String("runCondition");
-QLatin1String ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL =QLatin1String("scheduleInterval");
-QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publishResult");
+QLatin1String ProcessorTaskBase::PROPERTY_GROUP_ID = QLatin1String("group_id");
+QLatin1String ProcessorTaskBase::PROPERTY_TASK_TYPE = QLatin1String("task_type");
+QLatin1String ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE = QLatin1String("task_trigger_type");
+QLatin1String ProcessorTaskBase::PROPERTY_SCRIPT_CODE = QLatin1String("script_code");
+QLatin1String ProcessorTaskBase::PROPERTY_RUN_CONDITION = QLatin1String("run_condition");
+QLatin1String ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL =QLatin1String("schedule_interval");
+QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publish_result");
 QLatin1String ProcessorTaskBase::PROPERTY_ENABLED = QLatin1String("enabled");
 
 ProcessorTaskBase::ProcessorTaskBase() : QObject() {

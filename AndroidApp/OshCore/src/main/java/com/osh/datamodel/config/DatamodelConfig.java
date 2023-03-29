@@ -41,5 +41,5 @@ public class DatamodelConfig {
 	public void setModelName(String modelName) {
 		this.modelName = modelName;
 	}
-	
+
 }

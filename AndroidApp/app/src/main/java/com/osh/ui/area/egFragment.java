@@ -12,11 +12,7 @@ import android.view.ViewGroup;
 import com.osh.R;
 import com.osh.RoomFragment;
 import com.osh.databinding.FragmentEgBinding;
-import com.osh.service.IActorService;
-import com.osh.service.IAudioActorService;
-import com.osh.service.IDatamodelService;
 import com.osh.service.IServiceContext;
-import com.osh.service.IValueService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +61,7 @@ public class egFragment extends AreaFragmentBase {
         String shutterModeValueGroupId = "shutterModes0";
         String tempValueGroupId = "temps";
         String humsValueGroupId = "hums";
+        String windowStateGroupId = "allSwitches0";
 
         getChildFragmentManager().beginTransaction().replace(R.id.roomFEG, new RoomFragment(serviceContext , areaViewModel, "feg", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_TOP)
                 .withLight(relayValueGroupId, "0", toggleValueGroupId, "lightFEG")).commit();
@@ -72,7 +69,9 @@ public class egFragment extends AreaFragmentBase {
         getChildFragmentManager().beginTransaction().replace(R.id.roomAZ, new RoomFragment(serviceContext , areaViewModel, "az", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_BOTTOM)
                 .withLight(relayValueGroupId, "1", toggleValueGroupId, "lightAZ")
                 .withShutter(shutterValueGroupId, "0", shutterModeValueGroupId, "0")
-                .withSensor(tempValueGroupId, "25", humsValueGroupId, "25")).commit();
+                .withTemperature(tempValueGroupId, "25")
+                .withHumidity(humsValueGroupId, "25")
+                .withWindowState(windowStateGroupId, "15")).commit();
 
         getChildFragmentManager().beginTransaction().replace(R.id.roomK, new RoomFragment(serviceContext , areaViewModel, "k", getChildFragmentManager(), RoomViewModel.RoomPosition.POSITION_TOP)
                 .withLight(relayValueGroupId, "2", toggleValueGroupId, "lightK")

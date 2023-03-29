@@ -9,25 +9,25 @@ public class DBAudioActor {
     @DatabaseField(uniqueCombo = true)
     String id;
 
-    @DatabaseField(uniqueCombo = true)
+    @DatabaseField(uniqueCombo = true, columnName = "value_group_id")
     String valueGroupId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "audio_device_ids")
     String audioDeviceIds;
 
-    @DatabaseField
+    @DatabaseField(columnName = "audio_activation_relay_id")
     String audioActivationRelayId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "audio_volume")
     float audioVolume;
 
-    @DatabaseField
+    @DatabaseField(columnName = "audio_volume_id")
     String audioVolumeId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "audio_url")
     String audioUrl;
 
-    @DatabaseField
+    @DatabaseField(columnName = "audio_url_id")
     String audioUrlId;
 
     public String getId() {
