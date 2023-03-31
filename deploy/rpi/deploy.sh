@@ -164,7 +164,7 @@ case "$1" in
       buildOSHLib "Core"
       buildOSHLib "PJSIPSupport"
       buildOSHLib "DoorAudioController"
-      buildOSHLib "DoorAudioService"
+      buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
    *			)
