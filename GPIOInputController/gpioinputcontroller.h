@@ -1,20 +1,20 @@
-#ifndef MCP23017INPUTCONTROLLER_H
-#define MCP23017INPUTCONTROLLER_H
+#ifndef GPIOINPUTCONTROLLER_H
+#define GPIOINPUTCONTROLLER_H
 
 #include <QObject>
 
 #include "sharedlib.h"
 
 #include "controller/digitalinputcontrollerbase.h"
-#include "mcp23017reader.h"
+#include "gpioreader.h"
 
 #define MCP23017_INPUT_COUNT 16
 
-class SHARED_LIB_EXPORT MCP23017InputController : public DigitalInputControllerBase
+class SHARED_LIB_EXPORT GPIOInputController : public DigitalInputControllerBase
 {
 Q_OBJECT
 public:
-    MCP23017InputController(ControllerManager* manager, QString id, QObject *parent = nullptr);
+    GPIOInputController(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
     /*virtual*/ void init() override;
 
@@ -26,11 +26,11 @@ private slots:
     void onStateChanged(quint8 index, bool state);
 
 private:
-    MCP23017Reader m_reader;
+    GPIOReader m_reader;
 
 private slots:
     void onError(QString desc);
 
 };
 
-#endif // MCP23017INPUTCONTROLLER_H
+#endif // GPIOINPUTCONTROLLER_H

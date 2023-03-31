@@ -13,20 +13,19 @@ SUBDIRS += \
     CoreUI \
     DoorAudioController \
     DoorAudioService \
-    DoorInputController \
-    DoorInputService \
     DoorUnlockController \
     DoorUnlockService \
     HomeConnectController \
     HomeConnectService \
     KMTronicRelayController \
     KMTronicRelayService \
-    MCP23017InputController \
-    MCP23017InputService \
+    GPIOInputController \
+    GPIOInputService \
     OBISController \
     OBISService \
     OnvifController \
     OnvifService \
+    PJSIPSupport \
     QMqttCommunicationManager \
     RS485EnergyMeterController \
     RS485EnergyMeterService \
@@ -49,8 +48,8 @@ QMqttCommunicationManager.depends = qtmqtt Core
 KMTronicRelayController.depends = Core CoreSerial
 KMTronicRelayService.depends = Core CoreSerial KMTronicRelayController QMqttCommunicationManager
 
-MCP23017InputController.depends = Core
-MCP23017InputService.depends = Core MCP23017InputController QMqttCommunicationManager
+GPIOInputController.depends = Core
+GPIOInputService.depends = Core GPIOInputController QMqttCommunicationManager
 
 AudioController.depends = Core
 AudioService.depends = Core AudioController QMqttCommunicationManager
@@ -61,8 +60,8 @@ RS485RelayService.depends = Core RS485RelayController QMqttCommunicationManager
 WBB12Controller.depends = Core CoreSerial
 WBB12Service.depends = Core WBB12Controller QMqttCommunicationManager
 
-DoorAudioController.depends = Core
-DoorAudioService.depends = Core DoorAudioController QMqttCommunicationManager
+DoorAudioController.depends = Core PJSIPSupport
+DoorAudioService.depends = Core DoorAudioController PJSIPSupport QMqttCommunicationManager
 
 DoorInputController.depends = Core
 DoorInputService.depends = Core DoorInputController QMqttCommunicationManager

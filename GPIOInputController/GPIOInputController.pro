@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = MCP23017InputController
+TARGET = GPIOInputController
 TEMPLATE = lib
 #CONFIG += staticlib
 
@@ -24,12 +24,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        mcp23017inputcontroller.cpp \
-        mcp23017reader.cpp
+        gpioinputcontroller.cpp \
+        gpioreader.cpp
 
 HEADERS += \
-        mcp23017inputcontroller.h \
-        mcp23017reader.h
+        gpioinputcontroller.h \
+        gpioreader.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

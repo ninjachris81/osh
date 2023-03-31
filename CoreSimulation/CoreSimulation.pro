@@ -38,7 +38,6 @@ HEADERS += \
         controller/audiocontrollersimulator.h \
         controller/digitalinputcontrollersimulator.h \
         controller/relaycontrollersimulator.h \
-        sharedlib.h \
         simulation/simulator.h \
         time/client/clientsystemtimemanagersimulator.h \
         time/server/systemtimemanagersimulator.h

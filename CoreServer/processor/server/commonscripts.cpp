@@ -11,6 +11,7 @@ QLatin1String CommonScripts::INTERVAL_ON_DURATIONS = QLatin1String("interval_on_
 QLatin1String CommonScripts::INTERVAL_LAST_CHANGES = QLatin1String("interval_lastChanges_");
 QLatin1String CommonScripts::INTERVAL_STATES = QLatin1String("interval_states_");
 
+QLatin1String CommonScripts::TIMOUT_LAST_TS = QLatin1String("last_ts_");
 
 CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
 {
@@ -55,9 +56,9 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
         QVariant actualValue = lightActor->rawValue();
         QVariant expectedValue;
 
-        QString lastTsMotionSensorKey = "lastTs_" + motionSensorFullId;
+        //QString lastTsMotionSensorKey = "lastTs_" + motionSensorFullId;
         QString graceMotionSensorKey = "grace_" + motionSensorFullId;
-        QString lastTsInputKey = "lastTs_" + inputSensorFullId;
+        //QString lastTsInputKey = "lastTs_" + inputSensorFullId;
         QString lastValueInputKey = "lastValue_" + inputSensorFullId;
 
         QString triggerReason;
@@ -81,24 +82,24 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
             expectedValue = false;
 
             triggerReason = "Input trigger";
-            m_localStorage->set(lastTsMotionSensorKey, 0);
-            m_localStorage->set(lastTsInputKey, 0);
+            clearTimeout(motionSensorFullId);
+            clearTimeout(inputSensorFullId);
             m_localStorage->set(graceMotionSensorKey, QDateTime::currentMSecsSinceEpoch());
         } else {
             // update last values
             if (brightnessSensor->isValid() && brightnessSensor->rawValue().toInt() < brightnessThreshold) {
                 if (motionSensor->isValid() && motionSensor->rawValue().toBool() && (QDateTime::currentMSecsSinceEpoch() - m_localStorage->get(graceMotionSensorKey, 0).toULongLong() > motionSensorGracePeriodMs)) {
-                    m_localStorage->set(lastTsMotionSensorKey, QDateTime::currentMSecsSinceEpoch());
+                    setTimeout(motionSensorFullId);
                     triggerReason = "Motion sensor";
                 }
             }
 
             if (inputSensor->isValid() && inputTriggered) {
-                m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+                setTimeout(inputSensorFullId);
                 triggerReason = "Input trigger";
             }
 
-            quint64 lastContact = qMax(m_localStorage->get(lastTsMotionSensorKey, 0).toULongLong(), m_localStorage->get(lastTsInputKey, 0).toULongLong());
+            quint64 lastContact = qMax(getTimeout(motionSensorFullId), getTimeout(inputSensorFullId));
 
             iDebug() << "Last contact" << lastContact;
 
@@ -147,6 +148,8 @@ bool CommonScripts::initSwitchLogic(QString lightRelayActorFullIds, QString inpu
 }
 
 void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
+    iDebug() << Q_FUNC_INFO;
+
     BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
     ToggleActor* toggleActor = static_cast<ToggleActor*>(m_localStorage->getObject("switch_toggle_actor_" + inputSensor->fullId()));
 
@@ -170,12 +173,14 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
             break;
         }
 
-        QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
+        //QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
 
         if (toggleActor->rawValue().toBool()) {
-            m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+            setTimeout(toggleActor->fullId());
+            //m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
         } else {
-            m_localStorage->unset(lastTsInputKey);
+            clearTimeout(toggleActor->fullId());
+            //m_localStorage->unset(lastTsInputKey);
         }
 
         publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
@@ -187,12 +192,10 @@ bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 t
     QString lastTsInputKey = "lastToggleTs_" + toggleActorFullId;
 
     // check for timeout
-    quint64 lastOn = m_localStorage->get(lastTsInputKey, 0).toULongLong();
-    if (lastOn > 0 && QDateTime::currentMSecsSinceEpoch() - lastOn > triggerTimeoutMs) {
+    if (isTimeout(toggleActorFullId, triggerTimeoutMs, true)) {
         ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
 
         if (toggleActor->rawValue().toBool()) {
-            m_localStorage->unset(lastTsInputKey);
             publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "Timeout");
         } else {
             // hmm, already off
@@ -324,6 +327,40 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterMode
     return true;
 }
 
+bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRingActorFullId) {
+    BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->value(inputSensorFullId));
+    DigitalActor* ringActor = static_cast<DigitalActor*>(m_datamodel->actor(doorRingActorFullId));
+
+    Q_ASSERT(inputSensor != nullptr);
+    Q_ASSERT(ringActor != nullptr);
+
+    m_localStorage->setObject("door_ring_actor_" + inputSensorFullId, ringActor);
+    Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::initDoorRingLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(initDoorRingLogic_inputSensorValueChanged()));
+
+    return true;
+}
+
+void CommonScripts::initDoorRingLogic_inputSensorValueChanged() {
+    iDebug() << Q_FUNC_INFO;
+    BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
+    DigitalActor* ringActor = static_cast<DigitalActor*>(m_localStorage->getObject("door_ring_actor_" + inputSensor->fullId()));
+
+    QString lastInputValKey = "lastVal_" + inputSensor->fullId();
+    bool lastInputVal = m_localStorage->get(lastInputValKey, false).toBool();
+    if (lastInputVal != inputSensor->rawValue().toBool()) {     // on toggle true
+        setTimeout(ringActor->fullId());
+
+        if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
+            publishCmd(ringActor, actor::ACTOR_CMD_ON, true, "input sensor");
+        }
+    }
+
+}
+
+bool CommonScripts::applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint64 triggerTimeoutMs) {
+    return isTimeout(doorRingActorFullId, triggerTimeoutMs, true);
+}
+
 /*
 void CommonScripts::publishValue(QString fullId, QVariant value) {
     ValueBase* val = m_datamodel->values().value(fullId);
@@ -358,6 +395,33 @@ void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant
     iDebug() << actor->fullId() << cmd << value << reason;
     //actor->triggerCmd(cmd, reason);
     m_actorManager->publishCmd(actor, cmd, value);
+}
+
+void CommonScripts::setTimeout(QString key) {
+    QString timeoutKey = TIMOUT_LAST_TS + key;
+    m_localStorage->set(timeoutKey, QDateTime::currentMSecsSinceEpoch());
+}
+
+bool CommonScripts::isTimeout(QString key, quint64 timeoutMs, bool clearTimeoutIfTrue) {
+    QString timeoutKey = TIMOUT_LAST_TS + key;
+    quint64 lastOn = m_localStorage->get(timeoutKey, 0).toULongLong();
+    bool isTo = (lastOn > 0 && QDateTime::currentMSecsSinceEpoch() - lastOn > timeoutMs);
+
+    if (isTo && clearTimeoutIfTrue) {
+        clearTimeout(key);
+    }
+
+    return isTo;
+}
+
+quint64 CommonScripts::getTimeout(QString key) {
+    QString timeoutKey = TIMOUT_LAST_TS + key;
+    return m_localStorage->get(timeoutKey, 0).toULongLong();
+}
+
+void CommonScripts::clearTimeout(QString key) {
+    QString timeoutKey = TIMOUT_LAST_TS + key;
+    m_localStorage->unset(timeoutKey);
 }
 
 void CommonScripts::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {

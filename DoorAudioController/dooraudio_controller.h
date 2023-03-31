@@ -13,7 +13,7 @@
 #include "actor/dooractor.h"
 #include "actor/digitalactor.h"
 
-#define UNLOCK_ENABLE_DURATION_MS 2000
+#include "oshaccount.h"
 
 class SHARED_LIB_EXPORT DoorAudioController : public ControllerBase
 {
@@ -27,18 +27,18 @@ public:
 
     /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
-    void bindDoorActor(DoorActor* door, DigitalActor* relay);
+    void bindDoorRingActor(DigitalActor *doorRingActor);
 
 protected slots:
-    void onUnlockDoor(QString doorId);
+    void onRingTriggered(actor::ACTOR_CMDS cmd);
 
 private:
-    DoorUnlockManager* m_doorUnlockManager;
+    OshAccount *m_account;
+    QString m_sipRingId;
+
+    DigitalActor *m_doorRingActor;
     ClientSystemWarningsManager* m_warnManager;
     ActorManager* m_actorManager;
-
-    DoorActor* m_door;
-    DigitalActor* m_relay;
 
 
 signals:

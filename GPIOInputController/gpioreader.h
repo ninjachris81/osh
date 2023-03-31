@@ -1,5 +1,5 @@
-#ifndef MCP23017READER_H
-#define MCP23017READER_H
+#ifndef GPIOREADER_H
+#define GPIOREADER_H
 
 #include <QObject>
 #include <QThread>
@@ -12,11 +12,11 @@
 #include <mcp23017.h>
 #endif
 
-class SHARED_LIB_EXPORT MCP23017Reader : public QThread
+class SHARED_LIB_EXPORT GPIOReader : public QThread
 {
     Q_OBJECT
 public:
-    explicit MCP23017Reader(QObject *parent = nullptr);
+    explicit GPIOReader(QObject *parent = nullptr);
 
     void init(quint8 inputCount, int addr, int pinBase = 64);
 
@@ -41,4 +41,4 @@ signals:
 public slots:
 };
 
-#endif // MCP23017READER_H
+#endif // GPIOREADER_H

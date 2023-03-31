@@ -2,7 +2,7 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "mcp23017inputcontroller.h"
+#include "gpioinputcontroller.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    MCP23017InputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
+    GPIOInputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
     controllerManager.registerController(&inputController);
     managerRegistration.init(&config);
 

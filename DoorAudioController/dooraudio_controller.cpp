@@ -9,7 +9,8 @@
 
 #include "helpers.h"
 
-DoorAudioController::DoorAudioController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
+DoorAudioController::DoorAudioController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent)
+{
 }
 
 void DoorAudioController::init() {
@@ -18,39 +19,38 @@ void DoorAudioController::init() {
     REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
-    REQUIRE_MANAGER_X(m_manager, DoorUnlockManager);
-    m_doorUnlockManager = m_manager->getManager<DoorUnlockManager>(DoorUnlockManager::MANAGER_ID);
-
     REQUIRE_MANAGER_X(m_manager, ActorManager);
     m_actorManager = m_manager->getManager<ActorManager>(ActorManager::MANAGER_ID);
 
-    Helpers::safeConnect(m_doorUnlockManager, &DoorUnlockManager::unlockDoor, this, &DoorAudioController::onUnlockDoor, SIGNAL(unlockDoor(QString)), SLOT(onUnlockDoor(QString)));
+    QString registrarIp = m_config->getString(this, "sipRegistrarIp", "localhost");
+    QString sipId = m_config->getString(this, "sipId", "5001");
+    QString sipPassword = m_config->getString(this, "sipPassword", "test123");
+    m_sipRingId = m_config->getString(this, "sipRingId", "6000");
+
+    m_account = new OshAccount(registrarIp, sipId, sipPassword);
 }
 
 void DoorAudioController::start() {
     iDebug() << Q_FUNC_INFO;
+
+    Helpers::safeConnect(m_doorRingActor, &DigitalActor::cmdTriggered, this, &DoorAudioController::onRingTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onRingTriggered(actor::ACTOR_CMDS)));
 }
 
 void DoorAudioController::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-void DoorAudioController::bindDoorActor(DoorActor* door, DigitalActor* relay) {
-    iDebug() << Q_FUNC_INFO << door->id() << relay->id();
-    this->m_door = door;
-    this->m_relay = relay;
+void DoorAudioController::bindDoorRingActor(DigitalActor *doorRingActor) {
+    this->m_doorRingActor = doorRingActor;
 }
 
-void DoorAudioController::onUnlockDoor(QString doorId) {
-    iDebug() << Q_FUNC_INFO << doorId;
-
-    if (this->m_door->id() == doorId) {
-        iDebug() << "Unlock door" << doorId;
-        m_actorManager->publishCmd(m_relay, actor::ACTOR_CMD_ON);
-
-        QTimer::singleShot(UNLOCK_ENABLE_DURATION_MS, this, [this] () {
-            m_actorManager->publishCmd(m_relay, actor::ACTOR_CMD_OFF);
-            iDebug() << "Unlock door finished" << m_door->id();
-        });
+void DoorAudioController::onRingTriggered(actor::ACTOR_CMDS cmd) {
+    switch(cmd) {
+    case actor::ACTOR_CMD_ON:
+        m_account->startCall(m_sipRingId);
+        break;
+    case actor::ACTOR_CMD_OFF:
+        m_account->cancelCall();
+        break;
     }
 }

@@ -1,17 +1,17 @@
-#include "mcp23017reader.h"
+#include "gpioreader.h"
 
-MCP23017Reader::MCP23017Reader(QObject *parent) : QThread(parent)
+GPIOReader::GPIOReader(QObject *parent) : QThread(parent)
 {
 
 }
 
-void MCP23017Reader::init(quint8 inputCount, int addr, int pinBase) {
+void GPIOReader::init(quint8 inputCount, int addr, int pinBase) {
     m_inputCount = inputCount;
     m_pinBase = pinBase;
     m_addr = addr;
 }
 
-void MCP23017Reader::run() {
+void GPIOReader::run() {
     if (open()) {
         readStates();
         close();
@@ -20,7 +20,7 @@ void MCP23017Reader::run() {
     }
 }
 
-bool MCP23017Reader::open() {
+bool GPIOReader::open() {
 #ifdef __linux__
     wiringPiSetup();
     mcp23017Setup(m_pinBase, m_addr);
@@ -39,7 +39,7 @@ bool MCP23017Reader::open() {
     return true;
 }
 
-void MCP23017Reader::readStates() {
+void GPIOReader::readStates() {
     while(true) {
         for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
@@ -60,5 +60,5 @@ void MCP23017Reader::readStates() {
     }
 }
 
-void MCP23017Reader::close() {
+void GPIOReader::close() {
 }

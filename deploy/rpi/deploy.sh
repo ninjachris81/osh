@@ -93,12 +93,12 @@ case "$1" in
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
-   MCP23017InputService )
+   GPIOInputService )
       BUILD_TARGET=$1
       printInfos
       buildQtMqtt
       buildOSHLib "Core"
-      buildOSHLib "MCP23017InputController"
+      buildOSHLib "GPIOInputController"
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
@@ -148,6 +148,16 @@ case "$1" in
       buildOSHLib "CoreSerial"
       buildOSHLib "RS485EnergyMeterController"
       buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
+   DoorAudioService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "PJSIPSupport"
+      buildOSHLib "DoorAudioController"
+      buildOSHLib "DoorAudioService"
       buildOSHTarget $BUILD_TARGET
       ;;
    *			)
