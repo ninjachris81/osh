@@ -45,6 +45,14 @@ else:unix: LIBS += -L$$OUT_PWD/../DoorAudioController/ -lDoorAudioController
 INCLUDEPATH += $$PWD/../DoorAudioController
 DEPENDPATH += $$PWD/../DoorAudioController
 
+unix:!macx: DEFINES+=PJ_AUTOCONF=1
+unix:!macx: PJ_BASE_DIR = /home/pi/pjproject
+
+win32: DEFINES -= UNICODE
+win32: PJ_BASE_DIR = ../../pjproject
+
+message($${PJ_BASE_DIR})
+
 win32: DEFINES += PJ_USE_STUBS
 
 
