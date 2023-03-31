@@ -16,10 +16,10 @@ void GPIOInputController::init() {
     DigitalInputControllerBase::init();
 
     if (m_config->getInt("inputCount", 0) > 0) {        // can be overwritten by custom input count, if plain: mandatory to set
-        m_inputCount = m_config->getInt("inputCount", 0);
+        m_inputCount = m_config->getInt(this, "inputCount", 0);
     }
 
-    QString gpioType = m_config->getString("gpioType", GPIO_TYPE_PLAIN);
+    QString gpioType = m_config->getString(this, "gpioType", GPIO_TYPE_PLAIN);
     if (gpioType == GPIO_TYPE_PLAIN) {
         QString pins = m_config->getString(this, "pins", "");       // e.g. "3 21 33"
         QList<int> pinList;
