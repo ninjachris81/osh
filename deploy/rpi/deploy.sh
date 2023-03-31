@@ -10,6 +10,12 @@ function buildQtMqtt {
    make install
 }
 
+function buildWiringPi {
+   echo "Building WiringPi in $PWD"
+   cd $OSH_ROOT/WiringPi
+   ./build
+}
+
 function buildOSHLib {
     cd $OSH_ROOT/$1
     echo "Building lib in $PWD"
@@ -97,6 +103,7 @@ case "$1" in
       BUILD_TARGET=$1
       printInfos
       buildQtMqtt
+	  buildWiringPi
       buildOSHLib "Core"
       buildOSHLib "GPIOInputController"
       buildOSHLib "QMqttCommunicationManager"
