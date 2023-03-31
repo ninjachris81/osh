@@ -14,6 +14,7 @@
 #include "actor/digitalactor.h"
 
 #include "oshaccount.h"
+#include "oshendpoint.h"
 
 class SHARED_LIB_EXPORT DoorAudioController : public ControllerBase
 {
@@ -33,6 +34,7 @@ protected slots:
     void onRingTriggered(actor::ACTOR_CMDS cmd);
 
 private:
+    OshEndpoint m_endpoint;
     OshAccount *m_account;
     QString m_sipRingId;
 

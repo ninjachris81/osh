@@ -1,6 +1,8 @@
 #ifndef PJSTUBS_H
 #define PJSTUBS_H
 
+#include <QDebug>
+
 #include <string>
 #include <vector>
 
@@ -160,7 +162,9 @@ struct AccountConfig {
 class Account {
 public:
     void create(const AccountConfig &,
-                bool make_default=false) {}
+                bool make_default=false) {
+        qWarning() << "USING STUB";
+    }
 
 };
 
@@ -197,10 +201,106 @@ public:
     AudioMedia &getPlaybackDevMedia() {}
 };
 
+typedef enum pjsip_transport_type_e
+{
+    /** Unspecified. */
+    PJSIP_TRANSPORT_UNSPECIFIED,
+
+    /** UDP. */
+    PJSIP_TRANSPORT_UDP,
+
+    /** TCP. */
+    PJSIP_TRANSPORT_TCP,
+
+    /** TLS. */
+    PJSIP_TRANSPORT_TLS,
+
+    /** DTLS, not implemented yet. */
+    PJSIP_TRANSPORT_DTLS,
+
+    /** SCTP, not implemented yet. */
+    PJSIP_TRANSPORT_SCTP,
+
+    /** Loopback (stream, reliable) */
+    PJSIP_TRANSPORT_LOOP,
+
+    /** Loopback (datagram, unreliable) */
+    PJSIP_TRANSPORT_LOOP_DGRAM,
+
+    /** Start of user defined transport */
+    PJSIP_TRANSPORT_START_OTHER,
+
+    /** Start of IPv6 transports */
+    PJSIP_TRANSPORT_IPV6    = 128,
+
+    /** UDP over IPv6 */
+    PJSIP_TRANSPORT_UDP6 = PJSIP_TRANSPORT_UDP + PJSIP_TRANSPORT_IPV6,
+
+    /** TCP over IPv6 */
+    PJSIP_TRANSPORT_TCP6 = PJSIP_TRANSPORT_TCP + PJSIP_TRANSPORT_IPV6,
+
+    /** TLS over IPv6 */
+    PJSIP_TRANSPORT_TLS6 = PJSIP_TRANSPORT_TLS + PJSIP_TRANSPORT_IPV6,
+
+    /** DTLS over IPv6, not implemented yet */
+    PJSIP_TRANSPORT_DTLS6 = PJSIP_TRANSPORT_DTLS + PJSIP_TRANSPORT_IPV6
+
+};
+
+struct EpConfig {
+
+};
+
+struct TransportConfig {
+    int port;
+};
+
 class Endpoint {
 public:
+    Endpoint() {}
     static Endpoint &instance() {}
     AudDevManager &audDevManager() {}
+    void libCreate() { qWarning() << "Just a stub endpoint"; }
+    void libInit(EpConfig&) {}
+    void transportCreate(pjsip_transport_type_e, const TransportConfig &) {}
+    void libStart() {}
+};
+
+typedef int             pj_status_t;
+
+struct Error
+{
+    /** The error code. */
+    pj_status_t status;
+
+    /** The PJSUA API operation that throws the error. */
+    string      title;
+
+    /** The error message */
+    string      reason;
+
+    /** The PJSUA source file that throws the error */
+    string      srcFile;
+
+    /** The line number of PJSUA source file that throws the error */
+    int         srcLine;
+
+    /** Build error string. */
+    string      info(bool multi_line=false) const;
+
+    /** Default constructor */
+    Error();
+
+    /**
+     * Construct an Error instance from the specified parameters. If
+     * \a prm_reason is empty, it will be filled with the error description
+     *  for the status code.
+     */
+    Error(pj_status_t prm_status,
+          const string &prm_title,
+          const string &prm_reason,
+          const string &prm_src_file,
+          int prm_src_line);
 };
 
 

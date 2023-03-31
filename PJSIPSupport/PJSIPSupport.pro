@@ -18,11 +18,13 @@ DEFINES += MAKE_SHARED_LIB
 HEADERS += \
     oshaccount.h \
     oshcall.h \
+    oshendpoint.h \
     pjstubs.h
 
 SOURCES += \
     oshaccount.cpp \
-    oshcall.cpp
+    oshcall.cpp \
+    oshendpoint.cpp
 
 
 
@@ -43,10 +45,9 @@ unix:!macx: PJ_BASE_DIR = /home/pi/pjproject
 
 win32: DEFINES -= UNICODE
 win32: PJ_BASE_DIR = ../../pjproject
+win32: DEFINES += PJ_USE_STUBS
 
 message($${PJ_BASE_DIR})
-
-win32: DEFINES += PJ_USE_STUBS
 
 unix:!macx {
     LIBS += -L$${PJ_BASE_DIR}/pjsip/lib/ -lpjsip

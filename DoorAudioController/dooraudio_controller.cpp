@@ -16,6 +16,8 @@ DoorAudioController::DoorAudioController(ControllerManager *manager, QString id,
 void DoorAudioController::init() {
     iDebug() << Q_FUNC_INFO;
 
+    m_endpoint.init();
+
     REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
