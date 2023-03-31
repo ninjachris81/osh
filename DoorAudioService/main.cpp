@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    DigitalActor* doorRingActor = static_cast<DigitalActor*>(datamodelManager.datamodel()->actor(config.getString(&doorAudioController, "doorRingActorId", "ring0")));
+    DigitalActor* doorRingActor = static_cast<DigitalActor*>(datamodelManager.datamodel()->actor(config.getString(&doorAudioController, "doorRingActorId", "frontDoor.ring")));
     Q_ASSERT(doorRingActor != nullptr);
 
     doorAudioController.bindDoorRingActor(doorRingActor);

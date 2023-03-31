@@ -13,6 +13,9 @@ OshAccount::OshAccount(QString registrarIp, QString id, QString password, QObjec
     m_credInfo.username = id.toStdString();
     m_credInfo.data = password.toStdString();
     m_accountConfig.sipConfig.authCreds.push_back(m_credInfo);
+
+    qDebug() << "Adding account" << id << "to" << registrarIp;
+
     create(m_accountConfig);
 }
 
