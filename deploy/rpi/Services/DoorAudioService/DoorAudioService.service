@@ -1,0 +1,26 @@
+[Unit]
+Description=OSH Door Audio Service
+## make sure we only start the service after network is up
+Wants=network-online.target
+After=network.target postgresql.service
+
+[Service]
+## use 'Type=forking' if the service backgrounds itself
+## other values are Type=simple (default) and Type=oneshot
+#Type=forking
+Type=simple
+
+WorkingDirectory=/etc/osh/DoorAudioService
+
+#User=root
+
+## here we can set custom environment variables
+ExecStart=/etc/osh/deploy/rpi/Services/DoorAudioService/start.sh
+ExecStop=/etc/osh/deploy/rpi/Services/DoorAudioService/stop.sh
+
+# Useful during debugging; remove it once the service is working
+#StandardOutput=file:/var/log/osh_core_service.log
+#StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
