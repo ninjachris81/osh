@@ -1,17 +1,11 @@
-#include "gpioreader.h"
+#include "plaingpioreader.h"
 
-GPIOReader::GPIOReader(QObject *parent) : QThread(parent)
+PlainGPIOReader::PlainGPIOReader(QList<int> pinList, QObject *parent)
+    : GPIOReaderBase(pinList.count(), parent), m_pinList(pinList)
 {
-
 }
 
-void GPIOReader::init(quint8 inputCount, int addr, int pinBase) {
-    m_inputCount = inputCount;
-    m_pinBase = pinBase;
-    m_addr = addr;
-}
-
-void GPIOReader::run() {
+void PlainGPIOReader::run() {
     if (open()) {
         readStates();
         close();
@@ -20,31 +14,37 @@ void GPIOReader::run() {
     }
 }
 
-bool GPIOReader::open() {
+bool PlainGPIOReader::open() {
 #ifdef __linux__
     wiringPiSetup();
-    mcp23017Setup(m_pinBase, m_addr);
 #endif
 
     m_states = new QBitArray(m_inputCount);
 
     // setup pins
     for (quint8 i=0;i<m_inputCount;i++) {
+        int pin = m_pinList.at(i);
+
 #ifdef __linux__
-        pinMode (m_pinBase + i, INPUT) ;
-        pullUpDnControl ( m_pinBase + i, PUD_UP);
+        pinMode (pin, INPUT) ;
+        pullUpDnControl (pin, PUD_UP);
+#else
+        Q_UNUSED(pin)
 #endif
     }
 
     return true;
 }
 
-void GPIOReader::readStates() {
+void PlainGPIOReader::readStates() {
     while(true) {
         for (quint8 i=0;i<m_inputCount;i++) {
+            int pin = m_pinList.at(i);
+
 #ifdef __linux__
-            bool state = digitalRead(m_pinBase + i) == LOW;
+            bool state = digitalRead(pin) == LOW;
 #else
+            Q_UNUSED(pin)
             bool state = false;
 #endif
 
@@ -60,5 +60,5 @@ void GPIOReader::readStates() {
     }
 }
 
-void GPIOReader::close() {
+void PlainGPIOReader::close() {
 }

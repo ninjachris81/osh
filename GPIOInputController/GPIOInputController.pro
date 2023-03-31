@@ -25,11 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         gpioinputcontroller.cpp \
-        gpioreader.cpp
+        gpioreaderbase.cpp \
+        mcpreader.cpp \
+        plaingpioreader.cpp
 
 HEADERS += \
         gpioinputcontroller.h \
-        gpioreader.h
+        gpioreaderbase.h \
+        mcpreader.h \
+        plaingpioreader.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
