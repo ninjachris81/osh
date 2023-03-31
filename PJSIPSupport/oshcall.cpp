@@ -7,8 +7,21 @@
 OshCall::OshCall(OshAccount &account, int callId, QObject *parent)
     : QObject{parent}, Call(account, callId)
 {
+    m_ringToneGenerator.createToneGenerator();
+
+    ToneDesc t1;
+    t1.freq1 = 440;
+    //t1.freq2 = 480;
+    t1.on_msec = 1500;
+    t1.off_msec = 3000;
+    m_toneVector.push_back(t1);
+    m_ringToneGenerator.play(m_toneVector, true);
+
     m_cap_dev_med = Endpoint::instance().audDevManager().getCaptureDevMedia();
     m_play_dev_med = Endpoint::instance().audDevManager().getPlaybackDevMedia();
+
+    connect(this, &OshCall::startRinging, this, &OshCall::onStartRinging);
+    connect(this, &OshCall::stopRinging, this, &OshCall::onStopRinging);
 }
 
 void OshCall::accept() {
@@ -39,6 +52,27 @@ void OshCall::muteSpeaker() {
 
 void OshCall::onCallState(OnCallStateParam &prm) {
     //qDebug() << Q_FUNC_INFO << prm.e.type;
+
+    CallInfo info = getInfo();
+    pjsip_inv_state callState = info.state;
+    pjsip_status_code statusCode = info.lastStatusCode;
+    pjsip_role_e role = info.role;
+
+    switch(callState)     {
+    case PJSIP_INV_STATE_DISCONNECTED:
+    case PJSIP_INV_STATE_CONFIRMED:
+        Q_EMIT(stopRinging());
+        break;
+    case PJSIP_INV_STATE_EARLY:
+        if (statusCode == PJSIP_SC_RINGING && role == PJSIP_ROLE_UAC) {
+            Q_EMIT(startRinging());
+        } else if (statusCode == PJSIP_SC_PROGRESS) {
+            Q_EMIT(stopRinging());
+        }
+        break;
+    default:
+        break;
+    }
 }
 
 void OshCall::onCallMediaState(OnCallMediaStateParam &prm) {
@@ -58,4 +92,20 @@ void OshCall::onCallMediaState(OnCallMediaStateParam &prm) {
 
     // And this will connect the call audio media to the sound device/speaker
     aud_med.startTransmit(m_play_dev_med);
+}
+
+
+void OshCall::onStartRinging() {
+    qDebug() << Q_FUNC_INFO;
+
+    //m_ringToneGenerator.play(m_toneVector, true);
+    m_ringToneGenerator.startTransmit(m_play_dev_med);
+
+}
+
+void OshCall::onStopRinging() {
+    qDebug() << Q_FUNC_INFO;
+
+    m_ringToneGenerator.stopTransmit(m_play_dev_med);
+    //m_ringToneGenerator.stop();
 }

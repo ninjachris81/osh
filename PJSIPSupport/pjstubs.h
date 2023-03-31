@@ -163,7 +163,7 @@ class Account {
 public:
     void create(const AccountConfig &,
                 bool make_default=false) {
-        qWarning() << "USING STUB";
+        qWarning() << "Just a stub account";
     }
 
 };
@@ -177,7 +177,7 @@ public:
 
 class Call {
 public:
-    Call(Account&, int) {}
+    Call(Account&, int) { qWarning() << "Just a stub call"; }
 
     virtual void onCallState(OnCallStateParam &prm) {}
     virtual void onCallMediaState(OnCallMediaStateParam &prm) {}

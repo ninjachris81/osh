@@ -10,6 +10,7 @@
     #include <pjsua2/siptypes.hpp>
     #include <pjsua2/call.hpp>
     #include <pjsua2/endpoint.hpp>
+    #include <pjmedia.h>
 #endif
 
 
@@ -36,10 +37,18 @@ public:
 
 
 private:
+    ToneGenerator m_ringToneGenerator;
+    ToneDescVector m_toneVector;
+
     AudioMedia m_cap_dev_med;
     AudioMedia m_play_dev_med;
 
+    void onStartRinging();
+    void onStopRinging();
+
 signals:
+    void startRinging();
+    void stopRinging();
 
 };
 
