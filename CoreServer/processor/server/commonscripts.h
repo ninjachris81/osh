@@ -72,7 +72,7 @@ private:
     ValueManagerBase* m_valueManager;
     ActorManager* m_actorManager;
 
-    //void publishValue(ValueBase* val, QVariant value);
+    void publishValue(ValueBase* val, QVariant value);
     void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason);
     void publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason);
 

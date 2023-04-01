@@ -378,12 +378,10 @@ void CommonScripts::publishCmd(QString fullId, int cmd, QVariant value, QString 
     publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), value, reason);
 }
 
-/*
 void CommonScripts::publishValue(ValueBase* val, QVariant value) {
     val->updateValue(value);
     m_valueManager->publishValue(val);
 }
-*/
 
 void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
     iDebug() << actor->fullId() << cmd << reason;
@@ -547,7 +545,7 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
                 QString soundValue = m_localStorage->get("initPlaySoundOnEvent_soundValue_" + value->fullId()).toString();
                 StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("initPlaySoundOnEvent_urlValue_" + value->fullId()));
                 iDebug() << "Setting url" << soundValue;
-                urlValue->updateValue(soundValue);
+                publishValue(urlValue, soundValue);
             }
 
             publishCmd(playbackActor, actor::ACTOR_CMD_START, "event trigger playback");
