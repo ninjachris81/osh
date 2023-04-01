@@ -37,6 +37,8 @@ public:
 
     Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
+    Q_INVOKABLE bool initPlaySoundOnEvent(QString valueEventId, QVariant triggerValue, QString soundActorId, QString soundValue);
+
     static QLatin1String INTERVAL_OFF_DURATIONS;
     static QLatin1String INTERVAL_ON_DURATIONS;
     static QLatin1String INTERVAL_LAST_CHANGES;
@@ -61,7 +63,8 @@ private slots:
     void onInitSwitchLogic_inputSensorValueChanged();
     void onInitSwitchLogic_toggleActorValueChanged();
 
-    void initDoorRingLogic_inputSensorValueChanged();
+    void onInitDoorRingLogic_inputSensorValueChanged();
+    void onInitPlaySoundOnEvent_valueChanged();
 
 private:
     DatamodelBase* m_datamodel;

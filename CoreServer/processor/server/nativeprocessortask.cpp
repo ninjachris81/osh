@@ -15,6 +15,12 @@ NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorT
             m_nativeFunction = NativeProcessorTask::NFT_APPLY_SWITCH_TIMEOUT_LOGIC;
         } else if (scriptCode.startsWith("CommonScripts.applyShutterLogic")) {
             m_nativeFunction = NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC;
+        } else if (scriptCode.startsWith("CommonScripts.initDoorRingLogic")) {
+            m_nativeFunction = NativeProcessorTask::NFT_INIT_DOOR_RING_LOGIC;
+        } else if (scriptCode.startsWith("CommonScripts.applyDoorRingTimeoutLogic")) {
+            m_nativeFunction = NativeProcessorTask::NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC;
+        } else if (scriptCode.startsWith("CommonScripts.initPlaySoundOnEvent")) {
+            m_nativeFunction = NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_EVENT;
         } else {
             qFatal("Unsupported script operation");
         }
@@ -32,7 +38,9 @@ NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorT
             if (str.endsWith("'")) str = str.chopped(1);
 
             QVariant var = QVariant::fromValue(str);
-            var.convert(typeList.at(i));
+            if (typeList.at(i) != QVariant::UserType) {     // UserType = don't convert
+                var.convert(typeList.at(i));
+            }
             addNativeParam(var);
         }
     } else {
@@ -72,7 +80,17 @@ QVariant NativeProcessorTask::run() {
         case NFT_APPLY_SHUTTER_LOGIC:
             m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt());
             break;
+        case NFT_INIT_DOOR_RING_LOGIC:
+            m_lastResult = m_commonScripts->initDoorRingLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
+            break;
+        case NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
+            m_lastResult = m_commonScripts->applyDoorRingTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toLongLong());
+            break;
+        case NFT_INIT_PLAY_SOUND_ON_EVENT:
+            m_lastResult = m_commonScripts->initPlaySoundOnEvent(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
+            break;
         default:
+            iWarning() << "Unhandled script function" << m_nativeFunction;
             break;
         }
 
@@ -121,6 +139,12 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
         return QList<QVariant::Type>() << QVariant::String << QVariant::Int;
     case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::Int;
+    case NativeProcessorTask::NFT_INIT_DOOR_RING_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String;
+    case NativeProcessorTask::NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::LongLong;
+    case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_EVENT:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::String;
     default:
         return QList<QVariant::Type>();
     }

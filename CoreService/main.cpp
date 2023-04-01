@@ -5,6 +5,7 @@
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
 #include "device/server/serverdevicediscoverymanager.h"
+#include "user/usermanager.h"
 #include "value/server/servervaluemanager.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
     ActorManager actorManager;
     DatabaseManager databaseManager;
     SimpleDatabaseManager simpleDatabaseManager;
+    UserManager userManager;
 
     ToggleController toggleController(&controllerManager, "ToggleController");
 
@@ -61,6 +63,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&logManager);
     managerRegistration.registerManager(&databaseManager);
     managerRegistration.registerManager(&simpleDatabaseManager);
+    managerRegistration.registerManager(&userManager);
 
     managerRegistration.init(&config);
 

@@ -335,12 +335,12 @@ bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRin
     Q_ASSERT(ringActor != nullptr);
 
     m_localStorage->setObject("door_ring_actor_" + inputSensorFullId, ringActor);
-    Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::initDoorRingLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(initDoorRingLogic_inputSensorValueChanged()));
+    Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitDoorRingLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitDoorRingLogic_inputSensorValueChanged()));
 
     return true;
 }
 
-void CommonScripts::initDoorRingLogic_inputSensorValueChanged() {
+void CommonScripts::onInitDoorRingLogic_inputSensorValueChanged() {
     iDebug() << Q_FUNC_INFO;
     BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
     DigitalActor* ringActor = static_cast<DigitalActor*>(m_localStorage->getObject("door_ring_actor_" + inputSensor->fullId()));
@@ -489,5 +489,45 @@ bool CommonScripts::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, 
     } else {
         // day limit
         return now > from || now < to;
+    }
+}
+
+bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant triggerValue, QString soundActorId, QString soundValue) {
+    iInfo() << Q_FUNC_INFO;
+    ValueBase *value = m_datamodel->value(valueEventId);
+    if (value == nullptr) {
+        // could be actor or value
+        value = m_datamodel->actor(valueEventId);
+    }
+    AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
+
+    Q_ASSERT(value != nullptr);
+    Q_ASSERT(playbackActor != nullptr);
+
+    m_localStorage->set("initPlaySoundOnEvent_triggerValue_" + value->fullId(), triggerValue);
+    m_localStorage->setObject("initPlaySoundOnEvent_soundActorId_" + value->fullId(), playbackActor);
+    m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
+
+    Helpers::safeConnect(value, &ValueBase::valueChanged, this, &CommonScripts::onInitPlaySoundOnEvent_valueChanged, SIGNAL(valueChanged()), SLOT(onInitPlaySoundOnEvent_valueChanged()));
+
+    return true;
+}
+
+void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
+    iInfo() << Q_FUNC_INFO;
+
+    ValueBase* value = static_cast<ValueBase*>(sender());
+    QVariant triggerValue = m_localStorage->get("initPlaySoundOnEvent_triggerValue_" + value->fullId());
+    if (triggerValue.convert(value->rawValue().type())) {
+        if (value->rawValue() == triggerValue) {
+            iInfo() << "Trigger";
+
+            AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent_soundActorId_" + value->fullId()));
+            QString soundValue = m_localStorage->get("initPlaySoundOnEvent_soundValue_" + value->fullId()).toString();
+
+            publishCmd(playbackActor, actor::ACTOR_CMD_START, soundValue);
+        }
+    } else {
+        iWarning() << "Failed to convert to target type";
     }
 }

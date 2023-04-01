@@ -41,8 +41,10 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
     if (m_actors.contains(actorMessage->fullId())) {
         ActorBase* actor = m_actors.value(actorMessage->fullId());
 
-        if (actorMessage->cmd() == actor::ACTOR_CMD_SET_VALUE) {
-            actor->updateValue(actorMessage->rawValue(), false);
+        if (actorMessage->cmd() != actor::ACTOR_CMD_SET_VALUE) {        // value will be updated in actor explicitly
+            if (actorMessage->rawValue().isValid()) {           // TODO: check if allowed, like  && actor->cmdSupported(actor::ACTOR_CMD_SET_VALUE)?
+                actor->updateValue(actorMessage->rawValue(), false);
+            }
         }
 
         actor->triggerCmd(actorMessage->cmd(), "Message received");

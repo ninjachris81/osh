@@ -13,9 +13,15 @@ class SHARED_LIB_EXPORT NativeProcessorTask : public ProcessorTaskBase
 public:
     enum NativeFunctionType {
         NFT_INVALID = 0,
-        NFT_INIT_SWITCH_LOGIC = 10,
-        NFT_APPLY_SWITCH_TIMEOUT_LOGIC = 11,
-        NFT_APPLY_SHUTTER_LOGIC = 21
+        NFT_INIT_SWITCH_LOGIC =                 10,
+        NFT_APPLY_SWITCH_TIMEOUT_LOGIC =        11,
+
+        NFT_APPLY_SHUTTER_LOGIC =               20,
+
+        NFT_INIT_DOOR_RING_LOGIC =              30,
+        NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC =     31,
+
+        NFT_INIT_PLAY_SOUND_ON_EVENT =          40
     };
 
     NativeProcessorTask();
