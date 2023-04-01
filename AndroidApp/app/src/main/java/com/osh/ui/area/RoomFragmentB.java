@@ -1,24 +1,23 @@
-package com.osh;
+package com.osh.ui.area;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.osh.databinding.FragmentRoomWzBinding;
+import com.osh.R;
+import com.osh.databinding.FragmentRoomBBinding;
 import com.osh.service.IServiceContext;
-import com.osh.ui.area.AreaViewModel;
-import com.osh.ui.area.RoomViewModel;
 
 import java.util.List;
 
-public class RoomFragmentWz extends RoomFragmentBase<FragmentRoomWzBinding> {
+public class RoomFragmentB extends RoomFragmentBase<FragmentRoomBBinding> {
 
-    public RoomFragmentWz() {
+    public RoomFragmentB() {
     }
 
-    public RoomFragmentWz(IServiceContext serviceContext, AreaViewModel areaViewModel, String roomId, FragmentManager fragmentManager, RoomViewModel.RoomPosition roomPosition) {
+    public RoomFragmentB(IServiceContext serviceContext, AreaViewModel areaViewModel, String roomId, FragmentManager fragmentManager, RoomViewModel.RoomPosition roomPosition) {
         super(serviceContext, areaViewModel, roomId, fragmentManager, roomPosition);
-        layout = R.layout.fragment_room_wz;
+        layout = R.layout.fragment_room_b;
 
-        shutterModeButtons = List.of(R.id.shutterModeButtonWz0, R.id.shutterModeButtonWz1);
+        shutterModeButtons = List.of(R.id.shutterModeButtonB0, R.id.shutterModeButtonB1);
     }
 
     @Override

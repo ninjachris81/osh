@@ -1,6 +1,5 @@
-package com.osh;
+package com.osh.ui.dialogs;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,22 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
 
-import com.google.android.material.textfield.TextInputLayout;
+import com.osh.R;
 import com.osh.actor.AudioPlaybackActor;
 import com.osh.datamodel.meta.AudioPlaybackSource;
-import com.osh.datamodel.meta.KnownRoom;
-import com.osh.ui.area.RoomViewModel;
 import com.osh.ui.components.AudioPlaybackActorArrayAdapter;
 import com.osh.ui.components.AudioPlaybackSourceArrayAdapter;
-import com.osh.ui.components.TextImageSpinnerArrayAdapter;
-import com.osh.ui.components.TextSpinnerArrayAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

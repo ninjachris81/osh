@@ -1,4 +1,4 @@
-package com.osh;
+package com.osh.ui.area;
 
 import android.os.Bundle;
 
@@ -14,13 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.osh.R;
+import com.osh.ui.dialogs.SelectAudioDialogFragment;
 import com.osh.actor.ActorCmds;
 import com.osh.actor.DigitalActor;
 import com.osh.actor.ShutterActor;
 import com.osh.actor.ToggleActor;
 import com.osh.service.IServiceContext;
-import com.osh.ui.area.AreaViewModel;
-import com.osh.ui.area.RoomViewModel;
 import com.osh.ui.components.ShutterModeButton;
 import com.osh.value.BooleanValue;
 import com.osh.value.DoubleValue;

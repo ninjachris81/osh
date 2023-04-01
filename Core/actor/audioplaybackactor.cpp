@@ -21,7 +21,6 @@ AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE
 
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_SET_VALUE:
     case actor::ACTOR_CMD_START:
     case actor::ACTOR_CMD_PAUSE:
     case actor::ACTOR_CMD_STOP:

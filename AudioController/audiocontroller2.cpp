@@ -65,6 +65,9 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
             Q_ASSERT(urlValue != nullptr);
             audioActor->withAudioUrlValue(urlValue);
             valueManager->registerForNotification(urlValue);
+        } else if (audioActor->audioUrl().isEmpty()) {
+            iWarning() << "Audio actors must have either url value, or static url set" << audioActor->fullId();
+            Q_ASSERT(false);
         }
 
         m_playbackActors.insert(audioActor->id(), audioActor);

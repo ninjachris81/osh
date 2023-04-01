@@ -500,13 +500,29 @@ bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant triggerV
         value = m_datamodel->actor(valueEventId);
     }
     AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
+    StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
 
     Q_ASSERT(value != nullptr);
     Q_ASSERT(playbackActor != nullptr);
 
     m_localStorage->set("initPlaySoundOnEvent_triggerValue_" + value->fullId(), triggerValue);
     m_localStorage->setObject("initPlaySoundOnEvent_soundActorId_" + value->fullId(), playbackActor);
-    m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
+    if (!soundValue.isEmpty()) {
+        m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
+    } else if (soundValue.isEmpty() && playbackActor->audioUrl().isEmpty()) {
+        iWarning() << "Audio actors must have static url value set if soundValue is empty" << playbackActor->fullId();
+        Q_ASSERT(false);
+    }
+
+    if (urlValue == nullptr) {
+        // use static url of playback actor
+        if (playbackActor->audioUrl().isEmpty()) {
+            iWarning() << "Audio actors must have either url value, or static url set" << playbackActor->fullId();
+            Q_ASSERT(false);
+        }
+    } else {
+        m_localStorage->setObject("initPlaySoundOnEvent_urlValue_" + value->fullId(), urlValue);
+    }
 
     Helpers::safeConnect(value, &ValueBase::valueChanged, this, &CommonScripts::onInitPlaySoundOnEvent_valueChanged, SIGNAL(valueChanged()), SLOT(onInitPlaySoundOnEvent_valueChanged()));
 
@@ -523,9 +539,18 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
             iInfo() << "Trigger";
 
             AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent_soundActorId_" + value->fullId()));
-            QString soundValue = m_localStorage->get("initPlaySoundOnEvent_soundValue_" + value->fullId()).toString();
 
-            publishCmd(playbackActor, actor::ACTOR_CMD_START, soundValue);
+            if (!m_localStorage->contains("initPlaySoundOnEvent_soundValue_" + value->fullId())) {
+                // playback static url
+                iDebug() << "Playback static url";
+            } else {
+                QString soundValue = m_localStorage->get("initPlaySoundOnEvent_soundValue_" + value->fullId()).toString();
+                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("initPlaySoundOnEvent_urlValue_" + value->fullId()));
+                iDebug() << "Setting url" << soundValue;
+                urlValue->updateValue(soundValue);
+            }
+
+            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event trigger playback");
         }
     } else {
         iWarning() << "Failed to convert to target type";
