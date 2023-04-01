@@ -173,7 +173,38 @@ public:
     void adjustTxLevel(float) {}
     void adjustRxLevel(float) {}
     void startTransmit(AudioMedia) {}
+    void stopTransmit(AudioMedia) {}
 };
+
+typedef enum pjsip_inv_state
+{
+    PJSIP_INV_STATE_NULL,           /**< Before INVITE is sent or received  */
+    PJSIP_INV_STATE_CALLING,        /**< After INVITE is sent               */
+    PJSIP_INV_STATE_INCOMING,       /**< After INVITE is received.          */
+    PJSIP_INV_STATE_EARLY,          /**< After response with To tag.        */
+    PJSIP_INV_STATE_CONNECTING,     /**< After 2xx is sent/received.        */
+    PJSIP_INV_STATE_CONFIRMED,      /**< After ACK is sent/received.        */
+    PJSIP_INV_STATE_DISCONNECTED,   /**< Session is terminated.             */
+};
+
+typedef enum pjsip_role_e
+{
+    PJSIP_ROLE_UAC,     /**< Role is UAC. */
+    PJSIP_ROLE_UAS,     /**< Role is UAS. */
+
+    /* Alias: */
+
+    PJSIP_UAC_ROLE = PJSIP_ROLE_UAC,    /**< Role is UAC. */
+    PJSIP_UAS_ROLE = PJSIP_ROLE_UAS     /**< Role is UAS. */
+
+};
+
+struct CallInfo {
+   pjsip_role_e        role;
+   pjsip_inv_state     state;
+   pjsip_status_code   lastStatusCode;
+};
+
 
 class Call {
 public:
@@ -191,6 +222,8 @@ public:
     void hangup(CallOpParam) {}
 
     int getId() const {}
+
+    CallInfo getInfo() {}
 
     AudioMedia getAudioMedia(int) { }
 };
@@ -301,6 +334,26 @@ struct Error
           const string &prm_reason,
           const string &prm_src_file,
           int prm_src_line);
+};
+
+struct ToneDesc
+{
+    short   freq1;          /**< First frequency.                           */
+    short   freq2;          /**< Optional second frequency.                 */
+    short   on_msec;        /**< Playback ON duration, in miliseconds.      */
+    short   off_msec;       /**< Playback OFF duration, ini miliseconds.    */
+    short   volume;         /**< Volume (1-32767), or 0 for default, which
+                                 PJMEDIA_TONEGEN_VOLUME will be used.       */
+    short   flags;          /**< Currently internal flags, must be 0        */
+};
+
+typedef std::vector<ToneDesc> ToneDescVector;
+
+class ToneGenerator : public AudioMedia {
+public:
+    void createToneGenerator() {}
+    void play(ToneDescVector vector, bool loop) {}
+
 };
 
 

@@ -1,6 +1,7 @@
 package com.osh.service.impl;
 
-import com.osh.doorunlock.IDoorUnlockManager;
+import com.osh.service.IDeviceDiscoveryService;
+import com.osh.service.IDoorUnlockService;
 import com.osh.service.IActorService;
 import com.osh.service.IAudioActorService;
 import com.osh.service.IAudioSourceService;
@@ -14,13 +15,15 @@ public class ServiceContextImpl implements IServiceContext {
     private final IActorService actorService;
     private final IAudioActorService audioActorService;
     private final IAudioSourceService audioSourceService;
-    private final IDoorUnlockManager doorUnlockManager;
+    private final IDoorUnlockService doorUnlockManager;
     private final IValueService valueService;
     private final IDatabaseService databaseService;
     private final IDatamodelService datamodelService;
     private final ICommunicationService communicationService;
 
-    public ServiceContextImpl(IActorService actorService, IAudioActorService audioActorService, IAudioSourceService audioSourceService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
+    private final IDeviceDiscoveryService deviceDiscoveryService;
+
+    public ServiceContextImpl(IActorService actorService, IAudioActorService audioActorService, IAudioSourceService audioSourceService, IDoorUnlockService doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService, IDeviceDiscoveryService deviceDiscoveryService) {
         this.actorService = actorService;
         this.audioActorService = audioActorService;
         this.audioSourceService = audioSourceService;
@@ -29,6 +32,7 @@ public class ServiceContextImpl implements IServiceContext {
         this.databaseService = databaseService;
         this.datamodelService = datamodelService;
         this.communicationService = communicationService;
+        this.deviceDiscoveryService = deviceDiscoveryService;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class ServiceContextImpl implements IServiceContext {
     }
 
     @Override
-    public IDoorUnlockManager getDoorUnlockManager() {
+    public IDoorUnlockService getDoorUnlockManager() {
         return this.doorUnlockManager;
     }
 
@@ -69,5 +73,10 @@ public class ServiceContextImpl implements IServiceContext {
     @Override
     public ICommunicationService getCommunicationService() {
         return this.communicationService;
+    }
+
+    @Override
+    public IDeviceDiscoveryService getDeviceDiscoveryService() {
+        return this.deviceDiscoveryService;
     }
 }

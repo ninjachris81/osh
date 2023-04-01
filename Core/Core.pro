@@ -81,7 +81,7 @@ SOURCES += \
         serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemessage.cpp \
-        user/user.cpp \
+        user/oshuser.cpp \
         user/usermanager.cpp \
         value/client/clientvaluemanager.cpp \
         value/longvalue.cpp \
@@ -179,7 +179,7 @@ HEADERS += \
         sharedlib.h \
         time/client/clientsystemtimemanager.h \
         time/systemtimemessage.h \
-        user/user.h \
+        user/oshuser.h \
         user/usermanager.h \
         value/client/clientvaluemanager.h \
         value/longvalue.h \

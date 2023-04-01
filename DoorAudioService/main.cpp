@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     ClientValueManager valueManager;
     ActorManager actorManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, QStringList() << DigitalActor::staticMetaObject.className());
+    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << DigitalActor::staticMetaObject.className());
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_DU);
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
-    DigitalActor* doorRingActor = static_cast<DigitalActor*>(datamodelManager.datamodel()->actor(config.getString(&doorAudioController, "doorRingActorId", "frontDoor.ring")));
+    DigitalActor* doorRingActor = static_cast<DigitalActor*>(actorManager.getActor(config.getString(&doorAudioController, "doorRingActorId", "frontDoor.ring")));
     Q_ASSERT(doorRingActor != nullptr);
 
     doorAudioController.bindDoorRingActor(doorRingActor);

@@ -13,7 +13,11 @@
 #include "user/usermanager.h"
 #include "doorunlock/doorunlockmessage.h"
 
-#define DU_CHALLENGE_TIMEOUT_MS 1000
+#ifdef QT_DEBUG
+    #define DU_CHALLENGE_TIMEOUT_MS 120000
+#else
+    #define DU_CHALLENGE_TIMEOUT_MS 1000
+#endif
 
 class SHARED_LIB_EXPORT DoorUnlockManager : public ManagerBase
 {

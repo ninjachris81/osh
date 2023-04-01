@@ -28,8 +28,7 @@ SOURCES += \
         kmtronicrelaycontroller.cpp
 
 HEADERS += \
-        kmtronicrelaycontroller.h \
-        sharedlib.h
+        kmtronicrelaycontroller.h
 
 unix {
     target.path = /usr/lib

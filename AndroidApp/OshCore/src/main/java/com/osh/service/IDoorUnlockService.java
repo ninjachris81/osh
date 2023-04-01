@@ -1,9 +1,9 @@
-package com.osh.doorunlock;
+package com.osh.service;
 
 import com.osh.manager.IMqttSupport;
 import com.osh.user.User;
 
-public interface IDoorUnlockManager extends IMqttSupport {
+public interface IDoorUnlockService extends IMqttSupport {
 
     void requestChallenge(String userId, String doorId);
 

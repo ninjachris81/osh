@@ -1,10 +1,12 @@
-package com.osh.doorunlock;
+package com.osh.service.impl;
 
 import android.util.Base64;
 
 import com.osh.communication.MessageBase;
+import com.osh.doorunlock.DoorUnlockMessage;
 import com.osh.service.ICommunicationService;
 import com.osh.log.LogFacade;
+import com.osh.service.IDoorUnlockService;
 import com.osh.user.User;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,18 +16,19 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-public class DoorUnlockManager implements IDoorUnlockManager {
+public class DoorUnlockServiceImpl implements IDoorUnlockService {
 
-    private static final String TAG = DoorUnlockManager.class.getName();
+    private static final String TAG = DoorUnlockServiceImpl.class.getName();
 
     private static final String PSK = "q7XtfMBWAmKYWUekFPxS";
 
-    ICommunicationService communicationManager;
+    private ICommunicationService communicationManager;
 
     private CallbackListener callbackListener;
 
-    public DoorUnlockManager(ICommunicationService communicationManager) {
+    public DoorUnlockServiceImpl(ICommunicationService communicationManager) {
         this.communicationManager = communicationManager;
+        communicationManager.registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK, this);
     }
 
     @Override
@@ -102,7 +105,7 @@ public class DoorUnlockManager implements IDoorUnlockManager {
 
         if (resultHash != null) {
             DoorUnlockMessage msg = new DoorUnlockMessage(userId, doorId, Map.of(
-                    DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_CALCULATED,
+                    DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_CALCULATED.ordinal(),
                     DoorUnlockMessage.DU_ATTRIB_OTH, oth,
                     DoorUnlockMessage.DU_ATTRIB_TS, ts,
                     DoorUnlockMessage.DU_ATTRIB_RESULT_HASH, resultHash
@@ -115,7 +118,7 @@ public class DoorUnlockManager implements IDoorUnlockManager {
 
     @Override
     public void requestChallenge(String userId, String doorId) {
-        DoorUnlockMessage msg = new DoorUnlockMessage(userId, doorId, Map.of(DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_REQUESTED));
+        DoorUnlockMessage msg = new DoorUnlockMessage(userId, doorId, Map.of(DoorUnlockMessage.DU_ATTRIB_STAGE, DoorUnlockMessage.DU_AUTH_STAGE.CHALLENGE_REQUEST.ordinal()));
         communicationManager.sendMessage(msg);
     }
 

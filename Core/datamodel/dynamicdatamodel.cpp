@@ -166,6 +166,8 @@ void DynamicDatamodel::addActor(QString typeName, ValueGroup *valueGroup, QStrin
         actor = addValueActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "AudioPlaybackActor") {
         actor = addAudioPlaybackActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_DEVICE_IDS).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_ACTIVATION_RELAY_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_VOLUME).toFloat(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_URL).toString(), properties.value(AudioPlaybackActor::PROPERTY_AUDIO_URL_ID).toString());
+    } else if (typeName == "DoorActor") {
+        actor = addDoorActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else {
         iWarning() << "Unsupported type name" << typeName;
     }

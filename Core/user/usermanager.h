@@ -6,15 +6,12 @@
 #include "sharedlib.h"
 
 #include "manager/managerbase.h"
-#include "user/user.h"
-#include "database/databasemanager.h"
+#include "user/oshuser.h"
 
 class SHARED_LIB_EXPORT UserManager : public ManagerBase
 {
     Q_OBJECT
 public:
-    static QLatin1String USER_TABLE_NAME;
-
     explicit UserManager(QObject *parent = nullptr);
 
     static QLatin1String MANAGER_ID;
@@ -29,12 +26,13 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
-    User* getUser(QString id);
+    OshUser* user(QString id);
 
-
+    void registerUser(OshUser* user);
 
 private:
-    DatabaseManager* m_databaseManager;
+    QMap<QString, OshUser*> m_users;
+
 signals:
 
 };

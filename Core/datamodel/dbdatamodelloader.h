@@ -40,6 +40,7 @@ private:
     void loadProcessorVariables(DynamicDatamodel *datamodel);
     void loadProcessorTasks(DynamicDatamodel *datamodel);
     void loadKnownDevices(DynamicDatamodel *datamodel);
+    void loadUsers(DynamicDatamodel *datamodel);
 
 };
 

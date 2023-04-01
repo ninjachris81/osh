@@ -15,6 +15,12 @@
             app:title="@string/mqtt_port"
             app:useSimpleSummaryProvider="true" />
 
+        <EditTextPreference
+            app:defaultValue=""
+            app:key="@string/mqtt_client_id_key"
+            app:title="@string/mqtt_client_id"
+            app:useSimpleSummaryProvider="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Database">

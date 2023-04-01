@@ -167,6 +167,16 @@ case "$1" in
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
+   DoorUnlockService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+	  buildWiringPi
+      buildOSHLib "Core"
+      buildOSHLib "DoorUnlockController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
    *			)
       ;;
 esac

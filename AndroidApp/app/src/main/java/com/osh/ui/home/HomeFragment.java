@@ -6,17 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.osh.DoorOpenActivity;
 import com.osh.R;
 import com.osh.databinding.FragmentHomeBinding;
-import com.osh.doorunlock.DoorUnlockManager;
 
 public class HomeFragment extends Fragment {
 
@@ -44,7 +41,7 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getActivity(), DoorOpenActivity.class);
             startActivity(intent);
             Intent intent2 = new Intent(DoorOpenActivity.REQUEST_DOOR_UNLOCK_CHALLENGE_INTENT);
-            intent2.putExtra(DoorOpenActivity.DU_EXTRA_DOOR_ID, "frontDoor");
+            intent2.putExtra(DoorOpenActivity.DU_EXTRA_DOOR_ID, "frontDoor.door");
             startActivity(intent2);
         });
 

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false);
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false);
     ClientValueManager valueManager;
     LogManager logManager;
 

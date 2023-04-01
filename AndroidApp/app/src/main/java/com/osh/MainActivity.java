@@ -14,21 +14,11 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.osh.actor.ActorCmds;
-import com.osh.actor.ActorMessage;
-import com.osh.service.IActorService;
-import com.osh.service.IAudioActorService;
-import com.osh.service.ICommunicationService;
-import com.osh.doorunlock.IDoorUnlockManager;
-import com.osh.service.IDatabaseService;
-import com.osh.service.IDatamodelService;
 import com.osh.service.IServiceContext;
 import com.osh.ui.area.AreaFragment;
 import com.osh.ui.dashboard.DashboardFragment;
 import com.osh.ui.home.HomeFragment;
-import com.osh.ui.notifications.NotificationsFragment;
 import com.osh.ui.wbb12.WBB12Fragment;
-import com.osh.service.IValueService;
 import com.osh.wbb12.service.IWBB12Service;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;

@@ -174,6 +174,8 @@ public class DatamodelServiceImpl implements IDatamodelService {
 				} else {
 					throw new RuntimeException("Unexpected mapping of actor " + actor.getId());
 				}
+			} else if (actor.getClassType().equals("DoorActor")) {
+				act = datamodel.addDoorActor(valueGroup, actor.getId(), ValueType.of(actor.getValueType()), ValueBase.VALUE_TIMEOUT.of(actor.getValueTimeout()));
 			} else {
 				log.error("Unknown class type: " + actor.getClassType());
 			}

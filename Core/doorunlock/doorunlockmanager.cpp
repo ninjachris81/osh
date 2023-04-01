@@ -5,7 +5,7 @@
 #include <QCryptographicHash>
 
 #include "macros.h"
-#include "user/user.h"
+#include "user/oshuser.h"
 
 QLatin1String DoorUnlockManager::MANAGER_ID = QLatin1String("DoorUnlockManager");
 QLatin1String DoorUnlockManager::PSK = QLatin1String("q7XtfMBWAmKYWUekFPxS");
@@ -33,7 +33,7 @@ void DoorUnlockManager::init(LocalConfig *config) {
     REQUIRE_MANAGER(UserManager);
     m_userManager = getManager<UserManager>(UserManager::MANAGER_ID);
 
-    m_currentChallengeRequestsTimer.start();
+    //m_currentChallengeRequestsTimer.start();
 }
 
 MessageBase::MESSAGE_TYPE DoorUnlockManager::getMessageType() {
@@ -45,9 +45,9 @@ void DoorUnlockManager::handleReceivedMessage(MessageBase* msg) {
     DoorUnlockMessage* duMessage = static_cast<DoorUnlockMessage*>(msg);
 
     // first, check if user is allowed
-    User* user = m_userManager->getUser(duMessage->userId());
+    OshUser* user = m_userManager->user(duMessage->userId());
     if (user != nullptr) {
-        if (user->rights().contains(User::USER_RIGHT_UNLOCK_DOOR)) {
+        if (user->rights().contains(OshUser::USER_RIGHT_UNLOCK_DOOR)) {
             if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_STAGE)) {
                 DoorUnlockMessage::DU_AUTH_STAGE stage = static_cast<DoorUnlockMessage::DU_AUTH_STAGE>(duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_STAGE).toUInt());
 
@@ -68,14 +68,14 @@ void DoorUnlockManager::handleReceivedMessage(MessageBase* msg) {
         } else {
             iWarning() << "Insufficient user rights" << duMessage->userId();
         }
-        user->deleteLater();
     } else {
         iWarning() << "User could not be resolved" << duMessage->userId();
     }
 }
 
 void DoorUnlockManager::onChallengeMaintenance() {
-    QMutexLocker locker(&m_currentChallengeRequestsMutex);
+    //QMutexLocker locker(&m_currentChallengeRequestsMutex);
+    iInfo() << Q_FUNC_INFO;
 
     for (auto it = m_currentChallengeRequests.begin(); it != m_currentChallengeRequests.end();) {
         if (QDateTime::currentMSecsSinceEpoch() > it.value().ts + DU_CHALLENGE_TIMEOUT_MS) {
@@ -86,7 +86,7 @@ void DoorUnlockManager::onChallengeMaintenance() {
 }
 
 void DoorUnlockManager::handleChallengeRequest(DoorUnlockMessage* duMessage) {
-    QMutexLocker locker(&m_currentChallengeRequestsMutex);
+    //QMutexLocker locker(&m_currentChallengeRequestsMutex);
 
     if (!m_currentChallengeRequests.contains(duMessage->userId())) {
 
@@ -94,14 +94,17 @@ void DoorUnlockManager::handleChallengeRequest(DoorUnlockMessage* duMessage) {
         req.ts = QDateTime::currentMSecsSinceEpoch();
         req.oth = QString::number(QRandomGenerator::global()->bounded((quint32) 10000, (quint32) 99999));
 
-        m_currentChallengeRequests.insert(duMessage->userId(), req);
+        QString userId = duMessage->userId();
+        QString doorId = duMessage->doorId();
+        m_currentChallengeRequests.insert(userId, req);
 
         QVariantMap values;
         values.insert(DoorUnlockMessage::DU_ATTRIB_STAGE, DoorUnlockMessage::DU_AUTH_STAGE::CHALLENGE_CREATED);
         values.insert(DoorUnlockMessage::DU_ATTRIB_TS, req.ts);
         values.insert(DoorUnlockMessage::DU_ATTRIB_OTH, req.oth);
-        DoorUnlockMessage responseMessage(duMessage->userId(), duMessage->doorId(), values);
+        DoorUnlockMessage responseMessage(userId, doorId, values);
         m_commManager->sendMessage(responseMessage);
+        iInfo() << "Sending challenge created";
     } else {
         sendResult(duMessage->userId(), duMessage->doorId(), false);
         iWarning() << "Cannot create duplicate challenge";
@@ -109,9 +112,12 @@ void DoorUnlockManager::handleChallengeRequest(DoorUnlockMessage* duMessage) {
 }
 
 void DoorUnlockManager::handleChallengeCalculated(DoorUnlockMessage* duMessage) {
-    QMutexLocker locker(&m_currentChallengeRequestsMutex);
+    //QMutexLocker locker(&m_currentChallengeRequestsMutex);
 
-    if (m_currentChallengeRequests.contains(duMessage->userId())) {
+    QString userId = duMessage->userId();
+    QString doorId = duMessage->doorId();
+
+    if (m_currentChallengeRequests.contains(userId)) {
         if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_OTH)) {
             QString oth = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_OTH).toString();
 
@@ -120,15 +126,15 @@ void DoorUnlockManager::handleChallengeCalculated(DoorUnlockMessage* duMessage) 
 
                 if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_RESULT_HASH)) {
                     QString resultHash = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_RESULT_HASH).toString();
-                    QString expectedResultHash = calculateResultHash(ts, oth, duMessage->userId(), duMessage->doorId());
+                    QString expectedResultHash = calculateResultHash(ts, oth, userId, doorId);
 
                     if (resultHash == expectedResultHash) {
-                        Q_EMIT(unlockDoor(duMessage->doorId()));
-                        iDebug() << "Challenge success";
-                        sendResult(duMessage->userId(), duMessage->doorId(), true);
+                        Q_EMIT(unlockDoor(doorId));
+                        sendResult(userId, doorId, true);
+                        iInfo() << "Challenge success";
                     } else {
                         iWarning() << "Challenge mismatch" << resultHash << " expected " << expectedResultHash;
-                        sendResult(duMessage->userId(), duMessage->doorId(), false);
+                        sendResult(userId, doorId, false);
                     }
                 } else {
                     iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_RESULT_HASH;
@@ -141,10 +147,10 @@ void DoorUnlockManager::handleChallengeCalculated(DoorUnlockMessage* duMessage) 
         }
 
         // just clean up all the time
-        m_currentChallengeRequests.remove(duMessage->userId());
+        m_currentChallengeRequests.remove(userId);
     } else {
         iWarning() << "Request not found or timeout";
-        sendResult(duMessage->userId(), duMessage->doorId(), false);
+        sendResult(userId, doorId, false);
     }
 }
 

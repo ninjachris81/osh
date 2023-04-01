@@ -7,6 +7,7 @@
 #include <QList>
 
 #include "actor/audioplaybackactor.h"
+#include "actor/dooractor.h"
 #include "actor/toggleactor.h"
 #include "actor/valueactor.h"
 #include "processor/processorvariable.h"
@@ -14,6 +15,7 @@
 
 #include "device/knowndevice.h"
 #include "actor/actorbase.h"
+#include "user/oshuser.h"
 #include "value/enumvalue.h"
 #include "value/valuegroup.h"
 #include "value/valuebase.h"
@@ -58,6 +60,8 @@ public:
     QMap<QString, ProcessorTaskBase*> processorTasks();
     QMap<QString, KnownRoom*> knownRooms();
 
+    QMap<QString, OshUser*> users();
+
     KnownDevice* addKnownDevice(QString id, QString serviceId, QString name);
     ValueGroup* addValueGroup(QString id);
     ToggleActor* addToggleActor(ValueGroup* valueGroup, QString id);
@@ -65,6 +69,7 @@ public:
     ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration);
     ValueActor* addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     AudioPlaybackActor* addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl, QString audioUrlId);
+    DoorActor* addDoorActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
 
     BooleanValue* addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     IntegerValue* addIntegerValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
@@ -75,6 +80,8 @@ public:
     ProcessorVariable* addProcessorVariable(QString id, QString value);
     ProcessorTaskBase* addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = ProcessorTaskBase::INTERVAL_REALTIME, bool publishResult = false, bool isEnabled = true);
     KnownRoom* addKnownRoom(KnownArea *knownArea, QString id, QString name);
+
+    OshUser* addUser(QString id, QString name, QStringList rights);
 
     KnownArea* addKnownArea(QString id, QString name);
     KnownArea* knownArea(QString id);
@@ -91,6 +98,8 @@ protected:
 
     QMap<QString, ProcessorVariable*> m_processorVariables;
     QMap<QString, ProcessorTaskBase*> m_processorTasks;
+
+    QMap<QString, OshUser*> m_users;
 
 private:
 

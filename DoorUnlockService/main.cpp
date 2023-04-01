@@ -12,6 +12,7 @@
 #include "doorunlock/doorunlockmanager.h"
 #include "database/databasemanager.h"
 #include "user/usermanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "actor/digitalactor.h"
 #include "shared/mqtt_qt.h"
 
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
     ActorManager actorManager;
     DoorUnlockManager doorUnlockManager;
     DatabaseManager databaseManager;
+    DatamodelManager datamodelManager(false, false, true, true, false, false, true, QStringList() << DoorActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className());
     UserManager userManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_DU);
@@ -44,26 +46,22 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&doorUnlockManager);
-    managerRegistration.registerManager(&userManager);
     managerRegistration.registerManager(&databaseManager);
+    managerRegistration.registerManager(&datamodelManager);
+    managerRegistration.registerManager(&userManager);
 
-    DoorUnlockController frontDoorUnlockController(&controllerManager, "frontDoorUnlockController");
-    controllerManager.registerController(&frontDoorUnlockController);
+    DoorUnlockController doorUnlockController(&controllerManager, "frontDoorUnlockController");
+    controllerManager.registerController(&doorUnlockController);
 
     managerRegistration.init(&config);
 
-    QList<ValueBase*> actors;
-    ValueGroup actorGroup(frontDoorUnlockController.id());
-    DoorActor* frontDoorDoorActor = new DoorActor(&actorGroup, config.getString(&frontDoorUnlockController, "doorId", "frontDoor"), VALTYPE_DOOR_OPENER, true);
-    DigitalActor* frontDoorRelayActor = new DigitalActor(&actorGroup, config.getString(&frontDoorUnlockController, "relayId", "frontDoorRelay"), value::VALTYPE_RELAY_DOOR_OPEN, true);
+    DoorActor* doorActor = static_cast<DoorActor*>(actorManager.getActor(config.getString(&doorUnlockController, "doorId", "frontDoor.door")));
+    DigitalActor* doorRelayActor = static_cast<DigitalActor*>(actorManager.getActor(config.getString(&doorUnlockController, "relayId", "frontDoor.relay")));
 
-    actors.append(frontDoorDoorActor);
-    actors.append(frontDoorRelayActor);
+    Q_ASSERT(doorActor != nullptr);
+    Q_ASSERT(doorRelayActor != nullptr);
 
-    actorManager.registerActor(frontDoorDoorActor, &valueManager);
-    actorManager.registerActor(frontDoorRelayActor, &valueManager);
-
-    frontDoorUnlockController.bindDoorActor(frontDoorDoorActor, frontDoorRelayActor);
+    doorUnlockController.bindActors(doorActor, doorRelayActor);
 
     return a.exec();
 }

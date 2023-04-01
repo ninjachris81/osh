@@ -2,16 +2,21 @@ package com.osh.service.impl;
 
 import com.osh.communication.MessageBase;
 import com.osh.communication.MessageBase.MESSAGE_TYPE;
+import com.osh.service.ICommunicationService;
 import com.osh.service.IDeviceDiscoveryService;
 
 public class ClientDeviceDiscoveryServiceImpl implements IDeviceDiscoveryService {
 
-	public ClientDeviceDiscoveryServiceImpl() {
+	private final String clientId;
+
+	public ClientDeviceDiscoveryServiceImpl(ICommunicationService communicationService, String clientId) {
+		this.clientId = clientId;
+		communicationService.registerMessageType(MESSAGE_TYPE.MESSAGE_TYPE_DEVICE_DISCOVERY, this);
 	}
 
 	@Override
 	public MESSAGE_TYPE getMessageType() {
-		return MESSAGE_TYPE.MESSAGE_TYPE_UNKNOWN;
+		return MESSAGE_TYPE.MESSAGE_TYPE_DEVICE_DISCOVERY;
 	}
 
 	@Override
@@ -20,7 +25,7 @@ public class ClientDeviceDiscoveryServiceImpl implements IDeviceDiscoveryService
 
 	@Override
 	public String getDeviceId() {
-		return "AndroidTestClient";
+		return clientId;
 	}
 
 	// TODO: implement bc

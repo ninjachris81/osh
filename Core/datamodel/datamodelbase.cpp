@@ -80,6 +80,10 @@ QMap<QString, KnownRoom*> DatamodelBase::knownRooms() {
     return m_knownRooms;
 }
 
+QMap<QString, OshUser*> DatamodelBase::users() {
+    return m_users;
+}
+
 KnownDevice* DatamodelBase::addKnownDevice(QString id, QString serviceId, QString name) {
     KnownDevice* device = new KnownDevice(id, serviceId, name);
     m_knownDevices.insert(device->fullId(), device);
@@ -133,6 +137,15 @@ AudioPlaybackActor* DatamodelBase::addAudioPlaybackActor(ValueGroup* valueGroup,
     Q_EMIT(datamodelContentChanged());
     return actor;
 }
+
+DoorActor* DatamodelBase::addDoorActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    DoorActor* actor = new DoorActor(valueGroup, id, valueType);
+    actor->withValueTimeout(timeout);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
 
 BooleanValue* DatamodelBase::addBooleanValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
     BooleanValue* value = new BooleanValue(valueGroup, id, valueType);
@@ -230,4 +243,11 @@ KnownArea* DatamodelBase::addKnownArea(QString id, QString name) {
 
 KnownArea *DatamodelBase::knownArea(QString id) {
     return m_knownAreas.value(id);
+}
+
+OshUser* DatamodelBase::addUser(QString id, QString name, QStringList rights) {
+    OshUser* user = new OshUser(id, name, rights);
+    m_users.insert(user->id(), user);
+    Q_EMIT(datamodelContentChanged());
+    return user;
 }

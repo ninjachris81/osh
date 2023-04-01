@@ -42,7 +42,7 @@
 #define VALUE_TYPE_ALARM_SOUND      62
 #define VALUE_TYPE_SOUND_URL        63
 
-#define VALUE_TYPE_DOOR_OPENER      70
+#define VALUE_TYPE_DOOR             70
 #define VALUE_TYPE_HEAT_PUMP_DATA   80
 
 #define VALUE_TYPE_VIRTUAL_ACTOR    90

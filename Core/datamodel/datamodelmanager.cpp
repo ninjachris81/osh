@@ -10,11 +10,12 @@
 #include "datamodel/dbdatamodelloader.h"
 
 #include "macros.h"
+#include "user/usermanager.h"
 #include "value/valuemanagerbase.h"
 
 QLatin1String DatamodelManager::MANAGER_ID = QLatin1String("DatamodelManager");
 
-DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, QStringList actorClassTypeFilter, QObject *parent) : ManagerBase(parent)
+DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, bool loadUsers, QStringList actorClassTypeFilter, QObject *parent) : ManagerBase(parent)
 {
     m_loadingOptions.loadKnownAreas = loadKnownAreas;
     m_loadingOptions.loadKnownRooms = loadKnownRooms;
@@ -22,7 +23,13 @@ DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, boo
     m_loadingOptions.loadValues = loadValues;
     m_loadingOptions.loadProcessorTasks = loadProcessorTasks;
     m_loadingOptions.loadKnownDevices = loadKnownDevices;
+    m_loadingOptions.loadUsers = loadUsers;
     m_loadingOptions.actorClassTypeFilter = actorClassTypeFilter;
+
+    if (!actorClassTypeFilter.isEmpty() && !loadActors) {
+        iWarning() << "Actor filter set, but actors not loaded";
+        Q_ASSERT(false);
+    }
 
     m_datamodel = new EmptyDatamodel();
 }
@@ -91,6 +98,10 @@ void DatamodelManager::init(LocalConfig* config) {
         registerActors();
     }
 
+    if (m_loadingOptions.loadUsers) {
+        registerUsers();
+    }
+
     Q_EMIT(datamodelChanged());
 }
 
@@ -116,6 +127,18 @@ void DatamodelManager::registerActors() {
         it.next();
         iDebug() << "Register datamodel actor" << it.key();
         actorManager->registerActor(it.value(), valueManager);
+    }
+}
+
+void DatamodelManager::registerUsers() {
+    // register actors
+    UserManager* userManager = getManager<UserManager>(UserManager::MANAGER_ID);
+
+    QMapIterator<QString, OshUser*> it(m_datamodel->users());
+    while(it.hasNext()) {
+        it.next();
+        iDebug() << "Register user" << it.key();
+        userManager->registerUser(it.value());
     }
 }
 

@@ -24,11 +24,12 @@ public:
         bool isRetained;
         QString mqttTypePath;
         quint8 mqttPathLevels;
+        bool dropOwnMessages;
     };
 
     explicit MqttCommunicationManagerBase(QObject *parent = nullptr);
 
-    void registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels);
+    void registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels, bool dropOwnMessages);
 
     MessageBase* getMessage(QStringList levels, QByteArray payload, bool isRetain);
 

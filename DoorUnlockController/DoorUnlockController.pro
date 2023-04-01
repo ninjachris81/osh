@@ -29,3 +29,5 @@ else:unix: LIBS += -L$$OUT_PWD/../Core/ -lCore
 INCLUDEPATH += $$PWD/../Core
 DEPENDPATH += $$PWD/../Core
 
+# wiringpi will not be maintained any longer
+unix: LIBS += -I/usr/local/include -L/usr/local/lib -lwiringPi

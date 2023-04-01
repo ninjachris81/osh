@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     ControllerManager controllerManager;
     SystemtimeManager systimeManager;
     SystemWarningsManager syswarnManager;
-    DatamodelManager datamodelManager(true, true, true, true, true, true);
+    DatamodelManager datamodelManager(true, true, true, true, true, true, true);
     ModelProcessorManager modelProcessor;
     datamodelManager.setProcessorTaskFactory(&modelProcessor);
     LogManager logManager;

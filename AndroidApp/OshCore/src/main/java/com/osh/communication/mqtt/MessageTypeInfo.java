@@ -9,4 +9,5 @@ public class MessageTypeInfo {
     public String mqttTypePath;
     public int mqttPathLevels;
 
+    public boolean dropOwnMessages;
 }

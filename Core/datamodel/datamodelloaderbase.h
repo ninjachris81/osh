@@ -20,6 +20,7 @@ public:
         bool loadValues = true;
         bool loadProcessorTasks = true;
         bool loadKnownDevices = true;
+        bool loadUsers = true;
 
         QStringList actorClassTypeFilter;
     };

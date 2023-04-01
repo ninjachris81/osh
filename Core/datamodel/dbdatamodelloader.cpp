@@ -2,6 +2,7 @@
 #include "qsqlerror.h"
 #include "qsqlrecord.h"
 #include "processor/processorvariable.h"
+#include "user/oshuser.h"
 
 #include <QSqlQuery>
 #include <QSqlField>
@@ -42,6 +43,10 @@ DatamodelBase *DBDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactor
             datamodel->setProcessorTaskFactory(processorTaskFactory);
             loadProcessorVariables(datamodel);
             loadProcessorTasks(datamodel);
+        }
+
+        if (options.loadUsers) {
+            loadUsers(datamodel);
         }
 
         return datamodel;
@@ -204,6 +209,25 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
     } else {
         iWarning() << query.lastError();
     }
+}
+
+void DBDatamodelLoader::loadUsers(DynamicDatamodel *datamodel) {
+    iInfo() << Q_FUNC_INFO;
+
+    QSqlQuery query(*m_databaseManager->db());
+
+    if (query.exec("SELECT * FROM dm_users")) {
+        while (query.next()) {
+            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            QString name = query.value(OshUser::PROPERTY_NAME).toString();
+            QString rights = query.value(OshUser::PROPERTY_RIGHTS).toString();
+            QStringList allRights = rights.split(" ", QString::SkipEmptyParts);
+            datamodel->addUser(id, name, allRights);
+        }
+    } else {
+        iWarning() << query.lastError();
+    }
+
 }
 
 

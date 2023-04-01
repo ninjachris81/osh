@@ -11,6 +11,7 @@ import com.osh.Identifyable;
 import com.osh.actor.ActorBase;
 import com.osh.actor.AudioPlaybackActor;
 import com.osh.actor.DigitalActor;
+import com.osh.actor.DoorActor;
 import com.osh.actor.ShutterActor;
 import com.osh.actor.ToggleActor;
 import com.osh.actor.ValueActor;
@@ -118,6 +119,13 @@ public class DatamodelBase extends Identifyable {
 
 	public ActorBase addAudioPlaybackActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout, String audioDeviceIds, String audioActivationRelayId, float audioVolume, String audioVolumeId, String audioUrl, String audioUrlId) {
 		AudioPlaybackActor actor = new AudioPlaybackActor(valueGroup, id, valueType, audioDeviceIds, audioActivationRelayId, audioVolume, audioVolumeId, audioUrl, audioUrlId);
+		actor.withValueTimeout(timeout);
+		actors.put(actor.getFullId(), actor);
+		return actor;
+	}
+
+	public ActorBase addDoorActor(ValueGroup valueGroup, String id, ValueType valueType, ValueBase.VALUE_TIMEOUT timeout) {
+		DoorActor actor = new DoorActor(valueGroup, id, valueType);
 		actor.withValueTimeout(timeout);
 		actors.put(actor.getFullId(), actor);
 		return actor;

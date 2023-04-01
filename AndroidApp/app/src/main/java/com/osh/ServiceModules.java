@@ -16,8 +16,8 @@ import com.osh.service.impl.DatabaseServiceImpl;
 import com.osh.service.impl.DatamodelServiceImpl;
 import com.osh.service.impl.MqttCommunicationServiceImpl;
 import com.osh.config.IApplicationConfig;
-import com.osh.doorunlock.DoorUnlockManager;
-import com.osh.doorunlock.IDoorUnlockManager;
+import com.osh.service.impl.DoorUnlockServiceImpl;
+import com.osh.service.IDoorUnlockService;
 import com.osh.service.IValueService;
 import com.osh.service.impl.ServiceContextImpl;
 import com.osh.service.impl.ValueServiceImpl;
@@ -83,14 +83,14 @@ public class ServiceModules {
 
     @Provides
     @Singleton
-    static ICommunicationService provideCommunicationManager(IApplicationConfig applicationConfig, IDeviceDiscoveryService deviceDiscoveryService) {
-        return new MqttCommunicationServiceImpl(applicationConfig, deviceDiscoveryService);
+    static ICommunicationService provideCommunicationManager(IApplicationConfig applicationConfig) {
+        return new MqttCommunicationServiceImpl(applicationConfig);
     }
 
     @Provides
     @Singleton
-    static IDoorUnlockManager provideDoorUnlockManager(ICommunicationService communicationManager) {
-        return new DoorUnlockManager(communicationManager);
+    static IDoorUnlockService provideDoorUnlockManager(ICommunicationService communicationManager) {
+        return new DoorUnlockServiceImpl(communicationManager);
     }
 
     @Provides
@@ -101,14 +101,14 @@ public class ServiceModules {
 
     @Provides
     @Singleton
-    static IDeviceDiscoveryService provideDeviceDiscoveryService() {
-        return new ClientDeviceDiscoveryServiceImpl();
+    static IDeviceDiscoveryService provideDeviceDiscoveryService(ICommunicationService communicationManager, IApplicationConfig applicationConfig) {
+        return new ClientDeviceDiscoveryServiceImpl(communicationManager, applicationConfig.getMqtt().getClientId());
     }
 
     @Provides
     @Singleton
-    static IServiceContext provideServiceContext(IActorService actorService, IAudioActorService audioActorService, IAudioSourceService audioSourceService, IDoorUnlockManager doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService) {
-        return new ServiceContextImpl(actorService, audioActorService, audioSourceService, doorUnlockManager, valueService, databaseService, datamodelService, communicationService);
+    static IServiceContext provideServiceContext(IActorService actorService, IAudioActorService audioActorService, IAudioSourceService audioSourceService, IDoorUnlockService doorUnlockManager, IValueService valueService, IDatabaseService databaseService, IDatamodelService datamodelService, ICommunicationService communicationService, IDeviceDiscoveryService deviceDiscoveryService) {
+        return new ServiceContextImpl(actorService, audioActorService, audioSourceService, doorUnlockManager, valueService, databaseService, datamodelService, communicationService, deviceDiscoveryService);
     }
 
 

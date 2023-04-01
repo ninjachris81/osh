@@ -1,9 +1,5 @@
 package com.osh.service;
 
-import com.osh.doorunlock.IDoorUnlockManager;
-
-import javax.inject.Inject;
-
 public interface IServiceContext {
 
     IActorService getActorService();
@@ -12,7 +8,7 @@ public interface IServiceContext {
 
     IAudioSourceService getAudioSourceService();
 
-    IDoorUnlockManager getDoorUnlockManager();
+    IDoorUnlockService getDoorUnlockManager();
 
     IValueService getValueService();
 
@@ -21,5 +17,7 @@ public interface IServiceContext {
     IDatamodelService getDatamodelService();
 
     ICommunicationService getCommunicationService();
+
+    IDeviceDiscoveryService getDeviceDiscoveryService();
 
 }

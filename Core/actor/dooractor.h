@@ -12,7 +12,7 @@ class SHARED_LIB_EXPORT DoorActor : public ActorBase
     Q_OBJECT
 public:
     explicit DoorActor();
-    explicit DoorActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool isAsync, QObject *parent = nullptr);
+    explicit DoorActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 

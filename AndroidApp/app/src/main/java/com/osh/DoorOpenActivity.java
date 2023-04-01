@@ -17,10 +17,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.osh.doorunlock.IDoorUnlockManager;
+import com.osh.service.IDoorUnlockService;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.concurrent.Executor;
 
@@ -29,7 +28,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockManager.CallbackListener {
+public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockService.CallbackListener {
 
     public static final String DU_EXTRA_DOOR_ID = "doorId";
     private static final String TAG = DoorOpenActivity.class.getName();
@@ -37,7 +36,7 @@ public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockMa
     public static final String REQUEST_DOOR_UNLOCK_CHALLENGE_INTENT = "com.osh.action.requestDoorUnlockChallenge";
 
     @Inject
-    IDoorUnlockManager doorUnlockManager;
+    IDoorUnlockService doorUnlockManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +119,7 @@ public class DoorOpenActivity extends AppCompatActivity implements IDoorUnlockMa
             public void onAuthenticationSucceeded(
                     @NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                doorUnlockManager.requestChallenge("testuser", doorId);
+                doorUnlockManager.requestChallenge("chris", doorId);
             }
 
             @Override

@@ -23,27 +23,28 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     connect(this, &MqttCommunicationManagerBase::mqttConnected, this, &CommunicationManagerBase::connected);
     connect(this, &MqttCommunicationManagerBase::mqttDisconnected, this, &CommunicationManagerBase::disconnected);
 
-    registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, false, MQTT_MESSAGE_TYPE_AC, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0);
-    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1);
-    registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, MQTT_MESSAGE_TYPE_CO, 1);
-    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2);
-    registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, MQTT_MESSAGE_TYPE_SR, 1);
-    registerMessageType(MessageBase::MESSAGE_TYPE_DOOR_UNLOCK, false, MQTT_MESSAGE_TYPE_DU, 2);
+    registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2, false);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, false, MQTT_MESSAGE_TYPE_AC, 2, false);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2, false);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0, true);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1, true);
+    registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, MQTT_MESSAGE_TYPE_CO, 1, true);
+    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2, false);
+    registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, MQTT_MESSAGE_TYPE_SR, 1, true);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DOOR_UNLOCK, false, MQTT_MESSAGE_TYPE_DU, 2, true);
 
     QMetaEnum e = QMetaEnum::fromType<MessageBase::MESSAGE_TYPE>();
     iDebug() << "Checking message types" << e.keyCount()-1 << m_messageTypes.count();
     Q_ASSERT(e.keyCount()-1 == m_messageTypes.count());        // -1 because of UNKNOWN
 }
 
-void MqttCommunicationManagerBase::registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels) {
+void MqttCommunicationManagerBase::registerMessageType(MessageBase::MESSAGE_TYPE messageType, bool isRetained, QString mqttTypePath, quint8 mqttPathLevels, bool dropOwnMessages) {
     MessageTypeInfo info;
 
     info.isRetained = isRetained;
     info.mqttTypePath = mqttTypePath;
     info.mqttPathLevels = mqttPathLevels;
+    info.dropOwnMessages = dropOwnMessages;
 
     m_messageTypes.insert(messageType, info);
 }
@@ -66,6 +67,11 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         QString senderDeviceId;
         if (value.contains(MQTT_SENDER_DEVICE_ID_ATTR)) {
             senderDeviceId = value.value(MQTT_SENDER_DEVICE_ID_ATTR, "").toString();
+
+            if (info.dropOwnMessages && senderDeviceId == deviceId()) {
+                iWarning() << "Dropping own message" << messageType;
+                return nullptr;
+            }
         }
         qint64 ts;
         if (value.contains(MQTT_TS)) {

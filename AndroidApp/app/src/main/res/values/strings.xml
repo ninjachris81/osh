@@ -47,5 +47,7 @@
     <string name="area_last_overlay">area_last_overlay</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mqtt_client_id_key">mqtt_client_id</string>
+    <string name="mqtt_client_id">Client ID</string>
 
 </resources>

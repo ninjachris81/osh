@@ -32,7 +32,6 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAckReturnCode;
 import com.osh.actor.ActorCmds;
-import com.osh.actor.ActorConfigMessage;
 import com.osh.actor.ActorMessage;
 import com.osh.communication.MessageBase;
 import com.osh.communication.mqtt.MessageTypeInfo;
@@ -70,10 +69,10 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 
 	private String deviceId;
 
-	public MqttCommunicationServiceImpl(IApplicationConfig appConfig, IDeviceDiscoveryService deviceDiscoveryService) {
+	public MqttCommunicationServiceImpl(IApplicationConfig appConfig) {
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.appConfig = appConfig;
-		this.deviceId = deviceDiscoveryService.getDeviceId();
+		this.deviceId = appConfig.getMqtt().getClientId();		// use clientID as device id
 	}
 
     private Mqtt3AsyncClient mqttClient;
@@ -86,16 +85,15 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	public void connectMqtt() {
 		LogFacade.i(TAG, "Init Mqtt");
 		
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_VALUE, true, MqttConstants.MQTT_MESSAGE_TYPE_VA, 2);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_ACTOR, true, MqttConstants.MQTT_MESSAGE_TYPE_AC, 2);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_ACTOR_CONFIG, true, MqttConstants.MQTT_MESSAGE_TYPE_ACCO, 2);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DEVICE_DISCOVERY, false, MqttConstants.MQTT_MESSAGE_TYPE_DD, 2);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SYSTEM_TIME, false, MqttConstants.MQTT_MESSAGE_TYPE_ST, 0);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SYSTEM_WARNING, false, MqttConstants.MQTT_MESSAGE_TYPE_SW, 1);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_CONTROLLER, false, MqttConstants.MQTT_MESSAGE_TYPE_CO, 1);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_LOG, false, MqttConstants.MQTT_MESSAGE_TYPE_LO, 2);
-	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SCRIPT_RESULT, false, MqttConstants.MQTT_MESSAGE_TYPE_SR, 1);
-		registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK, false, MqttConstants.MQTT_MESSAGE_TYPE_DU, 2);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_VALUE, true, MqttConstants.MQTT_MESSAGE_TYPE_VA, 2, false);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_ACTOR, true, MqttConstants.MQTT_MESSAGE_TYPE_AC, 2, false);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DEVICE_DISCOVERY, false, MqttConstants.MQTT_MESSAGE_TYPE_DD, 2, false);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SYSTEM_TIME, false, MqttConstants.MQTT_MESSAGE_TYPE_ST, 0, true);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SYSTEM_WARNING, false, MqttConstants.MQTT_MESSAGE_TYPE_SW, 1, true);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_CONTROLLER, false, MqttConstants.MQTT_MESSAGE_TYPE_CO, 1, true);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_LOG, false, MqttConstants.MQTT_MESSAGE_TYPE_LO, 2, false);
+	    registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_SCRIPT_RESULT, false, MqttConstants.MQTT_MESSAGE_TYPE_SR, 1, true);
+		registerMessageType(MessageBase.MESSAGE_TYPE.MESSAGE_TYPE_DOOR_UNLOCK, false, MqttConstants.MQTT_MESSAGE_TYPE_DU, 2, true);
 
 		mqttClient = MqttClient.builder()
 				.identifier(appConfig.getMqtt().getClientId())
@@ -226,8 +224,6 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 			}
 			map.put(MQTT_ACTOR_CMD_ATTR, ((ActorMessage) msg).getCmd().getValue());
 	        return serializeJSONMap(map);
-	    case MESSAGE_TYPE_ACTOR_CONFIG:
-	        return serializeJSONMap(((ActorConfigMessage) msg).getValues());
 	    case MESSAGE_TYPE_SYSTEM_TIME:
 	        return serializeSingleJSONValue(((SystemtimeMessage) msg).getTs());
 	    case MESSAGE_TYPE_SYSTEM_WARNING:
@@ -289,13 +285,14 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 		return serializeJSONMap(map);
 	}
 
-	private void registerMessageType(MessageBase.MESSAGE_TYPE messageType, boolean isRetained, String mqttTypePath, int mqttPathLevels) {
+	private void registerMessageType(MessageBase.MESSAGE_TYPE messageType, boolean isRetained, String mqttTypePath, int mqttPathLevels, boolean dropOwnMessages) {
 	    MessageTypeInfo info = new MessageTypeInfo();
 
 	    info.messageType = messageType;
 	    info.isRetained = isRetained;
 	    info.mqttTypePath = mqttTypePath;
 	    info.mqttPathLevels = mqttPathLevels;
+		info.dropOwnMessages = dropOwnMessages;
 
 	    messageTypes.put(messageType, info);
 	}
@@ -313,9 +310,13 @@ public class MqttCommunicationServiceImpl implements ICommunicationService {
 	    if (info.mqttPathLevels == firstLevelPath.size()) {
 	        Map<String, Object> rawValue = parseJSONPayload(payload);
 
-			String deviceId = "";
+			String senderDeviceId = "";
 			if (rawValue.containsKey(MQTT_SENDER_DEVICE_ID_ATTR)) {
-				deviceId = rawValue.get(MQTT_SENDER_DEVICE_ID_ATTR).toString();
+				senderDeviceId = rawValue.get(MQTT_SENDER_DEVICE_ID_ATTR).toString();
+				if (info.dropOwnMessages && senderDeviceId.equals(deviceId)) {
+					LogFacade.w(TAG, "Dropping own message " + info.messageType);
+					return null;
+				}
 			}
 
 			long ts = 0;
