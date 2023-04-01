@@ -159,6 +159,8 @@ void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
         m_localStorage->set(lastInputValKey, inputSensor->rawValue().toBool());
 
         if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool()) {
+            // toggle controller is in server, to just emit
+            Q_EMIT(toggleActor->requestToggle());
             publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "input sensor");
         }
     }
@@ -196,6 +198,8 @@ bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 t
         ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
 
         if (toggleActor->rawValue().toBool()) {
+            // toggle controller is in server, to just emit
+            Q_EMIT(toggleActor->requestToggle());
             publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "Timeout");
         } else {
             // hmm, already off
