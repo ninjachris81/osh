@@ -43,6 +43,7 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
 
         if (actorMessage->cmd() != actor::ACTOR_CMD_SET_VALUE) {        // value will be updated in actor explicitly
             if (actorMessage->rawValue().isValid()) {           // TODO: check if allowed, like  && actor->cmdSupported(actor::ACTOR_CMD_SET_VALUE)?
+                iDebug() << "Updating value" << actor->fullId() << actorMessage->rawValue();
                 actor->updateValue(actorMessage->rawValue(), false);
             }
         }
