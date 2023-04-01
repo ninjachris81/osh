@@ -23,13 +23,13 @@ MqttCommunicationManagerBase::MqttCommunicationManagerBase(QObject *parent) : Co
     connect(this, &MqttCommunicationManagerBase::mqttConnected, this, &CommunicationManagerBase::connected);
     connect(this, &MqttCommunicationManagerBase::mqttDisconnected, this, &CommunicationManagerBase::disconnected);
 
-    registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2, false);
-    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, false, MQTT_MESSAGE_TYPE_AC, 2, false);
-    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2, false);
+    registerMessageType(MessageBase::MESSAGE_TYPE_VALUE, true, MQTT_MESSAGE_TYPE_VA, 2, true);
+    registerMessageType(MessageBase::MESSAGE_TYPE_ACTOR, false, MQTT_MESSAGE_TYPE_AC, 2, true);
+    registerMessageType(MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY, false, MQTT_MESSAGE_TYPE_DD, 2, true);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_TIME, false, MQTT_MESSAGE_TYPE_ST, 0, true);
     registerMessageType(MessageBase::MESSAGE_TYPE_SYSTEM_WARNING, false, MQTT_MESSAGE_TYPE_SW, 1, true);
     registerMessageType(MessageBase::MESSAGE_TYPE_CONTROLLER, false, MQTT_MESSAGE_TYPE_CO, 1, true);
-    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2, false);
+    registerMessageType(MessageBase::MESSAGE_TYPE_LOG, false, MQTT_MESSAGE_TYPE_LO, 2, true);
     registerMessageType(MessageBase::MESSAGE_TYPE_SCRIPT_RESULT, false, MQTT_MESSAGE_TYPE_SR, 1, true);
     registerMessageType(MessageBase::MESSAGE_TYPE_DOOR_UNLOCK, false, MQTT_MESSAGE_TYPE_DU, 2, true);
 
