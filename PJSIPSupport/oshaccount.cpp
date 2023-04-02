@@ -69,5 +69,6 @@ void OshAccount::cancelCall() {
 void OshAccount::changeState(OshCall::OshCallState newState) {
     qDebug() << Q_FUNC_INFO << newState << QThread::currentThreadId();
     QObject *obj = parent();
-    QMetaObject::invokeMethod(obj, "onCallStateChanged", Qt::AutoConnection, Q_ARG(OshCall::OshCallState, newState));
+    int state = newState;
+    QMetaObject::invokeMethod(obj, "onCallStateChanged", Qt::AutoConnection, Q_ARG(int, state));
 }

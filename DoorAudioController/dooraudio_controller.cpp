@@ -44,10 +44,11 @@ void DoorAudioController::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-void DoorAudioController::onCallStateChanged(OshCall::OshCallState newState) {
+void DoorAudioController::onCallStateChanged(int newState) {
     iInfo() << Q_FUNC_INFO << newState << QThread::currentThreadId();
+    OshCall::OshCallState state = static_cast<OshCall::OshCallState>(newState);
 
-    switch(newState) {
+    switch(state) {
     case OshCall::RINGING:
         m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_ON, true);
         break;
