@@ -2,6 +2,7 @@
 #define PJSTUBS_H
 
 #include <QDebug>
+#include <QTimer>
 
 #include <string>
 #include <vector>
@@ -215,17 +216,56 @@ public:
 
     void answer(CallOpParam) {}
 
-    void makeCall(const string &, const CallOpParam &) {}
+    void makeCall(const string &, const CallOpParam &) {
+        qDebug() << "I am just a stub, but I'm trying my best...";
 
-    bool isActive() { return false; }
+        m_active = false;
+        m_ringing = true;
+        OnCallStateParam prm;
+        onCallState(prm);
+        qDebug() << "Simu ringing";
+
+        QTimer::singleShot(3000, [=]() {
+            qDebug() << "Simu active";
+            m_active = true;
+            m_ringing = false;
+            OnCallStateParam prm;
+            onCallState(prm);
+
+            OnCallMediaStateParam prm2;
+            onCallMediaState(prm2);
+        });
+
+        QTimer::singleShot(6000, [=]() {
+            qDebug() << "Simu end";
+            m_active = false;
+            m_ringing = false;
+            OnCallStateParam prm;
+            onCallState(prm);
+        });
+    }
+
+    bool isActive() { return m_active; }
 
     void hangup(CallOpParam) {}
 
     int getId() const {}
 
-    CallInfo getInfo() {}
+    CallInfo getInfo() {
+        CallInfo info;
+
+        info.state = m_ringing ? PJSIP_INV_STATE_EARLY : PJSIP_INV_STATE_DISCONNECTED;
+        info.role = PJSIP_ROLE_UAC;
+        info.lastStatusCode = m_ringing ? PJSIP_SC_RINGING : PJSIP_SC_OK;
+
+        return info;
+    }
 
     AudioMedia getAudioMedia(int) { }
+
+private:
+    bool m_active = false;
+    bool m_ringing = false;
 };
 
 class AudDevManager {

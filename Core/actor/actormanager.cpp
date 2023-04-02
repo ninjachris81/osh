@@ -85,6 +85,11 @@ void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd, QVariant 
 
     ActorMessage msg(actor->valueGroup()->id(), actor->id(), value, cmd);
     m_commManager->sendMessage(msg);
+
+    if (cmd != actor::ACTOR_CMD_SET_VALUE) {
+        ValueMessage valMsg(actor->valueGroup()->id(), actor->id(), value);
+        m_commManager->sendMessage(valMsg);
+    }
 }
 
 /*
