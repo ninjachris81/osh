@@ -16,6 +16,7 @@
 #include "sharedlib.h"
 
 class OshAccount;
+class OshStateCallback;
 
 using namespace pj;
 
@@ -29,7 +30,7 @@ public:
         ACTIVE
     };
 
-    explicit OshCall(OshAccount &account, int callId, QObject *parent = nullptr);
+    explicit OshCall(OshStateCallback *stateCallback, OshAccount &account, int callId, QObject *parent = nullptr);
 
     void accept();
 
@@ -42,8 +43,9 @@ public:
     void onCallState(OnCallStateParam &prm) override;
     void onCallMediaState(OnCallMediaStateParam &prm) override;
 
-
 private:
+    OshStateCallback* m_callback = nullptr;
+
     ToneGenerator m_ringToneGenerator;
     ToneDescVector m_toneVector;
 
@@ -53,8 +55,11 @@ private:
     void startRinging();
     void stopRinging();
 
+    void changeState(OshCallState state);
+
 signals:
-    void stateChanged(OshCallState state);
+    // does not work, hence using cb
+    //void stateChanged(OshCallState state);
 
 };
 

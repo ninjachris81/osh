@@ -19,6 +19,7 @@ HEADERS += \
     oshaccount.h \
     oshcall.h \
     oshendpoint.h \
+    oshstatecallback.h \
     pjstubs.h
 
 SOURCES += \

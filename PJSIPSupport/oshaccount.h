@@ -11,19 +11,22 @@
 
 #include "oshcall.h"
 #include "sharedlib.h"
+#include "oshstatecallback.h"
 
 using namespace pj;
 
-class SHARED_LIB_EXPORT OshAccount : public QObject, public Account
+class SHARED_LIB_EXPORT OshAccount : public QObject, public Account, public OshStateCallback
 {
     Q_OBJECT
 public:
 
-    explicit OshAccount(QString registrarIp, QString id, QString password, QObject *parent = nullptr);
+    explicit OshAccount(OshStateCallback* stateCallback, QString registrarIp, QString id, QString password, QObject *parent = nullptr);
 
     void startCall(QString id);
 
     void cancelCall();
+
+    void changeState(OshCall::OshCallState newState);
 
     virtual void onRegState(OnRegStateParam &prm);
 
@@ -32,6 +35,7 @@ public:
     OshCall* currentCall();
 
 private:
+    OshStateCallback* m_stateCallback;
     QString m_registrarIp;
     AccountConfig m_accountConfig;
     AuthCredInfo m_credInfo;
@@ -41,10 +45,11 @@ private:
     void setNewCall(int callId);
 
 private slots:
-    void onCallStateChanged(OshCall::OshCallState state);
+    //void onCallStateChanged(OshCall::OshCallState state);
 
 signals:
-    void stateChanged(OshCall::OshCallState state);
+    // signals dont work
+    //void stateChanged(OshCall::OshCallState state);
 
 };
 

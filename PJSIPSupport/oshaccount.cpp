@@ -3,8 +3,8 @@
 #include <QDebug>
 #include "helpers.h"
 
-OshAccount::OshAccount(QString registrarIp, QString id, QString password, QObject *parent)
-    : QObject{parent}, Account(), m_registrarIp(registrarIp)
+OshAccount::OshAccount(OshStateCallback *stateCallback, QString registrarIp, QString id, QString password, QObject *parent)
+    : QObject{parent}, Account(), m_stateCallback(stateCallback), m_registrarIp(registrarIp)
 {
     m_accountConfig.idUri = QString("sip:" + id + "@" + registrarIp).toStdString();
     m_accountConfig.regConfig.registrarUri = QString("sip:" + registrarIp).toStdString();
@@ -40,8 +40,8 @@ void OshAccount::onIncomingCall(OnIncomingCallParam &prm) {
 void OshAccount::setNewCall(int callId) {
     qDebug() << Q_FUNC_INFO;
     cancelCall();
-    m_call = new OshCall(*this, callId);
-    Helpers::safeConnect(m_call, &OshCall::stateChanged, this, &OshAccount::onCallStateChanged, SIGNAL(stateChanged(OshCall::OshCallState)), SLOT(onCallStateChanged(OshCall::OshCallState)));
+    m_call = new OshCall(this, *this, callId);
+    //Helpers::safeConnect(m_call, &OshCall::stateChanged, this, &OshAccount::onCallStateChanged, SIGNAL(stateChanged(OshCall::OshCallState)), SLOT(onCallStateChanged(OshCall::OshCallState)));
 }
 
 OshCall* OshAccount::currentCall() {
@@ -65,7 +65,7 @@ void OshAccount::cancelCall() {
     }
 }
 
-void OshAccount::onCallStateChanged(OshCall::OshCallState state) {
-    qDebug() << Q_FUNC_INFO << state;
-    Q_EMIT(stateChanged(state));
+void OshAccount::changeState(OshCall::OshCallState newState) {
+    qDebug() << Q_FUNC_INFO << newState;
+    m_stateCallback->changeState(newState);
 }

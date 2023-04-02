@@ -1,11 +1,12 @@
 #include "oshcall.h"
 
 #include "oshaccount.h"
+#include "oshstatecallback.h"
 
 #include <QDebug>
 
-OshCall::OshCall(OshAccount &account, int callId, QObject *parent)
-    : QObject{parent}, Call(account, callId)
+OshCall::OshCall(OshStateCallback *stateCallback, OshAccount &account, int callId, QObject *parent)
+    : QObject{parent}, Call(account, callId), m_callback(stateCallback)
 {
     m_ringToneGenerator.createToneGenerator();
 
@@ -60,12 +61,12 @@ void OshCall::onCallState(OnCallStateParam &prm) {
     case PJSIP_INV_STATE_DISCONNECTED:
     case PJSIP_INV_STATE_CONFIRMED:
         stopRinging();
-        Q_EMIT(stateChanged(IDLE));
+        changeState(IDLE);
         break;
     case PJSIP_INV_STATE_EARLY:
         if (statusCode == PJSIP_SC_RINGING && role == PJSIP_ROLE_UAC) {
             startRinging();
-            Q_EMIT(stateChanged(RINGING));
+            changeState(RINGING);
 //        } else if (statusCode == PJSIP_SC_PROGRESS) {
 //            stopRinging();
         }
@@ -93,7 +94,7 @@ void OshCall::onCallMediaState(OnCallMediaStateParam &prm) {
     // And this will connect the call audio media to the sound device/speaker
     aud_med.startTransmit(m_play_dev_med);
 
-    Q_EMIT(stateChanged(ACTIVE));
+    changeState(ACTIVE);
 }
 
 
@@ -110,4 +111,9 @@ void OshCall::stopRinging() {
 
     m_ringToneGenerator.stopTransmit(m_play_dev_med);
     //m_ringToneGenerator.stop();
+}
+
+void OshCall::changeState(OshCallState state) {
+    qDebug() << Q_FUNC_INFO << state;
+    m_callback->changeState(state);
 }
