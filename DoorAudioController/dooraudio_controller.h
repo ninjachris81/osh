@@ -16,7 +16,7 @@
 #include "oshaccount.h"
 #include "oshendpoint.h"
 
-class SHARED_LIB_EXPORT DoorAudioController : public ControllerBase, public OshStateCallback
+class SHARED_LIB_EXPORT DoorAudioController : public ControllerBase
 {
     Q_OBJECT
 public:
@@ -28,13 +28,13 @@ public:
 
     /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
-    void changeState(OshCall::OshCallState newState) override;
-
     void bindDoorRingActor(DigitalActor *doorRingActor);
 
 protected slots:
     void onRingTriggered(actor::ACTOR_CMDS cmd);
-    //void onCallStateChanged(OshCall::OshCallState state);
+
+public slots:
+    void onCallStateChanged(OshCall::OshCallState state);
 
 private:
     OshEndpoint m_endpoint;

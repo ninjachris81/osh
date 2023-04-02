@@ -20,7 +20,7 @@ class SHARED_LIB_EXPORT OshAccount : public QObject, public Account, public OshS
     Q_OBJECT
 public:
 
-    explicit OshAccount(OshStateCallback* stateCallback, QString registrarIp, QString id, QString password, QObject *parent = nullptr);
+    explicit OshAccount(QString registrarIp, QString id, QString password, QObject *parent = nullptr);
 
     void startCall(QString id);
 
@@ -35,7 +35,6 @@ public:
     OshCall* currentCall();
 
 private:
-    OshStateCallback* m_stateCallback;
     QString m_registrarIp;
     AccountConfig m_accountConfig;
     AuthCredInfo m_credInfo;
@@ -48,8 +47,7 @@ private slots:
     //void onCallStateChanged(OshCall::OshCallState state);
 
 signals:
-    // signals dont work
-    //void stateChanged(OshCall::OshCallState state);
+    void stateChanged(OshCall::OshCallState state);
 
 };
 

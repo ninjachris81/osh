@@ -1,10 +1,11 @@
 #include "oshaccount.h"
 
 #include <QDebug>
+#include <QThread>
 #include "helpers.h"
 
-OshAccount::OshAccount(OshStateCallback *stateCallback, QString registrarIp, QString id, QString password, QObject *parent)
-    : QObject{parent}, Account(), m_stateCallback(stateCallback), m_registrarIp(registrarIp)
+OshAccount::OshAccount(QString registrarIp, QString id, QString password, QObject *parent)
+    : QObject{parent}, Account(), m_registrarIp(registrarIp)
 {
     m_accountConfig.idUri = QString("sip:" + id + "@" + registrarIp).toStdString();
     m_accountConfig.regConfig.registrarUri = QString("sip:" + registrarIp).toStdString();
@@ -66,6 +67,7 @@ void OshAccount::cancelCall() {
 }
 
 void OshAccount::changeState(OshCall::OshCallState newState) {
-    qDebug() << Q_FUNC_INFO << newState;
-    m_stateCallback->changeState(newState);
+    qDebug() << Q_FUNC_INFO << newState << QThread::currentThreadId();
+    QObject *obj = parent();
+    QMetaObject::invokeMethod(obj, "onCallStateChanged", Qt::AutoConnection, Q_ARG(OshCall::OshCallState, newState));
 }

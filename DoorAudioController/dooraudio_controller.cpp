@@ -30,22 +30,22 @@ void DoorAudioController::init() {
     QString sipPassword = m_config->getString(this, "sipPassword", "test123");
     m_sipRingId = m_config->getString(this, "sipRingId", "6000");
 
-    m_account = new OshAccount(this, registrarIp, sipId, sipPassword);
+    m_account = new OshAccount(registrarIp, sipId, sipPassword, this);
 }
 
 void DoorAudioController::start() {
     iDebug() << Q_FUNC_INFO;
 
     Helpers::safeConnect(m_doorRingActor, &DigitalActor::cmdTriggered, this, &DoorAudioController::onRingTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onRingTriggered(actor::ACTOR_CMDS)));
-    //Helpers::safeConnect(m_account, &OshAccount::stateChanged, this, &DoorAudioController::onCallStateChanged, SIGNAL(stateChanged(OshCall::OshCallState)), SLOT(onCallStateChanged(OshCall::OshCallState)));
+    Helpers::safeConnect(m_account, &OshAccount::stateChanged, this, &DoorAudioController::onCallStateChanged, SIGNAL(stateChanged(OshCall::OshCallState)), SLOT(onCallStateChanged(OshCall::OshCallState)));
 }
 
 void DoorAudioController::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-void DoorAudioController::changeState(OshCall::OshCallState newState) {
-    iInfo() << Q_FUNC_INFO << newState;
+void DoorAudioController::onCallStateChanged(OshCall::OshCallState newState) {
+    iInfo() << Q_FUNC_INFO << newState << QThread::currentThreadId();
 
     switch(newState) {
     case OshCall::RINGING:
