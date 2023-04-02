@@ -4,6 +4,7 @@
 #include "oshstatecallback.h"
 
 #include <QDebug>
+#include <QThread>
 
 OshCall::OshCall(OshStateCallback *stateCallback, OshAccount &account, int callId, QObject *parent)
     : QObject{parent}, Call(account, callId), m_callback(stateCallback)
@@ -114,6 +115,6 @@ void OshCall::stopRinging() {
 }
 
 void OshCall::changeState(OshCallState state) {
-    qDebug() << Q_FUNC_INFO << state;
+    qDebug() << Q_FUNC_INFO << state << QThread::currentThreadId();
     m_callback->changeState(state);
 }

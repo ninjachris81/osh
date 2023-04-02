@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <QThread>
 
 #include "controller/controllermanager.h"
 #include "shared/controllercmdtypes_qt.h"
@@ -14,7 +15,7 @@ DoorAudioController::DoorAudioController(ControllerManager *manager, QString id,
 }
 
 void DoorAudioController::init() {
-    iDebug() << Q_FUNC_INFO;
+    iDebug() << Q_FUNC_INFO << QThread::currentThreadId();
 
     m_endpoint.init();
 
@@ -47,7 +48,6 @@ void DoorAudioController::changeState(OshCall::OshCallState newState) {
     iInfo() << Q_FUNC_INFO << newState;
 
     switch(newState) {
-        break;
     case OshCall::RINGING:
         m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_ON, true);
         break;
