@@ -12,6 +12,8 @@
 #include "database/databasemanager.h"
 #include "datamodel/datamodelmanager.h"
 #include "actor/digitalactor.h"
+#include "datamodel/datamodelmanager.h"
+#include "log/logmanager.h"
 #include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
@@ -31,6 +33,7 @@ int main(int argc, char *argv[])
     ActorManager actorManager;
     DatabaseManager databaseManager;
     DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << DigitalActor::staticMetaObject.className());
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_DU);
 
@@ -43,6 +46,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&databaseManager);
     managerRegistration.registerManager(&datamodelManager);
+    managerRegistration.registerManager(&logManager);
 
     DoorAudioController doorAudioController(&controllerManager, "frontDoorAudioController");
     controllerManager.registerController(&doorAudioController);

@@ -14,6 +14,7 @@
 #include "user/usermanager.h"
 #include "datamodel/datamodelmanager.h"
 #include "actor/digitalactor.h"
+#include "log/logmanager.h"
 #include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
     DatabaseManager databaseManager;
     DatamodelManager datamodelManager(false, false, true, true, false, false, true, QStringList() << DoorActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className());
     UserManager userManager;
+    LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC << MQTT_MESSAGE_TYPE_DU);
 
@@ -49,6 +51,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&databaseManager);
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&userManager);
+    managerRegistration.registerManager(&logManager);
 
     DoorUnlockController doorUnlockController(&controllerManager, "frontDoorUnlockController");
     controllerManager.registerController(&doorUnlockController);
