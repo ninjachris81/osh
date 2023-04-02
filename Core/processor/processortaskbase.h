@@ -16,11 +16,13 @@ public:
     static QLatin1String PROPERTY_GROUP_ID;
     static QLatin1String PROPERTY_TASK_TYPE;
     static QLatin1String PROPERTY_TASK_TRIGGER_TYPE;
-    static QLatin1String PROPERTY_SCRIPT_CODE;
-    static QLatin1String PROPERTY_RUN_CONDITION;
+//    static QLatin1String PROPERTY_RUN_CONDITION;
     static QLatin1String PROPERTY_SCHEDULE_INTERVAL;
-    static QLatin1String PROPERTY_PUBLISH_RESULT;
+//    static QLatin1String PROPERTY_PUBLISH_RESULT;
     static QLatin1String PROPERTY_ENABLED;
+    static QLatin1String PROPERTY_MODULE_CODE;
+    static QLatin1String PROPERTY_FUNCTION_CODE;
+    static QLatin1String PROPERTY_PARAM_PREFIX;
 
     enum ProcessorTaskTriggerType {
         PTTT_INTERVAL = 0,
@@ -34,7 +36,7 @@ public:
     };
 
     ProcessorTaskBase();
-    explicit ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition = "", qint64 scheduleInterval = 0, bool publishResult = false, bool enabled = true, QObject *parent = nullptr);
+    explicit ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval = 0, bool enabled = true, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -44,13 +46,15 @@ public:
 
     virtual QVariant run() = 0;
 
-    QString scriptCode();
     qint64 scheduleInterval();
     ProcessorTaskType taskType();
     ProcessorTaskTriggerType taskTriggerType();
-    bool publishResult();
+    //bool publishResult();
     bool isEnabled();
     QString groupId();
+
+    int functionCode();
+    QStringList paramList();
 
     qint64 lastExecution();
     QVariant lastResult();
@@ -63,10 +67,12 @@ protected:
     ProcessorTaskType m_processorTaskType = PTT_JS;
     ProcessorTaskTriggerType m_processorTaskTriggerType = PTTT_INTERVAL;
 
-    QString m_scriptCode;
-    QString m_runCondition;
+    int m_moduleCode = 0;
+    int m_functionCode = 0;
+    QStringList m_paramList;
+//    QString m_runCondition;
     qint64 m_scheduleInterval;
-    bool m_publishResult = false;
+//    bool m_publishResult = false;
     bool m_enabled = true;
     QString m_groupId;
 

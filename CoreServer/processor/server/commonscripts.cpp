@@ -494,7 +494,11 @@ bool CommonScripts::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, 
     }
 }
 
-bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant triggerValue, QString soundActorId, QString soundValue) {
+bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue) {
+    return initPlaySoundOnEvent2(valueEventId, playValue, QVariant(), soundActorId, soundValue);
+}
+
+bool CommonScripts::initPlaySoundOnEvent2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue) {
     iInfo() << Q_FUNC_INFO;
     ValueBase *value = m_datamodel->value(valueEventId);
     if (value == nullptr) {
@@ -507,7 +511,8 @@ bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant triggerV
     Q_ASSERT(value != nullptr);
     Q_ASSERT(playbackActor != nullptr);
 
-    m_localStorage->set("initPlaySoundOnEvent_triggerValue_" + value->fullId(), triggerValue);
+    m_localStorage->set("initPlaySoundOnEvent_playValue_" + value->fullId(), playValue);
+    m_localStorage->set("initPlaySoundOnEvent_stopValue_" + value->fullId(), stopValue);
     m_localStorage->setObject("initPlaySoundOnEvent_soundActorId_" + value->fullId(), playbackActor);
     if (!soundValue.isEmpty()) {
         m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
@@ -535,12 +540,14 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
     iInfo() << Q_FUNC_INFO;
 
     ValueBase* value = static_cast<ValueBase*>(sender());
-    QVariant triggerValue = m_localStorage->get("initPlaySoundOnEvent_triggerValue_" + value->fullId());
-    if (triggerValue.convert(value->rawValue().type())) {
-        if (value->rawValue() == triggerValue) {
-            iInfo() << "Trigger";
+    QVariant playValue = m_localStorage->get("initPlaySoundOnEvent_playValue_" + value->fullId());
+    QVariant stopValue = m_localStorage->get("initPlaySoundOnEvent_stopValue_" + value->fullId());
 
-            AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent_soundActorId_" + value->fullId()));
+    if (playValue.convert(value->rawValue().type())) {
+        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent_soundActorId_" + value->fullId()));
+
+        if (value->rawValue() == playValue) {
+            iInfo() << "Play Trigger";
 
             if (!m_localStorage->contains("initPlaySoundOnEvent_soundValue_" + value->fullId())) {
                 // playback static url
@@ -552,7 +559,9 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
                 publishValue(urlValue, soundValue);
             }
 
-            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event trigger playback");
+            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+        } else if (value->rawValue() == stopValue) {
+            publishCmd(playbackActor, actor::ACTOR_CMD_STOP, "event stop playback");
         }
     } else {
         iWarning() << "Failed to convert to target type";

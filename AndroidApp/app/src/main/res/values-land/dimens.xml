@@ -1,8 +1,0 @@
-<resources>
-    <dimen name="activity_horizontal_margin">48dp</dimen>
-    <dimen name="shutter_mode_button_wall_padding">20dp</dimen>
-    <dimen name="shutter_mode_button_height">40dp</dimen>
-    <dimen name="shutter_mode_button_width">150dp</dimen>
-    <dimen name="audio_dialog_width">500dp</dimen>
-    <dimen name="audio_dialog_height">300dp</dimen>
-</resources>

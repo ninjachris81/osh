@@ -29,6 +29,7 @@ public:
 
 
 private:
+    QString m_scriptCode;
     QJSEngine* m_engine = nullptr;
 
     bool checkRunCondition(QJSEngine *engine);

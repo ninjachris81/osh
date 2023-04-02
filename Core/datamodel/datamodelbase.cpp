@@ -202,6 +202,7 @@ ProcessorVariable* DatamodelBase::addProcessorVariable(QString id, QString value
     return var;
 }
 
+/*
 ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool isEnabled) {
     if (m_processorTaskFactory != nullptr) {
         for (ProcessorVariable* var : m_processorVariables.values()) {
@@ -222,7 +223,34 @@ ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, 
     }
 
     return nullptr;
+}*/
+
+ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval, bool isEnabled) {
+    if (m_processorTaskFactory != nullptr) {
+        QStringList resolvedParams;
+        for (QString param : params) {
+            for (ProcessorVariable* var : m_processorVariables.values()) {
+                var->replaceScriptCode(param);
+                resolvedParams << param;
+            }
+        }
+
+        ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, resolvedParams, scheduleInterval);
+        processorNode->setEnabled(isEnabled);
+        if (processorNode != nullptr) {
+            m_processorTasks.insert(processorNode->id(), processorNode);
+            Q_EMIT(datamodelContentChanged());
+            return processorNode;
+        } else {
+            iWarning() << "Failed to create processor node" << id;
+        }
+    } else {
+        iWarning() << "No processor factory set!";
+    }
+
+    return nullptr;
 }
+
 
 KnownRoom* DatamodelBase::addKnownRoom(KnownArea* knownArea, QString id, QString name) {
     KnownRoom* knownRoom = new KnownRoom(id);

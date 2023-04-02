@@ -28,7 +28,7 @@ public:
 
     static QLatin1String MANAGER_ID;
 
-    ProcessorTaskBase* createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) override;
+    ProcessorTaskBase* createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval) override;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 

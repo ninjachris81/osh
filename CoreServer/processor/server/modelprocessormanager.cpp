@@ -28,28 +28,30 @@ ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(pare
     connect(&m_scheduleTimer, &QTimer::timeout, this, &ModelProcessorManager::executeTasks);
 }
 
-ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult) {
-
+ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval) {
     switch(taskType) {
-        case ProcessorTaskBase::PTT_JS:
+    case ProcessorTaskBase::PTT_JS:
+
 #ifdef PROCESSOR_JS_SUPPORT
-            return new JSProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+        return new JSProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
 #else
-            qWarning("JS Processor task not supported");
-#endif
-            break;
-        case ProcessorTaskBase::PTT_NATIVE:
-#ifdef IS_OSH_CORE_SERVICE
-            return new NativeProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
-#else
-            qWarning("Native Processor task not supported");
+        qWarning("JS Processor task not supported");
 #endif
         break;
+
+    case ProcessorTaskBase::PTT_NATIVE:
+#ifdef IS_OSH_CORE_SERVICE
+        return new NativeProcessorTask(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, params, scheduleInterval);
+#else
+        iWarning() << "Native Processor task not supported";
+#endif
+        break;
+
+    default:
+        iWarning() << "Unsupported processor task";
     }
-
-
+    return nullptr;
 }
-
 
 LogCat::LOGCAT ModelProcessorManager::logCat() {
     return LogCat::PROCESSOR;
@@ -118,6 +120,7 @@ MessageBase::MESSAGE_TYPE ModelProcessorManager::getMessageType() {
 }
 
 void ModelProcessorManager::handleReceivedMessage(MessageBase* msg) {
+    Q_UNUSED(msg)
 }
 
 void ModelProcessorManager::start() {
@@ -161,7 +164,10 @@ void ModelProcessorManager::executeTasks() {
             }
             break;
         case ProcessorTaskBase::PTTT_TRIGGER:
-            // will triggered externally
+            // will be triggered externally
+            break;
+        case ProcessorTaskBase::PTTT_ONLY_ONCE:
+            // will be triggered at start only
             break;
         }
     }
@@ -174,10 +180,9 @@ void ModelProcessorManager::executeTask(ProcessorTaskBase* task) {
         ProcessorExecutorBase* executor = m_processorExecutors.value(task->taskType());
 
         QVariant result = executor->execute(task);
-        //QVariant result = it.value()->run(&m_engine, m_commonScripts);
-        if (task->publishResult()) {
-            publishScriptResult(task->id(), result);
-        }
+        //if (task->publishResult()) {
+        //    publishScriptResult(task->id(), result);
+        //}
     } else {
         iDebug() << "Skipping task, since it's not enabled" << task->id();
     }

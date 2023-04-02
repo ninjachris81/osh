@@ -383,8 +383,8 @@ TestDatamodel::TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject
 
 
     // eg
-    addProcessorTask("Light", "eg.egFloor.light.init",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_ONLY_ONCE, "CommonScripts.initSwitchLogic('allRelays0.0', 'allSwitches0.0', 'lightToggles0.0')");
-    addProcessorTask("Light", "eg.egFloor.light",        ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchTimeoutLogic('lightToggles0.0', 10000)", "", 1000);
+    //addProcessorTask("Light", "eg.egFloor.light.init",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_ONLY_ONCE, "CommonScripts.initSwitchLogic('allRelays0.0', 'allSwitches0.0', 'lightToggles0.0')");
+    //addProcessorTask("Light", "eg.egFloor.light",        ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchTimeoutLogic('lightToggles0.0', 10000)", "", 1000);
 
     /*
     addProcessorTask("eg.workingRoom.light",    ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applySwitchLogic('allRelays0.1', 'allSwitches0.1', 3600000)");
@@ -406,12 +406,12 @@ TestDatamodel::TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject
 
 
     // eg
-    addProcessorTask("Shutter", "eg.workingRoom.shutter",  ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.0', 'motions.21', 22, 0, 6, 0)", "", 120000);
-    addProcessorTask("Shutter", "eg.kitchen.shutter",      ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.1', 'motions.22', 22, 0, 6, 0)", "", 120000);
-    addProcessorTask("Shutter", "eg.diningRoom.shutter",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.2', 'motions.23', 22, 0, 6, 0)", "", 120000);
-    addProcessorTask("Shutter", "eg.toilet.shutter",       ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.3', 'motions.24', 22, 0, 6, 0)", "", 120000);
-    addProcessorTask("Shutter", "eg.supplyRoom.shutter",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.4', 'motions.25', 22, 0, 6, 0)", "", 120000);
-    addProcessorTask("Shutter", "eg.egSideFloor.shutter",  ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.5', 'motions.27', 22, 0, 6, 0)", "", 120000);
+    //addProcessorTask("Shutter", "eg.workingRoom.shutter",  ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.0', 'motions.21', 22, 0, 6, 0)", "", 120000);
+    //addProcessorTask("Shutter", "eg.kitchen.shutter",      ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.1', 'motions.22', 22, 0, 6, 0)", "", 120000);
+    //addProcessorTask("Shutter", "eg.diningRoom.shutter",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.2', 'motions.23', 22, 0, 6, 0)", "", 120000);
+    //addProcessorTask("Shutter", "eg.toilet.shutter",       ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.3', 'motions.24', 22, 0, 6, 0)", "", 120000);
+    //addProcessorTask("Shutter", "eg.supplyRoom.shutter",   ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.4', 'motions.25', 22, 0, 6, 0)", "", 120000);
+    //addProcessorTask("Shutter", "eg.egSideFloor.shutter",  ProcessorTaskBase::PTT_NATIVE, ProcessorTaskBase::PTTT_INTERVAL, "CommonScripts.applyShutterLogic('allShutters0.5', 'motions.27', 22, 0, 6, 0)", "", 120000);
 
     /*
     // og

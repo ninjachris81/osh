@@ -9,7 +9,7 @@ JSProcessorTask::JSProcessorTask() : ProcessorTaskBase() {
 
 }
 
-JSProcessorTask::JSProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent) : ProcessorTaskBase(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, enabled, parent)
+JSProcessorTask::JSProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent) : ProcessorTaskBase(groupId, id, taskType, taskTriggerType, 0, 0, QStringList(), scheduleInterval, enabled, parent), m_scriptCode(scriptCode)
 {
 
 }
@@ -37,7 +37,7 @@ QVariant JSProcessorTask::run() {
     if (checkRunCondition(m_engine)) {
         QJSValue result;
 
-        result = ThreadSafeQJSEngine::call(m_engine, [&]{ return m_engine->evaluate(m_scriptCode);});
+        result = ThreadSafeQJSEngine::call(m_engine, [&]{ return m_engine->evaluate("" /*m_scriptCode*/);});
 
         if (!result.isError()) {
             iDebug() << "Result" << result.toVariant();
@@ -63,8 +63,9 @@ void JSProcessorTask::setEngine(QJSEngine* engine) {
 }
 
 bool JSProcessorTask::checkRunCondition(QJSEngine *engine) {
-    if (m_runCondition.length() == 0) return true;
-    return ThreadSafeQJSEngine::call(engine, [&]{ return engine->evaluate(m_runCondition);}).toBool();
+    Q_UNUSED(engine)
+    //if (m_runCondition.length() == 0) return true;
+    //return ThreadSafeQJSEngine::call(engine, [&]{ return engine->evaluate(m_runCondition);}).toBool();
 }
 
 

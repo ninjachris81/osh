@@ -37,7 +37,9 @@ public:
 
     Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
-    Q_INVOKABLE bool initPlaySoundOnEvent(QString valueEventId, QVariant triggerValue, QString soundActorId, QString soundValue);
+    Q_INVOKABLE bool initPlaySoundOnEvent(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue);
+
+    Q_INVOKABLE bool initPlaySoundOnEvent2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue);
 
     static QLatin1String INTERVAL_OFF_DURATIONS;
     static QLatin1String INTERVAL_ON_DURATIONS;

@@ -79,9 +79,11 @@ void DatamodelManager::init(LocalConfig* config) {
 
     // check for unreplaced vars
     for (ProcessorTaskBase *task : m_datamodel->processorTasks()) {
-        if (task->scriptCode().contains(ProcessorVariable::VARIABLE_PREFIX)) {
-            iWarning() << "Unreplaced processor variable in task" << task->id();
-            Q_ASSERT(false);
+        for (QString param : task->paramList()) {
+            if (param.contains(ProcessorVariable::VARIABLE_PREFIX)) {
+                iWarning() << "Unreplaced processor variable in task" << task->id();
+                Q_ASSERT(false);
+            }
         }
     }
 

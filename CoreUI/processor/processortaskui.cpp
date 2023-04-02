@@ -8,9 +8,11 @@ ProcessorTaskUI::ProcessorTaskUI(Identifyable *parent) : IdentifyableUI(parent)
     connect(m_processorTask, &ProcessorTaskBase::lastResultChanged, this, &ProcessorTaskUI::lastResultChanged);
 }
 
+/*
 QString ProcessorTaskUI::scriptCode() {
     return m_processorTask->scriptCode();
 }
+*/
 
 qint64 ProcessorTaskUI::scheduleInterval() {
     return m_processorTask->scheduleInterval();

@@ -198,13 +198,20 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
             QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
             ProcessorTaskBase::ProcessorTaskType taskType = static_cast<ProcessorTaskBase::ProcessorTaskType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TYPE).toInt());
             ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType = static_cast<ProcessorTaskBase::ProcessorTaskTriggerType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE).toInt());
-            QString scriptCode = query.value(ProcessorTaskBase::PROPERTY_SCRIPT_CODE).toString();
-            QString runCondition = query.value(ProcessorTaskBase::PROPERTY_RUN_CONDITION).toString();
+            int moduleCode = query.value(ProcessorTaskBase::PROPERTY_MODULE_CODE).toInt();
+            int functionCode = query.value(ProcessorTaskBase::PROPERTY_FUNCTION_CODE).toInt();
+
+            QStringList params;
+            for (quint8 i=0;i<10;i++) {
+                params << query.value(ProcessorTaskBase::PROPERTY_PARAM_PREFIX + QString::number(i)).toString();
+            }
+
+//            QString runCondition = query.value(ProcessorTaskBase::PROPERTY_RUN_CONDITION).toString();
             qint64 scheduleInterval = query.value(ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL).toLongLong();
-            bool publishResult = query.value(ProcessorTaskBase::PROPERTY_PUBLISH_RESULT).toBool();
+//            bool publishResult = query.value(ProcessorTaskBase::PROPERTY_PUBLISH_RESULT).toBool();
             bool isEnabled = query.value(ProcessorTaskBase::PROPERTY_ENABLED).toBool();
 
-            datamodel->addProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult, isEnabled);
+            datamodel->addProcessorTask(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, params, scheduleInterval, isEnabled);
         }
     } else {
         iWarning() << query.lastError();
