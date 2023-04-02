@@ -30,7 +30,7 @@ void DoorAudioController::init() {
     QString sipPassword = m_config->getString(this, "sipPassword", "test123");
     m_sipRingId = m_config->getString(this, "sipRingId", "6000");
 
-    m_account = new OshAccount(registrarIp, sipId, sipPassword, this);
+    m_account = new OshAccount(this, registrarIp, sipId, sipPassword);
 }
 
 void DoorAudioController::start() {

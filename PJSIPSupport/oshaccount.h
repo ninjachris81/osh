@@ -20,7 +20,7 @@ class SHARED_LIB_EXPORT OshAccount : public QObject, public Account, public OshS
     Q_OBJECT
 public:
 
-    explicit OshAccount(QString registrarIp, QString id, QString password, QObject *parent = nullptr);
+    explicit OshAccount(QObject *parentController, QString registrarIp, QString id, QString password, QObject *parent = nullptr);
 
     void startCall(QString id);
 
@@ -35,6 +35,7 @@ public:
     OshCall* currentCall();
 
 private:
+    QObject *m_parentController;
     QString m_registrarIp;
     AccountConfig m_accountConfig;
     AuthCredInfo m_credInfo;

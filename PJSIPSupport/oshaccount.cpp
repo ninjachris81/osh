@@ -4,8 +4,8 @@
 #include <QThread>
 #include "helpers.h"
 
-OshAccount::OshAccount(QString registrarIp, QString id, QString password, QObject *parent)
-    : QObject{parent}, Account(), m_registrarIp(registrarIp)
+OshAccount::OshAccount(QObject *parentController, QString registrarIp, QString id, QString password, QObject *parent)
+    : QObject{parent}, Account(), m_parentController(parentController), m_registrarIp(registrarIp)
 {
     m_accountConfig.idUri = QString("sip:" + id + "@" + registrarIp).toStdString();
     m_accountConfig.regConfig.registrarUri = QString("sip:" + registrarIp).toStdString();
@@ -68,7 +68,6 @@ void OshAccount::cancelCall() {
 
 void OshAccount::changeState(OshCall::OshCallState newState) {
     qDebug() << Q_FUNC_INFO << newState << QThread::currentThreadId();
-    QObject *obj = parent();
     int state = newState;
-    QMetaObject::invokeMethod(obj, "onCallStateChanged", Qt::AutoConnection, Q_ARG(int, state));
+    QMetaObject::invokeMethod(m_parentController, "onCallStateChanged", Qt::AutoConnection, Q_ARG(int, state));
 }
