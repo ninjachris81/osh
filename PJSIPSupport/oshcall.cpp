@@ -48,9 +48,10 @@ void OshCall::muteSpeaker() {
 
 
 void OshCall::onCallState(OnCallStateParam &prm) {
-    //qDebug() << Q_FUNC_INFO << prm.e.type;
-
     CallInfo info = getInfo();
+
+    qDebug() << Q_FUNC_INFO << info.state << info.lastStatusCode;
+
     pjsip_inv_state callState = info.state;
     pjsip_status_code statusCode = info.lastStatusCode;
     pjsip_role_e role = info.role;
