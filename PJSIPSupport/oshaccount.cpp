@@ -67,6 +67,5 @@ void OshAccount::cancelCall() {
 
 void OshAccount::onCallStateChanged(OshCall::OshCallState state) {
     qDebug() << Q_FUNC_INFO << state;
-
-
+    Q_EMIT(stateChanged(state));
 }
