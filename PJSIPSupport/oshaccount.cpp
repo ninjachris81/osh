@@ -40,6 +40,7 @@ void OshAccount::setNewCall(int callId) {
     qDebug() << Q_FUNC_INFO;
     cancelCall();
     m_call = new OshCall(*this, callId);
+    connect(m_call, &OshCall::stateChanged, this, &OshAccount::stateChanged);
 }
 
 OshCall* OshAccount::currentCall() {

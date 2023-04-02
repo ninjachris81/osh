@@ -22,6 +22,12 @@ class OshCall : public QObject, public Call
 {
     Q_OBJECT
 public:
+    enum OshCallState {
+        IDLE,
+        RINGING,
+        ACTIVE
+    };
+
     explicit OshCall(OshAccount &account, int callId, QObject *parent = nullptr);
 
     void accept();
@@ -43,12 +49,11 @@ private:
     AudioMedia m_cap_dev_med;
     AudioMedia m_play_dev_med;
 
-    void onStartRinging();
-    void onStopRinging();
-
-signals:
     void startRinging();
     void stopRinging();
+
+signals:
+    void stateChanged(OshCallState state);
 
 };
 

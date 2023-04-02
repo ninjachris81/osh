@@ -32,6 +32,7 @@ public:
 
 protected slots:
     void onRingTriggered(actor::ACTOR_CMDS cmd);
+    void onCallStateChanged(OshCall::OshCallState state);
 
 private:
     OshEndpoint m_endpoint;

@@ -19,9 +19,6 @@ OshCall::OshCall(OshAccount &account, int callId, QObject *parent)
 
     m_cap_dev_med = Endpoint::instance().audDevManager().getCaptureDevMedia();
     m_play_dev_med = Endpoint::instance().audDevManager().getPlaybackDevMedia();
-
-    connect(this, &OshCall::startRinging, this, &OshCall::onStartRinging);
-    connect(this, &OshCall::stopRinging, this, &OshCall::onStopRinging);
 }
 
 void OshCall::accept() {
@@ -61,13 +58,15 @@ void OshCall::onCallState(OnCallStateParam &prm) {
     switch(callState)     {
     case PJSIP_INV_STATE_DISCONNECTED:
     case PJSIP_INV_STATE_CONFIRMED:
-        Q_EMIT(stopRinging());
+        stopRinging();
+        Q_EMIT(stateChanged(IDLE));
         break;
     case PJSIP_INV_STATE_EARLY:
         if (statusCode == PJSIP_SC_RINGING && role == PJSIP_ROLE_UAC) {
-            Q_EMIT(startRinging());
-        } else if (statusCode == PJSIP_SC_PROGRESS) {
-            Q_EMIT(stopRinging());
+            startRinging();
+            Q_EMIT(stateChanged(RINGING));
+//        } else if (statusCode == PJSIP_SC_PROGRESS) {
+//            stopRinging();
         }
         break;
     default:
@@ -92,10 +91,12 @@ void OshCall::onCallMediaState(OnCallMediaStateParam &prm) {
 
     // And this will connect the call audio media to the sound device/speaker
     aud_med.startTransmit(m_play_dev_med);
+
+    Q_EMIT(stateChanged(ACTIVE));
 }
 
 
-void OshCall::onStartRinging() {
+void OshCall::startRinging() {
     qDebug() << Q_FUNC_INFO;
 
     //m_ringToneGenerator.play(m_toneVector, true);
@@ -103,7 +104,7 @@ void OshCall::onStartRinging() {
 
 }
 
-void OshCall::onStopRinging() {
+void OshCall::stopRinging() {
     qDebug() << Q_FUNC_INFO;
 
     m_ringToneGenerator.stopTransmit(m_play_dev_med);

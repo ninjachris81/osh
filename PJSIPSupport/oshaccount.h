@@ -17,6 +17,7 @@ class OshAccount : public QObject, public Account
 {
     Q_OBJECT
 public:
+
     explicit OshAccount(QString registrarIp, QString id, QString password, QObject *parent = nullptr);
 
     void startCall(QString id);
@@ -39,6 +40,7 @@ private:
     void setNewCall(int callId);
 
 signals:
+    void stateChanged(OshCall::OshCallState state);
 
 };
 
