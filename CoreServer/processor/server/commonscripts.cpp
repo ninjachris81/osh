@@ -4,16 +4,9 @@
 #include <QDateTime>
 
 #include "helpers.h"
-#include "qsignalmapper.h"
 
-QLatin1String CommonScripts::INTERVAL_OFF_DURATIONS = QLatin1String("interval_off_durations_");
-QLatin1String CommonScripts::INTERVAL_ON_DURATIONS = QLatin1String("interval_on_durations_");
-QLatin1String CommonScripts::INTERVAL_LAST_CHANGES = QLatin1String("interval_lastChanges_");
-QLatin1String CommonScripts::INTERVAL_STATES = QLatin1String("interval_states_");
 
-QLatin1String CommonScripts::TIMOUT_LAST_TS = QLatin1String("last_ts_");
-
-CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", parent), m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
+CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", datamodel, localStorage, valueManager, actorManager, parent)
 {
 }
 
@@ -365,135 +358,6 @@ bool CommonScripts::applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint
     return isTimeout(doorRingActorFullId, triggerTimeoutMs, true);
 }
 
-/*
-void CommonScripts::publishValue(QString fullId, QVariant value) {
-    ValueBase* val = m_datamodel->values().value(fullId);
-    publishValue(val, value);
-}
-*/
-
-void CommonScripts::publishCmd(QString fullId, int cmd, QString reason) {
-    ActorBase* actor = m_datamodel->actor(fullId);
-    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
-}
-
-void CommonScripts::publishCmd(QString fullId, int cmd, QVariant value, QString reason) {
-    ActorBase* actor = m_datamodel->actor(fullId);
-    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), value, reason);
-}
-
-void CommonScripts::publishValue(ValueBase* val, QVariant value) {
-    val->updateValue(value);
-    m_valueManager->publishValue(val);
-}
-
-void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
-    iDebug() << actor->fullId() << cmd << reason;
-    //actor->triggerCmd(cmd, reason);
-    m_actorManager->publishCmd(actor, cmd);
-}
-
-void CommonScripts::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason) {
-    iDebug() << actor->fullId() << cmd << value << reason;
-    //actor->triggerCmd(cmd, reason);
-    m_actorManager->publishCmd(actor, cmd, value);
-}
-
-void CommonScripts::setTimeout(QString key) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    m_localStorage->set(timeoutKey, QDateTime::currentMSecsSinceEpoch());
-}
-
-bool CommonScripts::isTimeout(QString key, quint64 timeoutMs, bool clearTimeoutIfTrue) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    quint64 lastOn = m_localStorage->get(timeoutKey, 0).toULongLong();
-    bool isTo = (lastOn > 0 && QDateTime::currentMSecsSinceEpoch() - lastOn > timeoutMs);
-
-    if (isTo && clearTimeoutIfTrue) {
-        clearTimeout(key);
-    }
-
-    return isTo;
-}
-
-quint64 CommonScripts::getTimeout(QString key) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    return m_localStorage->get(timeoutKey, 0).toULongLong();
-}
-
-void CommonScripts::clearTimeout(QString key) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    m_localStorage->unset(timeoutKey);
-}
-
-void CommonScripts::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {
-    if (durationOffMs > 0 && durationOnMs > 0) {
-        iDebug() << "Setup interval" << key << durationOffMs << durationOnMs << resetState;
-
-        m_localStorage->set(INTERVAL_OFF_DURATIONS + key, durationOffMs);
-        m_localStorage->set(INTERVAL_ON_DURATIONS + key, durationOnMs);
-        if (resetState) {
-            m_localStorage->set(INTERVAL_LAST_CHANGES + key, 0);
-            m_localStorage->set(INTERVAL_STATES + key, false);
-        }
-    } else {
-        iWarning() << "Invalid parameters" << durationOffMs << durationOnMs;
-    }
-}
-
-bool CommonScripts::getIntervalState(QString key) {
-    qulonglong durationOffMs = m_localStorage->get(INTERVAL_OFF_DURATIONS + key, 0).toULongLong();
-    qulonglong durationOnMs = m_localStorage->get(INTERVAL_ON_DURATIONS + key, 0).toULongLong();
-    qulonglong lastChangeMs = m_localStorage->get(INTERVAL_LAST_CHANGES + key, 0).toULongLong();
-    bool state = m_localStorage->get(INTERVAL_STATES + key, false).toBool();
-
-    if (state) {
-        // check if we have to switch off
-        if (QDateTime::currentMSecsSinceEpoch() - lastChangeMs >= durationOnMs) {
-            // ok, switch off
-            m_localStorage->set(INTERVAL_STATES + key, false);
-            state = false;
-            m_localStorage->set(INTERVAL_LAST_CHANGES + key, QDateTime::currentMSecsSinceEpoch());
-            iDebug() << "Interval switching to" << key << state;
-        }
-    } else {
-        // check if we have to switch on
-        if (QDateTime::currentMSecsSinceEpoch() - lastChangeMs >= durationOffMs) {
-            // ok, switch on
-            m_localStorage->set(INTERVAL_STATES + key, true);
-            state = true;
-            m_localStorage->set(INTERVAL_LAST_CHANGES + key, QDateTime::currentMSecsSinceEpoch());
-            iDebug() << "Interval switching to" << key << state;
-        }
-    }
-
-    return state;
-}
-
-void CommonScripts::clearInterval(QString key) {
-    m_localStorage->unset(INTERVAL_OFF_DURATIONS + key);
-    m_localStorage->unset(INTERVAL_ON_DURATIONS + key);
-    m_localStorage->unset(INTERVAL_LAST_CHANGES + key);
-    m_localStorage->unset(INTERVAL_STATES + key);
-}
-
-
-bool CommonScripts::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
-    int from = ((hourFrom * 60) + minuteFrom) * 60 * 1000;
-    int to = ((hourTo * 60) + minuteTo) * 60 * 1000;
-
-    if (from == to) return 0;
-
-    qint64 now = QTime::currentTime().msecsSinceStartOfDay();
-    if (from < to) {
-        // normal case
-        return now > from && now < to;
-    } else {
-        // day limit
-        return now > from || now < to;
-    }
-}
-
 bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue) {
     return initPlaySoundOnEvent2(valueEventId, playValue, QVariant(), soundActorId, soundValue);
 }
@@ -567,3 +431,4 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
         iWarning() << "Failed to convert to target type";
     }
 }
+

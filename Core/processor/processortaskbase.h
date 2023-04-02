@@ -20,7 +20,6 @@ public:
     static QLatin1String PROPERTY_SCHEDULE_INTERVAL;
 //    static QLatin1String PROPERTY_PUBLISH_RESULT;
     static QLatin1String PROPERTY_ENABLED;
-    static QLatin1String PROPERTY_MODULE_CODE;
     static QLatin1String PROPERTY_FUNCTION_CODE;
     static QLatin1String PROPERTY_PARAM_PREFIX;
 
@@ -36,7 +35,7 @@ public:
     };
 
     ProcessorTaskBase();
-    explicit ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval = 0, bool enabled = true, QObject *parent = nullptr);
+    explicit ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval = 0, bool enabled = true, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
@@ -67,7 +66,6 @@ protected:
     ProcessorTaskType m_processorTaskType = PTT_JS;
     ProcessorTaskTriggerType m_processorTaskTriggerType = PTTT_INTERVAL;
 
-    int m_moduleCode = 0;
     int m_functionCode = 0;
     QStringList m_paramList;
 //    QString m_runCondition;

@@ -10,15 +10,14 @@ QLatin1String ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE = QLatin1String("tas
 QLatin1String ProcessorTaskBase::PROPERTY_SCHEDULE_INTERVAL =QLatin1String("schedule_interval");
 //QLatin1String ProcessorTaskBase::PROPERTY_PUBLISH_RESULT = QLatin1String("publish_result");
 QLatin1String ProcessorTaskBase::PROPERTY_ENABLED = QLatin1String("enabled");
-QLatin1String ProcessorTaskBase::PROPERTY_MODULE_CODE = QLatin1String("module_code");
 QLatin1String ProcessorTaskBase::PROPERTY_FUNCTION_CODE = QLatin1String("function_code");
 QLatin1String ProcessorTaskBase::PROPERTY_PARAM_PREFIX = QLatin1String("param_");
 
 ProcessorTaskBase::ProcessorTaskBase() : QObject() {
 }
 
-ProcessorTaskBase::ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval, bool enabled, QObject *parent)
-    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_moduleCode(moduleCode), m_functionCode(functionCode), m_paramList(params), m_scheduleInterval(scheduleInterval), m_enabled(enabled), m_groupId(groupId)
+ProcessorTaskBase::ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval, bool enabled, QObject *parent)
+    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_functionCode(functionCode), m_paramList(params), m_scheduleInterval(scheduleInterval), m_enabled(enabled), m_groupId(groupId)
 {
 
 }

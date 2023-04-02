@@ -9,7 +9,7 @@ JSProcessorTask::JSProcessorTask() : ProcessorTaskBase() {
 
 }
 
-JSProcessorTask::JSProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent) : ProcessorTaskBase(groupId, id, taskType, taskTriggerType, 0, 0, QStringList(), scheduleInterval, enabled, parent), m_scriptCode(scriptCode)
+JSProcessorTask::JSProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, QString scriptCode, QString runCondition, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent) : ProcessorTaskBase(groupId, id, taskType, taskTriggerType, 0, QStringList(), scheduleInterval, enabled, parent), m_scriptCode(scriptCode)
 {
 
 }

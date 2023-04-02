@@ -225,17 +225,17 @@ ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, 
     return nullptr;
 }*/
 
-ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval, bool isEnabled) {
+ProcessorTaskBase* DatamodelBase::addProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval, bool isEnabled) {
     if (m_processorTaskFactory != nullptr) {
         QStringList resolvedParams;
         for (QString param : params) {
             for (ProcessorVariable* var : m_processorVariables.values()) {
                 var->replaceScriptCode(param);
-                resolvedParams << param;
             }
+            resolvedParams << param;
         }
 
-        ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, resolvedParams, scheduleInterval);
+        ProcessorTaskBase* processorNode = m_processorTaskFactory->createProcessorTask(groupId, id, taskType, taskTriggerType, functionCode, resolvedParams, scheduleInterval);
         processorNode->setEnabled(isEnabled);
         if (processorNode != nullptr) {
             m_processorTasks.insert(processorNode->id(), processorNode);

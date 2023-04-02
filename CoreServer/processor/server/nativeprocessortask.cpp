@@ -5,15 +5,14 @@ NativeProcessorTask::NativeProcessorTask() : ProcessorTaskBase() {
 
 }
 
-NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent)
-    :ProcessorTaskBase(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, params, scheduleInterval, enabled, parent)
+NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent)
+    :ProcessorTaskBase(groupId, id, taskType, taskTriggerType, functionCode, params, scheduleInterval, enabled, parent)
 {
-    m_nativeModule = static_cast<NativeModuleType>(m_moduleCode);
     m_nativeFunction = static_cast<NativeFunctionType>(m_functionCode);
 
     QList<QVariant::Type> typeList = NativeProcessorTask::paramTypeList(m_nativeFunction);
 
-    for (quint8 i = 0; i < m_paramList.size();i++) {
+    for (quint8 i = 0; i < typeList.size();i++) {
         QString str = m_paramList.at(i).trimmed();
         if (str.startsWith("'")) str = str.mid(1);
         if (str.endsWith("'")) str = str.chopped(1);
@@ -48,40 +47,37 @@ QVariant NativeProcessorTask::run() {
     }
 
     if (checkRunCondition()) {
-        switch(m_nativeModule) {
-        case NMT_COMMON_SCRIPTS:
-
-            switch(m_nativeFunction) {
-            case NFT_INIT_SWITCH_LOGIC:
-                m_lastResult = m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
-                break;
-            case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
-                m_lastResult = m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
-                break;
-            case NFT_APPLY_SHUTTER_LOGIC:
-                m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt());
-                break;
-            case NFT_INIT_DOOR_RING_LOGIC:
-                m_lastResult = m_commonScripts->initDoorRingLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
-                break;
-            case NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
-                m_lastResult = m_commonScripts->applyDoorRingTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toLongLong());
-                break;
-            case NFT_INIT_PLAY_SOUND_ON_EVENT:
-                m_lastResult = m_commonScripts->initPlaySoundOnEvent(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
-                break;
-            case NFT_INIT_PLAY_SOUND_ON_EVENT_2:
-                m_lastResult = m_commonScripts->initPlaySoundOnEvent2(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2), m_nativeParams.at(3).toString(), m_nativeParams.at(4).toString());
-                break;
-            default:
-                iWarning() << "Unhandled script function" << m_nativeFunction;
-                break;
-            }
+        switch(m_nativeFunction) {
+        case NFT_INIT_SWITCH_LOGIC:
+            m_lastResult = m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
             break;
-
+        case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
+            m_lastResult = m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
+            break;
+        case NFT_APPLY_SHUTTER_LOGIC:
+            m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt());
+            break;
+        case NFT_INIT_DOOR_RING_LOGIC:
+            m_lastResult = m_commonScripts->initDoorRingLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
+            break;
+        case NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
+            m_lastResult = m_commonScripts->applyDoorRingTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toLongLong());
+            break;
+        case NFT_INIT_PLAY_SOUND_ON_EVENT:
+            m_lastResult = m_commonScripts->initPlaySoundOnEvent(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
+            break;
+        case NFT_INIT_PLAY_SOUND_ON_EVENT_2:
+            m_lastResult = m_commonScripts->initPlaySoundOnEvent2(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2), m_nativeParams.at(3).toString(), m_nativeParams.at(4).toString());
+            break;
+        case NFT_INIT_CONNECT_VALUES:
+            m_lastResult = m_basicScripts->initConnectValues(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
+            break;
+        case NFT_INIT_TRIGGER_CMD_ON_VALUE:
+            m_lastResult = m_basicScripts->initTriggerCmdOnValue(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt());
+            break;
         default:
-            iWarning() << "Invalid native module" << m_nativeModule;
-            Q_ASSERT(false);
+            iWarning() << "Unhandled script function" << m_nativeFunction;
+            break;
         }
 
         Q_EMIT(lastResultChanged());
@@ -92,6 +88,10 @@ QVariant NativeProcessorTask::run() {
     }
 
     return false;
+}
+
+void NativeProcessorTask::setBasicScripts(BasicScripts* basicScripts) {
+    m_basicScripts = basicScripts;
 }
 
 void NativeProcessorTask::setCommonScripts(CommonScripts* commonScripts) {
@@ -137,6 +137,10 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
         return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_EVENT_2:
         return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::UserType << QVariant::String << QVariant::String;
+    case NativeProcessorTask::NFT_INIT_CONNECT_VALUES:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String;
+    case NativeProcessorTask::NFT_INIT_TRIGGER_CMD_ON_VALUE:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::Int;
     default:
         return QList<QVariant::Type>();
     }

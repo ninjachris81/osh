@@ -9,9 +9,11 @@
     #include <pjsua2/endpoint.hpp>
 #endif
 
+#include "sharedlib.h"
+
 using namespace pj;
 
-class OshEndpoint : public QObject, public Endpoint
+class SHARED_LIB_EXPORT OshEndpoint : public QObject, public Endpoint
 {
     Q_OBJECT
 public:

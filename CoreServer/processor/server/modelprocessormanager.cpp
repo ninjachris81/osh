@@ -28,7 +28,7 @@ ModelProcessorManager::ModelProcessorManager(QObject *parent) : ManagerBase(pare
     connect(&m_scheduleTimer, &QTimer::timeout, this, &ModelProcessorManager::executeTasks);
 }
 
-ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int moduleCode, int functionCode, QStringList params, qint64 scheduleInterval) {
+ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, QString id, ProcessorTaskBase::ProcessorTaskType taskType, ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval) {
     switch(taskType) {
     case ProcessorTaskBase::PTT_JS:
 
@@ -41,7 +41,7 @@ ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, Q
 
     case ProcessorTaskBase::PTT_NATIVE:
 #ifdef IS_OSH_CORE_SERVICE
-        return new NativeProcessorTask(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, params, scheduleInterval);
+        return new NativeProcessorTask(groupId, id, taskType, taskTriggerType, functionCode, params, scheduleInterval);
 #else
         iWarning() << "Native Processor task not supported";
 #endif

@@ -198,7 +198,6 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
             QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
             ProcessorTaskBase::ProcessorTaskType taskType = static_cast<ProcessorTaskBase::ProcessorTaskType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TYPE).toInt());
             ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType = static_cast<ProcessorTaskBase::ProcessorTaskTriggerType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE).toInt());
-            int moduleCode = query.value(ProcessorTaskBase::PROPERTY_MODULE_CODE).toInt();
             int functionCode = query.value(ProcessorTaskBase::PROPERTY_FUNCTION_CODE).toInt();
 
             QStringList params;
@@ -211,7 +210,7 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
 //            bool publishResult = query.value(ProcessorTaskBase::PROPERTY_PUBLISH_RESULT).toBool();
             bool isEnabled = query.value(ProcessorTaskBase::PROPERTY_ENABLED).toBool();
 
-            datamodel->addProcessorTask(groupId, id, taskType, taskTriggerType, moduleCode, functionCode, params, scheduleInterval, isEnabled);
+            datamodel->addProcessorTask(groupId, id, taskType, taskTriggerType, functionCode, params, scheduleInterval, isEnabled);
         }
     } else {
         iWarning() << query.lastError();

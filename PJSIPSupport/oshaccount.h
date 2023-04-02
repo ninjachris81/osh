@@ -10,10 +10,11 @@
 #endif
 
 #include "oshcall.h"
+#include "sharedlib.h"
 
 using namespace pj;
 
-class OshAccount : public QObject, public Account
+class SHARED_LIB_EXPORT OshAccount : public QObject, public Account
 {
     Q_OBJECT
 public:
@@ -38,6 +39,9 @@ private:
     OshCall *m_call = nullptr;
 
     void setNewCall(int callId);
+
+private slots:
+    void onCallStateChanged(OshCall::OshCallState state);
 
 signals:
     void stateChanged(OshCall::OshCallState state);

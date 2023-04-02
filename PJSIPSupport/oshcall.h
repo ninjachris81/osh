@@ -13,12 +13,13 @@
     #include <pjmedia.h>
 #endif
 
+#include "sharedlib.h"
 
 class OshAccount;
 
 using namespace pj;
 
-class OshCall : public QObject, public Call
+class SHARED_LIB_EXPORT OshCall : public QObject, public Call
 {
     Q_OBJECT
 public:

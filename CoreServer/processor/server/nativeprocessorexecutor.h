@@ -18,6 +18,7 @@ public:
     QVariant execute(NativeProcessorTask* task);
 
 private:
+    BasicScripts* m_basicScripts;
     CommonScripts* m_commonScripts;
 
 signals:

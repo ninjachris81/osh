@@ -1,6 +1,7 @@
 #include "oshaccount.h"
 
 #include <QDebug>
+#include "helpers.h"
 
 OshAccount::OshAccount(QString registrarIp, QString id, QString password, QObject *parent)
     : QObject{parent}, Account(), m_registrarIp(registrarIp)
@@ -40,7 +41,7 @@ void OshAccount::setNewCall(int callId) {
     qDebug() << Q_FUNC_INFO;
     cancelCall();
     m_call = new OshCall(*this, callId);
-    connect(m_call, &OshCall::stateChanged, this, &OshAccount::stateChanged);
+    Helpers::safeConnect(m_call, &OshCall::stateChanged, this, &OshAccount::onCallStateChanged, SIGNAL(stateChanged(OshCall::OshCallState)), SLOT(onCallStateChanged(OshCall::OshCallState)));
 }
 
 OshCall* OshAccount::currentCall() {
@@ -62,4 +63,10 @@ void OshAccount::cancelCall() {
         m_call->kill();
         delete m_call;
     }
+}
+
+void OshAccount::onCallStateChanged(OshCall::OshCallState state) {
+    qDebug() << Q_FUNC_INFO << state;
+
+
 }
