@@ -36,7 +36,7 @@ void DoorAudioController::start() {
     iDebug() << Q_FUNC_INFO;
 
     Helpers::safeConnect(m_doorRingActor, &DigitalActor::cmdTriggered, this, &DoorAudioController::onRingTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onRingTriggered(actor::ACTOR_CMDS)));
-    Helpers::safeConnect(m_account, &OshAccount::stateChanged, this, &DoorAudioController::onCallStateChanged, SIGNAL(actor::ACTOR_CMDS), SLOT(onCallStateChanged(OshAccount::OshCallState)));
+    Helpers::safeConnect(m_account, &OshAccount::stateChanged, this, &DoorAudioController::onCallStateChanged, SIGNAL(stateChanged(OshCall::OshCallState)), SLOT(onCallStateChanged(OshCall::OshCallState)));
 }
 
 void DoorAudioController::handleMessage(ControllerMessage *msg) {
@@ -64,11 +64,11 @@ void DoorAudioController::onCallStateChanged(OshCall::OshCallState state) {
     switch(state) {
         break;
     case OshCall::RINGING:
-        m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_ON);
+        m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_ON, true);
         break;
     case OshCall::IDLE:
     case OshCall::ACTIVE:
-        m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_OFF);
+        m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_OFF, false);
         break;
     }
 }
