@@ -6,6 +6,7 @@
 #include <QMutex>
 #include <QTimer>
 
+#include "actor/actormanager.h"
 #include "sharedlib.h"
 
 #include "manager/managerbase.h"
@@ -49,7 +50,9 @@ private slots:
 
 private:
     CommunicationManagerBase* m_commManager;
+    ActorManager *m_actorManager;
     UserManager* m_userManager;
+
     QMutex m_currentChallengeRequestsMutex;
     QTimer m_currentChallengeRequestsTimer;
 

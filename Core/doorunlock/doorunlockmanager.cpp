@@ -4,6 +4,7 @@
 #include <QRandomGenerator>
 #include <QCryptographicHash>
 
+#include "actor/dooractor.h"
 #include "macros.h"
 #include "user/oshuser.h"
 
@@ -33,6 +34,9 @@ void DoorUnlockManager::init(LocalConfig *config) {
     REQUIRE_MANAGER(UserManager);
     m_userManager = getManager<UserManager>(UserManager::MANAGER_ID);
 
+    REQUIRE_MANAGER(ActorManager);
+    m_actorManager = getManager<ActorManager>(ActorManager::MANAGER_ID);
+
     //m_currentChallengeRequestsTimer.start();
 }
 
@@ -46,7 +50,9 @@ void DoorUnlockManager::handleReceivedMessage(MessageBase* msg) {
 
     // first, check if user is allowed
     OshUser* user = m_userManager->user(duMessage->userId());
-    if (user != nullptr) {
+    DoorActor *door = static_cast<DoorActor*>(m_actorManager->getActor(duMessage->doorId()));
+
+    if (user != nullptr && door != nullptr) {
         if (user->rights().contains(OshUser::USER_RIGHT_UNLOCK_DOOR)) {
             if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_STAGE)) {
                 DoorUnlockMessage::DU_AUTH_STAGE stage = static_cast<DoorUnlockMessage::DU_AUTH_STAGE>(duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_STAGE).toUInt());
@@ -64,12 +70,15 @@ void DoorUnlockManager::handleReceivedMessage(MessageBase* msg) {
 
             } else {
                 iWarning() << "Stage attribute missing";
+                sendResult(duMessage->userId(), duMessage->doorId(), false);
             }
         } else {
             iWarning() << "Insufficient user rights" << duMessage->userId();
+            sendResult(duMessage->userId(), duMessage->doorId(), false);
         }
     } else {
         iWarning() << "User could not be resolved" << duMessage->userId();
+        sendResult(duMessage->userId(), duMessage->doorId(), false);
     }
 }
 
