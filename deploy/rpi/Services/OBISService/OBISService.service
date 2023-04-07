@@ -9,6 +9,8 @@ After=network.target
 ## other values are Type=simple (default) and Type=oneshot
 #Type=forking
 Type=simple
+Restart=on-failure
+RestartSec=5s
 
 WorkingDirectory=/etc/osh/OBISService
 
