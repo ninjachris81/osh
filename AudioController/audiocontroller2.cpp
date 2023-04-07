@@ -23,6 +23,9 @@ void AudioController2::init() {
     m_actorManager = m_manager->getManager<ActorManager>(ActorManager::MANAGER_ID);
     Q_ASSERT(m_actorManager != nullptr);
 
+    m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+    Q_ASSERT(m_valueManager);
+
 }
 
 void AudioController2::start() {
@@ -68,6 +71,13 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
         } else if (audioActor->audioUrl().isEmpty()) {
             iWarning() << "Audio actors must have either url value, or static url set" << audioActor->fullId();
             Q_ASSERT(false);
+        }
+
+        if (!audioActor->audioCurrentTitleId().isEmpty()) {
+            iInfo() << "Binding current title" << audioActor->audioCurrentTitleId();
+            StringValue* currentTitleValue = static_cast<StringValue*>(datamodel->value(audioActor->audioCurrentTitleId()));
+            Q_ASSERT(currentTitleValue != nullptr);
+            audioActor->withAudioCurrentTitleValue(currentTitleValue);
         }
 
         m_playbackActors.insert(audioActor->id(), audioActor);
@@ -128,9 +138,21 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
 
         iInfo() << "Launching" << proc->program() << proc->arguments();
         audioActor->setPlaybackState(AudioPlaybackActor::PLAYING);
-        proc->start();
+        Helpers::safeConnect(proc, &AudioProcessWrapperBase::currentTitleChanged, this, &AudioController2::onCurrentTitleChanged, SIGNAL(currentTitleChanged(QString)), SLOT(onCurrentTitleChanged(QString)));
+        proc->start(QIODevice::ReadOnly);
     } else {
         iWarning() << "Cannot playback - no url set";
+    }
+}
+
+void AudioController2::onCurrentTitleChanged(QString currentTitle) {
+    iInfo() << Q_FUNC_INFO << currentTitle;
+
+    AudioProcessWrapperBase* audioProcess = qobject_cast<AudioProcessWrapperBase*>(sender());
+    StringValue *currentTitleValue = static_cast<StringValue*>(audioProcess->audioActor()->audioCurrentTitle());
+    if (currentTitleValue != nullptr) {
+        currentTitleValue->updateValue(currentTitle);
+        m_valueManager->publishValue(currentTitleValue);
     }
 }
 

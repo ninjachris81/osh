@@ -19,6 +19,7 @@ public:
     static QLatin1String PROPERTY_AUDIO_VOLUME_ID;
     static QLatin1String PROPERTY_AUDIO_URL;
     static QLatin1String PROPERTY_AUDIO_URL_ID;
+    static QLatin1String PROPERTY_AUDIO_CURRENT_TITLE_ID;
 
     enum AudioPlaybackState {
         STOPPED = 0,
@@ -28,7 +29,7 @@ public:
     };
 
     AudioPlaybackActor();
-    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QObject *parent = nullptr);
+    explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QString audioCurrentTitleId, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
 
@@ -40,6 +41,8 @@ public:
 
     AudioPlaybackActor* withAudioUrlValue(StringValue* url);
 
+    AudioPlaybackActor* withAudioCurrentTitleValue(StringValue *currentTitle);
+
     AudioPlaybackState playbackState();
     void setPlaybackState(AudioPlaybackState state);
 
@@ -49,6 +52,8 @@ public:
     QString audioVolumeId();
     QString audioUrl();
     QString audioUrlId();
+    QString audioCurrentTitleId();
+    StringValue *audioCurrentTitle();
 
 protected:
     QStringList m_audioDeviceIds;
@@ -60,6 +65,7 @@ protected:
 
     DoubleValue* m_audioVolumeValue;
     StringValue* m_audioUrlValue;
+    StringValue* m_audioCurrentTitleValue;
 
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
 

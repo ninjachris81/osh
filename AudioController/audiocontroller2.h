@@ -46,6 +46,7 @@ private:
 
     CommunicationManagerBase* m_commManager;
     ActorManager *m_actorManager;
+    ValueManagerBase *m_valueManager;
     AMixerVolumeWrapper m_volumeWrapper;
 
     void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
@@ -57,6 +58,7 @@ private:
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onProcessError(QProcess::ProcessError error);
+    void onCurrentTitleChanged(QString currentTitle);
 
 protected slots:
     void onStartPlayback();

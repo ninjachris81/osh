@@ -16,4 +16,15 @@ MPG123ProcessWrapper::MPG123ProcessWrapper(QString cmd, AudioPlaybackActor *acto
     }
 
     setArguments(args);
+
+    this->setReadChannel(QProcess::StandardOutput);
+
+    connect(this, &QProcess::readyRead, this,[this](){
+        QString line = readLine();
+
+        if (line.startsWith("ICY-META: StreamTitle='") && line.contains("';")) {
+            line = line.mid(23, line.indexOf("';"));
+            Q_EMIT(currentTitleChanged(line));
+        }
+    });
 }

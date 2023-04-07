@@ -16,6 +16,9 @@ public:
 private:
     AudioPlaybackActor *m_audioActor;
 
+signals:
+    void currentTitleChanged(QString currentTitle);
+
 };
 
 #endif // AUDIOPROCESSWRAPPERBASE_H

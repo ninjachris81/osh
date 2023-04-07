@@ -8,11 +8,12 @@ QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME = QLatin1String("audio_v
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID = QLatin1String("audio_volume_id");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL = QLatin1String("audio_url");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL_ID = QLatin1String("audio_url_id");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_CURRENT_TITLE_ID = QLatin1String("audio_current_title_id");
 
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QObject *parent) : ActorBase(valueGroup, id, valueType, QVariant::Int, parent),
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QString audioCurrentTitleId, QObject *parent) : ActorBase(valueGroup, id, valueType, QVariant::Int, parent),
     m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioUrl(audioUrl), m_audioUrlId(audioUrlId)
 {
     m_audioDeviceIds = audioDeviceIds.split("\n");
@@ -98,6 +99,18 @@ QString AudioPlaybackActor::audioUrlId() {
     return m_audioUrlId;
 }
 
+QString AudioPlaybackActor::audioCurrentTitleId() {
+    if (m_audioCurrentTitleValue != nullptr && m_audioCurrentTitleValue->rawValue().isValid()) {
+        return m_audioCurrentTitleValue->rawValue().toString();
+    } else {
+        return "";
+    }
+}
+
+StringValue *AudioPlaybackActor::audioCurrentTitle() {
+    return m_audioCurrentTitleValue;
+}
+
 AudioPlaybackActor* AudioPlaybackActor::withAudioVolumeValue(DoubleValue* volume) {
     iDebug() << Q_FUNC_INFO << volume->fullId();
 
@@ -124,6 +137,12 @@ AudioPlaybackActor* AudioPlaybackActor::withAudioUrlValue(StringValue* url) {
     if (m_audioUrlValue->rawValue().isValid()) m_audioUrl = m_audioUrlValue->rawValue().toString();
 
     Helpers::safeConnect(m_audioUrlValue, &StringValue::valueChanged, this, &AudioPlaybackActor::onUrlChanged, SIGNAL(valueChanged()), SLOT(onUrlChanged()));
+    return this;
+}
+
+AudioPlaybackActor* AudioPlaybackActor::withAudioCurrentTitleValue(StringValue *currentTitle) {
+    iDebug() << Q_FUNC_INFO << currentTitle->fullId();
+    m_audioCurrentTitleValue = currentTitle;
     return this;
 }
 
