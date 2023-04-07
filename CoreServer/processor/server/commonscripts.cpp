@@ -303,7 +303,7 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterMode
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
-    if (shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
+    if (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
             // down: check is motion active
             if (!motionActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {

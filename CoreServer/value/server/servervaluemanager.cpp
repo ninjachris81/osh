@@ -23,10 +23,7 @@ void ServerValueManager::init(LocalConfig *config) {
 
     m_simpleDatabaseManager = getManager<SimpleDatabaseManager>(SimpleDatabaseManager::MANAGER_ID);
 
-    /* not needed, using retain
-     *
     Helpers::safeConnect(m_commManager, &CommunicationManagerBase::connected, this, &ServerValueManager::onConnected, SIGNAL(connected()), SLOT(onConnected()));
-    */
 
     m_valueCheckTimer.setInterval(config->getInt("value.checkInterval", 1000));
     m_valueCheckTimer.start();
