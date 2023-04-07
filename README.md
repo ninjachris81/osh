@@ -4,9 +4,12 @@ Open Smart Home
 I hate to have individual ecosystems for each of my smart home peripherals.
 This project is a central system which connects to all of my devices and feeds them into a single MQTT bus.
 
+It's the underlying layer beneath logic layer like openHAB.
+
 Frontends:
 Android
-Web-based for backend and datamodel (TBD)
+Web-based for backend and datamodel
+https://github.com/ninjachris81/osh_apps
 
 Current HW setup:
 
