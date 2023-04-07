@@ -34,7 +34,7 @@ void ToggleController::bindManager(ActorManager* actorManager, ValueManagerBase 
         if (qobject_cast<ToggleActor*>(actor) != nullptr) {
             ToggleActor* toggleActor = qobject_cast<ToggleActor*>(actor);
             iInfo() << "Connecting to toggle actor" <<  toggleActor->fullId();
-            Helpers::safeConnect(toggleActor, &ToggleActor::requestToggle, this, &ToggleController::onRequestToggle, SIGNAL(requestToggle()), SLOT(onRequestToggle()));
+            //Helpers::safeConnect(toggleActor, &ToggleActor::requestToggle, this, &ToggleController::onRequestToggle, SIGNAL(requestToggle()), SLOT(onRequestToggle()));
         }
     }
 }

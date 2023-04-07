@@ -34,9 +34,10 @@ public:
     static QLatin1String PROPERTY_VALUE_TIMEOUT;
     static QLatin1String PROPERTY_ALWAYS_EMIT;
     static QLatin1String PROPERTY_PERSIST;
+    static QLatin1String PROPERTY_TYPE_HINT;
 
     ValueBase();
-    explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit = true, QObject *parent = nullptr);
+    explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QVariant::Type typeHint, QObject *parent = nullptr);
 
     /*virtual*/ void serialize(QJsonObject &obj) override;
 
@@ -91,6 +92,7 @@ private slots:
 
 protected:
     bool m_alwaysEmit = true;
+    QVariant::Type m_typeHint = QVariant::Invalid;
 
 private:
     VALUE_TYPE m_valueType;

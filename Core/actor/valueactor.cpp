@@ -1,7 +1,7 @@
 #include "valueactor.h"
 
-ValueActor::ValueActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent)
-    : ActorBase(valueGroup, id, valueType, parent)
+ValueActor::ValueActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QVariant::Type typeHint, QObject *parent)
+    : ActorBase(valueGroup, id, valueType, typeHint, parent)
 {
 
 }
@@ -21,15 +21,11 @@ void ValueActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
 }
 
 QVariant ValueActor::_updateValue(QVariant newValue) {
-    if (newValue.canConvert(m_type)) {
-        newValue.convert(m_type);
+    if (newValue.canConvert(m_typeHint)) {
+        newValue.convert(m_typeHint);
         return newValue;
     } else {
-        qWarning() << "Cannot convert" << newValue << "to type" << m_type;
+        qWarning() << "Cannot convert" << newValue << "to type" << m_typeHint;
         return QVariant::fromValue(newValue);
     }
-}
-
-void ValueActor::setTypeHint(QVariant::Type type) {
-    m_type = type;
 }

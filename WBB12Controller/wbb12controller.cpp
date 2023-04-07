@@ -205,7 +205,6 @@ void WBB12Controller::bindValueManager(ValueManagerBase* valueManager, ActorMana
             }
         } else {
             ValueActor* actor = static_cast<ValueActor*>(val);
-            actor->setTypeHint(retVal.type);
             Helpers::safeConnect(actor, &ValueActor::requestSetValue, this, &WBB12Controller::onRequestSetValue, SIGNAL(requestSetValue()), SLOT(onRequestSetValue()));
         }
 

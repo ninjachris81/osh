@@ -10,11 +10,13 @@ QLatin1String ValueBase::PROPERTY_VALUE_TYPE = QLatin1String("value_type");
 QLatin1String ValueBase::PROPERTY_VALUE_TIMEOUT = QLatin1String("value_timeout");
 QLatin1String ValueBase::PROPERTY_ALWAYS_EMIT = QLatin1String("always_emit");
 QLatin1String ValueBase::PROPERTY_PERSIST = QLatin1String("persist");
+QLatin1String ValueBase::PROPERTY_TYPE_HINT = QLatin1String("type_hint");
 
 ValueBase::ValueBase() : SerializableIdentifyable() {
 }
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : QObject(parent), SerializableIdentifyable (id), m_alwaysEmit(alwaysEmit), m_valueType(valueType), m_valueGroup(valueGroup)
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QVariant::Type typeHint, QObject *parent) : QObject(parent), SerializableIdentifyable (id),
+    m_alwaysEmit(alwaysEmit), m_typeHint(typeHint), m_valueType(valueType), m_valueGroup(valueGroup)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 

@@ -27,7 +27,7 @@ protected:
 
 
 signals:
-    void requestToggle();
+    //void requestToggle();
 
 };
 

@@ -3,7 +3,7 @@
 IntegerValue::IntegerValue() : ValueBase() {
 }
 
-IntegerValue::IntegerValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, parent)
+IntegerValue::IntegerValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, QVariant::Int, parent)
 {
 
 }

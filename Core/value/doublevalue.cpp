@@ -3,7 +3,7 @@
 DoubleValue::DoubleValue() : ValueBase() {
 }
 
-DoubleValue::DoubleValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, parent)
+DoubleValue::DoubleValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, QVariant::Double, parent)
 {
 
 }

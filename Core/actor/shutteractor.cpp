@@ -10,7 +10,7 @@ ShutterActor::ShutterActor() : ActorBase() {
 }
 
 ShutterActor::ShutterActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, int fullTiltDuration, QObject *parent)
-    : ActorBase(valueGroup, id, valueType, parent), m_tiltSupport(tiltSupport), m_fullCloseDuration(fullCloseDuration), m_fullTiltDuration(fullTiltDuration)
+    : ActorBase(valueGroup, id, valueType, QVariant::Int, parent), m_tiltSupport(tiltSupport), m_fullCloseDuration(fullCloseDuration), m_fullTiltDuration(fullTiltDuration)
 {
 
 }

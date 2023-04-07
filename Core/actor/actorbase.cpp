@@ -8,7 +8,7 @@ QLatin1String ActorBase::PROPERTY_PRIORITY = QLatin1String("priority");
 ActorBase::ActorBase() : ValueBase() {
 }
 
-ActorBase::ActorBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ValueBase(valueGroup, id, valueType, true, parent)
+ActorBase::ActorBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QVariant::Type typeHint, QObject *parent) : ValueBase(valueGroup, id, valueType, true, typeHint, parent)
 {
 
 }

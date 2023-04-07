@@ -4,7 +4,7 @@
 
 
 ToggleActor::ToggleActor(ValueGroup *valueGroup, QString id, QObject *parent)
-    : ActorBase(valueGroup, id, VALUE_TYPE::VALTYPE_VIRTUAL_ACTOR, parent)
+    : ActorBase(valueGroup, id, VALUE_TYPE::VALTYPE_VIRTUAL_ACTOR, QVariant::Bool, parent)
 {
     m_alwaysEmit = false;
 }
@@ -29,6 +29,7 @@ bool ToggleActor::isAsync() {
 
 void ToggleActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     if (cmd == actor::ACTOR_CMD_TOGGLE) {
-        Q_EMIT(requestToggle());
+        //Q_EMIT(requestToggle());
+        updateValue(!rawValue().toBool());
     }
 }

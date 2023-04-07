@@ -1,6 +1,6 @@
 #include "cameraactor.h"
 
-CameraActor::CameraActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ActorBase(valueGroup, id, valueType, parent)
+CameraActor::CameraActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ActorBase(valueGroup, id, valueType, QVariant::Bool, parent)
 {
 }
 

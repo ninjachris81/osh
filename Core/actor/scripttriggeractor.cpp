@@ -1,7 +1,7 @@
 #include "scripttriggeractor.h"
 
 ScriptTriggerActor::ScriptTriggerActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent)
-    : ActorBase(valueGroup, id, valueType)
+    : ActorBase(valueGroup, id, valueType, QVariant::String)
 {
 
 }

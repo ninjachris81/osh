@@ -3,7 +3,7 @@
 LongValue::LongValue() : ValueBase() {
 }
 
-LongValue::LongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, parent)
+LongValue::LongValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, QVariant::LongLong, parent)
 {
 
 }

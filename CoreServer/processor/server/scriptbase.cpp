@@ -47,14 +47,17 @@ void ScriptBase::publishValue(ValueBase* val, QVariant value) {
 
 void ScriptBase::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
     iDebug() << actor->fullId() << cmd << reason;
-    //actor->triggerCmd(cmd, reason);
+    actor->triggerCmd(cmd, reason);
     m_actorManager->publishCmd(actor, cmd);
+    m_valueManager->publishValue(actor);
 }
 
 void ScriptBase::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason) {
     iDebug() << actor->fullId() << cmd << value << reason;
-    //actor->triggerCmd(cmd, reason);
+    actor->updateValue(value, true);
+    actor->triggerCmd(cmd, reason);
     m_actorManager->publishCmd(actor, cmd, value);
+    m_valueManager->publishValue(actor);
 }
 
 void ScriptBase::setTimeout(QString key) {

@@ -5,7 +5,7 @@
 DoorActor::DoorActor() : ActorBase() {
 }
 
-DoorActor::DoorActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ActorBase(valueGroup, id, valueType, parent)
+DoorActor::DoorActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent) : ActorBase(valueGroup, id, valueType, QVariant::Bool, parent)
 {
 
 }

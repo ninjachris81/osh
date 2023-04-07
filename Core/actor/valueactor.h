@@ -15,7 +15,7 @@ class SHARED_LIB_EXPORT ValueActor : public ActorBase
 {
     Q_OBJECT
 public:
-    explicit ValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
+    explicit ValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QVariant::Type typeHint, QObject *parent = nullptr);
 
     /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd) override;
 
@@ -23,13 +23,8 @@ public:
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 
-    void setTypeHint(QVariant::Type type);
-
-
 protected:
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd) override;
-
-    QVariant::Type m_type;
 
 signals:
     void requestSetValue();

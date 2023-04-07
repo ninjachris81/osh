@@ -17,7 +17,7 @@ public:
     static QLatin1String PROPERTY_PRIORITY;
 
     explicit ActorBase();
-    explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
+    explicit ActorBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QVariant::Type typeHint, QObject *parent = nullptr);
 
     void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
     virtual bool cmdSupported(actor::ACTOR_CMDS cmd) = 0;
@@ -25,6 +25,10 @@ public:
     ActorBase* withPriority(int priority);
     int priority();
 
+    /*
+     * If async, this means that the value will not be immediately set
+     * instead, the command might be triggered first and later the value will change
+     */
     virtual bool isAsync() = 0;
 
 protected:

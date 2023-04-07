@@ -122,8 +122,8 @@ ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QStrin
     return actor;
 }
 
-ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
-    ValueActor* actor = new ValueActor(valueGroup, id, valueType);
+ValueActor* DatamodelBase::addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QVariant::Type typeHint) {
+    ValueActor* actor = new ValueActor(valueGroup, id, valueType, typeHint);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());
@@ -187,7 +187,7 @@ StringValue* DatamodelBase::addStringValue(ValueGroup* valueGroup, QString id, V
     return value;
 }
 
-EnumValue* DatamodelBase::addEnumValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, int enumCount, ValueBase::VALUE_TIMEOUT timeout) {
+EnumValue* DatamodelBase::addEnumValue(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, int enumCount) {
     EnumValue* value = new EnumValue(valueGroup, id, valueType, enumCount);
     value->withValueTimeout(timeout);
     m_values.insert(value->fullId(), value);

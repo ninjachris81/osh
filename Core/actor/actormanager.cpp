@@ -50,11 +50,10 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
 
         actor->triggerCmd(actorMessage->cmd(), "Message received");
 
-        /*
-        if (!actor->isAsync()) {        // only publish if value is set synchronously
+        if (!actor->isAsync() && managerRegistration()->instanceRole() == ManagerRegistration::SERVER) {        // only publish if value is set synchronously
             iDebug() << "Publish value";
-            getManager<ClientValueManager>(ClientValueManager::MANAGER_ID)->publishValue(actor);
-        }*/
+            getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID)->publishValue(actor);
+        }
     } else {
         iWarning() << "Invalid actor" << actorMessage->fullId();
     }

@@ -343,7 +343,7 @@ TestDatamodel::TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject
     heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "garden", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
 
     ValueGroup *nodeWbb12 = addValueGroup("wbb12");
-    addValueActor(nodeWbb12, "hk1HeatingPauseParty", VALTYPE_HEAT_PUMP_DATA, ValueBase::VT_LONG);
+    addValueActor(nodeWbb12, "hk1HeatingPauseParty", VALTYPE_HEAT_PUMP_DATA, ValueBase::VT_LONG, QVariant::Int);
 
     /*
     // test interval

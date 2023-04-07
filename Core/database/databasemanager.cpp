@@ -43,7 +43,7 @@ void DatabaseManager::init(LocalConfig* config) {
         qFatal("Failed to open database");
     }
 
-    if (config->getBool("database.autoclose", true)) {      // auto close connection after startup
+    if (managerRegistration()->instanceRole() != ManagerRegistration::SERVER && config->getBool("database.autoclose", true)) {      // auto close connection after startup
         QTimer::singleShot(20000, this, [this] () {
             iInfo() << "Auto close DB connection";
             m_db.close();

@@ -21,7 +21,12 @@ void SimpleDatabaseManager::init(LocalConfig *config) {
 
     m_databaseManager = getManager<DatabaseManager>(DatabaseManager::MANAGER_ID);
 
-    m_databaseManager->db()->exec("CREATE TABLE IF NOT EXISTS " + SIMPLE_STORAGE_TABLE + " (id TEXT PRIMARY KEY, value BLOB)");
+    QSqlQuery query(*m_databaseManager->db());
+    query.prepare("CREATE TABLE IF NOT EXISTS :tableName (id TEXT PRIMARY KEY, value bytea)");
+    query.bindValue(":tableName", SIMPLE_STORAGE_TABLE);
+    if (!query.exec()) {
+        iWarning() << "Failed to execute statement" << query.lastError();
+    }
 }
 
 QString SimpleDatabaseManager::id() {
@@ -33,7 +38,7 @@ MessageBase::MESSAGE_TYPE SimpleDatabaseManager::getMessageType() {
 }
 
 void SimpleDatabaseManager::handleReceivedMessage(MessageBase* msg) {
-
+    Q_UNUSED(msg)
 }
 
 void SimpleDatabaseManager::simpleSet(QString prefix, QString id, QVariant value) {

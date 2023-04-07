@@ -1,6 +1,6 @@
 #include "redundantvalue.h"
 
-RedundantValue::RedundantValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, parent)
+RedundantValue::RedundantValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QObject *parent) : ValueBase(valueGroup, id, valueType, alwaysEmit, QVariant::Invalid, parent)
 {
 
 }

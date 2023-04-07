@@ -1,6 +1,6 @@
 #include "enumvalue.h"
 
-QLatin1String EnumValue::PROPERTY_ENUM_COUNT = QLatin1String("enumCount");
+QLatin1String EnumValue::PROPERTY_ENUM_COUNT = QLatin1String("enum_count");
 
 EnumValue::EnumValue(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, int enumCount, bool alwaysEmit, QObject *parent) : IntegerValue(valueGroup, id, valueType, alwaysEmit, parent), m_enumCount(enumCount)
 {
