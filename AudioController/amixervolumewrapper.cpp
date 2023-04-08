@@ -48,6 +48,9 @@ void AMixerVolumeWrapper::setVolume(AudioPlaybackActor *audioActor) {
     QStringList args;
 
     QString deviceId = audioActor->audioDeviceIds().at(0);
+    if (deviceId.endsWith("_sv")) {
+        deviceId.chop(3);
+    }
 
     if (m_cardMap.contains(deviceId)) {
         int cardId = m_cardMap.value(deviceId).card;
