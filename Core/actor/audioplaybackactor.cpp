@@ -83,7 +83,7 @@ QString AudioPlaybackActor::audioActivationRelayId() {
 }
 
 float AudioPlaybackActor::audioVolume() {
-    if (m_audioVolumeValue->rawValue().isValid()) m_audioVolume = m_audioVolumeValue->rawValue().toFloat();
+    if (m_audioVolumeValue != nullptr && m_audioVolumeValue->rawValue().isValid()) m_audioVolume = m_audioVolumeValue->rawValue().toFloat();
     return m_audioVolume;
 }
 
@@ -92,7 +92,7 @@ QString AudioPlaybackActor::audioVolumeId() {
 }
 
 QString AudioPlaybackActor::audioUrl() {
-    if (m_audioUrlValue->rawValue().isValid()) m_audioUrl = m_audioUrlValue->rawValue().toString();
+    if (m_audioUrlValue != nullptr && m_audioUrlValue->rawValue().isValid()) m_audioUrl = m_audioUrlValue->rawValue().toString();
     return m_audioUrl;
 }
 
