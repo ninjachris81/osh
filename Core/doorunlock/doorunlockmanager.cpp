@@ -168,7 +168,7 @@ QString DoorUnlockManager::calculateResultHash(qint64 ts, QString oth, QString u
     sha1.addData(QString::number(ts).toLatin1());
     sha1.addData(oth.toLatin1());
     sha1.addData(userId.toLatin1());
-    sha1.addData(PSK.latin1());
+    sha1.addData(DoorUnlock::PSK.latin1());
     sha1.addData(doorId.toLatin1());
 
     return sha1.result().toBase64();

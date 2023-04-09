@@ -5,6 +5,8 @@
 
 #include <QLatin1String>
 
-QLatin1String PSK = QLatin1String("insert key");
+namespace DoorUnlock {
+    static QLatin1String PSK = QLatin1String("insert_key");
+}
 
 #endif // PSK_H
