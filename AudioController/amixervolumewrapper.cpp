@@ -6,6 +6,30 @@ AMixerVolumeWrapper::AMixerVolumeWrapper(QObject *parent) : QObject(parent) {
 
     // some hard-coded stuff now...
 
+    /*
+    0_0 vz
+    0_1 wc
+
+    1_0 ez
+    1_1 k
+
+    2_0 az
+    2_1 feg
+
+    3_0 fog
+    3_1 b
+
+    4_0 sz
+    4_1 uz
+
+    5_0 wz1
+    5_1 wz2
+
+    6_0 hfo
+    6_1 hfe
+    */
+
+
     // amixer -c X controls
     addMapping("all_mono_mono", 0, 38);
     addMapping("all_mono_stereo", 0, 37);
@@ -57,18 +81,18 @@ void AMixerVolumeWrapper::setVolume(AudioPlaybackActor *audioActor) {
         int numid = m_cardMap.value(deviceId).numid;
 
         int volumeInt = audioActor->audioVolume() * 100;      // range 0...1 -> 0...100
-        QString volumeStr = QString::number(volumeInt) + "%";
-
-        qDebug() << "amixer" << cardId << numid << volumeStr;
 
         args << "-c" << QString::number(cardId);
         args << "cset" ;
         args << "numid=" + QString::number(numid);
-        args << volumeStr;
+        args << QString::number(volumeInt) + "%";
 
         QProcess proc;
         proc.setProgram("/usr/bin/amixer");
         proc.setArguments(args);
+
+        qInfo() << proc.program() << proc.arguments();
+
         proc.start();
         if (!proc.waitForFinished(1000)) {
             qWarning() << "AMixer did not finish in time";
