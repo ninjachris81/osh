@@ -15,6 +15,9 @@ ShutterController::ShutterController(ControllerManager *manager, ActorManager* a
 
 void ShutterController::init() {
     iDebug() << Q_FUNC_INFO;
+
+    REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
+    m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 }
 
 
@@ -34,6 +37,7 @@ void ShutterController::initializeShutters() {
     // first, initialize all shutters
     for (ShutterActor* actor : m_actorsUp.keys()) {
         actor->updateClosePattern(SHUTTER_CLOSED);      // assume it's closed
+        m_valueManager->publishValue(actor);
         insertShutterMovements(actor, actor::ACTOR_CMD_UP, true);
     }
 
@@ -111,6 +115,7 @@ void ShutterController::onMaintenance() {
             }
 
             movement.shutterActor->updateClosePattern(percentage);
+            m_valueManager->publishValue(movement.shutterActor);
         }
     }
 }

@@ -16,6 +16,7 @@ void RS485RelayController::init() {
     iDebug() << Q_FUNC_INFO;
 
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
+    Q_ASSERT(m_warnManager != nullptr);
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
 

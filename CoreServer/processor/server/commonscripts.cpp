@@ -273,17 +273,11 @@ bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QSt
     ValueBase* motionVal = m_datamodel->value(motionFullId);
 
     if (radarVal->isValid() && radarVal->rawValue().toBool()) {
-        if (motionVal->updateValue(true)) {
-            //publishValue(motionVal, true);
-        }
+        publishValue(motionVal, true);
     } else if (pirVal->isValid() && pirVal->rawValue().toBool()) {
-        if (motionVal->updateValue(true)) {
-            //publishValue(motionVal, true);
-        }
+        publishValue(motionVal, true);
     } else {
-        if (motionVal->updateValue(false)) {
-            //publishValue(motionVal, false);
-        }
+        publishValue(motionVal, false);
     }
     return true;
 }

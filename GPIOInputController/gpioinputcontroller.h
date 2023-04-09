@@ -29,6 +29,7 @@ private slots:
     void onStateChanged(quint8 index, bool state);
 
 private:
+    ValueManagerBase *m_valueManager;
     quint8 m_inputCount = 0;
     GPIOReaderBase *m_reader = nullptr;
 

@@ -24,7 +24,7 @@ void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {
 
     if (m_notificationValues.contains(msg->fullId())) {
         ValueBase* value = getValue(msg->valueGroupId(), msg->valueId());
-        value->updateValue(msg->rawValue(), false);
+        value->updateValue(msg->rawValue());
     } else {
         iDebug() << "Ignoring update of value" << msg->fullId();
     }
@@ -35,7 +35,7 @@ void ClientValueManager::registerValue(ValueBase* value) {
 
     ValueManagerBase::registerValue(value);
 
-    Helpers::safeConnect(value, &ValueBase::valueChanged, this, &ClientValueManager::_onValueChanged, SIGNAL(valueChanged), SLOT(onValueChanged));
+    //Helpers::safeConnect(value, &ValueBase::valueChanged, this, &ClientValueManager::_onValueChanged, SIGNAL(valueChanged), SLOT(onValueChanged));
 }
 
 void ClientValueManager::registerForMaintenance(ValueBase* value) {
@@ -61,10 +61,11 @@ void ClientValueManager::maintainValues() {
     }
 }
 
+/*
 void ClientValueManager::_onValueChanged() {
     qDebug() << Q_FUNC_INFO;
 
     ValueBase* value = qobject_cast<ValueBase*>(sender());
-
     this->publishValue(value);
 }
+*/

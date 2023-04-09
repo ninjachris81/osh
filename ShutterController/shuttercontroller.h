@@ -62,6 +62,8 @@ private:
     void insertShutterMovement(ShutterActor* shutterActor, DigitalActor *relayActor, qint64 duration, bool directionDown, bool updatesStatus, bool isInit);
     bool cancelShutterMovements(ShutterActor* shutterActor);
 
+    ValueManagerBase *m_valueManager;
+
     QMap<ShutterActor*, DigitalActor*> m_actorsUp;
     QMap<ShutterActor*, DigitalActor*> m_actorsDown;
 

@@ -33,7 +33,7 @@ private:
 private slots:
     void maintainValues();
 
-    void _onValueChanged();
+    //void _onValueChanged();
 
 signals:
 

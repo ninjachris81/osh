@@ -159,7 +159,7 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
             QVariant value = parseValue(reply->result().value(0), val.type, val.multiplier);
             iDebug() << reg << value;
             ValueBase *v = m_inputMappings.value(reg);
-            v->updateValue(value);
+            m_valueManager->updateAndPublishValue(v, value);
         } else if (reply->error() == QModbusDevice::ProtocolError) {
             iWarning() << "Modbus error" << reply->error();
         } else {

@@ -1,6 +1,9 @@
 #include "gpioinputcontroller.h"
+#include "controller/controllermanager.h"
 #include "mcpreader.h"
 #include "plaingpioreader.h"
+
+#include "helpers.h"
 
 QLatin1String GPIOInputController::GPIO_TYPE_PLAIN = QLatin1String("plain");
 QLatin1String GPIOInputController::GPIO_TYPE_MCP = QLatin1String("mcp");
@@ -14,6 +17,10 @@ void GPIOInputController::init() {
     iDebug() << Q_FUNC_INFO;
 
     DigitalInputControllerBase::init();
+
+    REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
+    m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+
 
     if (m_config->getInt("inputCount", 0) > 0) {        // can be overwritten by custom input count, if plain: mandatory to set
         m_inputCount = m_config->getInt(this, "inputCount", 0);
@@ -70,5 +77,5 @@ void GPIOInputController::onError(QString desc) {
 
 void GPIOInputController::onStateChanged(quint8 index, bool state) {
     Q_ASSERT(index < inputCount());
-    m_valueMappings.at(index)->updateValue(state);
+    m_valueManager->updateAndPublishValue(m_valueMappings.at(index), state);
 }

@@ -37,6 +37,11 @@ void ValueManagerBase::publishValue(ValueBase* value) {
     m_commManager->sendMessage(valueMessage);
 }
 
+void ValueManagerBase::updateAndPublishValue(ValueBase* value, QVariant newValue) {
+    value->updateValue(newValue);
+    publishValue(value);
+}
+
 void ValueManagerBase::registerValue(ValueBase* value) {
     iDebug() << Q_FUNC_INFO << value->fullId();
 

@@ -349,7 +349,7 @@ void WBB12Controller::_readInput(WBB12_Input_Registers reg, RetrieveValue val) {
             QVariant value = parseValue(reply->result().value(0), val.dataFormat);
             iDebug() << reg << value;
             ValueBase *v = m_inputMappings.value(reg);
-            v->updateValue(value);
+            m_valueManager->updateAndPublishValue(v, value);
             m_lastInputReadings.insert(reg, QDateTime::currentMSecsSinceEpoch());
         } else if (reply->error() == QModbusDevice::ProtocolError) {
             iWarning() << "Modbus error" << reply->error();
@@ -369,7 +369,7 @@ void WBB12Controller::_readHolding(WBB12_Holding_Registers reg, RetrieveValue va
             QVariant value = parseValue(reply->result().value(0), val.dataFormat);
             iDebug() << reg << value;
             ValueBase *v = m_holdingMappings.value(reg);
-            v->updateValue(value);
+            m_valueManager->updateAndPublishValue(v, value);
             m_lastHoldingReadings.insert(reg, QDateTime::currentMSecsSinceEpoch());
         } else if (reply->error() == QModbusDevice::ProtocolError) {
             iWarning() << "Modbus error" << reply->error();
@@ -393,7 +393,7 @@ void WBB12Controller::_writeHolding(WBB12_Holding_Registers reg, RetrieveValue v
             QVariant value = parseValue(reply->result().value(0), val.dataFormat);
             iDebug() << reg << value;
             ValueBase *v = m_holdingMappings.value(reg);
-            v->updateValue(value);
+            m_valueManager->updateAndPublishValue(v, value);
             m_lastHoldingReadings.insert(reg, QDateTime::currentMSecsSinceEpoch());
         } else if (reply->error() == QModbusDevice::ProtocolError) {
             iWarning() << "Modbus error" << reply->error();

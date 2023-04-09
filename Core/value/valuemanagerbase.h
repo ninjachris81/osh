@@ -32,6 +32,7 @@ public:
 
     virtual void handleReceivedMessage(ValueMessage* msg) = 0;
 
+    void updateAndPublishValue(ValueBase* value, QVariant newValue);
     void publishValue(ValueBase* value);
 
     virtual void registerValue(ValueBase* value);

@@ -45,6 +45,5 @@ void ToggleController::onRequestToggle() {
 
     iDebug() << Q_FUNC_INFO << toggleActor->fullId();
 
-    toggleActor->updateValue(!toggleActor->rawValue().toBool());
-    valueManager->publishValue(toggleActor);
+    valueManager->updateAndPublishValue(toggleActor, !toggleActor->rawValue().toBool());
 }

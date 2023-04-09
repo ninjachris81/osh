@@ -17,7 +17,6 @@ AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE
     m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioUrl(audioUrl), m_audioUrlId(audioUrlId)
 {
     m_audioDeviceIds = audioDeviceIds.split("\n");
-    updateValue(m_audioUrl, false);
 }
 
 bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
@@ -68,7 +67,7 @@ AudioPlaybackActor::AudioPlaybackState AudioPlaybackActor::playbackState() {
 }
 
 void AudioPlaybackActor::setPlaybackState(AudioPlaybackState state) {
-    updateValue(state);
+    updateValue(state, false);
 }
 
 bool AudioPlaybackActor::isAsync() {

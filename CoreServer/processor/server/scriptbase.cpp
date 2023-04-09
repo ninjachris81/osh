@@ -41,8 +41,7 @@ void ScriptBase::publishCmd(QString fullId, int cmd, QVariant value, QString rea
 }
 
 void ScriptBase::publishValue(ValueBase* val, QVariant value) {
-    val->updateValue(value);
-    m_valueManager->publishValue(val);
+    m_valueManager->updateAndPublishValue(val, value);
 }
 
 void ScriptBase::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {

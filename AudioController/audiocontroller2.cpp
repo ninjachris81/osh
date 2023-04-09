@@ -138,6 +138,7 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
 
         iInfo() << "Launching" << proc->program() << proc->arguments();
         audioActor->setPlaybackState(AudioPlaybackActor::PLAYING);
+        m_valueManager->publishValue(audioActor);
         Helpers::safeConnect(proc, &AudioProcessWrapperBase::currentTitleChanged, this, &AudioController2::onCurrentTitleChanged, SIGNAL(currentTitleChanged(QString)), SLOT(onCurrentTitleChanged(QString)));
         proc->start(QIODevice::ReadOnly);
     } else {
@@ -151,8 +152,7 @@ void AudioController2::onCurrentTitleChanged(QString currentTitle) {
     AudioProcessWrapperBase* audioProcess = qobject_cast<AudioProcessWrapperBase*>(sender());
     StringValue *currentTitleValue = static_cast<StringValue*>(audioProcess->audioActor()->audioCurrentTitle());
     if (currentTitleValue != nullptr) {
-        currentTitleValue->updateValue(currentTitle);
-        m_valueManager->publishValue(currentTitleValue);
+        m_valueManager->updateAndPublishValue(currentTitleValue, currentTitle);
     }
 }
 
@@ -162,6 +162,7 @@ void AudioController2::onProcessFinished(int exitCode, QProcess::ExitStatus exit
     AudioProcessWrapperBase *proc = static_cast<AudioProcessWrapperBase*>(sender());
     iInfo() << "Process finished with exit code" << exitCode << exitStatus;
     proc->audioActor()->setPlaybackState(AudioPlaybackActor::STOPPED);
+    m_valueManager->publishValue(proc->audioActor());
     m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
     proc->deleteLater();
 }
@@ -170,6 +171,7 @@ void AudioController2::onProcessError(QProcess::ProcessError error) {
     iWarning() << Q_FUNC_INFO << error;
     AudioProcessWrapperBase *proc = static_cast<AudioProcessWrapperBase*>(sender());
     proc->audioActor()->setPlaybackState(AudioPlaybackActor::ERROR);
+    m_valueManager->publishValue(proc->audioActor());
     m_runningProcesses.remove(proc->audioActor()->audioDeviceIds().at(0));
     proc->deleteLater();
 }
