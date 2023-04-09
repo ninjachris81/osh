@@ -13,6 +13,7 @@
 #include "communication/communicationmanagerbase.h"
 #include "user/usermanager.h"
 #include "doorunlock/doorunlockmessage.h"
+#include "psk.h"
 
 #ifdef QT_DEBUG
     #define DU_CHALLENGE_TIMEOUT_MS 120000
@@ -32,8 +33,6 @@ public:
     };
 
     static QLatin1String MANAGER_ID;
-
-    static QLatin1String PSK;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 
