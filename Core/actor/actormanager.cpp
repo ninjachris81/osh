@@ -55,7 +55,7 @@ void ActorManager::handleReceivedMessage(MessageBase* msg) {
             getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID)->publishValue(actor);
         }
     } else {
-        iWarning() << "Invalid actor" << actorMessage->fullId();
+        iDebug() << "Invalid actor" << actorMessage->fullId();
     }
 }
 

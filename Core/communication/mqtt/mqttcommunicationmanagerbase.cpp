@@ -69,7 +69,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             senderDeviceId = value.value(MQTT_SENDER_DEVICE_ID_ATTR, "").toString();
 
             if (info.dropOwnMessages && senderDeviceId == deviceId()) {
-                iWarning() << "Dropping own message" << messageType;
+                iDebug() << "Dropping own message" << messageType;
                 return nullptr;
             }
         }
