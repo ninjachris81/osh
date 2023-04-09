@@ -34,25 +34,26 @@ AMixerVolumeWrapper::AMixerVolumeWrapper(QObject *parent) : QObject(parent) {
     addMapping("all_mono_mono", 0, 38);
     addMapping("all_mono_stereo", 0, 37);
 
-    addMapping("mono3_0", 1, 11);
-    addMapping("mono3_1", 1, 12);
+    addMapping("mono0_0", 1, 11);
+    addMapping("mono0_1", 1, 12);
 
-    addMapping("mono0_0", 2, 11);
-    addMapping("mono0_1", 2, 12);
+    addMapping("mono1_0", 2, 11);
+    addMapping("mono1_1", 2, 12);
 
-    addMapping("mono4_0", 3, 11);
-    addMapping("mono4_1", 3, 12);
+    addMapping("mono2_0", 3, 12);
+    addMapping("mono2_1", 3, 13);
 
-    addMapping("mono1_0", 4, 11);
-    addMapping("mono1_1", 4, 12);
+    addMapping("mono3_0", 4, 12);
+    addMapping("mono3_1", 4, 13);
 
-    // 5 is hdmi
+    addMapping("mono4_0", 5, 11);
+    addMapping("mono4_1", 5, 12);
 
-    addMapping("mono5_0", 6, 11);
-    addMapping("mono5_1", 6, 12);
+    // 6 is hdmi
 
-    addMapping("mono2_0", 7, 11);
-    addMapping("mono2_1", 7, 12);
+    addMapping("mono5_0", 7, 11);
+    addMapping("mono5_1", 7, 12);
+
 
     addMapping("mono6_0", 8, 11);
     addMapping("mono6_1", 8, 12);
