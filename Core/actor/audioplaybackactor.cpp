@@ -84,6 +84,7 @@ QString AudioPlaybackActor::audioActivationRelayId() {
 }
 
 float AudioPlaybackActor::audioVolume() {
+    if (m_audioVolumeValue->rawValue().isValid()) m_audioVolume = m_audioVolumeValue->rawValue().toFloat();
     return m_audioVolume;
 }
 
@@ -92,6 +93,7 @@ QString AudioPlaybackActor::audioVolumeId() {
 }
 
 QString AudioPlaybackActor::audioUrl() {
+    if (m_audioUrlValue->rawValue().isValid()) m_audioUrl = m_audioUrlValue->rawValue().toString();
     return m_audioUrl;
 }
 
