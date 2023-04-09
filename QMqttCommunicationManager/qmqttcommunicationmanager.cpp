@@ -89,7 +89,7 @@ void QMqttCommunicationManager::_onMqttMsgReceived(QMqttMessage message) {
         handleReceivedMessage(msg);
         msg->deleteLater();
     } else {
-        iWarning() << "Received invalid message";
+        //iWarning() << "Received invalid message" << message.topic();
     }
 }
 

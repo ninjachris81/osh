@@ -24,7 +24,7 @@ void ClientValueManager::handleReceivedMessage(ValueMessage* msg) {
 
     if (m_notificationValues.contains(msg->fullId())) {
         ValueBase* value = getValue(msg->valueGroupId(), msg->valueId());
-        value->updateValue(msg->rawValue());
+        value->updateValue(msg->rawValue(), false);
     } else {
         iDebug() << "Ignoring update of value" << msg->fullId();
     }

@@ -63,9 +63,9 @@ protected:
     QString m_audioUrl = "";
     QString m_audioUrlId = "";
 
-    DoubleValue* m_audioVolumeValue;
-    StringValue* m_audioUrlValue;
-    StringValue* m_audioCurrentTitleValue;
+    DoubleValue* m_audioVolumeValue = nullptr;
+    StringValue* m_audioUrlValue = nullptr;
+    StringValue* m_audioCurrentTitleValue = nullptr;
 
     /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
 
