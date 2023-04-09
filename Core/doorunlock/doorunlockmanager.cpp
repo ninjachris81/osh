@@ -9,7 +9,6 @@
 #include "user/oshuser.h"
 
 QLatin1String DoorUnlockManager::MANAGER_ID = QLatin1String("DoorUnlockManager");
-QLatin1String DoorUnlockManager::PSK = QLatin1String("q7XtfMBWAmKYWUekFPxS");
 
 DoorUnlockManager::DoorUnlockManager(QObject *parent) : ManagerBase(parent)
 {

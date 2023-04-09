@@ -149,6 +149,7 @@ HEADERS += \
         device/knowndevice.h \
         doorunlock/doorunlockmanager.h \
         doorunlock/doorunlockmessage.h \
+        doorunlock/psk.h \
         helpers.h \
         log/httplogforwarder.h \
         log/logforwarderbase.h \

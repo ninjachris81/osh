@@ -19,3 +19,4 @@ RS485EnergyMeterService/RS485EnergyMeterService
 Makefile
 .qmake.stash
 /AndroidApp/app/google-services.json
+/Core/doorunlock/psk.h
