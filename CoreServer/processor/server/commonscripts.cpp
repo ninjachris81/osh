@@ -364,7 +364,6 @@ bool CommonScripts::initPlaySoundOnEvent2(QString valueEventId, QVariant playVal
         value = m_datamodel->actor(valueEventId);
     }
     AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
-    StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
 
     Q_ASSERT(value != nullptr);
     Q_ASSERT(playbackActor != nullptr);
@@ -372,21 +371,21 @@ bool CommonScripts::initPlaySoundOnEvent2(QString valueEventId, QVariant playVal
     m_localStorage->set("initPlaySoundOnEvent_playValue_" + value->fullId(), playValue);
     m_localStorage->set("initPlaySoundOnEvent_stopValue_" + value->fullId(), stopValue);
     m_localStorage->setObject("initPlaySoundOnEvent_soundActorId_" + value->fullId(), playbackActor);
-    if (!soundValue.isEmpty()) {
-        m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
-    } else if (soundValue.isEmpty() && playbackActor->audioUrl().isEmpty()) {
-        iWarning() << "Audio actors must have static url value set if soundValue is empty" << playbackActor->fullId();
-        Q_ASSERT(false);
-    }
 
-    if (urlValue == nullptr) {
-        // use static url of playback actor
+    if (soundValue.isEmpty()) {
         if (playbackActor->audioUrl().isEmpty()) {
-            iWarning() << "Audio actors must have either url value, or static url set" << playbackActor->fullId();
+            iWarning() << "Audio actors must have static url value set if soundValue is empty" << playbackActor->fullId();
             Q_ASSERT(false);
+        } else {
+            // play static url
         }
     } else {
+        StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
+
+        Q_ASSERT(urlValue != nullptr);
+
         m_localStorage->setObject("initPlaySoundOnEvent_urlValue_" + value->fullId(), urlValue);
+        m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
     }
 
     Helpers::safeConnect(value, &ValueBase::valueChanged, this, &CommonScripts::onInitPlaySoundOnEvent_valueChanged, SIGNAL(valueChanged()), SLOT(onInitPlaySoundOnEvent_valueChanged()));
@@ -407,14 +406,14 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
         if (value->rawValue() == playValue) {
             iInfo() << "Play Trigger";
 
-            if (!m_localStorage->contains("initPlaySoundOnEvent_soundValue_" + value->fullId())) {
-                // playback static url
-                iDebug() << "Playback static url";
-            } else {
+            if (m_localStorage->contains("initPlaySoundOnEvent_urlValue_" + value->fullId())) {
                 QString soundValue = m_localStorage->get("initPlaySoundOnEvent_soundValue_" + value->fullId()).toString();
                 StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("initPlaySoundOnEvent_urlValue_" + value->fullId()));
                 iDebug() << "Setting url" << soundValue;
                 publishValue(urlValue, soundValue);
+            } else {
+                // playback static url
+                iDebug() << "Playback static url";
             }
 
             publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
