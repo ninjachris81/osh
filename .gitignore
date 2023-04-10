@@ -22,3 +22,4 @@ Makefile
 .qmake.stash
 /AndroidApp/app/google-services.json
 /Core/doorunlock/psk.h
+/deploy/rpi/localservices.txt
