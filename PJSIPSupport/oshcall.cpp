@@ -92,6 +92,7 @@ void OshCall::onCallMediaState(OnCallMediaStateParam &prm) {
     // This will connect the sound device/mic to the call audio media
     m_cap_dev_med.startTransmit(aud_med);
 
+    m_play_dev_med.adjustRxLevel(1.0);
     // And this will connect the call audio media to the sound device/speaker
     aud_med.startTransmit(m_play_dev_med);
 
@@ -104,7 +105,7 @@ void OshCall::startRinging() {
 
     //m_ringToneGenerator.play(m_toneVector, true);
     m_ringToneGenerator.startTransmit(m_play_dev_med);
-
+    m_play_dev_med.adjustRxLevel(0.5);
 }
 
 void OshCall::stopRinging() {
