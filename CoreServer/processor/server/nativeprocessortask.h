@@ -31,8 +31,9 @@ public:
         NFT_INIT_DOOR_RING_LOGIC =              130,
         NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC =     131,
 
-        NFT_INIT_PLAY_SOUND_ON_EVENT =          140,
-        NFT_INIT_PLAY_SOUND_ON_EVENT_2 =        141,
+        NFT_INIT_PLAY_SOUND_ON_VALUE =          140,
+        NFT_INIT_PLAY_SOUND_ON_VALUE_2 =        141,
+        NFT_INIT_PLAY_SOUND_ON_CMD =            142,
 
         NFT_INIT_CONNECT_VALUES =               10,
         NFT_INIT_TRIGGER_CMD_ON_VALUE =         11

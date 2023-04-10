@@ -49,24 +49,19 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
         QVariant actualValue = lightActor->rawValue();
         QVariant expectedValue;
 
-        //QString lastTsMotionSensorKey = "lastTs_" + motionSensorFullId;
-        QString graceMotionSensorKey = "grace_" + motionSensorFullId;
-        //QString lastTsInputKey = "lastTs_" + inputSensorFullId;
-        QString lastValueInputKey = "lastValue_" + inputSensorFullId;
-
         QString triggerReason;
 
         bool inputTriggered = false;
 
         if (inputSensor->isValid()) {
-            QVariant lastValue = m_localStorage->get(lastValueInputKey);
+            QVariant lastValue = m_localStorage->get("applySwitchMotionLogic", "lastVal", inputSensor->fullId());
 
             if (lastValue.isValid() && inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
                 inputTriggered = true;
                 iDebug() << "Input sensor triggered";
             }
 
-            m_localStorage->set(lastValueInputKey, inputSensor->rawValue());
+            m_localStorage->set("applySwitchMotionLogic", "lastVal", inputSensor->fullId(), inputSensor->rawValue());
         }
 
         if (actualValue.isValid() && actualValue.toBool() && inputSensor->isValid() && inputTriggered) {
@@ -77,11 +72,11 @@ bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inp
             triggerReason = "Input trigger";
             clearTimeout(motionSensorFullId);
             clearTimeout(inputSensorFullId);
-            m_localStorage->set(graceMotionSensorKey, QDateTime::currentMSecsSinceEpoch());
+            m_localStorage->set("applySwitchMotionLogic", "grace", motionSensor->fullId(), QDateTime::currentMSecsSinceEpoch());
         } else {
             // update last values
             if (brightnessSensor->isValid() && brightnessSensor->rawValue().toInt() < brightnessThreshold) {
-                if (motionSensor->isValid() && motionSensor->rawValue().toBool() && (QDateTime::currentMSecsSinceEpoch() - m_localStorage->get(graceMotionSensorKey, 0).toULongLong() > motionSensorGracePeriodMs)) {
+                if (motionSensor->isValid() && motionSensor->rawValue().toBool() && (QDateTime::currentMSecsSinceEpoch() - m_localStorage->get("applySwitchMotionLogic", "grace", motionSensor->fullId(), 0).toULongLong() > motionSensorGracePeriodMs)) {
                     setTimeout(motionSensorFullId);
                     triggerReason = "Motion sensor";
                 }
@@ -125,7 +120,7 @@ bool CommonScripts::initSwitchLogic(QString lightRelayActorFullIds, QString inpu
     Q_ASSERT(inputSensor != nullptr);
     Q_ASSERT(toggleActor != nullptr);
 
-    m_localStorage->setObject("switch_toggle_actor_" + inputSensorFullId, toggleActor);
+    m_localStorage->setObject("initSwitchLogic", "toggleActor", inputSensor->fullId(), toggleActor);
     Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitSwitchLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_inputSensorValueChanged()));
     Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_toggleActorValueChanged()));
 
@@ -133,7 +128,7 @@ bool CommonScripts::initSwitchLogic(QString lightRelayActorFullIds, QString inpu
     for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", QString::SkipEmptyParts)) {
         DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightRelayActorFullId));
         Q_ASSERT(lightRelayActor != nullptr);
-        m_localStorage->setObject("switch_light_relay_" + toggleActorFullId + "_" + index, lightRelayActor);
+        m_localStorage->setObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index, lightRelayActor);
         index++;
     }
 
@@ -144,12 +139,11 @@ void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
     iDebug() << Q_FUNC_INFO;
 
     BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
-    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_localStorage->getObject("switch_toggle_actor_" + inputSensor->fullId()));
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_localStorage->getObject("initSwitchLogic", "toggleActor", inputSensor->fullId()));
 
-    QString lastInputValKey = "lastVal_" + inputSensor->fullId();
-    bool lastInputVal = m_localStorage->get(lastInputValKey, false).toBool();
+    bool lastInputVal = m_localStorage->get("initSwitchLogic", "lastVal", inputSensor->fullId(), false).toBool();
     if (lastInputVal != inputSensor->rawValue().toBool()) {
-        m_localStorage->set(lastInputValKey, inputSensor->rawValue().toBool());
+        m_localStorage->set("initSwitchLogic", "lastVal", inputSensor->fullId(), inputSensor->rawValue().toBool());
 
         if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool()) {
             // toggle controller is in server, to just emit
@@ -163,7 +157,7 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
     ToggleActor* toggleActor = static_cast<ToggleActor*>(sender());
 
     for (quint8 index = 0; index<255; index++) {
-        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("switch_light_relay_" + toggleActor->fullId() + "_" + index));
+        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index));
         if (lightRelayActor == nullptr) {
             break;
         }
@@ -205,8 +199,7 @@ bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 t
 bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFullId, QString tempValveActorFullId, int adjustIntervalMs, double fullDeltaThresholdTemp, int factorIntervalMs) {
     if (m_datamodel->actors().contains(tempValveActorFullId)) {
         QString valveKey = "temp_valve_" + tempValveActorFullId;
-        QString lastAdjustKey = "temp_valve_last_adj_" + tempValveActorFullId;
-        qlonglong lastAdjustMs = m_localStorage->get(lastAdjustKey, 0).toULongLong();
+        qlonglong lastAdjustMs = m_localStorage->get("applyTempValveLogic", "lastAdjust", tempValveActorFullId, 0).toULongLong();
         ActorBase* tempValve = m_datamodel->actor(tempValveActorFullId);
 
         if (lastAdjustMs == 0 || QDateTime::currentMSecsSinceEpoch() - lastAdjustMs > adjustIntervalMs) {
@@ -237,7 +230,7 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
                         clearInterval(valveKey);
                     }
 
-                    m_localStorage->set(lastAdjustKey, QDateTime::currentMSecsSinceEpoch());
+                    m_localStorage->set("applyTempValveLogic", "lastAdjust", tempValveActorFullId, QDateTime::currentMSecsSinceEpoch());
                     return true;
                 } else {
                     clearInterval(valveKey);
@@ -250,7 +243,7 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
             }
 
             // ok, adjust
-            m_localStorage->set(lastAdjustKey, QDateTime::currentMSecsSinceEpoch());
+            m_localStorage->set("applyTempValveLogic", "lastAdjust", tempValveActorFullId, QDateTime::currentMSecsSinceEpoch());
         } else {
             // check interval
             bool targetValveState = getIntervalState(valveKey);
@@ -325,7 +318,7 @@ bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRin
     Q_ASSERT(inputSensor != nullptr);
     Q_ASSERT(ringActor != nullptr);
 
-    m_localStorage->setObject("door_ring_actor_" + inputSensorFullId, ringActor);
+    m_localStorage->setObject("initDoorRingLogic", "ringActor", inputSensor->fullId(), ringActor);
     Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitDoorRingLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitDoorRingLogic_inputSensorValueChanged()));
 
     return true;
@@ -334,15 +327,15 @@ bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRin
 void CommonScripts::onInitDoorRingLogic_inputSensorValueChanged() {
     iDebug() << Q_FUNC_INFO;
     BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
-    DigitalActor* ringActor = static_cast<DigitalActor*>(m_localStorage->getObject("door_ring_actor_" + inputSensor->fullId()));
+    DigitalActor* ringActor = static_cast<DigitalActor*>(m_localStorage->getObject("initDoorRingLogic", "ringActor", inputSensor->fullId()));
 
-    QString lastInputValKey = "lastVal_" + inputSensor->fullId();
-    bool lastInputVal = m_localStorage->get(lastInputValKey, false).toBool();
+    bool lastInputVal = m_localStorage->get("initDoorRingLogic", "lastVal", inputSensor->fullId(), false).toBool();
     if (lastInputVal != inputSensor->rawValue().toBool()) {     // on toggle true
         setTimeout(ringActor->fullId());
 
         if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
-            publishCmd(ringActor, actor::ACTOR_CMD_ON, true, "input sensor");
+            publishCmd(ringActor, actor::ACTOR_CMD_ON, "input sensor");
+            m_localStorage->set("initDoorRingLogic", "lastVal", inputSensor->fullId(), true);
         }
     }
 
@@ -352,11 +345,11 @@ bool CommonScripts::applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint
     return isTimeout(doorRingActorFullId, triggerTimeoutMs, true);
 }
 
-bool CommonScripts::initPlaySoundOnEvent(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue) {
-    return initPlaySoundOnEvent2(valueEventId, playValue, QVariant(), soundActorId, soundValue);
+bool CommonScripts::initPlaySoundOnValue(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue) {
+    return initPlaySoundOnValue2(valueEventId, playValue, QVariant(), soundActorId, soundValue);
 }
 
-bool CommonScripts::initPlaySoundOnEvent2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue) {
+bool CommonScripts::initPlaySoundOnValue2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue) {
     iInfo() << Q_FUNC_INFO;
     ValueBase *value = m_datamodel->value(valueEventId);
     if (value == nullptr) {
@@ -368,9 +361,9 @@ bool CommonScripts::initPlaySoundOnEvent2(QString valueEventId, QVariant playVal
     Q_ASSERT(value != nullptr);
     Q_ASSERT(playbackActor != nullptr);
 
-    m_localStorage->set("initPlaySoundOnEvent_playValue_" + value->fullId(), playValue);
-    m_localStorage->set("initPlaySoundOnEvent_stopValue_" + value->fullId(), stopValue);
-    m_localStorage->setObject("initPlaySoundOnEvent_soundActorId_" + value->fullId(), playbackActor);
+    m_localStorage->set("initPlaySoundOnEvent", "playValue", value->fullId(), playValue);
+    m_localStorage->set("initPlaySoundOnEvent", "stopValue", value->fullId(), stopValue);
+    m_localStorage->setObject("initPlaySoundOnEvent", "soundActorId", value->fullId(), playbackActor);
 
     if (soundValue.isEmpty()) {
         if (playbackActor->audioUrl().isEmpty()) {
@@ -384,31 +377,31 @@ bool CommonScripts::initPlaySoundOnEvent2(QString valueEventId, QVariant playVal
 
         Q_ASSERT(urlValue != nullptr);
 
-        m_localStorage->setObject("initPlaySoundOnEvent_urlValue_" + value->fullId(), urlValue);
-        m_localStorage->set("initPlaySoundOnEvent_soundValue_" + value->fullId(), soundValue);
+        m_localStorage->setObject("initPlaySoundOnEvent", "urlValue", value->fullId(), urlValue);
+        m_localStorage->set("initPlaySoundOnEvent", "soundValue", value->fullId(), soundValue);
     }
 
-    Helpers::safeConnect(value, &ValueBase::valueChanged, this, &CommonScripts::onInitPlaySoundOnEvent_valueChanged, SIGNAL(valueChanged()), SLOT(onInitPlaySoundOnEvent_valueChanged()));
+    Helpers::safeConnect(value, &ValueBase::valueChanged, this, &CommonScripts::onInitPlaySoundOnValue_valueChanged, SIGNAL(valueChanged()), SLOT(onInitPlaySoundOnValue_valueChanged()));
 
     return true;
 }
 
-void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
+void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
     iInfo() << Q_FUNC_INFO;
 
     ValueBase* value = static_cast<ValueBase*>(sender());
-    QVariant playValue = m_localStorage->get("initPlaySoundOnEvent_playValue_" + value->fullId());
-    QVariant stopValue = m_localStorage->get("initPlaySoundOnEvent_stopValue_" + value->fullId());
+    QVariant playValue = m_localStorage->get("initPlaySoundOnEvent", "playValue", value->fullId());
+    QVariant stopValue = m_localStorage->get("initPlaySoundOnEvent", "stopValue", value->fullId());
 
     if (playValue.convert(value->rawValue().type())) {
-        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent_soundActorId_" + value->fullId()));
+        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent", "soundActorId", value->fullId()));
 
         if (value->rawValue() == playValue) {
             iInfo() << "Play Trigger";
 
-            if (m_localStorage->contains("initPlaySoundOnEvent_urlValue_" + value->fullId())) {
-                QString soundValue = m_localStorage->get("initPlaySoundOnEvent_soundValue_" + value->fullId()).toString();
-                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("initPlaySoundOnEvent_urlValue_" + value->fullId()));
+            if (m_localStorage->contains("initPlaySoundOnEvent", "urlValue", value->fullId())) {
+                QString soundValue = m_localStorage->get("initPlaySoundOnEvent", "soundValue", value->fullId()).toString();
+                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("initPlaySoundOnEvent", "urlValue", value->fullId()));
                 iDebug() << "Setting url" << soundValue;
                 publishValue(urlValue, soundValue);
             } else {
@@ -425,3 +418,40 @@ void CommonScripts::onInitPlaySoundOnEvent_valueChanged() {
     }
 }
 
+
+bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
+    iInfo() << Q_FUNC_INFO;
+
+    ActorBase* actor = m_actorManager->getActor(actorId);
+    Q_ASSERT(actor != nullptr);
+
+    AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
+    Q_ASSERT(playbackActor != nullptr);
+    m_localStorage->setObject("initPlaySoundOnCmd", "soundActorId", actor->fullId(), playbackActor);
+    m_localStorage->set("initPlaySoundOnCmd", "cmdValue", actor->fullId(), cmdValue);
+
+    Helpers::safeConnect(actor, &ActorBase::cmdTriggered, this, &CommonScripts::onInitPlaySoundOnCmd_triggeredCmd, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS)));
+
+    return true;
+}
+
+void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd) {
+    iInfo() << Q_FUNC_INFO;
+
+    ActorBase* actor = static_cast<ActorBase*>(sender());
+    actor::ACTOR_CMDS targetCmd = static_cast<actor::ACTOR_CMDS>(m_localStorage->get("initPlaySoundOnCmd", "cmdValue", actor->fullId()).toInt());
+    if (cmd == targetCmd) {
+        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnCmd", "soundActorId", actor->fullId()));
+        if (m_localStorage->contains("onInitPlaySoundOnCmd", "urlValue", actor->fullId())) {
+            QString soundValue = m_localStorage->get("onInitPlaySoundOnCmd", "soundValue", actor->fullId()).toString();
+            StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("onInitPlaySoundOnCmd", "urlValue", actor->fullId()));
+            iDebug() << "Setting url" << soundValue;
+            publishValue(urlValue, soundValue);
+        } else {
+            // playback static url
+            iDebug() << "Playback static url";
+        }
+
+        publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+    }
+}

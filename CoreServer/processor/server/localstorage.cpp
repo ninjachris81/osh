@@ -6,30 +6,34 @@ LocalStorage::LocalStorage(QObject *parent)
 
 }
 
-bool LocalStorage::contains(QString key) {
-    return m_values.contains(key);
+QString LocalStorage::getId(QString method, QString key, QString uniqueId) {
+    return method + "_" + key + "_" + uniqueId;
 }
 
-QVariant LocalStorage::get(QString key, QVariant defaultValue) {
-    return m_values.value(key, defaultValue);
+bool LocalStorage::contains(QString method, QString key, QString uniqueId) {
+    return m_values.contains(getId(method, key, uniqueId));
 }
 
-void LocalStorage::set(QString key, QVariant value) {
-    m_values.insert(key, value);
+QVariant LocalStorage::get(QString method, QString key, QString uniqueId, QVariant defaultValue) {
+    return m_values.value(getId(method, key, uniqueId), defaultValue);
 }
 
-void LocalStorage::unset(QString key) {
-    m_values.remove(key);
+void LocalStorage::set(QString method, QString key, QString uniqueId, QVariant value) {
+    m_values.insert(getId(method, key, uniqueId), value);
 }
 
-void LocalStorage::setObject(QString key, QObject* obj) {
-    m_objects.insert(key, obj);
+void LocalStorage::unset(QString method, QString key, QString uniqueId) {
+    m_values.remove(getId(method, key, uniqueId));
 }
 
-QObject* LocalStorage::getObject(QString key) {
-    return m_objects.value(key);
+void LocalStorage::setObject(QString method, QString key, QString uniqueId, QObject* obj) {
+    m_objects.insert(getId(method, key, uniqueId), obj);
 }
 
-void LocalStorage::unsetObject(QString key) {
-    m_objects.remove(key);
+QObject* LocalStorage::getObject(QString method, QString key, QString uniqueId) {
+    return m_objects.value(getId(method, key, uniqueId));
+}
+
+void LocalStorage::unsetObject(QString method, QString key, QString uniqueId) {
+    m_objects.remove(getId(method, key, uniqueId));
 }

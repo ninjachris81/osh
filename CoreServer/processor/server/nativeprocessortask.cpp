@@ -63,11 +63,14 @@ QVariant NativeProcessorTask::run() {
         case NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
             m_lastResult = m_commonScripts->applyDoorRingTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toLongLong());
             break;
-        case NFT_INIT_PLAY_SOUND_ON_EVENT:
-            m_lastResult = m_commonScripts->initPlaySoundOnEvent(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
+        case NFT_INIT_PLAY_SOUND_ON_VALUE:
+            m_lastResult = m_commonScripts->initPlaySoundOnValue(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
             break;
-        case NFT_INIT_PLAY_SOUND_ON_EVENT_2:
-            m_lastResult = m_commonScripts->initPlaySoundOnEvent2(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2), m_nativeParams.at(3).toString(), m_nativeParams.at(4).toString());
+        case NFT_INIT_PLAY_SOUND_ON_VALUE_2:
+            m_lastResult = m_commonScripts->initPlaySoundOnValue2(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2), m_nativeParams.at(3).toString(), m_nativeParams.at(4).toString());
+            break;
+        case NFT_INIT_PLAY_SOUND_ON_CMD:
+            m_lastResult = m_commonScripts->initPlaySoundOnCmd(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
             break;
         case NFT_INIT_CONNECT_VALUES:
             m_lastResult = m_basicScripts->initConnectValues(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
@@ -133,10 +136,12 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
         return QList<QVariant::Type>() << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::LongLong;
-    case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_EVENT:
+    case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_VALUE:
         return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::String;
-    case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_EVENT_2:
+    case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_VALUE_2:
         return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::UserType << QVariant::String << QVariant::String;
+    case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_CMD:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::Int << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_INIT_CONNECT_VALUES:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_INIT_TRIGGER_CMD_ON_VALUE:

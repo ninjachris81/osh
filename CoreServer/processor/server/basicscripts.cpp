@@ -27,7 +27,7 @@ bool BasicScripts::initConnectValues(QString valueSourceIds, QString valueTarget
         }
         Q_ASSERT(valueSource != nullptr);
 
-        m_localStorage->setObject("initConnectValues_valueTarget_" + valueSource->fullId(), valueTarget);
+        m_localStorage->setObject("initConnectValues", "valueTarget", valueSource->fullId(), valueTarget);
         Helpers::safeConnect(valueSource, &ValueBase::valueChanged, this, &BasicScripts::initConnectValues_valueChanged, SIGNAL(valueChanged()), SLOT(initConnectValues_valueChanged()));
     }
 
@@ -38,7 +38,7 @@ void BasicScripts::initConnectValues_valueChanged() {
     iInfo() << Q_FUNC_INFO;
 
     ValueBase* valueSource = static_cast<ValueBase*>(sender());
-    ValueBase *valueTarget = static_cast<ValueBase*>(m_localStorage->getObject("initConnectValues_valueTarget_" + valueSource->fullId()));
+    ValueBase *valueTarget = static_cast<ValueBase*>(m_localStorage->getObject("initConnectValues", "valueTarget", valueSource->fullId()));
 
     publishValue(valueTarget, valueSource->rawValue());
 }
@@ -58,9 +58,9 @@ bool BasicScripts::initTriggerCmdOnValue(QString valueSourceIds, QVariant trigge
         }
         Q_ASSERT(valueSource != nullptr);
 
-        m_localStorage->setObject("initTriggerCmdOnValue_actor_" + valueSource->fullId(), actor);
-        m_localStorage->set("initTriggerCmdOnValue_actorCmd_" + valueSource->fullId(), actorCmd);
-        m_localStorage->set("initTriggerCmdOnValue_triggerValue_" + valueSource->fullId(), triggerValue);
+        m_localStorage->setObject("initTriggerCmdOnValue", "actor", valueSource->fullId(), actor);
+        m_localStorage->set("initTriggerCmdOnValue", "actorCmd", valueSource->fullId(), actorCmd);
+        m_localStorage->set("initTriggerCmdOnValue", "triggerValue", valueSource->fullId(), triggerValue);
 
         Helpers::safeConnect(valueSource, &ValueBase::valueChanged, this, &BasicScripts::initTriggerCmdOnValue_valueChanged, SIGNAL(valueChanged()), SLOT(initTriggerCmdOnValue_valueChanged()));
     }
@@ -72,9 +72,9 @@ void BasicScripts::initTriggerCmdOnValue_valueChanged() {
     iDebug() << Q_FUNC_INFO;
 
     ValueBase* valueSource = static_cast<ValueBase*>(sender());
-    ActorBase *actor = static_cast<ActorBase*>(m_localStorage->getObject("initTriggerCmdOnValue_actor_" + valueSource->fullId()));
-    int cmd = m_localStorage->get("initTriggerCmdOnValue_actorCmd_" + valueSource->fullId()).toInt();
-    QVariant triggerValue = m_localStorage->get("initTriggerCmdOnValue_triggerValue_" + valueSource->fullId());
+    ActorBase *actor = static_cast<ActorBase*>(m_localStorage->getObject("initTriggerCmdOnValue", "actor", valueSource->fullId()));
+    int cmd = m_localStorage->get("initTriggerCmdOnValue", "actorCmd", valueSource->fullId()).toInt();
+    QVariant triggerValue = m_localStorage->get("initTriggerCmdOnValue", "triggerValue", valueSource->fullId());
 
     if (triggerValue.convert(valueSource->rawValue().type())) {
         if (triggerValue == valueSource->rawValue()) {

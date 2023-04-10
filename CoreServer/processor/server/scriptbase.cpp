@@ -60,13 +60,11 @@ void ScriptBase::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant va
 }
 
 void ScriptBase::setTimeout(QString key) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    m_localStorage->set(timeoutKey, QDateTime::currentMSecsSinceEpoch());
+    m_localStorage->set("setTimeout", TIMOUT_LAST_TS, key, QDateTime::currentMSecsSinceEpoch());
 }
 
 bool ScriptBase::isTimeout(QString key, quint64 timeoutMs, bool clearTimeoutIfTrue) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    quint64 lastOn = m_localStorage->get(timeoutKey, 0).toULongLong();
+    quint64 lastOn = m_localStorage->get("setTimeout", TIMOUT_LAST_TS, key, 0).toULongLong();
     bool isTo = (lastOn > 0 && QDateTime::currentMSecsSinceEpoch() - lastOn > timeoutMs);
 
     if (isTo && clearTimeoutIfTrue) {
@@ -77,24 +75,22 @@ bool ScriptBase::isTimeout(QString key, quint64 timeoutMs, bool clearTimeoutIfTr
 }
 
 quint64 ScriptBase::getTimeout(QString key) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    return m_localStorage->get(timeoutKey, 0).toULongLong();
+    return m_localStorage->get("setTimeout", TIMOUT_LAST_TS, key, 0).toULongLong();
 }
 
 void ScriptBase::clearTimeout(QString key) {
-    QString timeoutKey = TIMOUT_LAST_TS + key;
-    m_localStorage->unset(timeoutKey);
+    m_localStorage->unset("setTimeout", TIMOUT_LAST_TS, key);
 }
 
 void ScriptBase::setupInterval(QString key, qulonglong durationOffMs, qulonglong durationOnMs, bool resetState) {
     if (durationOffMs > 0 && durationOnMs > 0) {
         iDebug() << "Setup interval" << key << durationOffMs << durationOnMs << resetState;
 
-        m_localStorage->set(INTERVAL_OFF_DURATIONS + key, durationOffMs);
-        m_localStorage->set(INTERVAL_ON_DURATIONS + key, durationOnMs);
+        m_localStorage->set("setupInterval", INTERVAL_OFF_DURATIONS, key, durationOffMs);
+        m_localStorage->set("setupInterval", INTERVAL_ON_DURATIONS, key, durationOnMs);
         if (resetState) {
-            m_localStorage->set(INTERVAL_LAST_CHANGES + key, 0);
-            m_localStorage->set(INTERVAL_STATES + key, false);
+            m_localStorage->set("setupInterval", INTERVAL_LAST_CHANGES, key, 0);
+            m_localStorage->set("setupInterval", INTERVAL_STATES, key, false);
         }
     } else {
         iWarning() << "Invalid parameters" << durationOffMs << durationOnMs;
@@ -102,27 +98,27 @@ void ScriptBase::setupInterval(QString key, qulonglong durationOffMs, qulonglong
 }
 
 bool ScriptBase::getIntervalState(QString key) {
-    qulonglong durationOffMs = m_localStorage->get(INTERVAL_OFF_DURATIONS + key, 0).toULongLong();
-    qulonglong durationOnMs = m_localStorage->get(INTERVAL_ON_DURATIONS + key, 0).toULongLong();
-    qulonglong lastChangeMs = m_localStorage->get(INTERVAL_LAST_CHANGES + key, 0).toULongLong();
-    bool state = m_localStorage->get(INTERVAL_STATES + key, false).toBool();
+    qulonglong durationOffMs = m_localStorage->get("setupInterval", INTERVAL_OFF_DURATIONS, key, 0).toULongLong();
+    qulonglong durationOnMs = m_localStorage->get("setupInterval", INTERVAL_ON_DURATIONS, key, 0).toULongLong();
+    qulonglong lastChangeMs = m_localStorage->get("setupInterval", INTERVAL_LAST_CHANGES, key, 0).toULongLong();
+    bool state = m_localStorage->get("setupInterval", INTERVAL_STATES, key, false).toBool();
 
     if (state) {
         // check if we have to switch off
         if (QDateTime::currentMSecsSinceEpoch() - lastChangeMs >= durationOnMs) {
             // ok, switch off
-            m_localStorage->set(INTERVAL_STATES + key, false);
+            m_localStorage->set("setupInterval", INTERVAL_STATES, key, false);
             state = false;
-            m_localStorage->set(INTERVAL_LAST_CHANGES + key, QDateTime::currentMSecsSinceEpoch());
+            m_localStorage->set("setupInterval", INTERVAL_LAST_CHANGES, key, QDateTime::currentMSecsSinceEpoch());
             iDebug() << "Interval switching to" << key << state;
         }
     } else {
         // check if we have to switch on
         if (QDateTime::currentMSecsSinceEpoch() - lastChangeMs >= durationOffMs) {
             // ok, switch on
-            m_localStorage->set(INTERVAL_STATES + key, true);
+            m_localStorage->set("setupInterval", INTERVAL_STATES, key, true);
             state = true;
-            m_localStorage->set(INTERVAL_LAST_CHANGES + key, QDateTime::currentMSecsSinceEpoch());
+            m_localStorage->set("setupInterval", INTERVAL_LAST_CHANGES, key, QDateTime::currentMSecsSinceEpoch());
             iDebug() << "Interval switching to" << key << state;
         }
     }
@@ -131,10 +127,10 @@ bool ScriptBase::getIntervalState(QString key) {
 }
 
 void ScriptBase::clearInterval(QString key) {
-    m_localStorage->unset(INTERVAL_OFF_DURATIONS + key);
-    m_localStorage->unset(INTERVAL_ON_DURATIONS + key);
-    m_localStorage->unset(INTERVAL_LAST_CHANGES + key);
-    m_localStorage->unset(INTERVAL_STATES + key);
+    m_localStorage->unset("setupInterval", INTERVAL_OFF_DURATIONS, key);
+    m_localStorage->unset("setupInterval", INTERVAL_ON_DURATIONS, key);
+    m_localStorage->unset("setupInterval", INTERVAL_LAST_CHANGES, key);
+    m_localStorage->unset("setupInterval", INTERVAL_STATES, key);
 }
 
 

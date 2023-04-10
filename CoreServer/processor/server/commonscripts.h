@@ -35,9 +35,11 @@ public:
 
     Q_INVOKABLE bool applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint64 triggerTimeoutMs);
 
-    Q_INVOKABLE bool initPlaySoundOnEvent(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue);
+    Q_INVOKABLE bool initPlaySoundOnValue(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue);
 
-    Q_INVOKABLE bool initPlaySoundOnEvent2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue);
+    Q_INVOKABLE bool initPlaySoundOnValue2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue);
+
+    Q_INVOKABLE bool initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue);
 
 
 private slots:
@@ -45,7 +47,8 @@ private slots:
     void onInitSwitchLogic_toggleActorValueChanged();
 
     void onInitDoorRingLogic_inputSensorValueChanged();
-    void onInitPlaySoundOnEvent_valueChanged();
+    void onInitPlaySoundOnValue_valueChanged();
+    void onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd);
 
 private:
 
