@@ -22,7 +22,7 @@ done <$SERVICES_FILE
 echo "Building all services"
 while read s; do
   echo "Building service $s"
-  ./deploy $s
+  ./deploy.sh $s
 done <$SERVICES_FILE
 
 echo "Starting all services"
