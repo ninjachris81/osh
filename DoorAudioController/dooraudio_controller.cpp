@@ -22,6 +22,9 @@ void DoorAudioController::init() {
     REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
+    REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
+    m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+
     REQUIRE_MANAGER_X(m_manager, ActorManager);
     m_actorManager = m_manager->getManager<ActorManager>(ActorManager::MANAGER_ID);
 
@@ -50,11 +53,12 @@ void DoorAudioController::onCallStateChanged(int newState) {
 
     switch(state) {
     case OshCall::RINGING:
-        m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_ON, true);
+        //m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_ON, true);
+        m_valueManager->updateAndPublishValue(m_doorRingActor, true);
         break;
     case OshCall::IDLE:
     case OshCall::ACTIVE:
-        m_actorManager->publishCmd(m_doorRingActor, actor::ACTOR_CMD_OFF, false);
+        m_valueManager->updateAndPublishValue(m_doorRingActor, false);
         break;
     }
 }

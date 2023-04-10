@@ -43,6 +43,7 @@ private:
 
     DigitalActor *m_doorRingActor;
     ClientSystemWarningsManager* m_warnManager;
+    ValueManagerBase* m_valueManager;
     ActorManager* m_actorManager;
 
 
