@@ -57,6 +57,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
             QModbusResponse response = reply->rawResult();
             iDebug() << response.dataSize();
             setStatus(relayIndex, response.data().at(2) == 0x01);
+            m_valueManager->publishValue(actor(relayIndex));
         });
     } else {
         m_warnManager->raiseWarning("Serial not connected");
