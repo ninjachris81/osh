@@ -15,8 +15,11 @@ RS485RelayController::RS485RelayController(ControllerManager *manager, QString i
 void RS485RelayController::init() {
     iDebug() << Q_FUNC_INFO;
 
+    REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
-    Q_ASSERT(m_warnManager != nullptr);
+
+    REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
+    m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
 
@@ -113,6 +116,7 @@ void RS485RelayController::onDataReceived() {
 
         for (quint8 i = 0;i<m_relayCount;i++) {
             setStatus(i, response.data().at((i * 2) + 2) == 0x01);
+            m_valueManager->publishValue(actor(i));
         }
     } else if (reply->error() == QModbusDevice::ProtocolError) {
         iWarning() << "Modbus error" << reply->error();

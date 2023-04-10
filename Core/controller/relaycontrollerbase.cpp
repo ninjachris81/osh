@@ -29,6 +29,10 @@ bool RelayControllerBase::relayStatus(quint8 relayIndex) {
     return m_actorMappings.at(relayIndex)->rawValue().toBool();
 }
 
+DigitalActor* RelayControllerBase::actor(quint8 relayIndex) {
+    return m_actorMappings.at(relayIndex);
+}
+
 quint8 RelayControllerBase::bindActor(DigitalActor* actor) {
     quint8 relayIndex = m_actorMappings.count();
     m_actorMappings.append(actor);

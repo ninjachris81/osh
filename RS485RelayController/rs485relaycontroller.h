@@ -48,6 +48,7 @@ protected slots:
 
 private:
     QMutex m_Mutex;
+    ValueManagerBase *m_valueManager;
     ClientSystemWarningsManager* m_warnManager;
     QModbusRtuSerialMaster m_modbusClient;
     QTimer m_statusTimer;

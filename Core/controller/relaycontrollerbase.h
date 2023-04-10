@@ -26,6 +26,8 @@ public:
 
     bool relayStatus(quint8 relayIndex);
 
+    DigitalActor* actor(quint8 relayIndex);
+
     /*virtual*/ quint8 bindActor(DigitalActor *actor);
 
 protected:
