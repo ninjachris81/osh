@@ -1,0 +1,9 @@
+[Unit]
+Description=OSH Create Thumbnail Timer
+
+[Timer]
+OnUnitActiveSec=12h
+OnBootSec=12h
+
+[Install]
+WantedBy=timers.target
