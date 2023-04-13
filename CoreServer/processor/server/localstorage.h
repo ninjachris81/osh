@@ -21,6 +21,8 @@ public:
 
     Q_INVOKABLE void unset(QString method, QString key, QString uniqueId);
 
+    Q_INVOKABLE bool containsObject(QString method, QString key, QString uniqueId);
+
     Q_INVOKABLE void setObject(QString method, QString key, QString uniqueId, QObject* obj);
 
     Q_INVOKABLE QObject* getObject(QString method, QString key, QString uniqueId);

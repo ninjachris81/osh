@@ -266,11 +266,14 @@ bool CommonScripts::initPresenceLogic(QString radarId, QString pirId, QString pr
     BooleanValue* presenceVal = static_cast<BooleanValue*>(m_datamodel->value(presenceId));
     Q_ASSERT(presenceVal!=nullptr);
 
+    publishValue(presenceVal, false);       // overwrite retain
+
     if (!radarId.isEmpty()) {
         BooleanValue* radarVal = static_cast<BooleanValue*>(m_datamodel->value(radarId));
         Q_ASSERT(radarVal!=nullptr);
         Helpers::safeConnect(radarVal, &ValueBase::valueChanged, this, &CommonScripts::onInitPresenceLogic_radarValueChanged, SIGNAL(valueChanged()), SLOT(onInitPresenceLogic_radarValueChanged()));
         m_localStorage->setObject("initPresenceLogic", "radarPresence", radarVal->fullId(), presenceVal);
+        m_localStorage->set("initPresenceLogic", "hasRadar", presenceVal->fullId(), true);
     }
 
     if (!pirId.isEmpty()) {
@@ -278,6 +281,7 @@ bool CommonScripts::initPresenceLogic(QString radarId, QString pirId, QString pr
         Q_ASSERT(pirVal!=nullptr);
         Helpers::safeConnect(pirVal, &ValueBase::valueChanged, this, &CommonScripts::onInitPresenceLogic_pirValueChanged, SIGNAL(valueChanged()), SLOT(onInitPresenceLogic_pirValueChanged()));
         m_localStorage->setObject("initPresenceLogic", "pirPresence", pirVal->fullId(), presenceVal);
+        m_localStorage->set("initPresenceLogic", "hasPir", presenceVal->fullId(), true);
     }
 
     return true;
@@ -304,6 +308,7 @@ void CommonScripts::onInitPresenceLogic_valueChanged(QObject *sender, QString pr
     } else {
         m_localStorage->set("initPresenceLogic", valueKey, presenceVal->fullId(), false);
     }
+    applyPresenceLogic(presenceVal->fullId(), 60000);           // call with 60 sec, but normal interval will be lower anyways
 }
 
 bool CommonScripts::applyPresenceLogic(QString presenceId, qint32 timeoutMs) {
@@ -312,10 +317,10 @@ bool CommonScripts::applyPresenceLogic(QString presenceId, qint32 timeoutMs) {
     BooleanValue* presenceVal = static_cast<BooleanValue*>(m_datamodel->value(presenceId));
     Q_ASSERT(presenceVal!=nullptr);
 
-    bool hasRadar = m_localStorage->contains("initPresenceLogic", "radarPresence", presenceVal->fullId());
+    bool hasRadar = m_localStorage->get("initPresenceLogic", "hasRadar", presenceVal->fullId(), false).toBool();
     bool isRadar = m_localStorage->get("initPresenceLogic", "radar", presenceVal->fullId(), false).toBool();
 
-    bool hasPir = m_localStorage->contains("initPresenceLogic", "pirPresence", presenceVal->fullId());
+    bool hasPir = m_localStorage->get("initPresenceLogic", "hasPir", presenceVal->fullId(), false).toBool();
     bool isPir = m_localStorage->get("initPresenceLogic", "pir", presenceVal->fullId(), false).toBool();
 
     qint64 lastActive = m_localStorage->get("initPresenceLogic", "lastTs", presenceVal->fullId(), 0).toLongLong();

@@ -26,6 +26,10 @@ void LocalStorage::unset(QString method, QString key, QString uniqueId) {
     m_values.remove(getId(method, key, uniqueId));
 }
 
+bool LocalStorage::containsObject(QString method, QString key, QString uniqueId) {
+    return m_objects.contains(getId(method, key, uniqueId));
+}
+
 void LocalStorage::setObject(QString method, QString key, QString uniqueId, QObject* obj) {
     m_objects.insert(getId(method, key, uniqueId), obj);
 }
