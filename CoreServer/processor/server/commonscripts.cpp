@@ -260,40 +260,102 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
     }
 }
 
-bool CommonScripts::applyMotionLogic(QString radarFullId, QString pirFullId, QString motionFullId) {
-    ValueBase* radarVal = m_datamodel->value(radarFullId);
-    ValueBase* pirVal = m_datamodel->value(pirFullId);
-    ValueBase* motionVal = m_datamodel->value(motionFullId);
+bool CommonScripts::initPresenceLogic(QString radarId, QString pirId, QString presenceId) {
+    iInfo() << Q_FUNC_INFO;
 
-    if (radarVal->isValid() && radarVal->rawValue().toBool()) {
-        publishValue(motionVal, true);
-    } else if (pirVal->isValid() && pirVal->rawValue().toBool()) {
-        publishValue(motionVal, true);
-    } else {
-        publishValue(motionVal, false);
+    BooleanValue* presenceVal = static_cast<BooleanValue*>(m_datamodel->value(presenceId));
+    Q_ASSERT(presenceVal!=nullptr);
+
+    if (!radarId.isEmpty()) {
+        BooleanValue* radarVal = static_cast<BooleanValue*>(m_datamodel->value(radarId));
+        Q_ASSERT(radarVal!=nullptr);
+        Helpers::safeConnect(radarVal, &ValueBase::valueChanged, this, &CommonScripts::onInitPresenceLogic_radarValueChanged, SIGNAL(valueChanged()), SLOT(onInitPresenceLogic_radarValueChanged()));
+        m_localStorage->setObject("initPresenceLogic", "radarPresence", radarVal->fullId(), presenceVal);
     }
+
+    if (!pirId.isEmpty()) {
+        ValueBase* pirVal = static_cast<BooleanValue*>(m_datamodel->value(pirId));
+        Q_ASSERT(pirVal!=nullptr);
+        Helpers::safeConnect(pirVal, &ValueBase::valueChanged, this, &CommonScripts::onInitPresenceLogic_pirValueChanged, SIGNAL(valueChanged()), SLOT(onInitPresenceLogic_pirValueChanged()));
+        m_localStorage->setObject("initPresenceLogic", "pirPresence", pirVal->fullId(), presenceVal);
+    }
+
     return true;
 }
 
-bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString motionFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
+void CommonScripts::onInitPresenceLogic_radarValueChanged() {
+    iDebug() << Q_FUNC_INFO;
+    onInitPresenceLogic_valueChanged(sender(), "radarPresence", "radar");
+}
+
+void CommonScripts::onInitPresenceLogic_pirValueChanged() {
+    iDebug() << Q_FUNC_INFO;
+    onInitPresenceLogic_valueChanged(sender(), "pirPresence", "pir");
+}
+
+void CommonScripts::onInitPresenceLogic_valueChanged(QObject *sender, QString presenceKey, QString valueKey) {
+    iInfo() << Q_FUNC_INFO;
+
+    BooleanValue* sensorVal = static_cast<BooleanValue*>(sender);
+    BooleanValue* presenceVal = static_cast<BooleanValue*>(m_localStorage->getObject("initPresenceLogic", presenceKey, sensorVal->fullId()));
+
+    if (sensorVal->rawValue().isValid() && sensorVal->rawValue().toBool()) {
+        m_localStorage->set("initPresenceLogic", valueKey, presenceVal->fullId(), true);
+    } else {
+        m_localStorage->set("initPresenceLogic", valueKey, presenceVal->fullId(), false);
+    }
+}
+
+bool CommonScripts::applyPresenceLogic(QString presenceId, qint32 timeoutMs) {
+    iInfo() << Q_FUNC_INFO;
+
+    BooleanValue* presenceVal = static_cast<BooleanValue*>(m_datamodel->value(presenceId));
+    Q_ASSERT(presenceVal!=nullptr);
+
+    bool hasRadar = m_localStorage->contains("initPresenceLogic", "radarPresence", presenceVal->fullId());
+    bool isRadar = m_localStorage->get("initPresenceLogic", "radar", presenceVal->fullId(), false).toBool();
+
+    bool hasPir = m_localStorage->contains("initPresenceLogic", "pirPresence", presenceVal->fullId());
+    bool isPir = m_localStorage->get("initPresenceLogic", "pir", presenceVal->fullId(), false).toBool();
+
+    qint64 lastActive = m_localStorage->get("initPresenceLogic", "lastTs", presenceVal->fullId(), 0).toLongLong();
+
+    if (lastActive > 0 && QDateTime::currentMSecsSinceEpoch() - lastActive > timeoutMs) {
+        // switch off
+        publishValue(presenceVal, false);
+        m_localStorage->set("initPresenceLogic", "lastTs", presenceVal->fullId(), 0);
+    } else {
+        if ((hasRadar && isRadar) || (hasPir && isPir)) {
+            m_localStorage->set("initPresenceLogic", "lastTs", presenceVal->fullId(), QDateTime::currentMSecsSinceEpoch());
+
+            if (!presenceVal->rawValue().toBool()) {
+                publishValue(presenceVal, true);
+            }
+        }
+    }
+
+    return true;
+}
+
+bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
 
     Q_ASSERT(shutterActor != nullptr);
     Q_ASSERT(shutterMode != nullptr);
 
-    bool motionActive = false;
-    if (!motionFullId.isEmpty()) {
-        ValueBase* motionVal = m_datamodel->value(motionFullId);
-        motionActive = motionVal->rawValue().toBool();
+    bool presenceActive = false;
+    if (!presenceFullId.isEmpty()) {
+        ValueBase* presenceVal = m_datamodel->value(presenceFullId);
+        presenceActive = presenceVal->rawValue().toBool();
     }
 
     bool isDownTime = isWithin(hourFrom, minuteFrom, hourTo, minuteTo);
 
     if (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
-            // down: check is motion active
-            if (!motionActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
+            // down: check is presence active
+            if (!presenceActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
                 publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
             } else {
                 iDebug() << "Room still active - pausing shutter actions";

@@ -26,6 +26,9 @@ public:
         NFT_INIT_SWITCH_LOGIC =                 100,
         NFT_APPLY_SWITCH_TIMEOUT_LOGIC =        101,
 
+        NFT_INIT_PRESENCE_LOGIC =               110,
+        NFT_APPLY_PRESENCE_LOGIC =              111,
+
         NFT_APPLY_SHUTTER_LOGIC =               120,
 
         NFT_INIT_DOOR_RING_LOGIC =              130,
