@@ -46,6 +46,7 @@ protected slots:
 
 private:
     SmlParser m_smlParser;
+    ValueManagerBase* m_valueManager;
     ClientSystemWarningsManager* m_warnManager;
     SerialPortClient* m_serialClient;
 

@@ -12,6 +12,10 @@ OBISController::OBISController(ControllerManager *manager, QString id, QObject *
 void OBISController::init() {
     iDebug() << Q_FUNC_INFO;
 
+    REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
+    m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
+
+    REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
     m_serialClient = new SerialPortClient(m_config->getString(this, "serial.port", "COM1"), QSerialPort::Baud9600);
@@ -117,7 +121,7 @@ void OBISController::onDataReceived() {
 
     for (quint8 i = 0; i<SML_INDEX::COUNT;i++) {
         if (m_valueMappings.size() >= i-1) {
-            m_valueMappings.at(i)->updateValue(m_values[i]);
+            m_valueManager->updateAndPublishValue(m_valueMappings.at(i), m_values[i]);
         } else {
             iWarning() << "No mapping for value" << i;
         }
