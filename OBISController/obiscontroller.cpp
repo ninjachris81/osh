@@ -121,7 +121,9 @@ void OBISController::onDataReceived() {
 
     for (quint8 i = 0; i<SML_INDEX::COUNT;i++) {
         if (m_valueMappings.size() >= i-1) {
-            m_valueManager->updateAndPublishValue(m_valueMappings.at(i), m_values[i]);
+            if (m_valueMappings.at(i)->updateValue(m_values[i])) {
+                m_valueManager->publishValue(m_valueMappings.at(i));
+            }
         } else {
             iWarning() << "No mapping for value" << i;
         }
