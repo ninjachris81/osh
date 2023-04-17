@@ -13,6 +13,8 @@ SUBDIRS += \
     CoreUI \
     DoorAudioController \
     DoorAudioService \
+    DoorCameraController \
+    DoorCameraService \
     DoorUnlockController \
     DoorUnlockService \
     HomeConnectController \
@@ -83,3 +85,6 @@ HomeConnectService.depends = Core HomeConnectController QMqttCommunicationManage
 
 RS485EnergyMeterController.depends = Core CoreSerial
 RS485EnergyMeterService.depends = Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager
+
+DoorCameraController.depends = Core
+DoorCameraService.depends = Core DoorCameraController QMqttCommunicationManager
