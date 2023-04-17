@@ -50,8 +50,14 @@ void DoorCameraController::bindDoorRingActor(DigitalActor *doorRingActor) {
 
 void DoorCameraController::onRingTriggered(actor::ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_ON:
-        QProcess::startDetached(m_program, QStringList() << "-4" << "-d" << QString::number(m_duration) << rtspUrl << ">" << baseStorageUrl + QDir::separator() + QDateTime::currentDateTime().toString("yyyyMMdd") + QDir::separator() + QDateTime::currentDateTime().toString("yyMMddhhmmsszzz") + ".mp4");
+    case actor::ACTOR_CMD_ON: {
+        QProcess *proc = new QProcess();
+        proc->setProgram(m_program);
+        proc->setArguments(QStringList() << "-4" << "-d" << QString::number(m_duration) << rtspUrl);
+        proc->setStandardOutputFile(baseStorageUrl + QDir::separator() + QDateTime::currentDateTime().toString("yyyyMMdd") + QDir::separator() + QDateTime::currentDateTime().toString("yyMMddhhmmsszzz") + ".mp4");
+        proc->start();
+        connect(proc, SIGNAL(finished(int)), proc, SLOT(deleteLater()));
+    }
         break;
     case actor::ACTOR_CMD_OFF:
         break;
