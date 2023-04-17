@@ -10,7 +10,14 @@ ToggleActor::ToggleActor(ValueGroup *valueGroup, QString id, QObject *parent)
 }
 
 bool ToggleActor::cmdSupported(actor::ACTOR_CMDS cmd) {
-    return cmd == actor::ACTOR_CMD_TOGGLE;
+    switch(cmd) {
+    case actor::ACTOR_CMD_ON:
+    case actor::ACTOR_CMD_OFF:
+    case actor::ACTOR_CMD_TOGGLE:
+        return true;
+    default:
+        return false;
+    }
 }
 
 QVariant ToggleActor::_updateValue(QVariant newValue) {
@@ -28,8 +35,17 @@ bool ToggleActor::isAsync() {
 }
 
 void ToggleActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
-    if (cmd == actor::ACTOR_CMD_TOGGLE) {
-        //Q_EMIT(requestToggle());
+    switch(cmd) {
+    case actor::ACTOR_CMD_ON:
+        updateValue(true);
+        break;
+    case actor::ACTOR_CMD_OFF:
+        updateValue(false);
+        break;
+    case actor::ACTOR_CMD_TOGGLE:
         updateValue(!rawValue().toBool());
+        break;
+    default:
+        break;
     }
 }

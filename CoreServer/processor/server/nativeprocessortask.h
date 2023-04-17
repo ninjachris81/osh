@@ -25,6 +25,8 @@ public:
         NFT_INVALID = 0,
         NFT_INIT_SWITCH_LOGIC =                 100,
         NFT_APPLY_SWITCH_TIMEOUT_LOGIC =        101,
+        NFT_INIT_SWITCH_PRESENCE_LOGIC =        105,
+        NFT_APPLY_SWITCH_PRESENCE_LOGIC =       106,
 
         NFT_INIT_PRESENCE_LOGIC =               110,
         NFT_APPLY_PRESENCE_LOGIC =              111,

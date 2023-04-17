@@ -10,109 +10,90 @@ CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorag
 {
 }
 
-/*
- * Returns true if the function has been called
-*/
-/*
-bool CommonScripts::ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant invalidValue, QJSValue function) {
-    iDebug() << Q_FUNC_INFO << actualValue << expectedValue;
+bool CommonScripts::initSwitchPresenceLogic(QString presenceId, QString toggleActorId, QString brightnessId, double brightnessThreshold, quint64 switchCooldownPeriodMs) {
+    iInfo() << Q_FUNC_INFO;
 
-    QVariant actual = actualValue->isValid() ? actualValue->rawValue() : invalidValue;
-    QVariant expected = expectedValue->isValid() ?  expectedValue->rawValue() : invalidValue;
+    BooleanValue* presenceSensor = static_cast<BooleanValue*>(m_datamodel->value(presenceId));
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorId));
+    DoubleValue* brightnessValue = static_cast<DoubleValue*>(m_datamodel->value(brightnessId));
 
-    if (actual != expected) {
-        // call func
-        if (function.isCallable()) {
-            iDebug() << "Call function" << actual << expected;
-            QJSValueList paramList;
-            paramList << m_engine->toScriptValue(expected);
-            function.call(paramList);
-            return true;
-        } else {
-            iWarning() << "Parameter is not a function" << function.toString();
-        }
-    } else {
-        iDebug() << "Same value" << actual << expected;
-    }
+    Q_ASSERT(presenceSensor != nullptr);
+    Q_ASSERT(toggleActor != nullptr);
+    Q_ASSERT(brightnessValue != nullptr);
 
-    return false;
+    m_localStorage->setObject("initSwitchPresenceLogic", "toggleActor", presenceSensor->fullId(), toggleActor);
+    m_localStorage->setObject("initSwitchPresenceLogic", "brightnessValue", presenceSensor->fullId(), brightnessValue);
+    m_localStorage->set("initSwitchPresenceLogic", "brightnessThreshold", presenceSensor->fullId(), brightnessThreshold);
+    m_localStorage->set("initSwitchPresenceLogic", "switchCooldownPeriodMs", presenceSensor->fullId(), switchCooldownPeriodMs);
+
+    Helpers::safeConnect(presenceSensor, &ValueBase::valueChanged, this, &CommonScripts::onInitSwitchPresenceLogic_presenceValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchPresenceLogic_presenceValueChanged()));
+
+    return true;
 }
-*/
 
-bool CommonScripts::applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs) {
-    if (m_datamodel->actors().contains(lightActorFullId) && m_datamodel->values().contains(inputSensorFullId) && m_datamodel->values().contains(motionSensorFullId) && m_datamodel->values().contains(brightnessSensorFullId)) {
-        ActorBase* lightActor = m_datamodel->actor(lightActorFullId);
-        ValueBase* inputSensor = m_datamodel->value(inputSensorFullId);
-        ValueBase* motionSensor = m_datamodel->value(motionSensorFullId);
-        ValueBase* brightnessSensor = m_datamodel->value(brightnessSensorFullId);
+/*
+ *  ONLY handles turn ON logic
+ *  OFF is handled by apply
+ */
+void CommonScripts::onInitSwitchPresenceLogic_presenceValueChanged() {
+    iDebug() << Q_FUNC_INFO;
 
-        QVariant actualValue = lightActor->rawValue();
-        QVariant expectedValue;
+    BooleanValue* presenceSensor = static_cast<BooleanValue*>(sender());
+    _onInitSwitchPresenceLogic_presenceValueChanged(presenceSensor);
+}
 
-        QString triggerReason;
+void CommonScripts::_onInitSwitchPresenceLogic_presenceValueChanged(BooleanValue *presenceSensor) {
+    if (presenceSensor->rawValue().isValid() && presenceSensor->rawValue().toBool()) {
+        // presence active, check if light is on
+        ToggleActor* toggleActor = static_cast<ToggleActor*>(m_localStorage->getObject("initSwitchPresenceLogic", "toggleActor", presenceSensor->fullId()));
+        if (!toggleActor->rawValue().toBool()) {
+            // next, check brightness
+            DoubleValue* brightnessValue = static_cast<DoubleValue*>(m_localStorage->getObject("initSwitchPresenceLogic", "brightnessValue", presenceSensor->fullId()));
+            double brightnessThreshold = m_localStorage->get("initSwitchPresenceLogic", "brightnessThreshold", presenceSensor->fullId()).toDouble();
 
-        bool inputTriggered = false;
+            if (brightnessValue->rawValue().isValid() && brightnessValue->rawValue().toDouble() < brightnessThreshold) {
 
-        if (inputSensor->isValid()) {
-            QVariant lastValue = m_localStorage->get("applySwitchMotionLogic", "lastVal", inputSensor->fullId());
+                qint64 switchCooldownPeriodMs = m_localStorage->get("initSwitchPresenceLogic", "switchCooldownPeriodMs", presenceSensor->fullId(), 0).toLongLong();
+                qint64 lastSwitchOff = m_localStorage->get("initSwitchLogic", "lastSwitchOff", toggleActor->fullId(), 0).toLongLong();
 
-            if (lastValue.isValid() && inputSensor->rawValue() != lastValue && inputSensor->rawValue().toBool()) {
-                inputTriggered = true;
-                iDebug() << "Input sensor triggered";
-            }
-
-            m_localStorage->set("applySwitchMotionLogic", "lastVal", inputSensor->fullId(), inputSensor->rawValue());
-        }
-
-        if (actualValue.isValid() && actualValue.toBool() && inputSensor->isValid() && inputTriggered) {
-            // toggle to OFF
-            iDebug() << "Toggle off with grace period for motion sensor";
-            expectedValue = false;
-
-            triggerReason = "Input trigger";
-            clearTimeout(motionSensorFullId);
-            clearTimeout(inputSensorFullId);
-            m_localStorage->set("applySwitchMotionLogic", "grace", motionSensor->fullId(), QDateTime::currentMSecsSinceEpoch());
-        } else {
-            // update last values
-            if (brightnessSensor->isValid() && brightnessSensor->rawValue().toInt() < brightnessThreshold) {
-                if (motionSensor->isValid() && motionSensor->rawValue().toBool() && (QDateTime::currentMSecsSinceEpoch() - m_localStorage->get("applySwitchMotionLogic", "grace", motionSensor->fullId(), 0).toULongLong() > motionSensorGracePeriodMs)) {
-                    setTimeout(motionSensorFullId);
-                    triggerReason = "Motion sensor";
+                if (QDateTime::currentMSecsSinceEpoch() > (lastSwitchOff + switchCooldownPeriodMs)) {
+                    // ok, it's too dark, light is off and presence detected -> switch it ON
+                    publishCmd(toggleActor, actor::ACTOR_CMD_ON, true, "presence");
+                } else {
+                    // user just pressed turned it OFF, so ignore this one
                 }
             }
-
-            if (inputSensor->isValid() && inputTriggered) {
-                setTimeout(inputSensorFullId);
-                triggerReason = "Input trigger";
-            }
-
-            quint64 lastContact = qMax(getTimeout(motionSensorFullId), getTimeout(inputSensorFullId));
-
-            iDebug() << "Last contact" << lastContact;
-
-            if (lastContact > 0 && QDateTime::currentMSecsSinceEpoch() - lastContact < triggerTimeoutMs) {
-                expectedValue = true;
-            } else if (inputSensor->isValid() && motionSensor->isValid()) {
-                triggerReason = "Timeout";
-                expectedValue = false;
-            }
         }
-
-        // finally set the value
-        if (actualValue != expectedValue && expectedValue.isValid()) {
-            lightActor->triggerCmd(expectedValue.toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, triggerReason);
-        }
-
-        return true;
-    } else {
-        iWarning() << "Invalid parameters" << lightActorFullId << inputSensorFullId << motionSensorFullId << brightnessSensorFullId;
-        return false;
     }
+}
+
+/*
+ *
+ */
+bool CommonScripts::applySwitchPresenceLogic(QString presenceId) {
+    iDebug() << Q_FUNC_INFO;
+
+    BooleanValue* presenceSensor = static_cast<BooleanValue*>(m_datamodel->value(presenceId));
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_localStorage->getObject("initSwitchPresenceLogic", "toggleActor", presenceSensor->fullId()));
+
+    Q_ASSERT(presenceSensor != nullptr);
+    Q_ASSERT(toggleActor != nullptr);
+
+    if (presenceSensor->rawValue().isValid() ) {
+        if (presenceSensor->rawValue().toBool()) {
+            _onInitSwitchPresenceLogic_presenceValueChanged(presenceSensor);
+        } else {
+            if (toggleActor->rawValue().toBool()) {
+                publishCmd(toggleActor, actor::ACTOR_CMD_OFF, false, "presence");
+            }
+        }
+    }
+
+    return true;
 }
 
 bool CommonScripts::initSwitchLogic(QString lightRelayActorFullIds, QString inputSensorFullId, QString toggleActorFullId) {
-    iDebug() << lightRelayActorFullIds << inputSensorFullId << toggleActorFullId;
+    iInfo() << lightRelayActorFullIds << inputSensorFullId << toggleActorFullId;
 
     BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->value(inputSensorFullId));
     ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
@@ -146,9 +127,13 @@ void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
         m_localStorage->set("initSwitchLogic", "lastVal", inputSensor->fullId(), inputSensor->rawValue().toBool());
 
         if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool()) {
-            // toggle controller is in server, to just emit
+            // toggle controller is in server, so just emit
             //Q_EMIT(toggleActor->requestToggle());
             publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "input sensor");
+
+            if (!toggleActor->rawValue().toBool()) {
+                m_localStorage->set("initSwitchLogic", "lastSwitchOff", toggleActor->fullId(), QDateTime::currentMSecsSinceEpoch());       // for initSwitchPresenceLogic and applySwitchPresenceLogic
+            }
         }
     }
 }

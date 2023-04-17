@@ -54,6 +54,12 @@ QVariant NativeProcessorTask::run() {
         case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
             m_lastResult = m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
             break;
+        case NFT_INIT_SWITCH_PRESENCE_LOGIC:
+            m_lastResult = m_commonScripts->initSwitchPresenceLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toDouble(), m_nativeParams.at(4).toLongLong());
+            break;
+        case NFT_APPLY_SWITCH_PRESENCE_LOGIC:
+            m_lastResult = m_commonScripts->applySwitchPresenceLogic(m_nativeParams.at(0).toString());
+            break;
         case NFT_INIT_PRESENCE_LOGIC:
             m_lastResult = m_commonScripts->initPresenceLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
             break;
@@ -136,6 +142,10 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::Int;
+    case NativeProcessorTask::NFT_INIT_SWITCH_PRESENCE_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Double << QVariant::LongLong;
+    case NativeProcessorTask::NFT_APPLY_SWITCH_PRESENCE_LOGIC:
+        return QList<QVariant::Type>() << QVariant::String;
     case NativeProcessorTask::NFT_INIT_PRESENCE_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_APPLY_PRESENCE_LOGIC:

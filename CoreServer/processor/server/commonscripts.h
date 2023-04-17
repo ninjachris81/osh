@@ -19,7 +19,9 @@ public:
 
     //Q_INVOKABLE bool ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function);
 
-    Q_INVOKABLE bool applySwitchMotionLogic(QString lightActorFullId, QString inputSensorFullId, QString motionSensorFullId, QString brightnessSensorFullId, int brightnessThreshold, quint64 triggerTimeoutMs, quint64 motionSensorGracePeriodMs);
+    Q_INVOKABLE bool initSwitchPresenceLogic(QString presenceId, QString toggleActorId, QString brightnessId, double brightnessThreshold, quint64 switchCooldownPeriodMs);
+
+    Q_INVOKABLE bool applySwitchPresenceLogic(QString presenceId);
 
     Q_INVOKABLE bool initSwitchLogic(QString lightRelayActorFullId, QString inputSensorFullId, QString toggleActorFullId);
 
@@ -43,8 +45,9 @@ public:
 
     Q_INVOKABLE bool initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue);
 
-
 private slots:
+    void onInitSwitchPresenceLogic_presenceValueChanged();
+
     void onInitSwitchLogic_inputSensorValueChanged();
     void onInitSwitchLogic_toggleActorValueChanged();
 
@@ -57,6 +60,7 @@ private slots:
     void onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd);
 
 private:
+    void _onInitSwitchPresenceLogic_presenceValueChanged(BooleanValue *presenceSensor);
 
 signals:
 

@@ -18,6 +18,7 @@ WBB12Service/WBB12Service
 RS485EnergyMeterService/RS485EnergyMeterService
 DoorAudioService/DoorAudioService
 DoorUnlockService/DoorUnlockService
+OBISService/OBISService
 Makefile
 .qmake.stash
 /AndroidApp/app/google-services.json
