@@ -32,6 +32,8 @@ protected slots:
     void onRingTriggered(actor::ACTOR_CMDS cmd);
 
 private:
+    void startRecording();
+
     DigitalActor *m_doorRingActor;
     ClientSystemWarningsManager* m_warnManager;
     ValueManagerBase* m_valueManager;

@@ -49,17 +49,29 @@ void DoorCameraController::bindDoorRingActor(DigitalActor *doorRingActor) {
 }
 
 void DoorCameraController::onRingTriggered(actor::ACTOR_CMDS cmd) {
+    iInfo() << Q_FUNC_INFO << cmd;
+
     switch(cmd) {
-    case actor::ACTOR_CMD_ON: {
-        QProcess *proc = new QProcess();
-        proc->setProgram(m_program);
-        proc->setArguments(QStringList() << "-4" << "-d" << QString::number(m_duration) << rtspUrl);
-        proc->setStandardOutputFile(baseStorageUrl + QDir::separator() + QDateTime::currentDateTime().toString("yyyyMMdd") + QDir::separator() + QDateTime::currentDateTime().toString("yyMMddhhmmsszzz") + ".mp4");
-        proc->start();
-        connect(proc, SIGNAL(finished(int)), proc, SLOT(deleteLater()));
-    }
+    case actor::ACTOR_CMD_ON:
+        startRecording();
         break;
     case actor::ACTOR_CMD_OFF:
         break;
     }
+}
+
+
+void DoorCameraController::startRecording() {
+    iInfo() << Q_FUNC_INFO;
+
+    QProcess *proc = new QProcess();
+    proc->setProgram(m_program);
+    proc->setArguments(QStringList() << "-4" << "-d" << QString::number(m_duration) << rtspUrl);
+    QString videoDir = baseStorageUrl + QDir::separator() + QDateTime::currentDateTime().toString("yyyyMMdd");
+    QDir videoPath(videoDir);
+    iInfo() << "mkpath" << videoPath.mkpath(videoDir);
+    proc->setStandardOutputFile(videoDir + QDir::separator() + QDateTime::currentDateTime().toString("yyMMddhhmmsszzz") + ".mp4");
+    connect(proc, SIGNAL(finished(int)), proc, SLOT(deleteLater()));
+    iInfo() << "Starting" << proc;
+    proc->start();
 }
