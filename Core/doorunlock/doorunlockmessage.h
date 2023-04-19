@@ -23,6 +23,7 @@ public:
     static QLatin1String DU_ATTRIB_OTH;
     static QLatin1String DU_ATTRIB_RESULT_HASH;
     static QLatin1String DU_ATTRIB_DOOR_ID;
+    static QLatin1String DU_ATTRIB_INITIATOR_ID;
 
     explicit DoorUnlockMessage(QString userId, QString doorId, QVariantMap values, QObject *parent = nullptr);
 

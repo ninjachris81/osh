@@ -5,6 +5,7 @@ QLatin1String DoorUnlockMessage::DU_ATTRIB_TS = QLatin1String("ts");
 QLatin1String DoorUnlockMessage::DU_ATTRIB_OTH = QLatin1String("oth");
 QLatin1String DoorUnlockMessage::DU_ATTRIB_RESULT_HASH = QLatin1String("rh");
 QLatin1String DoorUnlockMessage::DU_ATTRIB_DOOR_ID = QLatin1String("did");
+QLatin1String DoorUnlockMessage::DU_ATTRIB_INITIATOR_ID = QLatin1String("iid");
 
 DoorUnlockMessage::DoorUnlockMessage(QString userId, QString doorId, QVariantMap values, QObject *parent) : MessageBase(parent), m_userId(userId), m_doorId(doorId), m_values(values)
 {

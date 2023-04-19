@@ -96,26 +96,34 @@ void DoorUnlockManager::onChallengeMaintenance() {
 void DoorUnlockManager::handleChallengeRequest(DoorUnlockMessage* duMessage) {
     //QMutexLocker locker(&m_currentChallengeRequestsMutex);
 
-    if (!m_currentChallengeRequests.contains(duMessage->userId())) {
+    QString initiatorId = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_INITIATOR_ID).toString();
 
-        ChallengeRequest req;
-        req.ts = QDateTime::currentMSecsSinceEpoch();
-        req.oth = QString::number(QRandomGenerator::global()->bounded((quint32) 10000, (quint32) 99999));
+    if (!initiatorId.isEmpty()) {       // TODO: maybe verify iid?
+        if (!m_currentChallengeRequests.contains(duMessage->userId())) {
 
-        QString userId = duMessage->userId();
-        QString doorId = duMessage->doorId();
-        m_currentChallengeRequests.insert(userId, req);
+            ChallengeRequest req;
+            req.ts = QDateTime::currentMSecsSinceEpoch();
+            req.oth = QString::number(QRandomGenerator::global()->bounded((quint32) 10000, (quint32) 99999));
 
-        QVariantMap values;
-        values.insert(DoorUnlockMessage::DU_ATTRIB_STAGE, DoorUnlockMessage::DU_AUTH_STAGE::CHALLENGE_CREATED);
-        values.insert(DoorUnlockMessage::DU_ATTRIB_TS, req.ts);
-        values.insert(DoorUnlockMessage::DU_ATTRIB_OTH, req.oth);
-        DoorUnlockMessage responseMessage(userId, doorId, values);
-        m_commManager->sendMessage(responseMessage);
-        iInfo() << "Sending challenge created";
+            QString userId = duMessage->userId();
+            QString doorId = duMessage->doorId();
+            m_currentChallengeRequests.insert(userId, req);
+
+            QVariantMap values;
+            values.insert(DoorUnlockMessage::DU_ATTRIB_STAGE, DoorUnlockMessage::DU_AUTH_STAGE::CHALLENGE_CREATED);
+            values.insert(DoorUnlockMessage::DU_ATTRIB_TS, req.ts);
+            values.insert(DoorUnlockMessage::DU_ATTRIB_OTH, req.oth);
+            values.insert(DoorUnlockMessage::DU_ATTRIB_INITIATOR_ID, initiatorId);
+            DoorUnlockMessage responseMessage(userId, doorId, values);
+            m_commManager->sendMessage(responseMessage);
+            iInfo() << "Sending challenge created";
+        } else {
+            iWarning() << "Cannot create duplicate challenge";
+            sendResult(duMessage->userId(), duMessage->doorId(), false);
+        }
     } else {
+        iWarning() << "No iid set";
         sendResult(duMessage->userId(), duMessage->doorId(), false);
-        iWarning() << "Cannot create duplicate challenge";
     }
 }
 
@@ -125,39 +133,46 @@ void DoorUnlockManager::handleChallengeCalculated(DoorUnlockMessage* duMessage) 
     QString userId = duMessage->userId();
     QString doorId = duMessage->doorId();
 
-    if (m_currentChallengeRequests.contains(userId)) {
-        if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_OTH)) {
-            QString oth = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_OTH).toString();
+    QString initiatorId = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_INITIATOR_ID).toString();
 
-            if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_TS)) {
-                qint64 ts = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_TS).toLongLong();
+    if (!initiatorId.isEmpty()) {       // TODO: maybe verify iid?
+        if (m_currentChallengeRequests.contains(userId)) {
+            if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_OTH)) {
+                QString oth = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_OTH).toString();
 
-                if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_RESULT_HASH)) {
-                    QString resultHash = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_RESULT_HASH).toString();
-                    QString expectedResultHash = calculateResultHash(ts, oth, userId, doorId);
+                if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_TS)) {
+                    qint64 ts = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_TS).toLongLong();
 
-                    if (resultHash == expectedResultHash) {
-                        Q_EMIT(unlockDoor(doorId));
-                        sendResult(userId, doorId, true);
-                        iInfo() << "Challenge success";
+                    if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_RESULT_HASH)) {
+                        QString resultHash = duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_RESULT_HASH).toString();
+                        QString expectedResultHash = calculateResultHash(ts, oth, userId, doorId);
+
+                        if (resultHash == expectedResultHash) {
+                            Q_EMIT(unlockDoor(doorId));
+                            sendResult(userId, doorId, true);
+                            iInfo() << "Challenge success";
+                        } else {
+                            iWarning() << "Challenge mismatch" << resultHash << " expected " << expectedResultHash;
+                            sendResult(userId, doorId, false);
+                        }
                     } else {
-                        iWarning() << "Challenge mismatch" << resultHash << " expected " << expectedResultHash;
-                        sendResult(userId, doorId, false);
+                        iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_RESULT_HASH;
                     }
                 } else {
-                    iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_RESULT_HASH;
+                    iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_TS;
                 }
             } else {
-                iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_TS;
+                iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_OTH;
             }
-        } else {
-            iWarning() << "Missing attribute" << DoorUnlockMessage::DU_ATTRIB_OTH;
-        }
 
-        // just clean up all the time
-        m_currentChallengeRequests.remove(userId);
+            // just clean up all the time
+            m_currentChallengeRequests.remove(userId);
+        } else {
+            iWarning() << "Request not found or timeout";
+            sendResult(userId, doorId, false);
+        }
     } else {
-        iWarning() << "Request not found or timeout";
+        iWarning() << "No iid set";
         sendResult(userId, doorId, false);
     }
 }
