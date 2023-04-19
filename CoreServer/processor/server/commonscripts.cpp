@@ -162,6 +162,51 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
 }
 
 
+bool CommonScripts::initSwitchLogic2(QString lightRelayActorFullIds, QString toggleActorFullId) {
+    iInfo() << lightRelayActorFullIds << toggleActorFullId;
+
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
+
+    Q_ASSERT(toggleActor != nullptr);
+
+    Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic2_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic2_toggleActorValueChanged()));
+
+    quint8 index = 0;
+    for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", QString::SkipEmptyParts)) {
+        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightRelayActorFullId));
+        Q_ASSERT(lightRelayActor != nullptr);
+        m_localStorage->setObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index, lightRelayActor);
+        index++;
+    }
+
+    return true;
+}
+
+
+void CommonScripts::onInitSwitchLogic2_toggleActorValueChanged() {
+    ToggleActor* toggleActor = static_cast<ToggleActor*>(sender());
+
+    for (quint8 index = 0; index<255; index++) {
+        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index));
+        if (lightRelayActor == nullptr) {
+            break;
+        }
+
+        //QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
+
+        if (toggleActor->rawValue().toBool()) {
+            setTimeout(toggleActor->fullId());
+            //m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+        } else {
+            clearTimeout(toggleActor->fullId());
+            //m_localStorage->unset(lastTsInputKey);
+        }
+
+        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
+    }
+}
+
+
 bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 triggerTimeoutMs) {
     QString lastTsInputKey = "lastToggleTs_" + toggleActorFullId;
 

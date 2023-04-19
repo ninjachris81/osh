@@ -24,7 +24,9 @@ public:
     enum NativeFunctionType {
         NFT_INVALID = 0,
         NFT_INIT_SWITCH_LOGIC =                 100,
-        NFT_APPLY_SWITCH_TIMEOUT_LOGIC =        101,
+        NFT_INIT_SWITCH_LOGIC2=                 101,
+        NFT_APPLY_SWITCH_TIMEOUT_LOGIC =        102,
+
         NFT_INIT_SWITCH_PRESENCE_LOGIC =        105,
         NFT_APPLY_SWITCH_PRESENCE_LOGIC =       106,
 

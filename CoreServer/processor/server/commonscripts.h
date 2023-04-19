@@ -25,6 +25,8 @@ public:
 
     Q_INVOKABLE bool initSwitchLogic(QString lightRelayActorFullId, QString inputSensorFullId, QString toggleActorFullId);
 
+    Q_INVOKABLE bool initSwitchLogic2(QString lightRelayActorFullId, QString toggleActorFullId);
+
     Q_INVOKABLE bool applySwitchTimeoutLogic(QString toggleActorFullId, quint64 triggerTimeoutMs);
 
     Q_INVOKABLE bool applyTempValveLogic(QString tempFullId, QString tempTargetFullId, QString tempValveActorFullId, int adjustIntervalMs, double fullDeltaThresholdTemp = 5.0, int factorIntervalMs = 10000);
@@ -50,6 +52,8 @@ private slots:
 
     void onInitSwitchLogic_inputSensorValueChanged();
     void onInitSwitchLogic_toggleActorValueChanged();
+
+    void onInitSwitchLogic2_toggleActorValueChanged();
 
     void onInitPresenceLogic_radarValueChanged();
     void onInitPresenceLogic_pirValueChanged();
