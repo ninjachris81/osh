@@ -52,7 +52,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString());
             break;
         case NFT_INIT_SWITCH_LOGIC2:
-            m_lastResult = m_commonScripts->initSwitchLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
+            m_lastResult = m_commonScripts->initSwitchLogic2(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
             break;
         case NFT_APPLY_SWITCH_TIMEOUT_LOGIC:
             m_lastResult = m_commonScripts->applySwitchTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt());
