@@ -149,7 +149,7 @@ void DoorUnlockManager::handleChallengeCalculated(DoorUnlockMessage* duMessage) 
 
                         if (resultHash == expectedResultHash) {
                             Q_EMIT(unlockDoor(doorId));
-                            sendResult(userId, doorId, true);
+                            sendResult(userId, doorId, true, initiatorId);
                             iInfo() << "Challenge success";
                         } else {
                             iWarning() << "Challenge mismatch" << resultHash << " expected " << expectedResultHash;
@@ -189,9 +189,10 @@ QString DoorUnlockManager::calculateResultHash(qint64 ts, QString oth, QString u
     return sha1.result().toBase64();
 }
 
-void DoorUnlockManager::sendResult(QString userId, QString doorId, bool success) {
+void DoorUnlockManager::sendResult(QString userId, QString doorId, bool success, QString initiatorId) {
     QVariantMap values;
     values.insert(DoorUnlockMessage::DU_ATTRIB_STAGE, success ? DoorUnlockMessage::DU_AUTH_STAGE::CHALLENGE_SUCCESS : DoorUnlockMessage::DU_AUTH_STAGE::CHALLENGE_FAILURE);
+    values.insert(DoorUnlockMessage::DU_ATTRIB_INITIATOR_ID, initiatorId);
     DoorUnlockMessage duMessage(userId, doorId, values);
     m_commManager->sendMessage(duMessage);
 }

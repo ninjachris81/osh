@@ -61,7 +61,7 @@ private:
 
     void handleChallengeCalculated(DoorUnlockMessage* duMessage);
 
-    void sendResult(QString userId, QString doorId, bool success);
+    void sendResult(QString userId, QString doorId, bool success, QString initiatorId = "");
 
     QString calculateResultHash(qint64 ts, QString oth, QString userId, QString doorId);
 
