@@ -353,19 +353,18 @@ bool CommonScripts::applyPresenceLogic(QString presenceId, qint32 timeoutMs) {
     bool hasPir = m_localStorage->get("initPresenceLogic", "hasPir", presenceVal->fullId(), false).toBool();
     bool isPir = m_localStorage->get("initPresenceLogic", "pir", presenceVal->fullId(), false).toBool();
 
-    qint64 lastActive = m_localStorage->get("initPresenceLogic", "lastTs", presenceVal->fullId(), 0).toLongLong();
+    if ((hasRadar && isRadar) || (hasPir && isPir)) {
+        m_localStorage->set("initPresenceLogic", "lastTs", presenceVal->fullId(), QDateTime::currentMSecsSinceEpoch());
 
-    if (lastActive > 0 && QDateTime::currentMSecsSinceEpoch() - lastActive > timeoutMs) {
-        // switch off
-        publishValue(presenceVal, false);
-        m_localStorage->set("initPresenceLogic", "lastTs", presenceVal->fullId(), 0);
+        if (!presenceVal->rawValue().toBool()) {
+            publishValue(presenceVal, true);
+        }
     } else {
-        if ((hasRadar && isRadar) || (hasPir && isPir)) {
-            m_localStorage->set("initPresenceLogic", "lastTs", presenceVal->fullId(), QDateTime::currentMSecsSinceEpoch());
-
-            if (!presenceVal->rawValue().toBool()) {
-                publishValue(presenceVal, true);
-            }
+        qint64 lastActive = m_localStorage->get("initPresenceLogic", "lastTs", presenceVal->fullId(), 0).toLongLong();
+        if (lastActive > 0 && QDateTime::currentMSecsSinceEpoch() - lastActive > timeoutMs) {
+            // switch off
+            publishValue(presenceVal, false);
+            m_localStorage->set("initPresenceLogic", "lastTs", presenceVal->fullId(), 0);
         }
     }
 
