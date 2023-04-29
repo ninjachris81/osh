@@ -6,4 +6,4 @@ Type=oneshot
 
 WorkingDirectory=/var/ftp_data
 
-ExecStart=/bin/bash /etc/osh/deploy/rpi/Service/CameraThumbnails/checkThumbnails.sh
+ExecStart=/bin/bash /etc/osh/deploy/rpi/Services/CameraThumbnails/checkThumbnails.sh

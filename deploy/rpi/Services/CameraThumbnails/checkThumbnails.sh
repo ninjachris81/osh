@@ -2,7 +2,7 @@
 
 #IM_CONVERT="/mnt/host/d/Program Files/ImageMagick-7.1.1-Q16-HDRI/magick.exe"
 IM_CONVERT=/usr/bin/convert
-IMAGE_DIR=/var/ftp_data
+IMAGE_DIR=/var/ftp_data/images
 MAX_DAYS=7
 
 function createThumbnails {
