@@ -46,7 +46,7 @@ function createVideoThumbnails {
 			echo "Thumbnail exists"
 		else
 			"$FFMPEG_CMD" -i $inputFile -b 320k -framerate 15 $inputFile2
-			mv $2inputFile $inputFile
+			mv $inputFile2 $inputFile
 			"$FFMPEG_CMD" -i $inputFile -ss 00:00:01.000 -frames:v 1 $outputFile
 			"$IM_CONVERT" $outputFile -thumbnail 200x200 -quality 80 $outputFile
 		fi
