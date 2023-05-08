@@ -30,7 +30,7 @@ function createThumbnails {
 }
 
 function createVideoThumbnails {
-    local dir="$1/videos"
+    local dir="$1"
     local thumbnailDir="$dir/thumbnails"
     if [ ! -d "$thumbnailDir" ]; then
 		echo "Creating thumbnails in $dir"
@@ -39,7 +39,7 @@ function createVideoThumbnails {
 
     for imageFile in $dir/*.mp4; do
 		local inputFile="$imageFile"
-		local outputFile="$dir/thumbnails/$(basename $imageFile)"
+		local outputFile="$dir/thumbnails/$(basename $imageFile).jpg"
 		echo "$inputFile -> $outputFile"
 		if [ -f $outputFile ]; then
 			echo "Thumbnail exists"
