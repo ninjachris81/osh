@@ -40,12 +40,13 @@ function createVideoThumbnails {
     for imageFile in $dir/*.mp4; do
 		local inputFile="$imageFile"
 		local outputFile="$dir/thumbnails/$(basename $imageFile).jpg"
+		local inputFile2="$dir/_$(basename $imageFile).mp4"
 		echo "$inputFile -> $outputFile"
 		if [ -f $outputFile ]; then
 			echo "Thumbnail exists"
 		else
-			"$FFMPEG_CMD" -i $inputFile -b 320k -framerate 15 "_$inputFile"
-			mv "_$inputFile" $inputFile
+			"$FFMPEG_CMD" -i $inputFile -b 320k -framerate 15 $inputFile2
+			mv $2inputFile $inputFile
 			"$FFMPEG_CMD" -i $inputFile -ss 00:00:01.000 -frames:v 1 $outputFile
 			"$IM_CONVERT" $outputFile -thumbnail 200x200 -quality 80 $outputFile
 		fi
