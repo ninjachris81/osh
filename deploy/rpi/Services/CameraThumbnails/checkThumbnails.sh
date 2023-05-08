@@ -37,7 +37,7 @@ function createVideoThumbnails {
 		mkdir $thumbnailDir
     fi
 
-    for imageFile in $dir/*.jpg; do
+    for imageFile in $dir/*.mp4; do
 		local inputFile="$imageFile"
 		local outputFile="$dir/thumbnails/$(basename $imageFile)"
 		echo "$inputFile -> $outputFile"
