@@ -356,6 +356,7 @@ void WBB12Controller::_readInput(WBB12_Input_Registers reg, RetrieveValue val) {
         } else {
             iWarning() << "Modbus error" << reply->error();
         }
+        reply->deleteLater();
     });
 }
 
@@ -364,7 +365,6 @@ void WBB12Controller::_readHolding(WBB12_Holding_Registers reg, RetrieveValue va
 
     QModbusReply* reply = m_modbusClient.sendReadRequest(dataUnit, m_slaveId);
     connect(reply, &QModbusReply::finished, [this, reply, reg, val] {
-
         if (reply->error() == QModbusDevice::NoError) {
             QVariant value = parseValue(reply->result().value(0), val.dataFormat);
             iDebug() << reg << value;
@@ -376,6 +376,7 @@ void WBB12Controller::_readHolding(WBB12_Holding_Registers reg, RetrieveValue va
         } else {
             iWarning() << "Modbus error" << reply->error();
         }
+        reply->deleteLater();
     });
 }
 
@@ -400,6 +401,7 @@ void WBB12Controller::_writeHolding(WBB12_Holding_Registers reg, RetrieveValue v
         } else {
             iWarning() << "Modbus error" << reply->error();
         }
+        reply->deleteLater();
     });
 }
 
