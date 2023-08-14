@@ -38,6 +38,7 @@ bool PlainGPIOReader::open() {
 
 void PlainGPIOReader::readStates() {
     int m_countMap[m_inputCount];
+     memset(m_countMap, 0, m_inputCount * sizeof(int));
 
     while(true) {
         for (int c = 0;c<GPIO_READ_COUNT;c++) {
@@ -55,7 +56,7 @@ void PlainGPIOReader::readStates() {
                     m_countMap[i]++;
                 }
             }
-            QThread::msleep(5);
+            QThread::msleep(1);
         }
 
         for (quint8 i=0;i<m_inputCount;i++) {
