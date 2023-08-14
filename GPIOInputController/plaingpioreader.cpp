@@ -38,9 +38,10 @@ bool PlainGPIOReader::open() {
 
 void PlainGPIOReader::readStates() {
     int m_countMap[m_inputCount];
-     memset(m_countMap, 0, m_inputCount * sizeof(int));
 
     while(true) {
+        memset(m_countMap, 0, m_inputCount * sizeof(int));
+
         for (int c = 0;c<GPIO_READ_COUNT;c++) {
             for (quint8 i=0;i<m_inputCount;i++) {
                 int pin = m_pinList.at(i);
