@@ -35,6 +35,7 @@ void ValueManagerBase::publishValue(ValueBase* value) {
 
     ValueMessage valueMessage(value->valueGroup()->id(), value->id(), value->rawValue());
     m_commManager->sendMessage(valueMessage);
+    valueMessage.deleteLater();
 }
 
 void ValueManagerBase::updateAndPublishValue(ValueBase* value, QVariant newValue) {

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QMap>
 
 #include "sharedlib.h"
 #include "gpioreaderbase.h"
@@ -10,6 +11,8 @@
 #ifdef __linux__
     #include <wiringPi.h>
 #endif
+
+#define GPIO_READ_COUNT 10
 
 class PlainGPIOReader : public GPIOReaderBase
 {

@@ -37,17 +37,29 @@ bool PlainGPIOReader::open() {
 }
 
 void PlainGPIOReader::readStates() {
+    int m_countMap[m_inputCount];
+
     while(true) {
-        for (quint8 i=0;i<m_inputCount;i++) {
-            int pin = m_pinList.at(i);
+        for (int c = 0;c<GPIO_READ_COUNT;c++) {
+            for (quint8 i=0;i<m_inputCount;i++) {
+                int pin = m_pinList.at(i);
 
 #ifdef __linux__
-            bool state = digitalRead(pin) == LOW;
+                bool state = digitalRead(pin) == LOW;
 #else
-            Q_UNUSED(pin)
-            bool state = false;
+                Q_UNUSED(pin)
+                bool state = false;
 #endif
 
+                if (state) {
+                    m_countMap[i]++;
+                }
+            }
+            QThread::msleep(5);
+        }
+
+        for (quint8 i=0;i<m_inputCount;i++) {
+            bool state = m_countMap[i] == GPIO_READ_COUNT;
             if (firstRun || state != m_states->at(i)) {
                 m_states->setBit(i, state);
                 Q_EMIT(stateChanged(i, state));
