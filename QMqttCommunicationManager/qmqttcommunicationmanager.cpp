@@ -102,6 +102,7 @@ void QMqttCommunicationManager::_onTryConnect() {
 
     if (m_mqttClient.state() != QMqttClient::Connected) {
         m_mqttClient.setClientId(getManager<DeviceDiscoveryManagerBase>(DeviceDiscoveryManagerBase::MANAGER_ID)->device()->fullId());
+        iDebug() << "Connecting as" << m_mqttClient.clientId();
         m_mqttClient.connectToHost();
     } else {
         iWarning() << "Already connected";

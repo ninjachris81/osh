@@ -14,3 +14,5 @@
 #define FLOW_CONTROLLER       10
 #define RELAY_CONTROLLER      11
 #define REED_CONTROLLER       12
+#define TOF_CONTROLLER        13
+#define TEMP_CONTROLLER_ONEWIRE      14

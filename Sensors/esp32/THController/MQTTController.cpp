@@ -26,6 +26,9 @@ void MQTTController::setClientId(String clientId) {
 
 void MQTTController::init() {
   //connecting to a mqtt broker
+  LOG_PRINT(F("MQTT Host "));
+  LOG_PRINTLN(MQTT_SERVER);
+  
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(&MQTTController::callback);
 
@@ -37,6 +40,7 @@ void MQTTController::init() {
 
 void MQTTController::update() {
   if (!client.connected()) {
+    LOG_PRINTLN(F("Not connected"));
     reconnect();
   }
   client.loop();
@@ -72,17 +76,19 @@ void MQTTController::addToSubscribe(String path) {
 }
 
 void MQTTController::subscribeTopics() {
-  uint16_t p = 0;
-  uint16_t x = 0;
+  int p = 0;
+  int x = 0;
 
   for (uint8_t i=0;i<m_callbackHandlerCount;i++) {
     addToSubscribe(m_callbackHandlers[i]->getTopics());
   }
   
+  LOG_PRINT(F("Topics: "));
   LOG_PRINTLN(m_topics);
 
   do {
     x = m_topics.indexOf(TOPIC_DELIMITER, p);
+    LOG_PRINTLN(x);
     if (x != -1) {
 
       String t = m_topics.substring(p, x);

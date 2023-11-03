@@ -11,7 +11,7 @@ void FlashController::init() {
   EEPROM.begin(EEPROM_SIZE);
   m_index = EEPROM.read(EEPROM_ADDRESS);
 
-  //setIndex(25);
+  //setIndex(23);
 
   LOG_PRINT(F("Using index "));
   LOG_PRINTLN(m_index);
@@ -24,7 +24,7 @@ void FlashController::update() {
     if (incomingData.length() <= 3 && isValidNumber(incomingData)) {
       int index = incomingData.toInt();
 
-      if (index >=0 && index<256) {
+      if (index >0 && index<256) {
         setIndex((uint8_t) index);
       }
   

@@ -11,9 +11,13 @@
 #include "OTAController.h"
 #include <LogHelper.h>
 #include "shared/device.h"
+#include "Pins.h"
 
 #if HAS_TEMP_CONTROLLER
   #include "TempController_AHTx.h"
+#endif
+#if HAS_TEMP_CONTROLLER_ONEWIRE
+    #include "TempController_DS18x.h"
 #endif
 #if HAS_MOTION_CONTROLLER
   #include "MotionController.h"
@@ -34,6 +38,9 @@
 #if HAS_REED_CONTROLLER
   #include "ReedController.h"
 #endif
+#if HAS_TOF_CONTROLLER
+  #include "TOFController_AJSR04M.h"
+#endif
 
 TaskManager taskManager;
 
@@ -46,6 +53,9 @@ OTAController otaController;
 
 #if HAS_TEMP_CONTROLLER
   TempControllerAHTx tempController("temps", "hums");
+#endif
+#if HAS_TEMP_CONTROLLER_ONEWIRE
+  TempControllerDS18x tempControllerOneWire("temps", PIN_TEMP_SENSOR_ONEWIRE, 80);
 #endif
 #if HAS_MOTION_CONTROLLER
   MotionController motionController("motions_pirs", "motions_radars");
@@ -65,6 +75,9 @@ OTAController otaController;
 #if HAS_REED_CONTROLLER
   ReedController reedController("reedContacts");
 #endif
+#if HAS_TOF_CONTROLLER
+  TOFControllerAJSR04M tofController("waterLevels");
+#endif
 
 void setup() {
   LOG_INIT();
@@ -80,6 +93,9 @@ void setup() {
   
 #if HAS_TEMP_CONTROLLER
   taskManager.registerTask(&tempController, TEMP_CONTROLLER);
+#endif
+#if HAS_TEMP_CONTROLLER_ONEWIRE
+  taskManager.registerTask(&tempControllerOneWire, TEMP_CONTROLLER_ONEWIRE);
 #endif
 #if HAS_MOTION_CONTROLLER
   taskManager.registerTask(&motionController, MOTION_CONTROLLER);
@@ -98,6 +114,9 @@ void setup() {
 #endif
 #if HAS_REED_CONTROLLER
   taskManager.registerTask(&reedController, REED_CONTROLLER);
+#endif
+#if HAS_TOF_CONTROLLER
+  taskManager.registerTask(&tofController, TOF_CONTROLLER);
 #endif
 
   taskManager.init();
