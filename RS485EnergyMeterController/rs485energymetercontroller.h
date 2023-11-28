@@ -45,7 +45,7 @@ protected slots:
 private:
     void registerInput(OrnoWe514::OrnoWe514_Input_Registers reg, QVariant::Type type, double multiplier, bool twoByte);
     void _readInput(OrnoWe514::OrnoWe514_Input_Registers reg, RetrieveValue val);
-    QVariant parseValue(QVector<quint16> value, QVariant::Type targetType, double multiplier, bool twoByte);
+    QVariant parseValue(QVector<quint16> values, QVariant::Type targetType, double multiplier, bool twoByte);
 
     ClientSystemWarningsManager* m_warnManager;
     ValueManagerBase* m_valueManager = nullptr;

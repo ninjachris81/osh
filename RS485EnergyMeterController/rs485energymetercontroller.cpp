@@ -163,8 +163,12 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
         if (reply->error() == QModbusDevice::NoError) {
             QVariant value = parseValue(reply->result().values(), val.type, val.multiplier, val.twoByte);
             iDebug() << reg << value;
-            ValueBase *v = m_inputMappings.value(reg);
-            m_valueManager->updateAndPublishValue(v, value);
+            if (!value.isNull()) {
+                ValueBase *v = m_inputMappings.value(reg);
+                m_valueManager->updateAndPublishValue(v, value);
+            } else {
+                iWarning() << "Value is null";
+            }
         } else if (reply->error() == QModbusDevice::ProtocolError) {
             iWarning() << "Modbus error" << reply->error();
             iDebug() << QString("Read response error: %1 (Modbus exception: 0x%2)").
@@ -176,16 +180,18 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
     });
 }
 
-QVariant RS485EnergyMeterController::parseValue(QVector<quint16> value, QVariant::Type targetType, double multiplier, bool twoByte) {
+QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVariant::Type targetType, double multiplier, bool twoByte) {
+    iDebug() << values;
+
     double tempValue = 0.0;
-    if (twoByte && value.size() == 2) {
+    if (twoByte && values.size() == 2) {
         quint32 result;
         quint16* result_arr = (quint16*)& result;
-        result_arr[0] = value.at(1);
-        result_arr[1] = value.at(0);
+        result_arr[0] = values.at(1);
+        result_arr[1] = values.at(0);
         tempValue = result;
-    } else if (value.size() == 1){
-        tempValue = value.at(0);
+    } else if (values.size() == 1){
+        tempValue = values.at(0);
     }
     tempValue *= multiplier;
 
