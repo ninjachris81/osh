@@ -32,9 +32,9 @@ void RS485EnergyMeterController::init() {
     m_modbusClient.setTimeout(1000);
     m_modbusClient.setNumberOfRetries(1);
 
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_ADDRESS, QVariant::Int, 1);
+    //registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_ADDRESS, QVariant::Int, 1);
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_BAUD_RATE, QVariant::Int, 1);
-    //registerInput(OrnoWe514::OrnoWe514_Input_Registers::FREQUENCY, QVariant::Int, 0.01);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::FREQUENCY, QVariant::Int, 0.01);
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V2, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V3, QVariant::Int, 0.01);
@@ -150,6 +150,8 @@ void RS485EnergyMeterController::retrieveStatus() {
 }
 
 void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers reg, RetrieveValue val) {
+    iDebug() << Q_FUNC_INFO << reg;
+
     QModbusDataUnit dataUnit(QModbusDataUnit::InputRegisters, reg, 1);
 
     QModbusReply* reply = m_modbusClient.sendReadRequest(dataUnit, m_slaveId);
@@ -161,7 +163,7 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
             ValueBase *v = m_inputMappings.value(reg);
             m_valueManager->updateAndPublishValue(v, value);
         } else if (reply->error() == QModbusDevice::ProtocolError) {
-            iWarning() << "Modbus error" << reply->error();
+            iWarning() << "Modbus error" << reply->error() << reply->errorString();
         } else {
             iWarning() << "Modbus error" << reply->error();
         }
