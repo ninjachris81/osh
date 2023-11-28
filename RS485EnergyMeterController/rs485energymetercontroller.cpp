@@ -38,10 +38,10 @@ void RS485EnergyMeterController::init() {
     registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01, false);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V2, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V3, QVariant::Int, 0.01);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_CURRENT_I1, QVariant::Int, 0.001, true);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_CURRENT_I1, QVariant::Double, 0.001, true);
     //registerInput(OrnoWe514_Input_Registers::PHASE_CURRENT_I2, QVariant::Double, 0.001);
     //registerInput(OrnoWe514_Input_Registers::PHASE_CURRENT_I3, QVariant::Double, 0.001);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_ACTIVE_POWER_P1, QVariant::Int, 0.001, true);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_ACTIVE_POWER_P1, QVariant::Double, 0.001, true);
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
 
     connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &RS485EnergyMeterController::onStateChanged);
