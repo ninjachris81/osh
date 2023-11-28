@@ -187,7 +187,7 @@ QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVarian
     double tempValue = 0.0;
     if (twoByte && values.size() == 2) {
         iDebug() << "2 byte";
-        quint32 result = (values.at(1) << 16) + values.at(0);
+        quint32 result = (values.at(0) << 16) + values.at(1);
         tempValue = result;
     } else if (values.size() == 1){
         tempValue = values.at(0);
