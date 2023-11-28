@@ -177,6 +177,7 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
         } else {
             iWarning() << "Modbus error" << reply->error();
         }
+        reply->deleteLater();
     });
 }
 
@@ -195,6 +196,8 @@ QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVarian
 
     QVariant returnVal = QVariant::fromValue(tempValue);
     returnVal.convert(targetType);
+
+    iDebug() << returnVal;
 
     return returnVal;
 }
