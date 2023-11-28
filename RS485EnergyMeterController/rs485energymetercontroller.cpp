@@ -163,7 +163,10 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
             ValueBase *v = m_inputMappings.value(reg);
             m_valueManager->updateAndPublishValue(v, value);
         } else if (reply->error() == QModbusDevice::ProtocolError) {
-            iWarning() << "Modbus error" << reply->error() << reply->errorString();
+            iWarning() << "Modbus error" << reply->error();
+            iDebug() << QString("Read response error: %1 (Mobus exception: 0x%2)").
+                                        arg(reply->errorString()).
+                                        arg(reply->rawResult().exceptionCode(), -1, 16);
         } else {
             iWarning() << "Modbus error" << reply->error();
         }
