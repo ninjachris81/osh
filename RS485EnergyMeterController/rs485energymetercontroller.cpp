@@ -35,12 +35,14 @@ void RS485EnergyMeterController::init() {
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_ADDRESS, QVariant::Int, 1);
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_BAUD_RATE, QVariant::Int, 1);
     registerInput(OrnoWe514::OrnoWe514_Input_Registers::FREQUENCY, QVariant::Int, 0.01);
-    //registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V2, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V3, QVariant::Int, 0.01);
-    //registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_CURRENT_I1, QVariant::Double, 0.001);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_CURRENT_I1, QVariant::Int, 0.001);
     //registerInput(OrnoWe514_Input_Registers::PHASE_CURRENT_I2, QVariant::Double, 0.001);
     //registerInput(OrnoWe514_Input_Registers::PHASE_CURRENT_I3, QVariant::Double, 0.001);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_ACTIVE_POWER_P1, QVariant::Int, 0.001);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::TOTAL_ACTIVE_POWER, QVariant::Int, 0.001);
 
     connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &RS485EnergyMeterController::onStateChanged);
     connect(&m_modbusClient, &QModbusDevice::errorOccurred, this, &RS485EnergyMeterController::onErrorOccurred);

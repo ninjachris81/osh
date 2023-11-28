@@ -18,8 +18,14 @@ public:
         PHASE_VOLTAGE_V3 = 0x133,
 
         PHASE_CURRENT_I1 = 0x139,
-        PHASE_CURRENT_I2 = 0x140,
-        PHASE_CURRENT_I3 = 0x141,
+        PHASE_CURRENT_I2 = 0x13b,
+        PHASE_CURRENT_I3 = 0x13d,
+
+        PHASE_ACTIVE_POWER_P1 = 0x140,
+        PHASE_ACTIVE_POWER_P2 = 0x142,
+        PHASE_ACTIVE_POWER_P3 = 0x144,
+
+        TOTAL_ACTIVE_POWER = 0x146,
     };
     Q_ENUM(OrnoWe514_Input_Registers)
 };
