@@ -152,7 +152,7 @@ void RS485EnergyMeterController::retrieveStatus() {
 void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers reg, RetrieveValue val) {
     iDebug() << Q_FUNC_INFO << reg;
 
-    QModbusDataUnit dataUnit(QModbusDataUnit::InputRegisters, reg, 1);
+    QModbusDataUnit dataUnit(QModbusDataUnit::HoldingRegisters, reg, 1);
 
     QModbusReply* reply = m_modbusClient.sendReadRequest(dataUnit, m_slaveId);
     connect(reply, &QModbusReply::finished, [this, reply, reg, val] {
@@ -164,7 +164,7 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
             m_valueManager->updateAndPublishValue(v, value);
         } else if (reply->error() == QModbusDevice::ProtocolError) {
             iWarning() << "Modbus error" << reply->error();
-            iDebug() << QString("Read response error: %1 (Mobus exception: 0x%2)").
+            iDebug() << QString("Read response error: %1 (Modbus exception: 0x%2)").
                                         arg(reply->errorString()).
                                         arg(reply->rawResult().exceptionCode(), -1, 16);
         } else {
