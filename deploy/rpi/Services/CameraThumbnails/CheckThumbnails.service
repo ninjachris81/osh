@@ -3,7 +3,5 @@ Description=OSH Check Thumbnails
 
 [Service]
 Type=oneshot
-
 WorkingDirectory=/var/ftp_data
-
 ExecStart=/bin/bash /etc/osh/deploy/rpi/Services/CameraThumbnails/checkThumbnails.sh

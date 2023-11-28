@@ -44,6 +44,9 @@ function createVideoThumbnails {
 		echo "$inputFile -> $outputFile"
 		if [ -f $outputFile ]; then
 			echo "Thumbnail exists"
+		elif [ ! -s $inputFile ]; then
+			echo "Video file is empty"
+			rm $inputFile
 		else
 			"$FFMPEG_CMD" -i $inputFile -b 200k -framerate 15 $inputFile2
 			mv $inputFile2 $inputFile
