@@ -34,26 +34,27 @@ void RS485EnergyMeterController::init() {
 
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_ADDRESS, QVariant::Int, 1);
     //registerInput(OrnoWe514::OrnoWe514_Input_Registers::COMM_BAUD_RATE, QVariant::Int, 1);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::FREQUENCY, QVariant::Int, 0.01);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01);
+    //registerInput(OrnoWe514::OrnoWe514_Input_Registers::FREQUENCY, QVariant::Int, 0.01);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_VOLTAGE_V1, QVariant::Int, 0.01, false);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V2, QVariant::Int, 0.01);
     //registerInput(OrnoWe514_Input_Registers::PHASE_VOLTAGE_V3, QVariant::Int, 0.01);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_CURRENT_I1, QVariant::Int, 0.001);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_CURRENT_I1, QVariant::Int, 0.001, true);
     //registerInput(OrnoWe514_Input_Registers::PHASE_CURRENT_I2, QVariant::Double, 0.001);
     //registerInput(OrnoWe514_Input_Registers::PHASE_CURRENT_I3, QVariant::Double, 0.001);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_ACTIVE_POWER_P1, QVariant::Int, 0.001);
-    registerInput(OrnoWe514::OrnoWe514_Input_Registers::TOTAL_ACTIVE_POWER, QVariant::Int, 0.001);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::PHASE_ACTIVE_POWER_P1, QVariant::Int, 0.001, true);
+    registerInput(OrnoWe514::OrnoWe514_Input_Registers::TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
 
     connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &RS485EnergyMeterController::onStateChanged);
     connect(&m_modbusClient, &QModbusDevice::errorOccurred, this, &RS485EnergyMeterController::onErrorOccurred);
 }
 
-void RS485EnergyMeterController::registerInput(OrnoWe514::OrnoWe514_Input_Registers reg, QVariant::Type type, double multiplier) {
+void RS485EnergyMeterController::registerInput(OrnoWe514::OrnoWe514_Input_Registers reg, QVariant::Type type, double multiplier, bool twoByte) {
     RetrieveValue ret;
 
     ret.mqttName = Helpers::generateMqttNameFromConstant(QVariant::fromValue(reg).toString());
     ret.multiplier = multiplier;
     ret.type = type;
+    ret.twoByte = twoByte;
 
     m_inputRegisters.insert(reg, ret);
 }
@@ -154,13 +155,13 @@ void RS485EnergyMeterController::retrieveStatus() {
 void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers reg, RetrieveValue val) {
     iDebug() << Q_FUNC_INFO << reg;
 
-    QModbusDataUnit dataUnit(QModbusDataUnit::HoldingRegisters, reg, 1);
+    QModbusDataUnit dataUnit(QModbusDataUnit::HoldingRegisters, reg, val.twoByte ? 2 : 1);
 
     QModbusReply* reply = m_modbusClient.sendReadRequest(dataUnit, m_slaveId);
     connect(reply, &QModbusReply::finished, [this, reply, reg, val] {
 
         if (reply->error() == QModbusDevice::NoError) {
-            QVariant value = parseValue(reply->result().value(0), val.type, val.multiplier);
+            QVariant value = parseValue(reply->result().values(), val.type, val.multiplier, val.twoByte);
             iDebug() << reg << value;
             ValueBase *v = m_inputMappings.value(reg);
             m_valueManager->updateAndPublishValue(v, value);
@@ -175,8 +176,17 @@ void RS485EnergyMeterController::_readInput(OrnoWe514::OrnoWe514_Input_Registers
     });
 }
 
-QVariant RS485EnergyMeterController::parseValue(quint16 value, QVariant::Type targetType, double multiplier) {
-    double tempValue = value;
+QVariant RS485EnergyMeterController::parseValue(QVector<quint16> value, QVariant::Type targetType, double multiplier, bool twoByte) {
+    double tempValue = 0.0;
+    if (twoByte && value.size() == 2) {
+        quint32 result;
+        quint16* result_arr = (quint16*)& result;
+        result_arr[0] = value.at(1);
+        result_arr[1] = value.at(0);
+        tempValue = result;
+    } else if (value.size() == 1){
+        tempValue = value.at(0);
+    }
     tempValue *= multiplier;
 
     QVariant returnVal = QVariant::fromValue(tempValue);
