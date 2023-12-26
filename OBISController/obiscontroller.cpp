@@ -60,6 +60,8 @@ void OBISController::onSerialDataReceived(QByteArray data) {
     if (data.size() == 1) {
         unsigned char dataByte = data.at(0);
         SmlParser::sml_states_t state = m_smlParser.smlState(dataByte);
+        iDebug() << state;
+
         switch(state) {
         case SmlParser::SML_START:
             iDebug() << "SML start";
@@ -73,9 +75,11 @@ void OBISController::onSerialDataReceived(QByteArray data) {
             if (m_smlParser.smlOBISCheck(SmlParser::SML_1_8_0)) {
                 m_smlParser.smlOBISWh(m_values[SML_INDEX::CONSUMPTION_TOTAL]);
                 iDebug() << "SML consumption" << m_values[SML_INDEX::CONSUMPTION_TOTAL];
+                Q_EMIT(dataReceived());
             } else if (m_smlParser.smlOBISCheck(SmlParser::SML_2_8_0)) {
                 m_smlParser.smlOBISWh(m_values[SML_INDEX::PRODUCTION_TOTAL]);
                 iDebug() << "SML production" << m_values[SML_INDEX::PRODUCTION_TOTAL];
+                Q_EMIT(dataReceived());
             } else {
                 iDebug() << "Ignoring SML frame";
             }
@@ -83,7 +87,6 @@ void OBISController::onSerialDataReceived(QByteArray data) {
         case SmlParser::SML_FINAL:
             // ok, publish values
             iDebug() << "SML final";
-            Q_EMIT(dataReceived());
             break;
         case SmlParser::SML_CHECKSUM_ERROR:
             m_warnManager->raiseWarning("SML Checksum error");
