@@ -80,11 +80,11 @@ void ValueBase::setValueGroup(ValueGroup* valueGroup) {
 }
 
 bool ValueBase::updateValue(QVariant newValue, bool emitChange) {
-    iDebug() << Q_FUNC_INFO << newValue;
+    iDebug() << Q_FUNC_INFO << newValue << m_value;
 
     m_currentSignalCount++;
 
-    bool isDifferent = m_value != newValue;
+    bool isDifferent = (m_value != newValue);
     m_value = _updateValue(newValue);
     //bool newValueApplied = m_value == newValue;
     m_lastUpdate = QDateTime::currentMSecsSinceEpoch();
