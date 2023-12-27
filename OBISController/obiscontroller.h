@@ -42,7 +42,7 @@ protected slots:
     void onSerialDisconnected();
     void onSerialDataReceived(QByteArray data);
 
-    void onDataReceived();
+    void onDataReceived(SML_INDEX index);
 
 private:
     SmlParser m_smlParser;
