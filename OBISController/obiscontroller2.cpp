@@ -29,6 +29,7 @@ void OBISController2::init() {
     if (QFile::exists(exec)) {
          m_serverProcess.setProgram(exec);
          m_serverProcess.setArguments(QStringList() << devPath);
+         m_serverProcess.setReadChannel(QProcess::StandardOutput);
 
          Helpers::safeConnect(&m_serverProcess, &QProcess::started, this, &OBISController2::onProcessStarted, SIGNAL(started()), SLOT(onProcessStarted()));
          //Helpers::safeConnect(&m_serverProcess, &QProcess::finished, this, &OBISController2::onProcessFinished, SIGNAL(finished(int)), SLOT(onProcessFinished(int)));
@@ -63,7 +64,7 @@ void OBISController2::onProcessFinished(int exitCode) {
 void OBISController2::onDataReceived() {
     iDebug() << Q_FUNC_INFO;
 
-    while (m_serverProcess.canReadLine()) {
+    while (m_serverProcess.bytesAvailable() > 4) {
         QString lineData = m_serverProcess.readLine();
 
         iDebug() << lineData;
