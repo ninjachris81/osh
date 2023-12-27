@@ -31,8 +31,15 @@ public:
         QVariant value;
 
         bool setIndex(QString data) {
-            if (data == "1.8.0") index = CONSUMPTION_TOTAL;
-            if (data == "2.8.0") index = PRODUCTION_TOTAL;
+            if (data == "1.8.0") {
+                index = CONSUMPTION_TOTAL;
+                return true;
+            } else if (data == "2.8.0") {
+                index = PRODUCTION_TOTAL;
+                return true;
+            }
+
+            return false;
         }
 
         // should set index first before calling this
