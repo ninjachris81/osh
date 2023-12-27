@@ -16,6 +16,7 @@ class SHARED_LIB_EXPORT OBISController2 : public ControllerBase
     Q_OBJECT
 public:
     OBISController2(ControllerManager* manager, QString id, QObject *parent = nullptr);
+    ~OBISController2();
 
     enum SML_INDEX {
         CONSUMPTION_TOTAL,
@@ -29,7 +30,7 @@ public:
         SML_INDEX index;
         QVariant value;
 
-        void setIndex(QString data) {
+        bool setIndex(QString data) {
             if (data == "1.8.0") index = CONSUMPTION_TOTAL;
             if (data == "2.8.0") index = PRODUCTION_TOTAL;
         }
@@ -68,7 +69,7 @@ private:
 
     QList<ValueBase*> m_valueMappings;
 
-    SML_DATA parseData(QString lineData);
+    bool parseData(QString lineData, SML_DATA &data);
 
 Q_SIGNALS:
     void dataReceived(SML_INDEX index, double value);

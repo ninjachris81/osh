@@ -10,6 +10,10 @@ OBISController2::OBISController2(ControllerManager *manager, QString id, QObject
 {
 }
 
+OBISController2::~OBISController2() {
+    m_serverProcess.terminate();
+}
+
 void OBISController2::init() {
     iDebug() << Q_FUNC_INFO;
 
@@ -64,30 +68,30 @@ void OBISController2::onDataReceived() {
 
         iDebug() << lineData;
 
-        SML_DATA data = parseData(lineData);
-
-        if (m_valueMappings.at(data.index)->updateValue(data.value, false)) {
-            m_valueManager->publishValue(m_valueMappings.at(data.index));
+        SML_DATA data;
+        if (parseData(lineData, data)) {
+            if (m_valueMappings.at(data.index)->updateValue(data.value, false)) {
+                m_valueManager->publishValue(m_valueMappings.at(data.index));
+            }
         }
     }
 }
 
-OBISController2::SML_DATA OBISController2::parseData(QString lineData) {
-    SML_DATA returnData;
-
+bool OBISController2::parseData(QString lineData, OBISController2::SML_DATA &data) {
     int pos = lineData.indexOf(":");
     lineData = lineData.mid(pos + 1);
 
     QString id = lineData.left(lineData.indexOf("*"));
-    returnData.setIndex(id);
+    if (data.setIndex(id)) {
+        pos = lineData.indexOf("#");
+        lineData = lineData.mid(pos + 1);
 
-    pos = lineData.indexOf("#");
-    lineData = lineData.mid(pos + 1);
+        QString value = lineData.left(lineData.indexOf("#"));
+        data.setValue(value);
+        return true;
+    }
 
-    QString value = lineData.left(lineData.indexOf("#"));
-    returnData.setValue(value);
-
-    return returnData;
+    return false;
 }
 
 void OBISController2::handleMessage(ControllerMessage *msg) {
