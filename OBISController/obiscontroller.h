@@ -56,7 +56,7 @@ private:
     double m_values[SML_INDEX::COUNT];
 
 Q_SIGNALS:
-    void dataReceived();
+    void dataReceived(SML_INDEX index);
 
 };
 

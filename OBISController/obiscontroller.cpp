@@ -29,6 +29,10 @@ void OBISController::init() {
     Helpers::safeConnect(m_serialClient, &SerialPortClient::dataReceived, this, &OBISController::onSerialDataReceived, SIGNAL(dataReceived(QByteArray)), SLOT(onSerialDataReceived(QByteArray)));
 
     Helpers::safeConnect(this, &OBISController::dataReceived, this, &OBISController::onDataReceived, SIGNAL(dataReceived()), SLOT(onDataReceived()));
+
+    for (int i = 0;i< SML_INDEX::COUNT;i++) {
+        m_values[i] = -1;
+    }
 }
 
 void OBISController::start() {
@@ -75,11 +79,11 @@ void OBISController::onSerialDataReceived(QByteArray data) {
             if (m_smlParser.smlOBISCheck(SmlParser::SML_1_8_0)) {
                 m_smlParser.smlOBISWh(m_values[SML_INDEX::CONSUMPTION_TOTAL]);
                 iDebug() << "SML consumption" << m_values[SML_INDEX::CONSUMPTION_TOTAL];
-                Q_EMIT(dataReceived());
+                Q_EMIT(dataReceived(SML_INDEX::CONSUMPTION_TOTAL));
             } else if (m_smlParser.smlOBISCheck(SmlParser::SML_2_8_0)) {
                 m_smlParser.smlOBISWh(m_values[SML_INDEX::PRODUCTION_TOTAL]);
                 iDebug() << "SML production" << m_values[SML_INDEX::PRODUCTION_TOTAL];
-                Q_EMIT(dataReceived());
+                Q_EMIT(dataReceived(SML_INDEX::PRODUCTION_TOTAL));
             } else {
                 iDebug() << "Ignoring SML frame";
             }
@@ -119,16 +123,10 @@ quint8 OBISController::bindValue(ValueBase *value) {
     return m_valueMappings.size();
 }
 
-void OBISController::onDataReceived() {
-    iInfo() << Q_FUNC_INFO;
+void OBISController::onDataReceived(SML_INDEX index) {
+    iInfo() << Q_FUNC_INFO << index << m_values[index];
 
-    for (quint8 i = 0; i<SML_INDEX::COUNT;i++) {
-        if (m_valueMappings.size() >= i-1) {
-            if (m_valueMappings.at(i)->updateValue(m_values[i], false)) {
-                m_valueManager->publishValue(m_valueMappings.at(i));
-            }
-        } else {
-            iWarning() << "No mapping for value" << i;
-        }
+    if (m_values[index] > -1 && m_valueMappings.at(index)->updateValue(m_values[index], false)) {
+        m_valueManager->publishValue(m_valueMappings.at(index));
     }
 }
