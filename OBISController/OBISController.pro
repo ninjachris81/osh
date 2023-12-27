@@ -16,10 +16,12 @@ DEFINES += MAKE_SHARED_LIB
 
 HEADERS += \
     obiscontroller.h \
+    obiscontroller2.h \
     smlparser.h
 
 SOURCES += \
     obiscontroller.cpp \
+    obiscontroller2.cpp \
     smlparser.cpp
 
 
@@ -42,4 +44,3 @@ else:unix: LIBS += -L$$OUT_PWD/../CoreSerial/ -lCoreSerial
 
 INCLUDEPATH += $$PWD/../CoreSerial
 DEPENDPATH += $$PWD/../CoreSerial
-
