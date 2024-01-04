@@ -65,7 +65,7 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         QVariantMap value = parseJSONPayload(payload);
 
         QString senderDeviceId;
-        if (value.contains(MQTT_SENDER_DEVICE_ID_ATTR)) {
+        if (!isRetain && value.contains(MQTT_SENDER_DEVICE_ID_ATTR)) {
             senderDeviceId = value.value(MQTT_SENDER_DEVICE_ID_ATTR, "").toString();
 
             if (info.dropOwnMessages && senderDeviceId == deviceId()) {
@@ -183,7 +183,11 @@ void MqttCommunicationManagerBase::onMqttConnected() {
     iDebug() << Q_FUNC_INFO;
 
     if (m_hasCustomChannels) {
-        subscribeChannels(m_customChannels);
+        QStringList customChannels;
+        customChannels << m_customChannels;
+        customChannels << m_customValueGroupChannels;
+
+        subscribeChannels(customChannels);
     } else {
         switch(managerRegistration()->instanceRole()) {
         case ManagerRegistration::SERVER:
@@ -413,3 +417,12 @@ void MqttCommunicationManagerBase::setCustomChannels(QStringList customChannels)
     m_customChannels = customChannels;
     m_hasCustomChannels = true;
 }
+
+void MqttCommunicationManagerBase::setCustomValueGroups(QStringList customValueGroupChannels) {
+    for (QString c : customValueGroupChannels) {
+        m_customValueGroupChannels << (QString(MQTT_MESSAGE_TYPE_VA) + QString(MQTT_PATH_SEP) + c);
+    }
+
+    m_hasCustomChannels = true;
+}
+

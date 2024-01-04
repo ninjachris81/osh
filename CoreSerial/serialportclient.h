@@ -13,7 +13,7 @@ class SHARED_LIB_EXPORT SerialPortClient : public QObject
 
 public:
 
-    explicit SerialPortClient(QString portName, QSerialPort::BaudRate baudRate = QSerialPort::BaudRate::Baud115200, quint16 readTimeoutMs = 5000, QSerialPort::Parity parity = QSerialPort::Parity::NoParity, QSerialPort::StopBits stopBits = QSerialPort::StopBits::OneStop, QSerialPort::DataBits databits = QSerialPort::DataBits::Data8, QObject *parent = nullptr);
+    explicit SerialPortClient(QString portName, QSerialPort::BaudRate baudRate = QSerialPort::BaudRate::Baud115200, quint16 readBufferSize = 0, quint16 readTimeoutMs = 5000, QSerialPort::Parity parity = QSerialPort::Parity::NoParity, QSerialPort::StopBits stopBits = QSerialPort::StopBits::OneStop, QSerialPort::DataBits databits = QSerialPort::DataBits::Data8, QObject *parent = nullptr);
 
     void write(QByteArray data, int responseTimeout = -1);
     void writeSync(QByteArray data, int responseTimeout = -1);

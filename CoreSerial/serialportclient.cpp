@@ -2,17 +2,17 @@
 #include <QThread>
 #include <QDebug>
 
-SerialPortClient::SerialPortClient(QString portName, QSerialPort::BaudRate baudRate, quint16 readTimeoutMs, QSerialPort::Parity parity, QSerialPort::StopBits stopBits, QSerialPort::DataBits databits, QObject *parent) : QObject(parent) {
+SerialPortClient::SerialPortClient(QString portName, QSerialPort::BaudRate baudRate, quint16 readBufferSize, quint16 readTimeoutMs, QSerialPort::Parity parity, QSerialPort::StopBits stopBits, QSerialPort::DataBits databits, QObject *parent) : QObject(parent) {
     qDebug() << Q_FUNC_INFO << portName << baudRate << readTimeoutMs;
 
     connect(&m_readTimer, &QTimer::timeout, this, &SerialPortClient::handleReadTimeout);
 
     m_serialPort.setPortName(portName);
     m_serialPort.setBaudRate(baudRate);
+    m_serialPort.setReadBufferSize(readBufferSize);
     m_serialPort.setParity(parity);
     m_serialPort.setStopBits(stopBits);
     m_serialPort.setDataBits(databits);
-    m_serialPort.setReadBufferSize(8);
 
     connect(&m_serialPort, &QSerialPort::readyRead, this, &SerialPortClient::handleReadyRead);
     connect(&m_serialPort, &QSerialPort::errorOccurred, this, &SerialPortClient::handleError);

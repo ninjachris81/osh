@@ -29,12 +29,15 @@ SUBDIRS += \
     OnvifService \
     PJSIPSupport \
     QMqttCommunicationManager \
+    RS232WaterMeterController \
+    RS232WaterMeterService \
     RS485EnergyMeterController \
     RS485EnergyMeterService \
     RS485RelayController \
     RS485RelayService \
     ShutterController \
     ShutterService \
+    TestService \
     WBB12Controller \
     WBB12Service \
     qtmqtt
@@ -82,6 +85,9 @@ ShutterService.depends = Core ShutterController QMqttCommunicationManager
 
 HomeConnectController.depends = Core
 HomeConnectService.depends = Core HomeConnectController QMqttCommunicationManager
+
+RS232WaterMeterController.depends = Core CoreSerial
+RS232WaterMeterService.depends = Core CoreSerial RS232WaterMeterController QMqttCommunicationManager
 
 RS485EnergyMeterController.depends = Core CoreSerial
 RS485EnergyMeterService.depends = Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager

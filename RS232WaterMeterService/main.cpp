@@ -1,21 +1,18 @@
 #include <QCoreApplication>
 
-#include "actor/actormanager.h"
-#include "database/databasemanager.h"
-#include "datamodel/datamodelmanager.h"
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
+#include "rs232watermetercontroller.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/client/clientvaluemanager.h"
+#include "database/databasemanager.h"
+#include "datamodel/datamodelmanager.h"
 #include "log/logmanager.h"
-//#include "actor/actormanager.h"
-//#include "audiocontroller.h"
-#include "audiocontroller2.h"
+#include "actor/actormanager.h"
 #include "actor/digitalactor.h"
-#include "value/booleanvalue.h"
 #include "shared/mqtt_qt.h"
 
 int main(int argc, char *argv[])
@@ -28,18 +25,17 @@ int main(int argc, char *argv[])
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager("AudioService");
+    ClientDeviceDiscoveryManager clientManager("RS232WaterMeterService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << AudioPlaybackActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className());
-    ActorManager actorManager;
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false);
     LogManager logManager;
 
-    QString audioGroupId = config.getString(&clientManager, "audioGroupId", "egAudio0");
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
-    commManager.setCustomValueGroups(QStringList() << audioGroupId);
+    QString groupdId = config.getString(&clientManager, "inputValueGroupId", "waterLevels0");
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
+    commManager.setCustomValueGroups(QStringList() << groupdId);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -49,15 +45,14 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&valueManager);
     managerRegistration.registerManager(&databaseManager);
     managerRegistration.registerManager(&datamodelManager);
-    managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    AudioController2 audioController(&controllerManager, audioGroupId);
-    controllerManager.registerController(&audioController);
+    RS232WaterMeterController waterLevelController(&controllerManager, groupdId);
+    controllerManager.registerController(&waterLevelController);
 
     managerRegistration.init(&config);
 
-    audioController.loadAudioActors(datamodelManager.datamodel(), &valueManager);
+    waterLevelController.bindValueManager(&valueManager, datamodelManager.datamodel());
 
     return a.exec();
 }
