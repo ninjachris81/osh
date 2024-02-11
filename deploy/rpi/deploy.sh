@@ -123,6 +123,7 @@ case "$1" in
       printInfos
       buildQtMqtt
       buildOSHLib "Core"
+      buildOSHLib "CoreSerial"
       buildOSHLib "WBB12Controller"
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
