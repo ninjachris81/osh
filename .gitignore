@@ -6,8 +6,8 @@ credentials.h
 build-*
 moc_*
 *.o
-config.ini
-!doc/*/config.ini
+/*/config.ini
+!/doc/*/config.ini
 *.so
 *.so.*
 AudioService/AudioService
