@@ -1,0 +1,17 @@
+sudo apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+sudo apt install qtbase5-private-dev
+sudo apt install qtdeclarative5-dev
+
+sudo apt install libqt5serialbus5-dev
+sudo apt install libqt5serialport5-dev
+
+sudo apt install qtmultimedia5-dev
+
+sudo apt install libqt5sql5-psql
+
+sudo apt install mosquitto
+sudo apt install postgresql
+
+git submodule update --init
+
+copy psk.h
