@@ -6,6 +6,7 @@
 #include "processor/server/processorexecutorbase.h"
 #include "processor/server/nativeprocessortask.h"
 #include "processor/server/commonscripts.h"
+#include "processor/server/advancedscripts.h"
 
 class NativeProcessorExecutor : public ProcessorExecutorBase
 {
@@ -20,6 +21,7 @@ public:
 private:
     BasicScripts* m_basicScripts;
     CommonScripts* m_commonScripts;
+    AdvancedScripts* m_advScripts;
 
 signals:
 

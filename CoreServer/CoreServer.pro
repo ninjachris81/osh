@@ -32,6 +32,8 @@ DEFINES += IS_OSH_CORE_SERVICE
 SOURCES += \
     actor/server/togglecontroller.cpp \
         device/server/serverdevicediscoverymanager.cpp \
+    processor/server/3rdparty/sunset.cpp \
+    processor/server/advancedscripts.cpp \
     processor/server/basicscripts.cpp \
     processor/server/commonscripts.cpp \
     processor/server/localstorage.cpp \
@@ -48,6 +50,8 @@ SOURCES += \
 HEADERS += \
     actor/server/togglecontroller.h \
         device/server/serverdevicediscoverymanager.h \
+    processor/server/3rdparty/sunset.h \
+    processor/server/advancedscripts.h \
     processor/server/basicscripts.h \
     processor/server/commonscripts.h \
     processor/server/localstorage.h \

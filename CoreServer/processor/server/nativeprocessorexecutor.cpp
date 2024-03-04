@@ -5,12 +5,12 @@ NativeProcessorExecutor::NativeProcessorExecutor(DatamodelManager *dmManager, Lo
 {
     m_basicScripts = new BasicScripts(dmManager->datamodel(), localStorage, valueManager, actorManager, this);
     m_commonScripts = new CommonScripts(dmManager->datamodel(), localStorage, valueManager, actorManager, this);
+    m_advScripts = new AdvancedScripts(dmManager->datamodel(), localStorage, valueManager, actorManager, this);
 }
 
 
 QVariant NativeProcessorExecutor::execute(NativeProcessorTask* task) {
-    task->setBasicScripts(m_basicScripts);
-    task->setCommonScripts(m_commonScripts);
+    task->setScripts(m_basicScripts, m_commonScripts, m_advScripts);
     return task->run();
 }
 

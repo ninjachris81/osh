@@ -7,6 +7,7 @@
 #include "processor/server/basicscripts.h"
 
 class CommonScripts;
+class AdvancedScripts;
 
 class SHARED_LIB_EXPORT NativeProcessorTask : public ProcessorTaskBase
 {
@@ -34,6 +35,7 @@ public:
         NFT_APPLY_PRESENCE_LOGIC =              111,
 
         NFT_APPLY_SHUTTER_LOGIC =               120,
+        NFT_APPLY_SHUTTER_LOGIC_ADV =           1120,
 
         NFT_INIT_DOOR_RING_LOGIC =              130,
         NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC =     131,
@@ -57,8 +59,7 @@ public:
 
     /*virtual*/ QVariant run() override;
 
-    void setBasicScripts(BasicScripts* basicScripts);
-    void setCommonScripts(CommonScripts* commonScripts);
+    void setScripts(BasicScripts* basicScripts, CommonScripts* commonScripts, AdvancedScripts* advScripts);
 
     void setNativeFunction(NativeFunctionType nativeFunction);
     NativeFunctionType nativeFunction();
@@ -75,7 +76,7 @@ private:
 
     BasicScripts* m_basicScripts = nullptr;
     CommonScripts* m_commonScripts = nullptr;
-
+    AdvancedScripts* m_advScripts = nullptr;
 
 signals:
 
