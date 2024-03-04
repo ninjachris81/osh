@@ -74,7 +74,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_commonScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt());
             break;
         case NFT_APPLY_SHUTTER_LOGIC_ADV:
-            m_lastResult = m_advScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toDouble(), m_nativeParams.at(4).toDouble(), m_nativeParams.at(5).toInt());
+            m_lastResult = m_advScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toDouble(), m_nativeParams.at(4).toDouble(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt(), m_nativeParams.at(7).toInt());
             break;
         case NFT_INIT_DOOR_RING_LOGIC:
             m_lastResult = m_commonScripts->initDoorRingLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
@@ -160,7 +160,7 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
     case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::Int;
     case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC_ADV:
-        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Double<< QVariant::Double << QVariant::Int;
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Double<< QVariant::Double << QVariant::Int << QVariant::Int << QVariant::Int;
     case NativeProcessorTask::NFT_INIT_DOOR_RING_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:

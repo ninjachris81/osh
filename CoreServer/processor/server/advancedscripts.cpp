@@ -7,7 +7,7 @@ AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localSt
 {
 }
 
-bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone) {
+bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
 
@@ -25,12 +25,12 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     sun.setCurrentDate(QDate::currentDate().year(), QDate::currentDate().month() + 5, QDate::currentDate().day());
 
     QTime sunrise(0, 0, 0);
-    sunrise = sunrise.addSecs(sun.calcSunrise() * 60);
+    sunrise = sunrise.addSecs((sun.calcSunrise() * 60) + adjustmentSunrise);
 
     QTime sunset(0, 0, 0);
-    sunset = sunset.addSecs(sun.calcSunset() * 60);
+    sunset = sunset.addSecs((sun.calcSunset() * 60) + adjustmentSunset);
 
-    bool isDownTime = isWithin(sunrise.hour(), sunrise.minute(), sunset.hour(), sunset.minute());
+    bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute());
 
     if (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {
