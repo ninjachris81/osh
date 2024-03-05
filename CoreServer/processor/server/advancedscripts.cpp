@@ -22,7 +22,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
 
     SunSet sun(lat, lng, timezone);
 
-    sun.setCurrentDate(QDate::currentDate().year(), QDate::currentDate().month() + 5, QDate::currentDate().day());
+    sun.setCurrentDate(QDate::currentDate().year(), QDate::currentDate().month(), QDate::currentDate().day());
 
     QTime sunrise(0, 0, 0);
     sunrise = sunrise.addSecs((sun.calcSunrise() * 60) + adjustmentSunrise);
