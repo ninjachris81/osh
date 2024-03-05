@@ -25,7 +25,7 @@ ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, b
 
 void ValueBase::serialize(QJsonObject &obj) {
     SerializableIdentifyable::serialize(obj);
-    m_metaInfo.serialize(obj);
+    //m_metaInfo.serialize(obj);
 
     obj.insert("valueType", m_valueType);
     obj.insert("alwaysEmit", m_alwaysEmit);
@@ -34,7 +34,7 @@ void ValueBase::serialize(QJsonObject &obj) {
 
 void ValueBase::deserialize(QJsonObject obj) {
     SerializableIdentifyable::deserialize(obj);
-    m_metaInfo.deserialize(obj);
+    //m_metaInfo.deserialize(obj);
 
     m_valueType = (VALUE_TYPE) obj.value("valueType").toInt();
     m_alwaysEmit = obj.value("alwaysEmit").toBool();
