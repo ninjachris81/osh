@@ -2,6 +2,7 @@
 #define SCRIPTBASE_H
 
 #include <QObject>
+#include <QTime>
 #include "identifyable.h"
 #include "processor/server/scriptbase.h"
 #include "value/valuebase.h"
@@ -27,7 +28,7 @@ public:
 
     LogCat::LOGCAT logCat();
 
-    Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
+    Q_INVOKABLE bool isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo, QTime referenceNow = QTime::currentTime());
 
     //Q_INVOKABLE void publishValue(QString fullId, QVariant value);
     Q_INVOKABLE void publishCmd(QString fullId, int cmd, QString reason);

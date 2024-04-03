@@ -20,6 +20,8 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
         presenceActive = presenceVal->rawValue().toBool();
     }
 
+    QTime utcTime = QDateTime::currentDateTimeUtc().time();
+    utcTime = utcTime.addSecs(timezone * 3600);
     SunSet sun(lat, lng, timezone);
 
     sun.setCurrentDate(QDate::currentDate().year(), QDate::currentDate().month(), QDate::currentDate().day());
@@ -30,7 +32,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     QTime sunset(0, 0, 0);
     sunset = sunset.addSecs((sun.calcSunset() * 60) + adjustmentSunset);
 
-    bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute());
+    bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
 
     if (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
         if (isDownTime) {

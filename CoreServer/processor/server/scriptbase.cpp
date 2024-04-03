@@ -134,13 +134,13 @@ void ScriptBase::clearInterval(QString key) {
 }
 
 
-bool ScriptBase::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo) {
+bool ScriptBase::isWithin(quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo, QTime referenceNow) {
     int from = ((hourFrom * 60) + minuteFrom) * 60 * 1000;
     int to = ((hourTo * 60) + minuteTo) * 60 * 1000;
 
     if (from == to) return 0;
 
-    qint64 now = QTime::currentTime().msecsSinceStartOfDay();
+    qint64 now = referenceNow.msecsSinceStartOfDay();
     if (from < to) {
         // normal case
         return now > from && now < to;
