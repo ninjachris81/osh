@@ -36,6 +36,7 @@ void HomeConnectController::start() {
 }
 
 void HomeConnectController::handleMessage(ControllerMessage *msg) {
+    Q_UNUSED(msg)
     iDebug() << Q_FUNC_INFO;
 }
 

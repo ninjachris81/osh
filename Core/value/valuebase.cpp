@@ -189,4 +189,5 @@ QString ValueBase::unitTypeToSuffix(UNIT_TYPE unitType) {
     case UT_LITER_PER_MIN: return "l/min";
     case UT_LITERS: return "l";
     }
+    return QString();
 }

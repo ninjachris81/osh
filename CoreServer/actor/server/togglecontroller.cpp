@@ -23,6 +23,7 @@ void ToggleController::start() {
 }
 
 void ToggleController::handleMessage(ControllerMessage *msg) {
+    Q_UNUSED(msg)
 }
 
 void ToggleController::bindManager(ActorManager* actorManager, ValueManagerBase *valueManager) {

@@ -10,6 +10,7 @@ SystemWarningsManager::SystemWarningsManager(QObject *parent) : ManagerBase(pare
 }
 
 void SystemWarningsManager::init(LocalConfig* config) {
+    Q_UNUSED(config)
     iDebug() << Q_FUNC_INFO;
 }
 
@@ -22,5 +23,5 @@ MessageBase::MESSAGE_TYPE SystemWarningsManager::getMessageType() {
 }
 
 void SystemWarningsManager::handleReceivedMessage(MessageBase* msg) {
-
+    Q_UNUSED(msg)
 }

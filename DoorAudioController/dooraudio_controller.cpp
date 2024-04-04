@@ -75,5 +75,7 @@ void DoorAudioController::onRingTriggered(actor::ACTOR_CMDS cmd) {
     case actor::ACTOR_CMD_OFF:
         m_account->cancelCall();
         break;
+    default:
+        break;
     }
 }

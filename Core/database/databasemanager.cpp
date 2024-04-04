@@ -109,5 +109,5 @@ MessageBase::MESSAGE_TYPE DatabaseManager::getMessageType() {
 }
 
 void DatabaseManager::handleReceivedMessage(MessageBase* msg) {
-
+    Q_UNUSED(msg)
 }

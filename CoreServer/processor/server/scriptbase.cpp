@@ -12,7 +12,7 @@ QLatin1String ScriptBase::INTERVAL_STATES = QLatin1String("interval_states_");
 
 QLatin1String ScriptBase::TIMOUT_LAST_TS = QLatin1String("last_ts_");
 
-ScriptBase::ScriptBase(QString name, DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent) : Identifyable(name), QObject(parent)
+ScriptBase::ScriptBase(QString name, DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent) : QObject(parent), Identifyable(name)
   , m_datamodel(datamodel), m_localStorage(localStorage), m_valueManager(valueManager), m_actorManager(actorManager)
 {
 

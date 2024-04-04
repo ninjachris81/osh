@@ -52,5 +52,5 @@ MessageBase::MESSAGE_TYPE SystemtimeManager::getMessageType() {
 }
 
 void SystemtimeManager::handleReceivedMessage(MessageBase* msg) {
-
+    Q_UNUSED(msg)
 }

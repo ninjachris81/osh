@@ -32,7 +32,7 @@ void ActorBase::triggerCmd(int cmd) {
 */
 
 void ActorBase::_triggerCmd(actor::ACTOR_CMDS cmd) {
-
+    Q_UNUSED(cmd)
 }
 
 ActorBase* ActorBase::withPriority(int priority) {

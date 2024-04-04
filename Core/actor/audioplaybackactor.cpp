@@ -49,6 +49,8 @@ void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
     case actor::ACTOR_CMD_PREVIOUS:
         Q_EMIT(previousRequested());
         break;
+    default:
+        break;
     }
 }
 

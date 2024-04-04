@@ -9,7 +9,7 @@
 DeviceBase::DeviceBase() : SerializableIdentifyable() {
 }
 
-DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : SerializableIdentifyable(id), QObject(parent) , m_serviceId(serviceId) {
+DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : QObject(parent), SerializableIdentifyable(id), m_serviceId(serviceId) {
 }
 
 void DeviceBase::serialize(QJsonObject &obj) {

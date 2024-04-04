@@ -24,8 +24,9 @@ MessageBase::MESSAGE_TYPE ServerDeviceDiscoveryManager::getMessageType() {
 }
 
 void ServerDeviceDiscoveryManager::handleReceivedMessage(MessageBase* msg) {
+    Q_UNUSED(msg)
     iDebug() << Q_FUNC_INFO;
-    DeviceDiscoveryMessage* ddMessage = static_cast<DeviceDiscoveryMessage*>(msg);
+    //DeviceDiscoveryMessage* ddMessage = static_cast<DeviceDiscoveryMessage*>(msg);
 
-    DeviceBase* device = m_modelBridge->handleReceivedMessage(ddMessage);
+    //DeviceBase* device = m_modelBridge->handleReceivedMessage(ddMessage);
 }

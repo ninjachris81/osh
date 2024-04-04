@@ -27,10 +27,10 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     sun.setCurrentDate(QDate::currentDate().year(), QDate::currentDate().month(), QDate::currentDate().day());
 
     QTime sunrise(0, 0, 0);
-    sunrise = sunrise.addSecs((sun.calcSunrise() * 60) + adjustmentSunrise);
+    sunrise = sunrise.addSecs((sun.calcSunrise()  + adjustmentSunrise) * 60);
 
     QTime sunset(0, 0, 0);
-    sunset = sunset.addSecs((sun.calcSunset() * 60) + adjustmentSunset);
+    sunset = sunset.addSecs((sun.calcSunset()  + adjustmentSunset) * 60);
 
     bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
 

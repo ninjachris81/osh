@@ -17,6 +17,8 @@ LogCat::LOGCAT ActorManager::logCat() {
 }
 
 void ActorManager::init(LocalConfig* config) {
+    Q_UNUSED(config)
+
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(CommunicationManagerBase);

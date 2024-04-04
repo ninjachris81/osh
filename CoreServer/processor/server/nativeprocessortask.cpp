@@ -9,6 +9,8 @@ NativeProcessorTask::NativeProcessorTask() : ProcessorTaskBase() {
 NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval, bool publishResult, bool enabled, QObject *parent)
     :ProcessorTaskBase(groupId, id, taskType, taskTriggerType, functionCode, params, scheduleInterval, enabled, parent)
 {
+    Q_UNUSED(publishResult)
+
     m_nativeFunction = static_cast<NativeFunctionType>(m_functionCode);
 
     QList<QVariant::Type> typeList = NativeProcessorTask::paramTypeList(m_nativeFunction);

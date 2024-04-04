@@ -153,6 +153,7 @@ MessageBase::MESSAGE_TYPE DatamodelManager::getMessageType() {
 }
 
 void DatamodelManager::handleReceivedMessage(MessageBase* msg) {
+    Q_UNUSED(msg)
 }
 
 DatamodelBase* DatamodelManager::datamodel() {

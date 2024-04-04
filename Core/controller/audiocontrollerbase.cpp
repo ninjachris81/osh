@@ -6,5 +6,5 @@ AudioControllerBase::AudioControllerBase(ControllerManager *manager, QString id,
 }
 
 void AudioControllerBase::handleMessage(ControllerMessage *msg) {
-
+    Q_UNUSED(msg)
 }

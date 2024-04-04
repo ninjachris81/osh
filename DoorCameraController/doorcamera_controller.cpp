@@ -57,6 +57,8 @@ void DoorCameraController::onRingTriggered(actor::ACTOR_CMDS cmd) {
         break;
     case actor::ACTOR_CMD_OFF:
         break;
+    default:
+        break;
     }
 }
 

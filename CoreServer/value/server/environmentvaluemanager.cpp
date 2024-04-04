@@ -19,6 +19,8 @@ LogCat::LOGCAT EnvironmentValueManager::logCat() {
 }
 
 void EnvironmentValueManager::init(LocalConfig* config) {
+    Q_UNUSED(config)
+
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(ValueManagerBase);
@@ -43,6 +45,7 @@ MessageBase::MESSAGE_TYPE EnvironmentValueManager::getMessageType() {
 }
 
 void EnvironmentValueManager::handleReceivedMessage(MessageBase* msg) {
+    Q_UNUSED(msg)
 }
 
 void EnvironmentValueManager::updateValues() {

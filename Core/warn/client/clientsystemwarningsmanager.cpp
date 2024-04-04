@@ -14,6 +14,7 @@ ClientSystemWarningsManager::ClientSystemWarningsManager(QObject *parent) : Mana
 }
 
 void ClientSystemWarningsManager::init(LocalConfig* config) {
+    Q_UNUSED(config)
     iDebug() << Q_FUNC_INFO;
     REQUIRE_MANAGER(CommunicationManagerBase);
     REQUIRE_MANAGER(ClientDeviceDiscoveryManager);
@@ -40,5 +41,5 @@ MessageBase::MESSAGE_TYPE ClientSystemWarningsManager::getMessageType() {
 }
 
 void ClientSystemWarningsManager::handleReceivedMessage(MessageBase* msg) {
-
+    Q_UNUSED(msg)
 }

@@ -74,6 +74,7 @@ QString LogManager::msgTypeToString(QtMsgType type) {
     case QtCriticalMsg: return LOG_TYPE_CRITICAL;
     case QtFatalMsg: return LOG_TYPE_FATAL;
     }
+    return QString();
 }
 
 QtMsgType LogManager::stringToMsgType(QString type) {

@@ -25,6 +25,8 @@ QString DoorUnlockManager::id() {
 }
 
 void DoorUnlockManager::init(LocalConfig *config) {
+    Q_UNUSED(config)
+
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER(CommunicationManagerBase);

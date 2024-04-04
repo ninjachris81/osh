@@ -17,5 +17,5 @@ MessageBase::MESSAGE_TYPE ClientDeviceDiscoveryManager::getMessageType() {
 }
 
 void ClientDeviceDiscoveryManager::handleReceivedMessage(MessageBase* msg) {
-
+    Q_UNUSED(msg)
 }

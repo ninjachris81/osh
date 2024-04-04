@@ -19,14 +19,16 @@ void AudioOutputWrapper::onStateChanged(QAudio::State state) {
     iInfo() << Q_FUNC_INFO << output << state << output->elapsedUSecs();
 
     switch(state) {
-    case QAudio::ActiveState:
-    case QAudio::SuspendedState:
-        break;
-    case QAudio::IdleState:
-        if (output->elapsedUSecs() > 0) {
-            // playback finished
-            _stop(m_currentAudioActor);
-        }
+        case QAudio::ActiveState:
+        case QAudio::SuspendedState:
+            break;
+        case QAudio::IdleState:
+            if (output->elapsedUSecs() > 0) {
+                // playback finished
+                _stop(m_currentAudioActor);
+            }
+        default:
+            break;
     }
 }
 

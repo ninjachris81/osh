@@ -12,6 +12,7 @@ ClientSystemtimeManager::ClientSystemtimeManager(QObject *parent) : ManagerBase(
 }
 
 void ClientSystemtimeManager::init(LocalConfig* config) {
+    Q_UNUSED(config)
     iDebug() << Q_FUNC_INFO;
 }
 

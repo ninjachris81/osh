@@ -288,6 +288,8 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
         iWarning() << "Invalid parameters" << tempValveActorFullId;
         return false;
     }
+
+    return false;
 }
 
 bool CommonScripts::initPresenceLogic(QString radarId, QString pirId, QString presenceId) {
@@ -516,6 +518,8 @@ void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
 
 
 bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
+    Q_UNUSED(soundValue)
+
     iInfo() << Q_FUNC_INFO;
 
     ActorBase* actor = m_actorManager->getActor(actorId);

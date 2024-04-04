@@ -14,5 +14,5 @@ void FileGPIOController::start() {
 }
 
 void FileGPIOController::handleMessage(ControllerMessage *msg) {
-
+    Q_UNUSED(msg)
 }

@@ -154,6 +154,8 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
     case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
         // TODO
         break;
+    default:
+        break;
     }
 }
 

@@ -62,8 +62,7 @@ QString DBDatamodelLoader::typeName() {
 }
 
 void DBDatamodelLoader::save(DatamodelBase* datamodel) {
-    // TODO
-
+    Q_UNUSED(datamodel)
     Q_EMIT(saved());
 }
 

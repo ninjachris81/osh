@@ -90,7 +90,7 @@ void RS485EnergyMeterController::start() {
 }
 
 void RS485EnergyMeterController::handleMessage(ControllerMessage *msg) {
-
+    Q_UNUSED(msg)
 }
 
 void RS485EnergyMeterController::onStateChanged() {

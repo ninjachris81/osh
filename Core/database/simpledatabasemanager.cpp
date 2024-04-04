@@ -16,6 +16,7 @@ SimpleDatabaseManager::SimpleDatabaseManager(QObject *parent) : ManagerBase(pare
 }
 
 void SimpleDatabaseManager::init(LocalConfig *config) {
+    Q_UNUSED(config)
 
     REQUIRE_MANAGER(DatabaseManager);
 

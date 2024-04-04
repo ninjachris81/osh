@@ -11,7 +11,7 @@ void DigitalInputControllerBase::init() {
 }
 
 void DigitalInputControllerBase::handleMessage(ControllerMessage *msg) {
-
+    Q_UNUSED(msg)
 }
 
 bool DigitalInputControllerBase::inputStatus(quint8 valueIndex) {

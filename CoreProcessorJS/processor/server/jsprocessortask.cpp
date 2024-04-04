@@ -66,6 +66,7 @@ bool JSProcessorTask::checkRunCondition(QJSEngine *engine) {
     Q_UNUSED(engine)
     //if (m_runCondition.length() == 0) return true;
     //return ThreadSafeQJSEngine::call(engine, [&]{ return engine->evaluate(m_runCondition);}).toBool();
+    return false;
 }
 
 

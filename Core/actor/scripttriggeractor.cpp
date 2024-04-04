@@ -3,7 +3,7 @@
 ScriptTriggerActor::ScriptTriggerActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent)
     : ActorBase(valueGroup, id, valueType, QVariant::String)
 {
-
+    Q_UNUSED(parent)
 }
 
 bool ScriptTriggerActor::cmdSupported(actor::ACTOR_CMDS cmd) {

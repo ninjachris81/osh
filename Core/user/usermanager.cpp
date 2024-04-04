@@ -16,6 +16,7 @@ LogCat::LOGCAT UserManager::logCat() {
 }
 
 void UserManager::init(LocalConfig* config) {
+    Q_UNUSED(config)
     iDebug() << Q_FUNC_INFO;
 }
 
@@ -28,6 +29,7 @@ MessageBase::MESSAGE_TYPE UserManager::getMessageType() {
 }
 
 void UserManager::handleReceivedMessage(MessageBase* msg) {
+    Q_UNUSED(msg)
     iDebug() << Q_FUNC_INFO;
 }
 
