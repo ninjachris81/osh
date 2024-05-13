@@ -154,7 +154,7 @@ void WBB12Controller::init() {
     m_modbusClient.setConnectionParameter(QModbusDevice::NetworkAddressParameter, m_config->getString(this, "tcp.ip", "127.0.0.1"));
     m_modbusClient.setConnectionParameter(QModbusDevice::NetworkPortParameter, m_config->getString(this, "tcp.port", "502"));
     m_modbusClient.setTimeout(500);
-    m_modbusClient.setNumberOfRetries(1);
+    //m_modbusClient.setNumberOfRetries(1);
 
     connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &WBB12Controller::onStateChanged);
     connect(&m_modbusClient, &QModbusDevice::errorOccurred, this, &WBB12Controller::onErrorOccurred);
@@ -342,22 +342,26 @@ void WBB12Controller::retrieveStatus() {
 void WBB12Controller::_readInput(WBB12_Input_Registers reg, RetrieveValue val) {
     QModbusDataUnit dataUnit(QModbusDataUnit::InputRegisters, WBB12_Input_Registers_Offset + reg, 1);
 
-    QModbusReply* reply = m_modbusClient.sendReadRequest(dataUnit, m_slaveId);
-    connect(reply, &QModbusReply::finished, [this, reply, reg, val] {
+    if (m_modbusClient.state() == QModbusClient::ConnectedState) {
+        QModbusReply* reply = m_modbusClient.sendReadRequest(dataUnit, m_slaveId);
+        connect(reply, &QModbusReply::finished, [this, reply, reg, val] {
 
-        if (reply->error() == QModbusDevice::NoError) {
-            QVariant value = parseValue(reply->result().value(0), val.dataFormat);
-            iDebug() << reg << value;
-            ValueBase *v = m_inputMappings.value(reg);
-            m_valueManager->updateAndPublishValue(v, value);
-            m_lastInputReadings.insert(reg, QDateTime::currentMSecsSinceEpoch());
-        } else if (reply->error() == QModbusDevice::ProtocolError) {
-            iWarning() << "Modbus error" << reply->error();
-        } else {
-            iWarning() << "Modbus error" << reply->error();
-        }
-        reply->deleteLater();
-    });
+            if (reply->error() == QModbusDevice::NoError) {
+                QVariant value = parseValue(reply->result().value(0), val.dataFormat);
+                iDebug() << reg << value;
+                ValueBase *v = m_inputMappings.value(reg);
+                m_valueManager->updateAndPublishValue(v, value);
+                m_lastInputReadings.insert(reg, QDateTime::currentMSecsSinceEpoch());
+            } else if (reply->error() == QModbusDevice::ProtocolError) {
+                iWarning() << "Modbus error" << reply->error();
+            } else {
+                iWarning() << "Modbus error" << reply->error();
+            }
+            reply->deleteLater();
+        });
+    } else {
+        iWarning() << "Not connected";
+    }
 }
 
 void WBB12Controller::_readHolding(WBB12_Holding_Registers reg, RetrieveValue val) {

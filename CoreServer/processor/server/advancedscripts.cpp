@@ -34,7 +34,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
 
     bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
 
-    if (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO) {
+    if (!shutterMode->rawValue().isValid() || (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO)) {
         if (isDownTime) {
             // down: check is presence active
             if (!presenceActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
