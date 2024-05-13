@@ -72,6 +72,8 @@ public:
     VALUE_TYPE valueType();
     UNIT_TYPE unitType();
 
+    QVariant::Type typeHint();
+
     static QString unitTypeToSuffix(UNIT_TYPE unitType);
     static UNIT_TYPE valueTypeToUnitType(VALUE_TYPE valueType);
 

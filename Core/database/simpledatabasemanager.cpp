@@ -6,6 +6,7 @@
 #include <QDataStream>
 
 #include "macros.h"
+#include "qjsonvalue.h"
 
 QLatin1String SimpleDatabaseManager::SIMPLE_STORAGE_TABLE = QLatin1String("simple_storage");
 QLatin1String SimpleDatabaseManager::MANAGER_ID = QLatin1String("SimpleDatabaseManager");
@@ -23,9 +24,7 @@ void SimpleDatabaseManager::init(LocalConfig *config) {
     m_databaseManager = getManager<DatabaseManager>(DatabaseManager::MANAGER_ID);
 
     QSqlQuery query(*m_databaseManager->db());
-    query.prepare("CREATE TABLE IF NOT EXISTS :tableName (id TEXT PRIMARY KEY, value bytea)");
-    query.bindValue(":tableName", SIMPLE_STORAGE_TABLE);
-    if (!query.exec()) {
+    if (!query.exec("CREATE TABLE IF NOT EXISTS " + SIMPLE_STORAGE_TABLE + " (id TEXT PRIMARY KEY, value TEXT)")) {
         iWarning() << "Failed to execute statement" << query.lastError();
     }
 }
@@ -43,31 +42,30 @@ void SimpleDatabaseManager::handleReceivedMessage(MessageBase* msg) {
 }
 
 void SimpleDatabaseManager::simpleSet(QString prefix, QString id, QVariant value) {
-    QByteArray data;
-    QDataStream ds(&data,QIODevice::WriteOnly);
-    ds << value;
-
     QSqlQuery query(*m_databaseManager->db());
-    query.prepare("INSERT OR REPLACE INTO " + SIMPLE_STORAGE_TABLE + " (id, value) VALUES (:id, :value)");
+    query.prepare("INSERT INTO " + SIMPLE_STORAGE_TABLE + " (id, value) VALUES (:id, :value) ON CONFLICT(id) DO UPDATE SET value = :value");
     query.bindValue(":id", prefix + "_" + id);
-    query.bindValue(":value", data);
+    query.bindValue(":value", value);
 
     if (!query.exec()) {
         iWarning() << "Failed to execute statement" << query.lastError();
     }
 }
 
-QVariant SimpleDatabaseManager::simpleGet(QString prefix, QString id) {
+QVariant SimpleDatabaseManager::simpleGet(QString prefix, QString id, QVariant::Type expectedType) {
     QSqlQuery query(*m_databaseManager->db());
     query.prepare("SELECT value FROM " + SIMPLE_STORAGE_TABLE + " WHERE id = :id");
     query.bindValue(":id", prefix + "_" + id);
 
     if (query.exec()) {
         if (query.next()) {
-            QByteArray data = query.value(0).toByteArray();
-            QDataStream ds(&data,QIODevice::ReadOnly);
-            QVariant returnVal;
-            ds >> returnVal;
+            QVariant returnVal = query.value(0);
+
+            if (returnVal.type() != expectedType) {
+                iWarning() << "Trying to convert stored value";
+                returnVal.convert(expectedType);
+            }
+
             return returnVal;
         } else {
             // no value stored yet

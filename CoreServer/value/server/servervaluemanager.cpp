@@ -82,7 +82,7 @@ void ServerValueManager::onConnected() {
     while(it.hasNext()) {
         it.next();
         if (it.value()->persist()) {
-            QVariant storedValue = m_simpleDatabaseManager->simpleGet(VALUE_PREFIX, it.key());
+            QVariant storedValue = m_simpleDatabaseManager->simpleGet(VALUE_PREFIX, it.key(), it.value()->typeHint());
             if (storedValue.isValid()) {
                 iInfo() << "Publishing stored value" << it.key() << it.value();
                 ValueBase* value = m_knownValues.value(it.key());

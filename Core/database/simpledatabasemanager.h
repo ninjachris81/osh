@@ -26,7 +26,7 @@ public:
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
     void simpleSet(QString prefix, QString id, QVariant value);
-    QVariant simpleGet(QString prefix, QString id);
+    QVariant simpleGet(QString prefix, QString id, QVariant::Type expectedType);
     QMap<QString, QVariant> simpleList(QString prefix);
     void simpleRemove(QString prefix, QString id);
 

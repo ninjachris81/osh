@@ -168,6 +168,10 @@ UNIT_TYPE ValueBase::unitType() {
     return valueTypeToUnitType(m_valueType);
 }
 
+QVariant::Type ValueBase::typeHint() {
+    return m_typeHint;
+}
+
 UNIT_TYPE ValueBase::valueTypeToUnitType(VALUE_TYPE valueType) {
     switch(valueType) {
     case VALUE_TYPE_BRIGHTNESS: return UT_PERCENT;
