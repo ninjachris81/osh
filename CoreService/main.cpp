@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     LogManager logManager;
     ActorManager actorManager;
     DatabaseManager databaseManager;
-    //SimpleDatabaseManager simpleDatabaseManager;
+    SimpleDatabaseManager simpleDatabaseManager;
     UserManager userManager;
 
     //ToggleController toggleController(&controllerManager, "ToggleController");
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&modelProcessor);
     managerRegistration.registerManager(&logManager);
     managerRegistration.registerManager(&databaseManager);
-    //managerRegistration.registerManager(&simpleDatabaseManager);
+    managerRegistration.registerManager(&simpleDatabaseManager);
     managerRegistration.registerManager(&userManager);
 
     managerRegistration.init(&config);
