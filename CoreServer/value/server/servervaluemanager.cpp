@@ -19,11 +19,11 @@ ServerValueManager::ServerValueManager(QObject *parent) : ValueManagerBase(paren
 void ServerValueManager::init(LocalConfig *config) {
     ValueManagerBase::init(config);
 
-    //REQUIRE_MANAGER(SimpleDatabaseManager);
+    REQUIRE_MANAGER(SimpleDatabaseManager);
 
-    //m_simpleDatabaseManager = getManager<SimpleDatabaseManager>(SimpleDatabaseManager::MANAGER_ID);
+    m_simpleDatabaseManager = getManager<SimpleDatabaseManager>(SimpleDatabaseManager::MANAGER_ID);
 
-    //Helpers::safeConnect(m_commManager, &CommunicationManagerBase::connected, this, &ServerValueManager::onConnected, SIGNAL(connected()), SLOT(onConnected()));
+    Helpers::safeConnect(m_commManager, &CommunicationManagerBase::connected, this, &ServerValueManager::onConnected, SIGNAL(connected()), SLOT(onConnected()));
 
     m_valueCheckTimer.setInterval(config->getInt("value.checkInterval", 1000));
     m_valueCheckTimer.start();
@@ -39,7 +39,7 @@ void ServerValueManager::valueReceived(ValueBase* value, QVariant newValue) {
     if (value != nullptr) {
         value->updateValue(newValue);
         if (value->persist() && newValue.isValid()) {
-            //m_simpleDatabaseManager->simpleSet(VALUE_PREFIX, value->fullId(), newValue);
+            m_simpleDatabaseManager->simpleSet(VALUE_PREFIX, value->fullId(), newValue);
         }
     }
 }
@@ -82,14 +82,13 @@ void ServerValueManager::onConnected() {
     while(it.hasNext()) {
         it.next();
         if (it.value()->persist()) {
-            /*
             QVariant storedValue = m_simpleDatabaseManager->simpleGet(VALUE_PREFIX, it.key());
             if (storedValue.isValid()) {
                 iInfo() << "Publishing stored value" << it.key() << it.value();
                 ValueBase* value = m_knownValues.value(it.key());
                 value->updateValue(storedValue);
                 publishValue(value);
-            }*/
+            }
         }
     }
 }
