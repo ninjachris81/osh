@@ -28,6 +28,7 @@ public:
     } m_model;
 
     RS485RelayController(ControllerManager* manager, QString id, RELAY_MODEL model, quint8 relayCount, QObject *parent = nullptr);
+    ~RS485RelayController();
 
     /*virtual*/ void init() override;
 

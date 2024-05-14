@@ -12,6 +12,10 @@ RS485RelayController::RS485RelayController(ControllerManager *manager, QString i
 
 }
 
+RS485RelayController::~RS485RelayController() {
+    m_modbusClient.disconnectDevice();
+}
+
 void RS485RelayController::init() {
     iDebug() << Q_FUNC_INFO;
 
@@ -43,6 +47,7 @@ void RS485RelayController::start() {
     iInfo() << "Connecting on" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
 
     m_modbusClient.connectDevice();
+    m_statusTimer.start();
 }
 
 void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
@@ -79,7 +84,6 @@ void RS485RelayController::onStateChanged() {
 
     switch(m_modbusClient.state()) {
     case QModbusClient::ConnectedState:
-        m_statusTimer.start();
         Q_EMIT(controllerConnected());
         break;
     case QModbusClient::UnconnectedState:
