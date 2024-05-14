@@ -53,6 +53,7 @@ private:
     QModbusRtuSerialMaster m_modbusClient;
     QTimer m_statusTimer;
     int m_slaveId = 1;
+    quint8 m_errorCount = 0;
 
 };
 

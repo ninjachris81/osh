@@ -30,7 +30,7 @@ void RS485RelayController::init() {
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud9600);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
-    m_modbusClient.setTimeout(500);
+    //m_modbusClient.setTimeout(500);
     m_modbusClient.setNumberOfRetries(1);
 
     connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &RS485RelayController::onStateChanged);
@@ -83,8 +83,7 @@ void RS485RelayController::onStateChanged() {
         Q_EMIT(controllerConnected());
         break;
     case QModbusClient::UnconnectedState:
-        m_statusTimer.stop();
-        Q_EMIT(controllerDisconnected());
+        onErrorOccurred();
         break;
     default:
         iDebug() << m_modbusClient.state();
@@ -97,12 +96,12 @@ void RS485RelayController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO << m_modbusClient.errorString();
 
     m_warnManager->raiseWarning("Relay connection disconnected");
-    m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }
 
 void RS485RelayController::onDataReceived() {
     iDebug() << Q_FUNC_INFO;
+
 
     auto reply = qobject_cast<QModbusReply *>(sender());
     if (!reply)
@@ -119,10 +118,13 @@ void RS485RelayController::onDataReceived() {
             setStatus(i, response.data().at((i * 2) + 2) == 0x01);
             m_valueManager->publishValue(actor(i));
         }
+        m_errorCount = 0;
     } else if (reply->error() == QModbusDevice::ProtocolError) {
         iWarning() << "Modbus error" << reply->error();
+        m_errorCount++;
     } else {
         iWarning() << "Modbus error" << reply->error();
+        m_errorCount++;
     }
 
     reply->deleteLater();
@@ -140,19 +142,30 @@ void RS485RelayController::retrieveStatus() {
 
     QMutexLocker locker(&m_Mutex);
 
-    if (m_currentStatus == RETRIEVING_STATUS) {
-        m_warnManager->raiseWarning("No status from relay");
+    if (m_modbusClient.state() == QModbusDevice::UnconnectedState) {
+        iDebug() << "Connecting to modbus";
+        m_modbusClient.connectDevice();
+    } else {
+        if (m_currentStatus == RETRIEVING_STATUS) {
+            m_warnManager->raiseWarning("No status from relay");
+            m_errorCount++;
+        }
+
+        if (m_errorCount > 5) {
+            iWarning() << "Too many errors - disconnecting";
+            onErrorOccurred();
+        } else {
+            setSerialRelayStatus(RETRIEVING_STATUS);
+
+            QByteArray data;
+            data.append((char) 0x00);
+            data.append((char) 0x20);
+
+            QModbusRequest req(QModbusRequest::ReadHoldingRegisters);
+            req.encodeData(quint16(0x0001), quint16(0x0020));
+
+            QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
+            connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
+        }
     }
-
-    setSerialRelayStatus(RETRIEVING_STATUS);
-
-    QByteArray data;
-    data.append((char) 0x00);
-    data.append((char) 0x20);
-
-    QModbusRequest req(QModbusRequest::ReadHoldingRegisters);
-    req.encodeData(quint16(0x0001), quint16(0x0020));
-
-    QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
-    connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
 }
