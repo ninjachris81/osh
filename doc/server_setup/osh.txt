@@ -16,6 +16,9 @@ sudo apt install mpg123
 
 sudo apt install imagemagick
 
+sudo apt install livemedia-utils
+sudo apt install ffmpeg libraw-dev
+
 git submodule update --init
 
 copy psk.h

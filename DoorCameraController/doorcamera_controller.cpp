@@ -28,7 +28,7 @@ void DoorCameraController::init() {
     REQUIRE_MANAGER_X(m_manager, ActorManager);
     m_actorManager = m_manager->getManager<ActorManager>(ActorManager::MANAGER_ID);
 
-    m_program = m_config->getString(this, "program", "/usr/local/bin/openRTSP");
+    m_program = m_config->getString(this, "program", "/usr/bin/openRTSP");
     m_duration = m_config->getInt(this, "duration", 30000);
     rtspUrl = m_config->getString(this, "rtspUrl", "rtsp://localhost:554");
     baseStorageUrl = m_config->getString(this, "baseStorageUrl", "/var/ftp_data/videos");
