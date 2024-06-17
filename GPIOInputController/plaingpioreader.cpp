@@ -24,7 +24,7 @@ bool PlainGPIOReader::open() {
 #ifdef __linux__
     int returnCode = wiringPiSetup();
     if (returnCode != 0) {
-        qError() "Setup returned" << returnCode;
+        qWarning() "Setup returned" << returnCode;
     }
     Q_ASSERT(returnCode == 0);
 #endif
