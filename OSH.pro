@@ -17,6 +17,7 @@ SUBDIRS += \
     DoorCameraService \
     DoorUnlockController \
     DoorUnlockService \
+    GPIOInputTest \
     HomeConnectController \
     HomeConnectService \
     KMTronicRelayController \

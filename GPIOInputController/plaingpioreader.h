@@ -26,9 +26,12 @@ public:
     void readStates();
     void close();
 
+    void enableDebug();
+
 private:
     QList<int> m_pinList;
-    bool firstRun = true;
+    bool m_firstRun = true;
+    bool m_enableDebug = false;
 
 signals:
 

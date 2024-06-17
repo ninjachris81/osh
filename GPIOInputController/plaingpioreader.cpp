@@ -1,8 +1,14 @@
 #include "plaingpioreader.h"
+#include <QDebug>
+
 
 PlainGPIOReader::PlainGPIOReader(QList<int> pinList, QObject *parent)
     : GPIOReaderBase(pinList.count(), parent), m_pinList(pinList)
 {
+}
+
+void PlainGPIOReader::enableDebug() {
+    m_enableDebug = true;
 }
 
 void PlainGPIOReader::run() {
@@ -62,13 +68,18 @@ void PlainGPIOReader::readStates() {
 
         for (quint8 i=0;i<m_inputCount;i++) {
             bool state = m_countMap[i] == GPIO_READ_COUNT;
-            if (firstRun || state != m_states->at(i)) {
+
+            if (m_enableDebug) {
+                qDebug() << i << m_countMap[i] << "/" << GPIO_READ_COUNT;
+            }
+
+            if (m_firstRun || state != m_states->at(i)) {
                 m_states->setBit(i, state);
                 Q_EMIT(stateChanged(i, state));
             }
         }
 
-        firstRun = false;
+        m_firstRun = false;
 
         QThread::msleep(100);
     }
