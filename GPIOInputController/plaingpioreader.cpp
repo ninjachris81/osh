@@ -57,7 +57,7 @@ void PlainGPIOReader::readStates() {
                     m_countMap[i]++;
                 }
             }
-            QThread::msleep(3);
+            QThread::msleep(1);
         }
 
         for (quint8 i=0;i<m_inputCount;i++) {
