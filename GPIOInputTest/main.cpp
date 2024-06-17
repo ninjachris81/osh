@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     Q_ASSERT(inputCount > 0);
 
     QObject::connect(&reader, &GPIOReaderBase::stateChanged, [](quint8 index, bool state){
-        qDebug() << index << state;
+        qDebug() << "State" << index << state;
     });
 
     QObject::connect(&reader, &GPIOReaderBase::error, [](QString desc){

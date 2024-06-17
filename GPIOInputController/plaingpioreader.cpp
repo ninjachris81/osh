@@ -22,7 +22,11 @@ void PlainGPIOReader::run() {
 
 bool PlainGPIOReader::open() {
 #ifdef __linux__
-    wiringPiSetup();
+    int returnCode = wiringPiSetup();
+    if (returnCode != 0) {
+        qError() "Setup returned" << returnCode;
+    }
+    Q_ASSERT(returnCode == 0);
 #endif
 
     m_states = new QBitArray(m_inputCount);
