@@ -12,7 +12,7 @@
     #include <wiringPi.h>
 #endif
 
-#define GPIO_READ_COUNT 4
+#define GPIO_READ_COUNT 20
 
 class PlainGPIOReader : public GPIOReaderBase
 {
