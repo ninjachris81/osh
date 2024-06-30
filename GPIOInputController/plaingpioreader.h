@@ -14,7 +14,7 @@
 
 #define GPIO_READ_COUNT 10
 
-class PlainGPIOReader : public GPIOReaderBase
+class SHARED_LIB_EXPORT PlainGPIOReader : public GPIOReaderBase
 {
     Q_OBJECT
 public:
@@ -26,12 +26,9 @@ public:
     void readStates();
     void close();
 
-    void enableDebug();
-
 private:
     QList<int> m_pinList;
     bool m_firstRun = true;
-    bool m_enableDebug = false;
 
 signals:
 

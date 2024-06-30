@@ -7,10 +7,6 @@ PlainGPIOReader::PlainGPIOReader(QList<int> pinList, QObject *parent)
 {
 }
 
-void PlainGPIOReader::enableDebug() {
-    m_enableDebug = true;
-}
-
 void PlainGPIOReader::run() {
     if (open()) {
         readStates();

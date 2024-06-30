@@ -1,5 +1,7 @@
 #include "mcpreader.h"
 
+#include <QDebug>
+
 MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, QObject *parent) : GPIOReaderBase(inputCount, parent),
   m_pinBase(pinBase), m_addr(addr)
 {
@@ -17,8 +19,17 @@ void MCPReader::run() {
 
 bool MCPReader::open() {
 #ifdef __linux__
-    wiringPiSetup();
-    mcp23017Setup(m_pinBase, m_addr);
+    int returnCode = wiringPiSetup();
+    if (returnCode != 0) {
+        qWarning() << "Setup returned" << returnCode;
+    }
+    Q_ASSERT(returnCode == 0);
+
+    returnCode = mcp23017Setup(m_pinBase, m_addr);
+    if (returnCode != TRUE) {
+        qWarning() << "Setup returned" << returnCode;
+    }
+    Q_ASSERT(returnCode == TRUE);
 #endif
 
     m_states = new QBitArray(m_inputCount);
@@ -47,6 +58,10 @@ void MCPReader::readStates() {
                 m_states->setBit(i, state);
                 Q_EMIT(stateChanged(i, state));
             }
+        }
+
+        if (m_enableDebug) {
+            qDebug() << m_states;
         }
 
         firstRun = false;

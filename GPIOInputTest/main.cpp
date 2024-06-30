@@ -2,14 +2,15 @@
 #include <QDebug>
 
 #include "config/localconfig.h"
+#include "gpioinputcontroller.h"
 #include "plaingpioreader.h"
+#include "mcpreader.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
     LocalConfig config;
-
 
     QString pins = config.getString("pins", "");       // e.g. "3 21 33"
     QList<int> pinList;
@@ -19,20 +20,35 @@ int main(int argc, char *argv[])
     }
     int inputCount = pinList.count();
     qDebug() << "pins:" << pinList;
-
-    PlainGPIOReader reader(pinList);
     Q_ASSERT(inputCount > 0);
 
-    QObject::connect(&reader, &GPIOReaderBase::stateChanged, [](quint8 index, bool state){
+    QString gpioType = config.getString("gpioType", GPIOInputController::GPIO_TYPE_PLAIN);
+
+    GPIOReaderBase *reader = nullptr;
+
+    if (gpioType == GPIOInputController::GPIO_TYPE_PLAIN) {
+        reader = new PlainGPIOReader(pinList);
+    } else if (gpioType == GPIOInputController::GPIO_TYPE_MCP) {
+        int pinBase = config.getInt("mcp.pinBase", 64);
+        int addr = config.getInt("mcp.addr", 0x20);
+
+        reader = new MCPReader(inputCount, addr, pinBase);
+    } else {
+        qWarning() << "No gpioType specified";
+        exit(-1);
+    }
+
+    QObject::connect(reader, &GPIOReaderBase::stateChanged, [](quint8 index, bool state){
         qDebug() << "State" << index << state;
     });
 
-    QObject::connect(&reader, &GPIOReaderBase::error, [](QString desc){
+    QObject::connect(reader, &GPIOReaderBase::error, [](QString desc){
         qDebug() << desc;
     });
 
-    reader.start();
-    reader.enableDebug();
+    reader->start();
+    reader->enableDebug();
+
 
     return a.exec();
 }

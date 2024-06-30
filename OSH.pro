@@ -56,6 +56,7 @@ KMTronicRelayService.depends = Core CoreSerial KMTronicRelayController QMqttComm
 
 GPIOInputController.depends = Core
 GPIOInputService.depends = Core GPIOInputController QMqttCommunicationManager
+GPIOInputTest.depends = Core GPIOInputController QMqttCommunicationManager
 
 AudioController.depends = Core
 AudioService.depends = Core AudioController QMqttCommunicationManager

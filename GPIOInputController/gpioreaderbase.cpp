@@ -5,3 +5,7 @@ GPIOReaderBase::GPIOReaderBase(int inputCount, QObject *parent)
 {
 
 }
+
+void GPIOReaderBase::enableDebug() {
+    m_enableDebug = true;
+}
