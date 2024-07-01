@@ -46,7 +46,11 @@ bool MCPReader::open() {
 }
 
 void MCPReader::readStates() {
+    QString debugStr;
+
     while(true) {
+        debugStr.clear();
+
         for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
             bool state = digitalRead(m_pinBase + i) == LOW;
@@ -58,10 +62,14 @@ void MCPReader::readStates() {
                 m_states->setBit(i, state);
                 Q_EMIT(stateChanged(i, state));
             }
+
+            debugStr.append(i);
+            debugStr.append('=');
+            debugStr.append(state);
         }
 
         if (m_enableDebug) {
-            qDebug() << m_states;
+            qDebug() << debugStr;
         }
 
         firstRun = false;
