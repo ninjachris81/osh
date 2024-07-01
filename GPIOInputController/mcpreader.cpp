@@ -24,12 +24,14 @@ bool MCPReader::open() {
         qWarning() << "Setup returned" << returnCode;
     }
     Q_ASSERT(returnCode == 0);
+    qDebug() << "Setup complete";
 
     returnCode = mcp23017Setup(m_pinBase, m_addr);
     if (returnCode != TRUE) {
         qWarning() << "Setup returned" << returnCode;
     }
     Q_ASSERT(returnCode == TRUE);
+    qDebug() << "MCP Setup complete";
 #endif
 
     m_states = new QBitArray(m_inputCount);
@@ -63,9 +65,7 @@ void MCPReader::readStates() {
                 Q_EMIT(stateChanged(i, state));
             }
 
-            debugStr.append(i);
-            debugStr.append('=');
-            debugStr.append(state);
+            debugStr.append(QString::number(i) + "=" + state);
         }
 
         if (m_enableDebug) {

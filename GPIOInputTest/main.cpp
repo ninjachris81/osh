@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
         qDebug() << desc;
     });
 
-    reader->start();
     reader->enableDebug();
+    reader->start();
 
 
     return a.exec();
