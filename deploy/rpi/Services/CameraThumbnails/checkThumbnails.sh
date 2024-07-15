@@ -27,6 +27,9 @@ function createThumbnails {
 			"$IM_CONVERT" $inputFile -thumbnail 200x200 -quality 80 $outputFile
 		fi
     done;
+	
+	rm thumbnails/thumbnails.zip
+	zip thumbnails/thumbnails.zip *
 }
 
 function createVideoThumbnails {
@@ -54,6 +57,9 @@ function createVideoThumbnails {
 			"$IM_CONVERT" $outputFile -thumbnail 200x200 -quality 80 $outputFile
 		fi
     done;
+	
+	rm thumbnails/thumbnails.zip
+	zip thumbnails/thumbnails.zip *
 }
 
 function processImages {
