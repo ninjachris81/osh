@@ -28,8 +28,8 @@ function createThumbnails {
 		fi
     done;
 	
-	rm $dir/thumbnails/thumbnails.zip
-	zip $dir/thumbnails/thumbnails.zip *
+	rm $thumbnailDir/thumbnails.zip
+	zip -j $thumbnailDir/thumbnails.zip $thumbnailDir/*
 }
 
 function createVideoThumbnails {
