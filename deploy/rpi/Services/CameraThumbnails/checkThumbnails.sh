@@ -51,8 +51,8 @@ function createVideoThumbnails {
 			echo "Video file is empty"
 			rm $inputFile
 		else
-			"$FFMPEG_CMD" -i $inputFile -b 200k -framerate 15 $inputFile2
-			mv $inputFile2 $inputFile
+			#"$FFMPEG_CMD" -i $inputFile -b 200k -framerate 15 $inputFile2
+			#mv $inputFile2 $inputFile
 			"$FFMPEG_CMD" -i $inputFile -ss 00:00:01.000 -frames:v 1 $outputFile
 			"$IM_CONVERT" $outputFile -thumbnail 200x200 -quality 80 $outputFile
 		fi
