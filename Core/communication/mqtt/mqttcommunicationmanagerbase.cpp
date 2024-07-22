@@ -293,7 +293,10 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
     }
     case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
         DeviceDiscoveryMessage* ddMessage = static_cast<DeviceDiscoveryMessage*>(&message);
-        return serializeSingleJSONValue(ddMessage->upTime());
+        QVariantMap map;
+        map.insert(MQTT_SINGLE_VALUE_ATTR, ddMessage->upTime());
+        map.insert(MQTT_HEALTH_STATE_ATTR, ddMessage->healthState());
+        return serializeJSONValue(map);
     }
     case MessageBase::MESSAGE_TYPE_CONTROLLER: {
         ControllerMessage* controllerMessage = static_cast<ControllerMessage*>(&message);
