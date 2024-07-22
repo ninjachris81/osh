@@ -37,7 +37,7 @@ private:
     ClientDevice* m_device = nullptr;
     CommunicationManagerBase* m_commManager;
     qint64 m_startedTime;
-    DeviceDiscoveryMessage::DeviceHealthState m_healthState;
+    DeviceDiscoveryMessage::DeviceHealthState m_healthState = DeviceDiscoveryMessage::Healthy;
 
 private slots:
     void startDDBroadcast();
