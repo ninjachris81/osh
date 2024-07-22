@@ -27,12 +27,24 @@ QString ClientSystemWarningsManager::id() {
     return MANAGER_ID;
 }
 
-void ClientSystemWarningsManager::raiseWarning(QString msg) {
+void ClientSystemWarningsManager::raiseWarning(QString msg, QtMsgType msgType) {
     iWarning() << Q_FUNC_INFO << msg;
 
     if (m_commManager != nullptr) {
         SystemWarningMessage warnMsg(m_clientDeviceManager->device(), msg);
         m_commManager->sendMessage(warnMsg);
+    }
+
+    switch (msgType) {
+    case QtWarningMsg:
+        m_clientDeviceManager->setHealthState(DeviceDiscoveryMessage::HasWarnings);
+        break;
+    case QtCriticalMsg:
+    case QtFatalMsg:
+        m_clientDeviceManager->setHealthState(DeviceDiscoveryMessage::HasErrors);
+        break;
+    default:
+        break;
     }
 }
 

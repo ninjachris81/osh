@@ -43,6 +43,12 @@ ClientDevice* DeviceDiscoveryManagerBase::device() {
     return m_device;
 }
 
+void DeviceDiscoveryManagerBase::setHealthState(DeviceDiscoveryMessage::DeviceHealthState healthState) {
+    if (healthState > m_healthState) {
+        m_healthState = healthState;
+    }
+}
+
 void DeviceDiscoveryManagerBase::startDDBroadcast() {
     iDebug() << Q_FUNC_INFO;
 
@@ -60,6 +66,6 @@ void DeviceDiscoveryManagerBase::stopDDBroadcast() {
 void DeviceDiscoveryManagerBase::sendDDBroadcast() {
     iDebug() << Q_FUNC_INFO;
 
-    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId(), QDateTime::currentMSecsSinceEpoch() - m_startedTime);
+    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId(), QDateTime::currentMSecsSinceEpoch() - m_startedTime, m_healthState);
     m_commManager->sendMessage(message);
 }

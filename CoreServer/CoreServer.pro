@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------
 
+DEFINES += PROCESSOR_JS_SUPPORT
+
 QT       += sql
 QT       += network
 QT       -= gui
@@ -13,8 +15,6 @@ TEMPLATE = lib
 #CONFIG += staticlib
 
 DEFINES += MAKE_SHARED_LIB
-
-#DEFINES += PROCESSOR_JS_SUPPORT
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -31,7 +31,7 @@ DEFINES += IS_OSH_CORE_SERVICE
 
 SOURCES += \
     actor/server/togglecontroller.cpp \
-        device/server/serverdevicediscoverymanager.cpp \
+    device/server/serverdevicediscoverymanager.cpp \
     processor/server/3rdparty/sunset.cpp \
     processor/server/advancedscripts.cpp \
     processor/server/basicscripts.cpp \
@@ -41,15 +41,15 @@ SOURCES += \
     processor/server/nativeprocessortask.cpp \
     processor/server/processorexecutorbase.cpp \
     processor/server/scriptbase.cpp \
-        time/server/systemtimemanager.cpp \
-        value/server/environmentvaluemanager.cpp \
-        value/server/servervaluemanager.cpp \
-        device/server/devicediscoverymodelbridge.cpp \
-        processor/server/modelprocessormanager.cpp
+    time/server/systemtimemanager.cpp \
+    value/server/environmentvaluemanager.cpp \
+    value/server/servervaluemanager.cpp \
+    device/server/devicediscoverymodelbridge.cpp \
+    processor/server/modelprocessormanager.cpp
 
 HEADERS += \
     actor/server/togglecontroller.h \
-        device/server/serverdevicediscoverymanager.h \
+    device/server/serverdevicediscoverymanager.h \
     processor/server/3rdparty/sunset.h \
     processor/server/advancedscripts.h \
     processor/server/basicscripts.h \
@@ -61,22 +61,23 @@ HEADERS += \
     processor/server/scriptbase.h \
     processor/server/threadsafeqjsengine.h \
     sharedlib.h \
-        time/server/systemtimemanager.h \
-        value/server/environmentvaluemanager.h \
-        value/server/servervaluemanager.h \
-        device/server/devicediscoverymodelbridge.h \
-        processor/server/modelprocessormanager.h
+    time/server/systemtimemanager.h \
+    value/server/environmentvaluemanager.h \
+    value/server/servervaluemanager.h \
+    device/server/devicediscoverymodelbridge.h \
+    processor/server/modelprocessormanager.h
 
+contains(DEFINES, PROCESSOR_JS_SUPPORT) {
+    QT       += qml
 
-defined(PROCESSOR_JS_SUPPORT) {
     win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../CoreProcessorJS/release/ -lCoreProcessorJS
     else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../CoreProcessorJS/debug/ -lCoreProcessorJS
     else:unix: LIBS += -L$$OUT_PWD/../CoreProcessorJS/ -lCoreProcessorJS
 
     INCLUDEPATH += $$PWD/../CoreProcessorJS
     DEPENDPATH += $$PWD/../CoreProcessorJS
-    message("JS Processor Support")
 }
+
 
 unix {
     target.path = /usr/lib

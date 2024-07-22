@@ -257,7 +257,7 @@ void WBB12Controller::onStateChanged() {
 void WBB12Controller::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO;
 
-    m_warnManager->raiseWarning("Relay connection disconnected");
+    m_warnManager->raiseWarning("Connection disconnected", QtCriticalMsg);
     m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }

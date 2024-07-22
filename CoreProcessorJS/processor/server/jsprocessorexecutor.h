@@ -9,7 +9,7 @@
 #include "datamodel/datamodelmanager.h"
 #include "processor/server/jsprocessortask.h"
 #include "processor/server/scriptbase.h"
-#include "processor/server/commonscripts.h"
+#include "processor/server/jsmethods.h"
 
 class SHARED_LIB_EXPORT JSProcessorExecutor : public ProcessorExecutorBase
 {
@@ -19,25 +19,11 @@ public:
 
     /*virtual*/ QVariant execute(ProcessorTaskBase* task) override;
 
-    /*virtual*/ class QVariant execute(JSProcessorTask* task);
+    QVariant execute(JSProcessorTask* task);
 
 private:
+    JSMethods *m_jsMethods;
     QJSEngine m_engine;
-    QList<QJSValue> m_values;
-
-    QMap<QString, ScriptBase*> m_scripts;
-    CommonScripts *m_commonScripts;
-
-    void injectValue(ValueBase* value);
-    void injectActor(ActorBase* actor);
-
-    void injectValues(DatamodelManager *dmManager);
-    void injectActors(DatamodelManager *dmManager);
-    void injectConstants();
-    void injectScripts();
-    void injectLocalStorage();
-
-    void registerScript(ScriptBase* script);
 
 signals:
 

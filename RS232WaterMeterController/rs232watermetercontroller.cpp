@@ -58,7 +58,7 @@ void RS232WaterMeterController::onSerialConnected() {
 void RS232WaterMeterController::onSerialDisconnected() {
     iDebug() << Q_FUNC_INFO;
 
-    m_warnManager->raiseWarning("Serial connection disconnected");
+    m_warnManager->raiseWarning("Serial connection disconnected", QtCriticalMsg);
     //m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }
@@ -80,7 +80,7 @@ void RS232WaterMeterController::onSerialDataReceived(QByteArray data) {
                 increaseWaterLevel(doc.object().value("id").toInt());
                 break;
             case EVENT_ERROR:
-                m_warnManager->raiseWarning("Water sensor error " + QString::number(doc.object().value("id").toInt()));
+                m_warnManager->raiseWarning("Water sensor error " + QString::number(doc.object().value("id").toInt()), QtCriticalMsg);
                 break;
             default:
                 break;
@@ -126,7 +126,7 @@ void RS232WaterMeterController::onStateChanged() {
 void RS232WaterMeterController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO;
 
-    m_warnManager->raiseWarning("Relay connection disconnected");
+    m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
     //m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }

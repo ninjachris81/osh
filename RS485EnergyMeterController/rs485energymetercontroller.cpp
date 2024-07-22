@@ -114,7 +114,7 @@ void RS485EnergyMeterController::onStateChanged() {
 void RS485EnergyMeterController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO << m_modbusClient.errorString();
 
-    m_warnManager->raiseWarning("RS485 connection disconnected");
+    m_warnManager->raiseWarning("RS485 connection disconnected", QtCriticalMsg);
     m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }

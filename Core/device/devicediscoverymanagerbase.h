@@ -11,6 +11,7 @@
 #include "device/client/clientdevice.h"
 #include "manager/managerbase.h"
 #include "communication/communicationmanagerbase.h"
+#include "device/devicediscoverymessage.h"
 
 class SHARED_LIB_EXPORT DeviceDiscoveryManagerBase : public ManagerBase
 {
@@ -28,12 +29,15 @@ public:
 
     ClientDevice *device();
 
+    void setHealthState(DeviceDiscoveryMessage::DeviceHealthState healthState);
+
 private:
     QString m_serviceId;
     QTimer m_ddTimer;
     ClientDevice* m_device = nullptr;
     CommunicationManagerBase* m_commManager;
     qint64 m_startedTime;
+    DeviceDiscoveryMessage::DeviceHealthState m_healthState;
 
 private slots:
     void startDDBroadcast();

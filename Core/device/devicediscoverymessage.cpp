@@ -4,7 +4,7 @@
 
 #include <QDateTime>
 
-DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, quint64 upTime, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId), m_upTime(upTime)
+DeviceDiscoveryMessage::DeviceDiscoveryMessage(QString deviceId, QString serviceId, quint64 upTime, DeviceHealthState healthState, QObject *parent) : MessageBase(parent), m_deviceId(deviceId), m_serviceId(serviceId), m_upTime(upTime), m_healthState(healthState)
 {
 }
 
@@ -34,4 +34,8 @@ QString DeviceDiscoveryMessage::getSecondLevelId() {
 
 quint64 DeviceDiscoveryMessage::upTime() {
     return m_upTime;
+}
+
+DeviceDiscoveryMessage::DeviceHealthState DeviceDiscoveryMessage::healthState() {
+    return m_healthState;
 }

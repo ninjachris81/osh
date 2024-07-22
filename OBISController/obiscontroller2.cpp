@@ -57,7 +57,7 @@ void OBISController2::onProcessStarted() {
 void OBISController2::onProcessFinished(int exitCode) {
     iDebug() << Q_FUNC_INFO;
 
-    m_warnManager->raiseWarning("Server process terminated " + QString::number(exitCode));
+    m_warnManager->raiseWarning("Server process terminated " + QString::number(exitCode), QtCriticalMsg);
     Q_EMIT(controllerDisconnected());
 }
 

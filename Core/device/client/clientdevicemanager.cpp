@@ -10,6 +10,7 @@ ClientDeviceDiscoveryManager::ClientDeviceDiscoveryManager(QString serviceId, QO
 
 void ClientDeviceDiscoveryManager::init(LocalConfig* config) {
     DeviceDiscoveryManagerBase::init(config);
+    setHealthState(DeviceDiscoveryMessage::Healthy);
 }
 
 MessageBase::MESSAGE_TYPE ClientDeviceDiscoveryManager::getMessageType() {

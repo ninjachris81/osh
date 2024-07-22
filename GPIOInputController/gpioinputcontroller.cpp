@@ -11,6 +11,7 @@ QLatin1String GPIOInputController::GPIO_TYPE_MCP = QLatin1String("mcp");
 
 GPIOInputController::GPIOInputController(ControllerManager* manager, QString id, QObject *parent) : DigitalInputControllerBase (manager, id, parent)
 {
+    connect(&m_i2cSanityChecker, &I2CSanityChecker::i2cNotDetected, this, &GPIOInputController::onI2cNotDetected);
 }
 
 void GPIOInputController::init() {
@@ -21,6 +22,8 @@ void GPIOInputController::init() {
     REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
     m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
+    REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
+    m_clientSystemWarningsManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
     if (m_config->getInt("inputCount", 0) > 0) {        // can be overwritten by custom input count, if plain: mandatory to set
         m_inputCount = m_config->getInt(this, "inputCount", 0);
@@ -53,6 +56,19 @@ void GPIOInputController::init() {
         Q_ASSERT(false);
     }
 
+    int i2cBus = m_config->getInt(this, "i2cCheckBus", 1);
+    QStringList i2cDevs = m_config->getString(this, "i2cCheckDevs", "").split(" ", QString::SkipEmptyParts); // 20 21, as hex
+    if (!i2cDevs.isEmpty()) {
+        QList<int> devList;
+        for (QString s : i2cDevs) {
+            devList << s.toInt();
+        }
+
+        m_i2cSanityChecker.setBus(i2cBus);
+        m_i2cSanityChecker.setDevList(devList);
+    }
+
+
     Q_ASSERT(m_reader!=nullptr);
     Q_ASSERT(m_inputCount > 0);
 
@@ -65,6 +81,7 @@ void GPIOInputController::start() {
     iDebug() << Q_FUNC_INFO;
 
     m_reader->start();
+    m_i2cSanityChecker.start();
 }
 
 quint8 GPIOInputController::inputCount() {
@@ -78,4 +95,10 @@ void GPIOInputController::onError(QString desc) {
 void GPIOInputController::onStateChanged(quint8 index, bool state) {
     Q_ASSERT(index < inputCount());
     m_valueManager->updateAndPublishValue(m_valueMappings.at(index), state);
+}
+
+void GPIOInputController::onI2cNotDetected() {
+    iWarning() << Q_FUNC_INFO;
+
+    m_clientSystemWarningsManager->raiseWarning("I2C not detected", QtMsgType::QtCriticalMsg);
 }

@@ -50,7 +50,7 @@ void OBISController::onSerialConnected() {
 void OBISController::onSerialDisconnected() {
     iDebug() << Q_FUNC_INFO;
 
-    m_warnManager->raiseWarning("Relay connection disconnected");
+    m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
     Q_EMIT(controllerDisconnected());
 }
 
@@ -93,11 +93,11 @@ void OBISController::onSerialDataReceived(QByteArray data) {
             iDebug() << "SML final";
             break;
         case SmlParser::SML_CHECKSUM_ERROR:
-            m_warnManager->raiseWarning("SML Checksum error");
+            m_warnManager->raiseWarning("SML Checksum error", QtWarningMsg);
             break;
         case SmlParser::SML_UNEXPECTED:
             if (m_startReceived) {
-                m_warnManager->raiseWarning("SML Unexpected error");
+                m_warnManager->raiseWarning("SML Unexpected error", QtWarningMsg);
             }
             break;
         default:
@@ -105,7 +105,7 @@ void OBISController::onSerialDataReceived(QByteArray data) {
         }
 
     } else {
-        m_warnManager->raiseWarning("Invalid response size " + QString::number(data.size()));
+        m_warnManager->raiseWarning("Invalid response size " + QString::number(data.size()), QtWarningMsg);
     }
 }
 

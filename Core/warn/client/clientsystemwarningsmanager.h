@@ -25,7 +25,7 @@ public:
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
 
-    void raiseWarning(QString msg);
+    void raiseWarning(QString msg, QtMsgType msgType);
 
 private:
     CommunicationManagerBase* m_commManager = nullptr;

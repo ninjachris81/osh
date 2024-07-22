@@ -33,7 +33,7 @@ ProcessorTaskBase* ModelProcessorManager::createProcessorTask(QString groupId, Q
     case ProcessorTaskBase::PTT_JS:
 
 #ifdef PROCESSOR_JS_SUPPORT
-        return new JSProcessorTask(groupId, id, taskType, taskTriggerType, scriptCode, runCondition, scheduleInterval, publishResult);
+        return new JSProcessorTask(groupId, id, taskType, taskTriggerType, params.at(0), params.at(1), scheduleInterval, false);
 #else
         qWarning("JS Processor task not supported");
 #endif

@@ -45,7 +45,7 @@ void KMTronicRelayController::switchStatus(quint8 relayIndex, bool status) {
         m_serialClient->writeSync(data, 500);
         retrieveStatus();
     } else {
-        m_warnManager->raiseWarning("Serial not connected");
+        m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
     }
 }
 
@@ -69,7 +69,7 @@ void KMTronicRelayController::onSerialConnected() {
 void KMTronicRelayController::onSerialDisconnected() {
     iDebug() << Q_FUNC_INFO;
 
-    m_warnManager->raiseWarning("Relay connection disconnected");
+    m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
     m_statusTimer.stop();
     Q_EMIT(controllerDisconnected());
 }
@@ -86,7 +86,7 @@ void KMTronicRelayController::onSerialDataReceived(QByteArray data) {
             }
         } else {
             setSerialRelayStatus(STATUS_ERROR);
-            m_warnManager->raiseWarning("Invalid response size from relay" + QString::number(data.size()));
+            m_warnManager->raiseWarning("Invalid response size from relay" + QString::number(data.size()), QtWarningMsg);
         }
     }
 }
@@ -102,7 +102,7 @@ void KMTronicRelayController::retrieveStatus() {
     iDebug() << Q_FUNC_INFO;
 
     if (m_currentStatus == RETRIEVING_STATUS) {
-        m_warnManager->raiseWarning("No status from relay");
+        m_warnManager->raiseWarning("No status from relay", QtWarningMsg);
     }
 
     setSerialRelayStatus(RETRIEVING_STATUS);

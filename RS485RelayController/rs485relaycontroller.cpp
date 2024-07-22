@@ -65,7 +65,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
             m_valueManager->publishValue(actor(relayIndex));
         });
     } else {
-        m_warnManager->raiseWarning("Serial not connected");
+        m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
     }
 }
 
@@ -99,7 +99,7 @@ void RS485RelayController::onStateChanged() {
 void RS485RelayController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO << m_modbusClient.errorString();
 
-    m_warnManager->raiseWarning("Relay connection disconnected");
+    m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
     Q_EMIT(controllerDisconnected());
 }
 
@@ -151,7 +151,7 @@ void RS485RelayController::retrieveStatus() {
         m_modbusClient.connectDevice();
     } else {
         if (m_currentStatus == RETRIEVING_STATUS) {
-            m_warnManager->raiseWarning("No status from relay");
+            m_warnManager->raiseWarning("No status from relay", QtCriticalMsg);
             m_errorCount++;
         }
 

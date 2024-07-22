@@ -36,6 +36,7 @@ SUBDIRS += \
     RS485EnergyMeterService \
     RS485RelayController \
     RS485RelayService \
+    ScriptingTestService \
     ShutterController \
     ShutterService \
     TestService \

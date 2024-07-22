@@ -1,30 +1,24 @@
 QT -= gui
-QT += sql qml
+QT += mqtt
+QT += qml
+QT       += sql
 
-TEMPLATE = lib
-DEFINES += MAKE_SHARED_LIB
+CONFIG += c++17 console
+CONFIG -= app_bundle
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    processor/server/jsmethods.cpp \
-    processor/server/jsprocessorexecutor.cpp \
-    processor/server/jsprocessortask.cpp
+        main.cpp
 
-HEADERS += \
-    processor/server/jsmethods.h \
-    processor/server/jsprocessorexecutor.h \
-    processor/server/jsprocessortask.h \
-    processor/server/threadsafeqjsengine.h
+DEFINES += IS_OSH_CORE_SERVICE
 
 # Default rules for deployment.
-unix {
-    target.path = /usr/lib
-}
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Core/release/ -lCore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Core/debug/ -lCore
@@ -39,3 +33,11 @@ else:unix: LIBS += -L$$OUT_PWD/../CoreServer/ -lCoreServer
 
 INCLUDEPATH += $$PWD/../CoreServer
 DEPENDPATH += $$PWD/../CoreServer
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/release/ -lQMqttCommunicationManager
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/debug/ -lQMqttCommunicationManager
+else:unix: LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/ -lQMqttCommunicationManager
+
+INCLUDEPATH += $$PWD/../QMqttCommunicationManager
+DEPENDPATH += $$PWD/../QMqttCommunicationManager

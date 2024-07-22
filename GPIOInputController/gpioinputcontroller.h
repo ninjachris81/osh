@@ -6,7 +6,10 @@
 #include "sharedlib.h"
 
 #include "controller/digitalinputcontrollerbase.h"
+#include "value/valuemanagerbase.h"
+#include "warn/client/clientsystemwarningsmanager.h"
 #include "gpioreaderbase.h"
+#include "i2csanitychecker.h"
 
 #define MCP23017_INPUT_COUNT 16
 
@@ -27,11 +30,14 @@ public:
 
 private slots:
     void onStateChanged(quint8 index, bool state);
+    void onI2cNotDetected();
 
 private:
     ValueManagerBase *m_valueManager;
+    ClientSystemWarningsManager *m_clientSystemWarningsManager;
     quint8 m_inputCount = 0;
     GPIOReaderBase *m_reader = nullptr;
+    I2CSanityChecker m_i2cSanityChecker;
 
 private slots:
     void onError(QString desc);

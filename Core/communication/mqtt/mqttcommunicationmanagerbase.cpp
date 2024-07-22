@@ -100,9 +100,16 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
             }
         }
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
-            QVariant ddVal = parseSingleValue(value);
+            QVariant ddVal = value.value(MQTT_SINGLE_VALUE_ATTR);
+            QVariant healthVal = value.value(MQTT_HEALTH_STATE_ATTR);
             if (ddVal.isValid() && ddVal.canConvert(QVariant::ULongLong)) {
-                msg = new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong());
+                DeviceDiscoveryMessage::DeviceHealthState healthState = DeviceDiscoveryMessage::Unknown;
+
+                if (healthVal.isValid() && healthVal.canConvert(QVariant::UInt)) {
+                    healthState = static_cast<DeviceDiscoveryMessage::DeviceHealthState>(healthVal.toUInt());
+                }
+
+                msg = new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong(), healthState);
                 break;
             } else {
                 iWarning() << "Invalid payload value" << value << messageType;

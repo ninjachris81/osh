@@ -26,12 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         gpioinputcontroller.cpp \
         gpioreaderbase.cpp \
+        i2csanitychecker.cpp \
         mcpreader.cpp \
         plaingpioreader.cpp
 
 HEADERS += \
         gpioinputcontroller.h \
         gpioreaderbase.h \
+        i2csanitychecker.h \
         mcpreader.h \
         plaingpioreader.h
 unix {
