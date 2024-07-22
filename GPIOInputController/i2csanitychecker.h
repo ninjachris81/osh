@@ -6,7 +6,9 @@
 
 #define I2C_CHECK_INTERVAL 30000
 
-class I2CSanityChecker : public QObject
+#include "sharedlib.h"
+
+class SHARED_LIB_EXPORT I2CSanityChecker : public QObject
 {
     Q_OBJECT
 public:

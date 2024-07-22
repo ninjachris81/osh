@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-DEFINES += PROCESSOR_JS_SUPPORT
+#DEFINES += PROCESSOR_JS_SUPPORT
 
 QT       += sql
 QT       += network
