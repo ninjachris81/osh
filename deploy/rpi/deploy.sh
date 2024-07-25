@@ -51,7 +51,7 @@ fi
 RPI_MODEL="$(tr -d '\0' </proc/device-tree/model)"
 case $RPI_MODEL in
    *Zero*		)
-      MAKE_CORE_COUNT=2
+      MAKE_CORE_COUNT=1
       ;;
    *			)
       MAKE_CORE_COUNT=4
