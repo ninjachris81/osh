@@ -1,0 +1,10 @@
+sudo apt-get install vsftpd
+
+sudo useradd ftp_user
+
+# default: test
+sudo passwd ftp_user
+
+sudo mkhomedir_helper ftp_user
+
+# write_enable=YES
