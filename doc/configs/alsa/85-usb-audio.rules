@@ -1,14 +1,14 @@
 SUBSYSTEM!="sound", GOTO="my_usb_audio_end"
 ACTION!="add", GOTO="my_usb_audio_end"
 
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.4/1-1.4.4/1-1.4.4:1.0/sound/card?", ATTR{id}="USB_Audio_6"
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.4/1-1.4.3/1-1.4.3:1.0/sound/card?", ATTR{id}="USB_Audio_5"
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.4/1-1.4.2/1-1.4.2:1.0/sound/card?", ATTR{id}="USB_Audio_4"
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.4/1-1.4.1/1-1.4.1:1.0/sound/card?", ATTR{id}="USB_Audio_3"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.4/3-1.4.4/3-1.4.4:1.0/sound/card?", ATTR{id}="USB_Audio_6"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.4/3-1.4.3/3-1.4.3:1.0/sound/card?", ATTR{id}="USB_Audio_5"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.4/3-1.4.2/3-1.4.2:1.0/sound/card?", ATTR{id}="USB_Audio_4"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.4/3-1.4.1/3-1.4.1:1.0/sound/card?", ATTR{id}="USB_Audio_3"
 
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.3/1-1.3:1.0/sound/card?", ATTR{id}="USB_Audio_2"
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.2/1-1.2:1.0/sound/card?", ATTR{id}="USB_Audio_1"
-DEVPATH=="/devices/platform/usb@fe900000/fe900000.usb/xhci-hcd.1.auto/usb1/1-1/1-1.1/1-1.1:1.0/sound/card?", ATTR{id}="USB_Audio_0"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.3/3-1.3:1.0/sound/card?", ATTR{id}="USB_Audio_2"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.2/3-1.2:1.0/sound/card?", ATTR{id}="USB_Audio_1"
+DEVPATH=="/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb3/3-1/3-1.1/3-1.1:1.0/sound/card?", ATTR{id}="USB_Audio_0"
 
 
 LABEL="my_usb_audio_end"
