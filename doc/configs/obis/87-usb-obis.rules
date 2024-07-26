@@ -1,0 +1,1 @@
+DEVPATH=="/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3.3/1-1.3.3:1.0/ttyUSB?/tty/ttyUSB?",SYMLINK+="tty_mainVoltmeter",TAG+="systemd"
