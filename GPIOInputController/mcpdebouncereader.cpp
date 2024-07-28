@@ -84,28 +84,28 @@ bool MCPDebounceReader::open() {
         switch(i) {
         case 0:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt0);
-            break,
+            break;
         case 1:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt1);
-            break,
+            break;
         case 2:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt2);
-            break,
+            break;
         case 3:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt3);
-            break,
+            break;
         case 4:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt4);
-            break,
+            break;
         case 5:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt5);
-            break,
+            break;
         case 6:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt6);
-            break,
+            break;
         case 7:
             wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt7);
-            break,
+            break;
         }
 #endif
     }
