@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager("OBISService");
+    ClientDeviceDiscoveryManager clientManager("EnergyMeterService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;

@@ -62,6 +62,7 @@ void GPIOInputController::init() {
         QList<int> devList;
         for (QString s : i2cDevs) {
             devList << s.toInt();
+            iInfo() << "Adding to checklist" << s;
         }
 
         m_i2cSanityChecker.setBus(i2cBus);
