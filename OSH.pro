@@ -18,6 +18,8 @@ SUBDIRS += \
     DoorUnlockController \
     DoorUnlockService \
     GPIOInputTest \
+    GPIOWaterMeterController \
+    GPIOWaterMeterService \
     HomeConnectController \
     HomeConnectService \
     KMTronicRelayController \
@@ -97,3 +99,6 @@ RS485EnergyMeterService.depends = Core CoreSerial RS485EnergyMeterController QMq
 
 DoorCameraController.depends = Core
 DoorCameraService.depends = Core DoorCameraController QMqttCommunicationManager
+
+GPIOWaterMeterController.depends = Core
+GPIOWaterMeterService.depends = Core GPIOWaterMeterController QMqttCommunicationManager

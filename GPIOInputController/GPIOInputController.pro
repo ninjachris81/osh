@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2021-11-18T12:40:45
-#
-#-------------------------------------------------
-
 QT       -= gui
 
 TARGET = GPIOInputController
@@ -27,6 +21,7 @@ SOURCES += \
         gpioinputcontroller.cpp \
         gpioreaderbase.cpp \
         i2csanitychecker.cpp \
+        mcpdebouncereader.cpp \
         mcpreader.cpp \
         plaingpioreader.cpp
 
@@ -34,6 +29,7 @@ HEADERS += \
         gpioinputcontroller.h \
         gpioreaderbase.h \
         i2csanitychecker.h \
+        mcpdebouncereader.h \
         mcpreader.h \
         plaingpioreader.h
 unix {

@@ -25,7 +25,7 @@ void GPIOInputController::init() {
     REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_clientSystemWarningsManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
-    if (m_config->getInt("inputCount", 0) > 0) {        // can be overwritten by custom input count, if plain: mandatory to set
+    if (m_config->getInt(this, "inputCount", 0) > 0) {        // can be overwritten by custom input count, if plain: mandatory to set
         m_inputCount = m_config->getInt(this, "inputCount", 0);
     }
 
