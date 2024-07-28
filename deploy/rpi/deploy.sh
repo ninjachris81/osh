@@ -187,6 +187,16 @@ case "$1" in
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
+   GPIOWaterMeterService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "GPIOInputController"
+      buildOSHLib "GPIOWaterMeterController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
    *			)
       ;;
 esac
