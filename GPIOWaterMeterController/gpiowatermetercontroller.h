@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QMutex>
 
 #include "datamodel/datamodelbase.h"
 #include "sharedlib.h"
@@ -33,9 +34,15 @@ public:
 
     void retrieveStatus();
 
+private slots:
+    void onCalculateFlow();
+
 private:
-    DoubleValue *getValue(uint8_t id);
-    void increaseWaterLevel(uint8_t id);
+    QMutex m_flowCounterMutex;
+    QTimer m_flowTimer;
+
+    QString m_waterLevelValueGroupId;
+    QString m_waterFlowValueGroupId;
 
     ClientSystemWarningsManager* m_warnManager;
     //QTimer m_statusTimer;
@@ -44,12 +51,14 @@ private:
     float m_stepAmountML;
     MCPDebounceReader* m_debounceReader = nullptr;
 
-    QList<DoubleValue*> m_valueMappings;
+    QList<DoubleValue*> m_waterLevelMappings;
+    QList<DoubleValue*> m_waterFlowMappings;
 
     ValueManagerBase* m_valueManager = nullptr;
-    ValueGroup *m_valueGroup;
+    ValueGroup *m_waterLevelValueGroup;
+    ValueGroup *m_waterFlowValueGroup;
 
-
+    QList<quint16> m_waterFlows;
 
 signals:
 

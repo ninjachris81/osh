@@ -34,8 +34,6 @@ int main(int argc, char *argv[])
     LogManager logManager;
 
     QString groupdId = config.getString(&clientManager, "inputValueGroupId", "waterLevels0");
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
-    commManager.setCustomValueGroups(QStringList() << groupdId);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);

@@ -39,5 +39,12 @@ else:unix: LIBS += -L$$OUT_PWD/../QMqttCommunicationManager/ -lQMqttCommunicatio
 INCLUDEPATH += $$PWD/../QMqttCommunicationManager
 DEPENDPATH += $$PWD/../QMqttCommunicationManager
 
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../GPIOInputController/release/ -lGPIOInputController
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../GPIOInputController/debug/ -lGPIOInputController
+else:unix: LIBS += -L$$OUT_PWD/../GPIOInputController/ -lGPIOInputController
+
+INCLUDEPATH += $$PWD/../GPIOInputController
+DEPENDPATH += $$PWD/../GPIOInputController
+
 # wiringpi will not be maintained any longer
 unix: LIBS += -I/usr/local/include -L/usr/local/lib -lwiringPi
