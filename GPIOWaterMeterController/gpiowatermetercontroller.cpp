@@ -43,8 +43,9 @@ void GPIOWaterMeterController::init() {
 
     int pinBase = m_config->getInt(this, "mcp.pinBase", 64);
     int addr = m_config->getInt(this, "mcp.addr", 0x20);
+    int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
 
-    m_debounceReader = new MCPDebounceReader(m_sensorCount, addr, pinBase);
+    m_debounceReader = new MCPDebounceReader(m_sensorCount, addr, pinBase, pinOffset);
     connect(m_debounceReader, &MCPDebounceReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
 
     m_flowTimer.setInterval(4000);
@@ -87,6 +88,8 @@ void GPIOWaterMeterController::bindValueManager(ClientValueManager* valueManager
             if (waterFlow->rawValue().isNull()) waterFlow->updateValue(0.0, false);
             if (waterLevel->rawValue().isNull()) waterLevel->updateValue(0.0, false);
         }
+
+        waterLevel->withAlwaysEmit(true);
 
         m_waterFlowMappings.append(waterFlow);
         m_waterLevelMappings.append(waterLevel);

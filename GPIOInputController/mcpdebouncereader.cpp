@@ -4,8 +4,8 @@
 
 MCPDebounceReader* MCPDebounceReader::m_instance = nullptr;
 
-MCPDebounceReader::MCPDebounceReader(quint8 inputCount, int addr, int pinBase, QObject *parent) : GPIOReaderBase(inputCount, parent),
-  m_pinBase(pinBase), m_addr(addr)
+MCPDebounceReader::MCPDebounceReader(quint8 inputCount, int addr, int pinBase, int pinOffset, QObject *parent) : GPIOReaderBase(inputCount, parent),
+  m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset)
 {
     m_instance = this;
 }
@@ -83,28 +83,28 @@ bool MCPDebounceReader::open() {
 #ifdef __linux__
         switch(i) {
         case 0:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt0);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt0);
             break;
         case 1:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt1);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt1);
             break;
         case 2:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt2);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt2);
             break;
         case 3:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt3);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt3);
             break;
         case 4:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt4);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt4);
             break;
         case 5:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt5);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt5);
             break;
         case 6:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt6);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt6);
             break;
         case 7:
-            wiringPiISR(i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt7);
+            wiringPiISR(i + m_pinOffset, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt7);
             break;
         }
 #endif

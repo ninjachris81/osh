@@ -16,7 +16,7 @@ class SHARED_LIB_EXPORT MCPDebounceReader : public GPIOReaderBase
 {
     Q_OBJECT
 public:
-    explicit MCPDebounceReader(quint8 inputCount, int addr, int pinBase = 64, QObject *parent = nullptr);
+    explicit MCPDebounceReader(quint8 inputCount, int addr, int pinBase = 64, int pinOffset = 0, QObject *parent = nullptr);
 
     /*virtual*/ void run() override;
 
@@ -37,6 +37,7 @@ public:
 private:
     int m_pinBase = 0;
     int m_addr = 0;
+    int m_pinOffset = 0;
 
     bool open();
     void readStates();
