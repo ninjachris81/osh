@@ -97,6 +97,9 @@ void GPIOWaterMeterController::bindValueManager(ClientValueManager* valueManager
         valueManager->registerForNotification(waterFlow);
         valueManager->registerForNotification(waterLevel);
 
+        valueManager->registerForMaintenance(waterFlow);
+        valueManager->registerForMaintenance(waterLevel);
+
         m_waterFlows.append(0);
     }
 }
