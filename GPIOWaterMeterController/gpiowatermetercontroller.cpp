@@ -17,7 +17,6 @@
 
 GPIOWaterMeterController::GPIOWaterMeterController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
     //connect(&m_statusTimer, &QTimer::timeout, this, &RS232WaterMeterController::retrieveStatus);
-    connect(m_debounceReader, &MCPDebounceReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
     connect(&m_flowTimer, &QTimer::timeout, this, &GPIOWaterMeterController::onCalculateFlow);
 }
 
@@ -46,6 +45,7 @@ void GPIOWaterMeterController::init() {
     int addr = m_config->getInt(this, "mcp.addr", 0x20);
 
     m_debounceReader = new MCPDebounceReader(m_sensorCount, addr, pinBase);
+    connect(m_debounceReader, &MCPDebounceReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
 
     m_flowTimer.setInterval(4000);
 
