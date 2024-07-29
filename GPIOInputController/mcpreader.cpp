@@ -2,10 +2,13 @@
 
 #include <QDebug>
 
-MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, int pinOffset, QObject *parent) : GPIOReaderBase(inputCount, parent),
-  m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset)
+MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, int pinOffset, bool emitInitially, QObject *parent) : GPIOReaderBase(inputCount, parent),
+  m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset), m_emitInitially(emitInitially)
 {
     Q_ASSERT(m_pinBase>64);
+    if (m_emitInitially){
+        m_firstRun = false;
+    }
 }
 
 void MCPReader::run() {
@@ -60,7 +63,7 @@ void MCPReader::readStates() {
             bool state = false;
 #endif
 
-            if (firstRun || state != m_states->at(i)) {
+            if (m_firstRun || state != m_states->at(i)) {
                 m_states->setBit(i, state);
                 Q_EMIT(stateChanged(i, state));
             }
@@ -72,7 +75,7 @@ void MCPReader::readStates() {
             qDebug() << debugStr;
         }
 
-        firstRun = false;
+        m_firstRun = false;
 
         QThread::msleep(50);
     }

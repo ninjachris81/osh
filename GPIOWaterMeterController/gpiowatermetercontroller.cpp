@@ -52,7 +52,7 @@ void GPIOWaterMeterController::init() {
     int addr = m_config->getInt(this, "mcp.addr", 0x20);
     int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
 
-    m_reader = new MCPReader(m_sensorCount, addr, pinBase, pinOffset);
+    m_reader = new MCPReader(m_sensorCount, addr, pinBase, pinOffset, false);
     connect(m_reader, &MCPReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
 
     m_flowTimer.setInterval(4000);
@@ -130,7 +130,7 @@ void GPIOWaterMeterController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO;
 
     m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
-    //m_statusTimer.stop();
+    m_flowTimer.stop();
     Q_EMIT(controllerDisconnected());
 }
 

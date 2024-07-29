@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
-    ClientDeviceDiscoveryManager clientManager("RS232WaterMeterService");
+    ClientDeviceDiscoveryManager clientManager("WaterMeterService");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;

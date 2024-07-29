@@ -44,13 +44,14 @@ void GPIOInputController::init() {
     } else if (gpioType == GPIO_TYPE_MCP) {
         int pinBase = m_config->getInt(this, "mcp.pinBase", 64);
         int addr = m_config->getInt(this, "mcp.addr", 0x20);
+        int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
 
         if (m_inputCount == 0) {
             m_inputCount = MCP23017_INPUT_COUNT;
         }
 
         iDebug() << "MCP init" << pinBase << addr;
-        m_reader = new MCPReader(m_inputCount, addr, pinBase);
+        m_reader = new MCPReader(m_inputCount, addr, pinBase, pinOffset, true);
     } else {
         iWarning() << "Invalid gpio type or not set" << gpioType;
         Q_ASSERT(false);

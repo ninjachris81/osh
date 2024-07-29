@@ -16,7 +16,7 @@ class SHARED_LIB_EXPORT MCPReader : public GPIOReaderBase
 {
     Q_OBJECT
 public:
-    explicit MCPReader(quint8 inputCount, int addr, int pinBase = 64, int pinOffset = 0, QObject *parent = nullptr);
+    explicit MCPReader(quint8 inputCount, int addr, int pinBase, int pinOffset, bool emitInitially, QObject *parent = nullptr);
 
     /*virtual*/ void run() override;
 
@@ -25,7 +25,9 @@ private:
     int m_addr = 0;
     int m_pinOffset = 0;
 
-    bool firstRun = true;
+    bool m_emitInitially = true;
+
+    bool m_firstRun = true;
 
     bool open();
     void readStates();
