@@ -8,7 +8,7 @@ MCPDebounceReader::MCPDebounceReader(quint8 inputCount, int addr, int pinBase, i
   m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset)
 {
     m_instance = this;
-    Q_ASSERT(m_pinBase>64);
+    Q_ASSERT(m_pinBase >=0 && m_pinBase<64);
 }
 
 void MCPDebounceReader::run() {
