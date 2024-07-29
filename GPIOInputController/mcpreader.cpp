@@ -6,9 +6,6 @@ MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, int pinOffset, bo
   m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset), m_emitInitially(emitInitially)
 {
     Q_ASSERT(m_pinBase>64);
-    if (m_emitInitially){
-        m_firstRun = false;
-    }
 }
 
 void MCPReader::run() {
@@ -65,7 +62,11 @@ void MCPReader::readStates() {
 
             if (m_firstRun || state != m_states->at(i)) {
                 m_states->setBit(i, state);
-                Q_EMIT(stateChanged(i, state));
+                if (m_firstRun && !m_emitInitially) {
+                    qInfo() << "Not emitting first signal" << i;
+                } else {
+                    Q_EMIT(stateChanged(i, state));
+                }
             }
 
             debugStr.append(QString::number(i) + "=" + state + " ");
