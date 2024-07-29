@@ -7,6 +7,7 @@
 
 QLatin1String GPIOInputController::GPIO_TYPE_PLAIN = QLatin1String("plain");
 QLatin1String GPIOInputController::GPIO_TYPE_MCP = QLatin1String("mcp");
+QLatin1String GPIOInputController::GPIO_TYPE_MCP_ISR = QLatin1String("mcp_isr");
 
 
 GPIOInputController::GPIOInputController(ControllerManager* manager, QString id, QObject *parent) : DigitalInputControllerBase (manager, id, parent)

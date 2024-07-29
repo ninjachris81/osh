@@ -19,6 +19,7 @@ Q_OBJECT
 public:
     static QLatin1String GPIO_TYPE_PLAIN;
     static QLatin1String GPIO_TYPE_MCP;
+    static QLatin1String GPIO_TYPE_MCP_ISR;
 
     GPIOInputController(ControllerManager* manager, QString id, QObject *parent = nullptr);
 

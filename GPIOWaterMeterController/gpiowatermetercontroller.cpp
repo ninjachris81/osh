@@ -41,7 +41,7 @@ void GPIOWaterMeterController::init() {
     m_dataOffset = m_config->getInt(this, "inputOffset", 0);
     m_stepAmountML = m_config->getInt(this, "stepMl", 250);
 
-    int pinBase = m_config->getInt(this, "mcp.pinBase", 64);
+    int pinBase = m_config->getInt(this, "mcp.pinBase", 65);
     int addr = m_config->getInt(this, "mcp.addr", 0x20);
     int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
 

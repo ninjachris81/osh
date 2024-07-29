@@ -5,7 +5,7 @@
 MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, int pinOffset, QObject *parent) : GPIOReaderBase(inputCount, parent),
   m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset)
 {
-
+    Q_ASSERT(m_pinBase>64);
 }
 
 void MCPReader::run() {
