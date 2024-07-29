@@ -107,7 +107,7 @@ void GPIOWaterMeterController::onStateChanged(quint8 index, bool state) {
     DoubleValue* waterLevel = m_waterLevelMappings.value(index);
 
     if (waterLevel != nullptr) {
-        waterLevel->updateValue(waterLevel->rawValue().toDouble() + (m_stepAmountML / 1000), true);
+        waterLevel->updateValue(waterLevel->rawValue().toDouble() + (m_stepAmountML / 1000 / 2), true);
         m_valueManager->publishValue(waterLevel);
     }
 
@@ -138,7 +138,7 @@ void GPIOWaterMeterController::onCalculateFlow() {
     float buff[m_sensorCount];      // as L/min
 
     for (quint8 i = 0; i<m_sensorCount;i++) {
-        buff[i] = m_stepAmountML * m_waterFlows[i] / 1000;
+        buff[i] = m_stepAmountML * m_waterFlows[i] / 1000 / 2;
         m_waterFlows[i] = 0;
     }
 
