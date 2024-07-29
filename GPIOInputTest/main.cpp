@@ -5,7 +5,6 @@
 #include "gpioinputcontroller.h"
 #include "plaingpioreader.h"
 #include "mcpreader.h"
-#include "mcpdebouncereader.h"
 
 int main(int argc, char *argv[])
 {
@@ -35,12 +34,6 @@ int main(int argc, char *argv[])
         int pinOffset = config.getInt("mcp.pinOffset", 0);
 
         reader = new MCPReader(inputCount, addr, pinBase, pinOffset);
-    } else if (gpioType == GPIOInputController::GPIO_TYPE_MCP_ISR) {
-        int pinBase = config.getInt("mcp.pinBase", 65);
-        int addr = config.getInt("mcp.addr", 0x20);
-        int pinOffset = config.getInt("mcp.pinOffset", 0);
-
-        reader = new MCPDebounceReader(inputCount, addr, pinBase, pinOffset);
     } else {
         qWarning() << "No gpioType specified";
         exit(-1);

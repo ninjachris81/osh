@@ -12,7 +12,7 @@
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
-#include "mcpdebouncereader.h"
+#include "mcpreader.h"
 
 class SHARED_LIB_EXPORT GPIOWaterMeterController : public ControllerBase
 {
@@ -49,7 +49,7 @@ private:
     uint8_t m_sensorCount;
     uint8_t m_dataOffset;
     float m_stepAmountML;
-    MCPDebounceReader* m_debounceReader = nullptr;
+    GPIOReaderBase* m_reader = nullptr;
 
     QList<DoubleValue*> m_waterLevelMappings;
     QList<DoubleValue*> m_waterFlowMappings;

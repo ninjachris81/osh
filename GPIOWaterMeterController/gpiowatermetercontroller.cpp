@@ -45,8 +45,8 @@ void GPIOWaterMeterController::init() {
     int addr = m_config->getInt(this, "mcp.addr", 0x20);
     int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
 
-    m_debounceReader = new MCPDebounceReader(m_sensorCount, addr, pinBase, pinOffset);
-    connect(m_debounceReader, &MCPDebounceReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
+    m_reader = new MCPReader(m_sensorCount, addr, pinBase, pinOffset);
+    connect(m_reader, &MCPReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
 
     m_flowTimer.setInterval(4000);
 
@@ -56,7 +56,7 @@ void GPIOWaterMeterController::init() {
 void GPIOWaterMeterController::start() {
     iDebug() << Q_FUNC_INFO;
 
-    m_debounceReader->start();
+    m_reader->start();
     m_flowTimer.start();
 }
 
