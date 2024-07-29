@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     if (gpioType == GPIOInputController::GPIO_TYPE_PLAIN) {
         reader = new PlainGPIOReader(pinList);
     } else if (gpioType == GPIOInputController::GPIO_TYPE_MCP) {
-        int pinBase = config.getInt("mcp.pinBase", 64);
+        int pinBase = config.getInt("mcp.pinBase", 65);
         int addr = config.getInt("mcp.addr", 0x20);
         int pinOffset = config.getInt("mcp.pinOffset", 0);
 
