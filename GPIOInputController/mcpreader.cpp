@@ -74,7 +74,7 @@ void MCPReader::readStates() {
 
         firstRun = false;
 
-        QThread::msleep(10);
+        QThread::msleep(50);
     }
 }
 
