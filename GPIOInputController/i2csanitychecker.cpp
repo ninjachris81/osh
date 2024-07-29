@@ -47,8 +47,10 @@ void I2CSanityChecker::onCheckBusses() {
 
         for (QString dev : devices) {
             if (dev != "--") {
-                if (m_devList.contains(dev.toInt())) {
-                    foundDevs.append(dev.toInt());
+                bool ok;
+                int devDec = dev.toInt(&ok, 16);
+                if (m_devList.contains(devDec)) {
+                    foundDevs.append(devDec);
                 }
             }
         }

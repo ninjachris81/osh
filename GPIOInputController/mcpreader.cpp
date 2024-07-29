@@ -40,7 +40,7 @@ bool MCPReader::open() {
     for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
         pinMode (m_pinOffset + i, INPUT) ;
-        pullUpDnControl ( m_pinOffset + i, PUD_UP);
+        pullUpDnControl ( m_pinBase + m_pinOffset + i, PUD_UP);
 #endif
     }
 
@@ -55,7 +55,7 @@ void MCPReader::readStates() {
 
         for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
-            bool state = digitalRead(m_pinOffset + i) == LOW;
+            bool state = digitalRead(m_pinBase + m_pinOffset + i) == LOW;
 #else
             bool state = false;
 #endif
