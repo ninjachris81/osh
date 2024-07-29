@@ -82,6 +82,9 @@ bool MCPDebounceReader::open() {
     // setup pins
     for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
+        pinMode (m_pinBase + m_pinOffset + i, INPUT) ;
+        pullUpDnControl ( m_pinBase + m_pinOffset + i, PUD_UP);
+
         switch(i) {
         case 0:
             wiringPiISR(m_pinBase + m_pinOffset + i, INT_EDGE_BOTH, &MCPDebounceReader::onInterrupt0);
