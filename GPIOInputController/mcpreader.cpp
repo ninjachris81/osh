@@ -65,7 +65,7 @@ void MCPReader::readStates() {
                 Q_EMIT(stateChanged(i, state));
             }
 
-            debugStr.append(QString::number(i) + "=" + state);
+            debugStr.append(QString::number(i) + "=" + state + " ");
         }
 
         if (m_enableDebug) {
