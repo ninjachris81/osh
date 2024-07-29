@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         int addr = config.getInt("mcp.addr", 0x20);
         int pinOffset = config.getInt("mcp.pinOffset", 0);
 
-        reader = new MCPReader(inputCount, addr, pinBase);
+        reader = new MCPReader(inputCount, addr, pinBase, pinOffset);
     } else {
         qWarning() << "No gpioType specified";
         exit(-1);
