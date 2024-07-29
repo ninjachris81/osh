@@ -2,8 +2,8 @@
 
 #include <QDebug>
 
-MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, QObject *parent) : GPIOReaderBase(inputCount, parent),
-  m_pinBase(pinBase), m_addr(addr)
+MCPReader::MCPReader(quint8 inputCount, int addr, int pinBase, int pinOffset, QObject *parent) : GPIOReaderBase(inputCount, parent),
+  m_pinBase(pinBase), m_addr(addr), m_pinOffset(pinOffset)
 {
 
 }
@@ -39,8 +39,8 @@ bool MCPReader::open() {
     // setup pins
     for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
-        pinMode (m_pinBase + i, INPUT) ;
-        pullUpDnControl ( m_pinBase + i, PUD_UP);
+        pinMode (m_pinOffset + i, INPUT) ;
+        pullUpDnControl ( m_pinOffset + i, PUD_UP);
 #endif
     }
 
@@ -55,7 +55,7 @@ void MCPReader::readStates() {
 
         for (quint8 i=0;i<m_inputCount;i++) {
 #ifdef __linux__
-            bool state = digitalRead(m_pinBase + i) == LOW;
+            bool state = digitalRead(m_pinOffset + i) == LOW;
 #else
             bool state = false;
 #endif
