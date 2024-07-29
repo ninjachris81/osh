@@ -1,5 +1,5 @@
-#ifndef MCPREADER_H
-#define MCPREADER_H
+#ifndef MCPDEBOUNCEREADER_H
+#define MCPDEBOUNCEREADER_H
 
 #include <QObject>
 #include <QThread>
@@ -48,4 +48,4 @@ signals:
 public slots:
 };
 
-#endif // MCPREADER_H
+#endif // MCPDEBOUNCEREADER_H
