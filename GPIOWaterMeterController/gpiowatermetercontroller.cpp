@@ -116,7 +116,10 @@ void GPIOWaterMeterController::onStateChanged(quint8 index, bool state) {
         if (waterLevel->rawValue().isNull()) {
             iWarning() << "No initial water level - setting 0";
             waterLevel->updateValue(0.0, false);
+        } else {
+            iInfo() << "Resuming at water level" << waterLevel->rawValue();
         }
+
         waterLevel->updateValue(waterLevel->rawValue().toDouble() + (m_stepAmountML / 1000 / 2), true);
         m_valueManager->publishValue(waterLevel);
     }
