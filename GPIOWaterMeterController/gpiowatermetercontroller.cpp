@@ -13,6 +13,7 @@
 #include "value/doublevalue.h"
 #include "value/integervalue.h"
 #include "actor/valueactor.h"
+#include "datamodel/datamodelmanager.h"
 #include "communication/mqtt/mqttcommunicationmanagerbase.h"
 
 GPIOWaterMeterController::GPIOWaterMeterController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
@@ -22,6 +23,12 @@ GPIOWaterMeterController::GPIOWaterMeterController(ControllerManager *manager, Q
 
 void GPIOWaterMeterController::init() {
     iDebug() << Q_FUNC_INFO;
+
+    REQUIRE_MANAGER_X(m_manager, ClientValueManager);
+    ClientValueManager *valueManager = m_manager->getManager<ClientValueManager>(ClientValueManager::MANAGER_ID);
+
+    REQUIRE_MANAGER_X(m_manager, DatamodelManager);
+    DatamodelManager *datamodelManager = m_manager->getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
 
     REQUIRE_MANAGER_X(m_manager, ClientSystemWarningsManager);
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
@@ -51,6 +58,8 @@ void GPIOWaterMeterController::init() {
     m_flowTimer.setInterval(4000);
 
     m_waterFlows.clear();
+
+    bindValueManager(valueManager, datamodelManager->datamodel());
 }
 
 void GPIOWaterMeterController::start() {
@@ -84,9 +93,6 @@ void GPIOWaterMeterController::bindValueManager(ClientValueManager* valueManager
             iWarning() << "Value not in datamodel" << i << waterFlow << waterLevel;
             Q_ASSERT(waterFlow != nullptr);
             Q_ASSERT(waterLevel != nullptr);
-        } else {
-            if (waterFlow->rawValue().isNull()) waterFlow->updateValue(0.0, false);
-            if (waterLevel->rawValue().isNull()) waterLevel->updateValue(0.0, false);
         }
 
         waterLevel->withAlwaysEmit(true);
@@ -107,6 +113,10 @@ void GPIOWaterMeterController::onStateChanged(quint8 index, bool state) {
     DoubleValue* waterLevel = m_waterLevelMappings.value(index);
 
     if (waterLevel != nullptr) {
+        if (waterLevel->rawValue().isNull()) {
+            iWarning() << "No initial water level - setting 0";
+            waterLevel->updateValue(0.0, false);
+        }
         waterLevel->updateValue(waterLevel->rawValue().toDouble() + (m_stepAmountML / 1000 / 2), true);
         m_valueManager->publishValue(waterLevel);
     }

@@ -27,8 +27,6 @@ public:
 
     /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
-    void bindValueManager(ClientValueManager *valueManager, DatamodelBase *datamodel);
-
     void onStateChanged(quint8 index, bool state);
     void onErrorOccurred();
 
@@ -38,6 +36,8 @@ private slots:
     void onCalculateFlow();
 
 private:
+    void bindValueManager(ClientValueManager *valueManager, DatamodelBase *datamodel);
+
     QMutex m_flowCounterMutex;
     QTimer m_flowTimer;
 
