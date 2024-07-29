@@ -102,7 +102,7 @@ void GPIOWaterMeterController::bindValueManager(ClientValueManager* valueManager
 }
 
 void GPIOWaterMeterController::onStateChanged(quint8 index, bool state) {
-    iDebug() << Q_FUNC_INFO << index << state;
+    iInfo() << Q_FUNC_INFO << index << state;
 
     DoubleValue* waterLevel = m_waterLevelMappings.value(index);
 
