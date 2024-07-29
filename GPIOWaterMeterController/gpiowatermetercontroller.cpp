@@ -55,7 +55,7 @@ void GPIOWaterMeterController::init() {
     m_reader = new MCPReader(m_sensorCount, addr, pinBase, pinOffset, false);
     connect(m_reader, &MCPReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
 
-    m_flowTimer.setInterval(4000);
+    m_flowTimer.setInterval(3000);
 
     m_waterFlows.clear();
 
@@ -151,7 +151,7 @@ void GPIOWaterMeterController::onCalculateFlow() {
     float buff[m_sensorCount];      // as L/min
 
     for (quint8 i = 0; i<m_sensorCount;i++) {
-        buff[i] = m_stepAmountML * m_waterFlows[i] / 1000 / 2;
+        buff[i] = (m_stepAmountML * m_waterFlows[i] / 1000 / 2) * 20;       // 20 = 60 / interval
         m_waterFlows[i] = 0;
     }
 
