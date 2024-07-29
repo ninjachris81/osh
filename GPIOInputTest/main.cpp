@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     } else if (gpioType == GPIOInputController::GPIO_TYPE_MCP) {
         int pinBase = config.getInt("mcp.pinBase", 64);
         int addr = config.getInt("mcp.addr", 0x20);
+        int pinOffset = config.getInt("mcp.pinOffset", 0);
 
         reader = new MCPReader(inputCount, addr, pinBase);
     } else {
