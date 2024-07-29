@@ -135,7 +135,7 @@ void GPIOWaterMeterController::retrieveStatus() {
 void GPIOWaterMeterController::onCalculateFlow() {
     m_flowCounterMutex.lock();
 
-    float buff[m_sensorCount];
+    float buff[m_sensorCount];      // as L/min
 
     for (quint8 i = 0; i<m_sensorCount;i++) {
         buff[i] = m_stepAmountML * m_waterFlows[i] / 1000;
@@ -145,10 +145,12 @@ void GPIOWaterMeterController::onCalculateFlow() {
     m_flowCounterMutex.unlock();
 
     for (quint8 i = 0; i<m_sensorCount;i++) {
-        DoubleValue* waterLevel = m_waterLevelMappings.value(i);
+        DoubleValue* waterFlow = m_waterFlowMappings.value(i);
 
-        if (waterLevel->updateValue(buff[i], false)) {
-            m_valueManager->publishValue(waterLevel);
+        iDebug() << i << buff[i];
+
+        if (waterFlow->updateValue(buff[i], false)) {
+            m_valueManager->publishValue(waterFlow);
         }
     }
 
