@@ -121,10 +121,10 @@ void AudioController2::startPlayback(AudioPlaybackActor *audioActor) {
         AudioProcessWrapperBase *proc;
         if (url.endsWith(".wav")) {
             iInfo() << "Launch new aplay";
-            proc = new APlayProcessWrapper(m_config->getString("aplay", "/usr/bin/aplay"), audioActor);
+            proc = new APlayProcessWrapper(m_config->getString(this, "aplay", "/usr/bin/aplay"), audioActor);
         } else {
             iInfo() << "Launch new mpg123";
-            proc = new MPG123ProcessWrapper(m_config->getString("mpg123", "/usr/bin/mpg123"), audioActor);
+            proc = new MPG123ProcessWrapper(m_config->getString(this, "mpg123", "/usr/bin/mpg123"), audioActor);
         }
 
         connect(proc, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, &AudioController2::onProcessFinished);
