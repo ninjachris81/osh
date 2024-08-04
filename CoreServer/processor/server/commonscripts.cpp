@@ -518,17 +518,20 @@ void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
 
 
 bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
-    Q_UNUSED(soundValue)
-
     iInfo() << Q_FUNC_INFO;
 
     ActorBase* actor = m_actorManager->getActor(actorId);
     Q_ASSERT(actor != nullptr);
 
-    AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
-    Q_ASSERT(playbackActor != nullptr);
-    m_localStorage->setObject("initPlaySoundOnCmd", "soundActorId", actor->fullId(), playbackActor);
-    m_localStorage->set("initPlaySoundOnCmd", "cmdValue", actor->fullId(), cmdValue);
+    quint8 index = 0;
+    for (QString playbackActorFullId : soundActorId.split("|", QString::SkipEmptyParts)) {
+        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
+        Q_ASSERT(playbackActor != nullptr);
+        m_localStorage->setObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index, playbackActor);
+        m_localStorage->set("initPlaySoundOnCmd", "cmdValue", actor->fullId() + "_" + index, cmdValue);
+        m_localStorage->set("initPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index, soundValue);
+        index++;
+    }
 
     Helpers::safeConnect(actor, &ActorBase::cmdTriggered, this, &CommonScripts::onInitPlaySoundOnCmd_triggeredCmd, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS)));
 
@@ -541,17 +544,24 @@ void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd) {
     ActorBase* actor = static_cast<ActorBase*>(sender());
     actor::ACTOR_CMDS targetCmd = static_cast<actor::ACTOR_CMDS>(m_localStorage->get("initPlaySoundOnCmd", "cmdValue", actor->fullId()).toInt());
     if (cmd == targetCmd) {
-        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnCmd", "soundActorId", actor->fullId()));
-        if (m_localStorage->contains("onInitPlaySoundOnCmd", "urlValue", actor->fullId())) {
-            QString soundValue = m_localStorage->get("onInitPlaySoundOnCmd", "soundValue", actor->fullId()).toString();
-            StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("onInitPlaySoundOnCmd", "urlValue", actor->fullId()));
-            iDebug() << "Setting url" << soundValue;
-            publishValue(urlValue, soundValue);
-        } else {
-            // playback static url
-            iDebug() << "Playback static url";
-        }
 
-        publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+        for (quint8 index = 0; index<255; index++) {
+            AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index));
+            if (playbackActor == nullptr) {
+                break;
+            }
+
+            if (m_localStorage->contains("onInitPlaySoundOnCmd", "urlValue", actor->fullId() + "_" + index)) {
+                QString soundValue = m_localStorage->get("onInitPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index).toString();
+                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("onInitPlaySoundOnCmd", "urlValue", actor->fullId() + "_" + index));
+                iDebug() << "Setting url" << soundValue;
+                publishValue(urlValue, soundValue);
+            } else {
+                // playback static url
+                iDebug() << "Playback static url";
+            }
+
+            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+        }
     }
 }
