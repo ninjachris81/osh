@@ -69,7 +69,7 @@ void MCPReader::readStates() {
                 }
             }
 
-            debugStr.append(QString::number(i) + "=" + state + " ");
+            debugStr.append(QString::number(i) + "=" + QString::number(state) + " ");
         }
 
         if (m_enableDebug) {
