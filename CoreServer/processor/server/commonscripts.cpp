@@ -528,7 +528,7 @@ bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString so
     quint8 index = 0;
     for (QString playbackActorFullId : soundActorId.split("|", QString::SkipEmptyParts)) {
         iInfo() << "Register" << playbackActorFullId;
-        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(soundActorId));
+        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(playbackActorFullId));
         Q_ASSERT(playbackActor != nullptr);
         m_localStorage->setObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index, playbackActor);
         m_localStorage->set("initPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index, soundValue);

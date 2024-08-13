@@ -54,10 +54,9 @@ void MCPReader::readStates() {
         debugStr.clear();
 
         for (quint8 i=0;i<m_inputCount;i++) {
-#ifdef __linux__
-            bool state = digitalRead(m_pinBase + m_pinOffset + i) == LOW;
-#else
             bool state = false;
+#ifdef __linux__
+            state = digitalRead(m_pinBase + m_pinOffset + i) == LOW;
 #endif
 
             if (m_firstRun || state != m_states->at(i)) {
