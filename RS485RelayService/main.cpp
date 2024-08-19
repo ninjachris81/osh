@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    RS485RelayController relayController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "allRelays0"), RS485RelayController::RS485_SERIAL_32PORT, RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT));
+    RS485RelayController relayController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "allRelays0"), static_cast<RS485RelayController::RELAY_MODEL>(config.getInt(&clientManager, "relayModel", RS485RelayController::RS485_SERIAL_32PORT)));
     quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
     controllerManager.registerController(&relayController);
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     ValueGroup *actorGroup = datamodelManager.datamodel()->valueGroup(relayController.id());
     Q_ASSERT(actorGroup != nullptr);
 
-    for (quint8 i=offset;i<RS485RelayController::getRelayCount(RS485RelayController::RS485_SERIAL_32PORT) + offset;i++) {
+    for (quint8 i=offset;i<relayController.relayCount() + offset;i++) {
         qDebug() << "Init actor" << actorGroup->id() << i;
         DigitalActor* actor = static_cast<DigitalActor*>(actorManager.getActor(actorGroup, QString::number(i)));
         Q_ASSERT(actor != nullptr);

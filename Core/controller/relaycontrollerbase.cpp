@@ -41,3 +41,7 @@ quint8 RelayControllerBase::bindActor(DigitalActor* actor) {
     });
     return relayIndex;
 }
+
+quint8 RelayControllerBase::relayCount() {
+    return m_relayCount;
+}

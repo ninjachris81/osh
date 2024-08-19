@@ -6,7 +6,7 @@
 
 #include "controller/controllermanager.h"
 
-RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, quint8 relayCount, QObject *parent) : RelayControllerBase(manager, id, relayCount, parent), m_model(model)
+RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, QObject *parent) : RelayControllerBase(manager, id, getRelayCount(model), parent), m_model(model)
 {
     connect(&m_statusTimer, &QTimer::timeout, this, &RS485RelayController::retrieveStatus);
 
@@ -73,6 +73,8 @@ quint8 RS485RelayController::getRelayCount(RELAY_MODEL model) {
     switch (model) {
     case RS485_SERIAL_32PORT:
         return 32;
+    case RS485_SERIAL_8PORT:
+        return 8;
     default:
         qWarning() << "Unknown relay model" << model;
         return 0;

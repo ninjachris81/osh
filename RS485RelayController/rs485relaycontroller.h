@@ -24,10 +24,11 @@ public:
     } m_currentStatus = INIT;
 
     enum RELAY_MODEL {
-        RS485_SERIAL_32PORT
+        RS485_SERIAL_32PORT,
+        RS485_SERIAL_8PORT
     } m_model;
 
-    RS485RelayController(ControllerManager* manager, QString id, RELAY_MODEL model, quint8 relayCount, QObject *parent = nullptr);
+    RS485RelayController(ControllerManager* manager, QString id, RELAY_MODEL model, QObject *parent = nullptr);
     ~RS485RelayController();
 
     /*virtual*/ void init() override;

@@ -30,6 +30,8 @@ public:
 
     /*virtual*/ quint8 bindActor(DigitalActor *actor);
 
+    quint8 relayCount();
+
 protected:
     void setStatus(quint8 relayIndex, bool status);
 
