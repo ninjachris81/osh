@@ -1,0 +1,1 @@
+DEVPATH=="/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1:1.0/ttyUSB?/tty/ttyUSB?",SYMLINK+="tty_allRelays2",TAG+="systemd"
