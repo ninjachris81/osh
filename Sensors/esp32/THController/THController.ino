@@ -52,10 +52,10 @@ MQTTController mqttController;
 OTAController otaController;
 
 #if HAS_TEMP_CONTROLLER
-  TempControllerAHTx tempController("temps", "hums");
+  TempControllerAHTx tempController(TEMPS_VALUE_GROUP_ID, HUMS_VALUE_GROUP_ID);
 #endif
 #if HAS_TEMP_CONTROLLER_ONEWIRE
-  TempControllerDS18x tempControllerOneWire("temps", PIN_TEMP_SENSOR_ONEWIRE, 80);
+  TempControllerDS18x tempControllerOneWire(TEMPS_VALUE_GROUP_ID);
 #endif
 #if HAS_MOTION_CONTROLLER
   MotionController motionController("motions_pirs", "motions_radars");
@@ -76,7 +76,7 @@ OTAController otaController;
   ReedController reedController("reedContacts");
 #endif
 #if HAS_TOF_CONTROLLER
-  TOFControllerAJSR04M tofController("waterLevels");
+  TOFControllerAJSR04M tofController("waterLevels1");
 #endif
 
 void setup() {

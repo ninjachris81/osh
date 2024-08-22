@@ -6,8 +6,6 @@
 #include "TaskIDs.h"
 //#include "MqttController.h"
 
-#define BRIGHTNESS_INTERVAL_MS 6000
-
 class BrightnessControllerGL55x : public AbstractIntervalTask {
 public:
   BrightnessControllerGL55x(String valueGroup);

@@ -7,7 +7,6 @@
 #include "TaskIDs.h"
 //#include "MqttController.h"
 
-#define TEMP_INTERVAL_MS 6000
 #define TEMP_MIN -10
 #define TEMP_MAX 50
 

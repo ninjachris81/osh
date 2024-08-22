@@ -28,6 +28,13 @@
   #define HAS_RELAY_CONTROLLER false
   #define HAS_REED_CONTROLLER false
   #define HAS_TOF_CONTROLLER false
+
+  #define TEMP_INTERVAL_MS 6000
+  #define TOF_INTERVAL_MS  2000
+  #define BRIGHTNESS_INTERVAL_MS 6000
+  
+  #define TEMPS_VALUE_GROUP_ID "temps0"
+  #define HUMS_VALUE_GROUP_ID "hums0"
 #elif ACTIVE_CONFIG == CONFIG_WATER_SENSOR
   #warning Water Sensor Configuration
   #define DEVICE_ID_PREFIX "00"
@@ -43,6 +50,13 @@
   #define HAS_RELAY_CONTROLLER false
   #define HAS_REED_CONTROLLER false
   #define HAS_TOF_CONTROLLER false
+
+  #define TEMP_INTERVAL_MS 6000
+  #define TOF_INTERVAL_MS  2000
+  #define BRIGHTNESS_INTERVAL_MS 6000
+  
+  #define TEMPS_VALUE_GROUP_ID "temps0"
+  #define HUMS_VALUE_GROUP_ID "hums0"
 #elif ACTIVE_CONFIG == CONFIG_SHUTTER_SENSOR
   #warning Shutter Sensor Configuration
   #define DEVICE_ID_PREFIX "00"
@@ -58,6 +72,13 @@
   #define HAS_RELAY_CONTROLLER true
   #define HAS_REED_CONTROLLER true
   #define HAS_TOF_CONTROLLER false
+
+  #define TEMP_INTERVAL_MS 6000
+  #define TOF_INTERVAL_MS  2000
+  #define BRIGHTNESS_INTERVAL_MS 6000
+  
+  #define TEMPS_VALUE_GROUP_ID "temps0"
+  #define HUMS_VALUE_GROUP_ID "hums0"
 #elif ACTIVE_CONFIG == CONFIG_TANK_SENSOR
   #warning Tank Sensor Configuration
   #define DEVICE_ID_PREFIX "00"
@@ -73,4 +94,11 @@
   #define HAS_RELAY_CONTROLLER false
   #define HAS_REED_CONTROLLER false
   #define HAS_TOF_CONTROLLER true
+
+  #define TEMP_INTERVAL_MS 120000
+  #define TOF_INTERVAL_MS  120000
+  #define BRIGHTNESS_INTERVAL_MS 6000
+  
+  #define TEMPS_VALUE_GROUP_ID "temps1"
+  #define HUMS_VALUE_GROUP_ID "hums1"
 #endif

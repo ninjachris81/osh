@@ -24,8 +24,10 @@ void FlashController::update() {
     if (incomingData.length() <= 3 && isValidNumber(incomingData)) {
       int index = incomingData.toInt();
 
-      if (index >0 && index<256) {
+      if (index>0 && index<256) {
         setIndex((uint8_t) index);
+      } else {
+        LOG_PRINTLN(F("Invalid number"));
       }
   
     } else {

@@ -7,8 +7,6 @@
 #include "TaskIDs.h"
 //#include "MqttController.h"
 
-#define TOF_INTERVAL_MS 2000
-
 class TOFControllerCJVL53 : public AbstractIntervalTask {
 public:
   TOFControllerCJVL53(String valueGroup);

@@ -50,7 +50,7 @@ void MQTTController::reconnect() {
   if (m_clientId.length() > 0) {
     if (!client.connected()) {
        if (client.connect(m_clientId.c_str())) {
-           LOG_PRINTLN(F("MQTT broker"));
+           LOG_PRINTLN(F("MQTT connected"));
            for (uint8_t i=0;i<m_callbackHandlerCount;i++) m_callbackHandlers[i]->onConnected();
            subscribeTopics();
            taskManager->getTask<LEDController*>(LED_CONTROLLER)->setFlashFrequency(LED_FREQUENCY_OK);
