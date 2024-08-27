@@ -58,11 +58,14 @@ void RS485EnergyMeterController::init() {
         //registerInput(OrnoWe514::OrnoWe514_Input_Registers::WE514_TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
         break;
     case OrnoWe::WE516:
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_FREQUENCY, QVariant::Double, 0.01, true);
+        /*
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P1, QVariant::Double, 0.01, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P2, QVariant::Double, 0.01, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P3, QVariant::Double, 0.01, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER, QVariant::Double, 0.001, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_TOTAL_ACTIVE_ENERGY, QVariant::Double, 0.001, true);
+        */
         break;
     }
 
@@ -205,7 +208,7 @@ void RS485EnergyMeterController::_readInput(int reg, RetrieveValue val) {
 }
 
 QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVariant::Type targetType, double multiplier, bool twoByte) {
-    iDebug() << values;
+    iDebug() << Q_FUNC_INFO << values;
 
     double tempValue = 0.0;
     if (twoByte && values.size() == 2) {
@@ -214,12 +217,18 @@ QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVarian
         result_arr[0] = values.at(1);
         result_arr[1] = values.at(0);
         tempValue = result;
-    } else if (values.size() == 1){
+    } else if (!twoByte && values.size() == 1){
         tempValue = values.at(0);
+    } else {
+        iWarning() << "Unexpected value format";
+        return QVariant();
     }
     tempValue *= multiplier;
 
     QVariant returnVal = QVariant::fromValue(tempValue);
+
+    iDebug() << returnVal;
+
     returnVal.convert(targetType);
 
     iDebug() << returnVal;
