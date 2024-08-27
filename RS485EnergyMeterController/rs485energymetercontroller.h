@@ -8,7 +8,7 @@
 #include "datamodel/datamodelbase.h"
 #include "sharedlib.h"
 
-#include "orno_we_514.h"
+#include "orno.h"
 
 #include "controller/controllerbase.h"
 #include "warn/client/clientsystemwarningsmanager.h"
@@ -43,8 +43,8 @@ protected slots:
     void retrieveStatus();
 
 private:
-    void registerInput(OrnoWe514::OrnoWe514_Input_Registers reg, QVariant::Type type, double multiplier, bool twoByte);
-    void _readInput(OrnoWe514::OrnoWe514_Input_Registers reg, RetrieveValue val);
+    void registerInput(int reg, QVariant::Type type, double multiplier, bool twoByte);
+    void _readInput(int reg, RetrieveValue val);
     QVariant parseValue(QVector<quint16> values, QVariant::Type targetType, double multiplier, bool twoByte);
 
     ClientSystemWarningsManager* m_warnManager;
@@ -52,12 +52,14 @@ private:
     QModbusRtuSerialMaster m_modbusClient;
     QTimer m_statusTimer;
 
-    QMap<OrnoWe514::OrnoWe514_Input_Registers, RetrieveValue> m_inputRegisters;
-    QMap<OrnoWe514::OrnoWe514_Input_Registers, ValueBase*> m_inputMappings;
+    QMap<int, RetrieveValue> m_inputRegisters;
+    QMap<int, ValueBase*> m_inputMappings;
 
     ValueGroup* m_valueGroup;
 
     int m_slaveId = 1;
+
+    OrnoWe::OrnoTypes m_type;
 
 };
 

@@ -29,7 +29,7 @@ SOURCES += \
     rs485energymetercontroller.cpp
 
 HEADERS += \
-    orno_we_514.h \
+    orno.h \
     rs485energymetercontroller.h
 
 unix {
