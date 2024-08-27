@@ -57,6 +57,14 @@ public:
         WE516_TOTAL_ACTIVE_ENERGY_P2 = 0x0104,
         WE516_TOTAL_ACTIVE_ENERGY_P3 = 0x0106,
     };
+
+    static float u2fA(uint16_t a, uint16_t b)
+    {
+      float result = 0;
+      *(((uint16_t*)&result)+0) = a;
+      *(((uint16_t*)&result)+1) = b;
+      return result;
+    }
 };
 
 #endif // ORNOH_H

@@ -58,14 +58,12 @@ void RS485EnergyMeterController::init() {
         //registerInput(OrnoWe514::OrnoWe514_Input_Registers::WE514_TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
         break;
     case OrnoWe::WE516:
-        //registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_FREQUENCY, QVariant::Double, 0.01, true);
-        /*
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P1, QVariant::Double, 0.01, true);
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P2, QVariant::Double, 0.01, true);
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P3, QVariant::Double, 0.01, true);
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER, QVariant::Double, 0.001, true);
-        */
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_TOTAL_ACTIVE_ENERGY, QVariant::Double, 0.001, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_FREQUENCY, QVariant::Double, 1, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P1, QVariant::Double, 1, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P2, QVariant::Double, 1, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P3, QVariant::Double, 1, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER, QVariant::Double, 1, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_TOTAL_ACTIVE_ENERGY, QVariant::Double, 1, true);
         break;
     }
 
@@ -191,7 +189,12 @@ void RS485EnergyMeterController::_readInput(int reg, RetrieveValue val) {
             iDebug() << reg << value;
             if (!value.isNull()) {
                 ValueBase *v = m_inputMappings.value(reg);
-                m_valueManager->updateAndPublishValue(v, value);
+
+                if (v != nullptr) {
+                    m_valueManager->updateAndPublishValue(v, value);
+                } else {
+                    iWarning() << "Missing mapping for" << reg;
+                }
             } else {
                 iWarning() << "Value is null";
             }
@@ -208,7 +211,7 @@ void RS485EnergyMeterController::_readInput(int reg, RetrieveValue val) {
 }
 
 QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVariant::Type targetType, double multiplier, bool twoByte) {
-    iDebug() << Q_FUNC_INFO << values;
+    iDebug() << Q_FUNC_INFO << values << targetType;
 
     double tempValue = 0.0;
     if (twoByte && values.size() == 2) {
@@ -216,7 +219,7 @@ QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVarian
         quint16* result_arr = (quint16*)& result;
         result_arr[0] = values.at(1);
         result_arr[1] = values.at(0);
-        tempValue = result;
+        tempValue = OrnoWe::u2fA(values.at(1), values.at(0));
     } else if (!twoByte && values.size() == 1){
         tempValue = values.at(0);
     } else {
