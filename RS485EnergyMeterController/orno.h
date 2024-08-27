@@ -52,7 +52,7 @@ public:
         WE514_CURRENT_P2 = 0x13C,
         WE514_CURRENT_P3 = 0x13E,
 
-        WE514_POWER_P1 = 0x141,
+        WE514_POWER_P1 = 0x140,
         WE514_POWER_P2 = 0x142,
         WE514_POWER_P3 = 0x144,
 
