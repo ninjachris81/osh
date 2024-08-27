@@ -48,11 +48,11 @@ public:
         WE514_VOLTAGE_P2 = 0x132,
         WE514_VOLTAGE_P3 = 0x133,
 
-        WE514_CURRENT_P1 = 0x139,
-        WE514_CURRENT_P2 = 0x13B,
-        WE514_CURRENT_P3 = 0x13D,
+        WE514_CURRENT_P1 = 0x13A,
+        WE514_CURRENT_P2 = 0x13C,
+        WE514_CURRENT_P3 = 0x13E,
 
-        WE514_POWER_P1 = 0x140,
+        WE514_POWER_P1 = 0x141,
         WE514_POWER_P2 = 0x142,
         WE514_POWER_P3 = 0x144,
 
