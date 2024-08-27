@@ -51,10 +51,10 @@ void RS485EnergyMeterController::init() {
         registerInput(OrnoWe::VOLTAGE_P1, OrnoWe::OrnoWe514_Input_Registers::WE514_VOLTAGE_P1, QVariant::Int, 0.01, false);
         //registerInput(OrnoWe514_Input_Registers::WE514_PHASE_VOLTAGE_V2, QVariant::Int, 0.01);
         //registerInput(OrnoWe514_Input_Registers::WE514_PHASE_VOLTAGE_V3, QVariant::Int, 0.01);
-        registerInput(OrnoWe::CURRENT_P1, OrnoWe::OrnoWe514_Input_Registers::WE514_CURRENT_P1, QVariant::Double, 0.001, true);
+        registerInput(OrnoWe::CURRENT_P1, OrnoWe::OrnoWe514_Input_Registers::WE514_CURRENT_P1, QVariant::Int, 0.001, false);
         //registerInput(OrnoWe514_Input_Registers::WE514_PHASE_CURRENT_I2, QVariant::Double, 0.001);
         //registerInput(OrnoWe514_Input_Registers::WE514_PHASE_CURRENT_I3, QVariant::Double, 0.001);
-        registerInput(OrnoWe::POWER_P1, OrnoWe::OrnoWe514_Input_Registers::WE514_POWER_P1, QVariant::Double, 0.001, true);
+        registerInput(OrnoWe::POWER_P1, OrnoWe::OrnoWe514_Input_Registers::WE514_POWER_P1, QVariant::Int, 0.001, true);
         //registerInput(OrnoWe514::OrnoWe514_Input_Registers::WE514_TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
         break;
     case OrnoWe::WE516:
@@ -220,7 +220,12 @@ QVariant RS485EnergyMeterController::parseValue(QVector<quint16> values, QVarian
         quint16* result_arr = (quint16*)& result;
         result_arr[0] = values.at(1);
         result_arr[1] = values.at(0);
-        tempValue = OrnoWe::u2fA(values.at(1), values.at(0));
+
+        if (targetType == QVariant::Double) {
+            tempValue = OrnoWe::u2fA(values.at(1), values.at(0));
+        } else {
+            tempValue = result;
+        }
     } else if (!twoByte && values.size() == 1){
         tempValue = values.at(0);
     } else {
