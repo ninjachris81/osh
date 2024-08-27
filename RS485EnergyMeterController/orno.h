@@ -36,7 +36,7 @@ public:
     Q_ENUM(OrnoWe514_Input_Registers)
 
     enum OrnoWe516_Input_Registers {
-        WE516_FREQUENCY = 0x0014,
+        WE516_FREQUENCY = 0x0015,
 
         WE516_PHASE_VOLTAGE_V1 = 0x000E,
         WE516_PHASE_VOLTAGE_V2 = 0x0010,
