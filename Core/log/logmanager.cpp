@@ -101,19 +101,19 @@ void LogManager::messageHandler(QtMsgType type, const QMessageLogContext &contex
 
     switch (type) {
     case QtDebugMsg:
-        fprintf(stdout, "D: [%s] (%s:%u, %s)\n", context.category, localMsg.constData(), context.line, context.function);
+        fprintf(stdout, "D: [%s] (%s, %s)\n", context.category, localMsg.constData(), context.function);
         break;
     case QtInfoMsg:
-        fprintf(stdout, "I: [%s] (%s:%u, %s)\n", context.category, localMsg.constData(), context.line, context.function);
+        fprintf(stdout, "I: [%s] (%s, %s)\n", context.category, localMsg.constData(), context.function);
         break;
     case QtWarningMsg:
-        fprintf(stdout, "W: [%s] (%s:%u, %s)\n", context.category, localMsg.constData(), context.line, context.function);
+        fprintf(stdout, "W: [%s] (%s, %s)\n", context.category, localMsg.constData(), context.function);
         break;
     case QtCriticalMsg:
-        fprintf(stdout, "C: [%s] (%s:%u, %s)\n", context.category, localMsg.constData(), context.line, context.function);
+        fprintf(stdout, "C: [%s] (%s, %s)\n", context.category, localMsg.constData(), context.function);
         break;
     case QtFatalMsg:
-        fprintf(stdout, "F: [%s] (%s:%u, %s)\n", context.category, localMsg.constData(), context.line, context.function);
+        fprintf(stdout, "F: [%s] (%s, %s)\n", context.category, localMsg.constData(), context.function);
         abort();
     }
 
