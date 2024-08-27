@@ -58,7 +58,7 @@ void RS485EnergyMeterController::init() {
         //registerInput(OrnoWe514::OrnoWe514_Input_Registers::WE514_TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
         break;
     case OrnoWe::WE516:
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_FREQUENCY, QVariant::Double, 0.01, true);
+        //registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_FREQUENCY, QVariant::Double, 0.01, true);
         /*
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P1, QVariant::Double, 0.01, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P2, QVariant::Double, 0.01, true);
