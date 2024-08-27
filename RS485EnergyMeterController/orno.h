@@ -49,14 +49,16 @@ public:
         WE514_VOLTAGE_P3 = 0x133,
 
         WE514_CURRENT_P1 = 0x139,
-        WE514_CURRENT_P2 = 0x13b,
-        WE514_CURRENT_P3 = 0x13d,
+        WE514_CURRENT_P2 = 0x13B,
+        WE514_CURRENT_P3 = 0x13D,
 
         WE514_POWER_P1 = 0x140,
         WE514_POWER_P2 = 0x142,
         WE514_POWER_P3 = 0x144,
 
         WE514_POWER_TOTAL = 0x146,
+
+        WE514_ENERGY_TOTAL = 0xA000
     };
     Q_ENUM(OrnoWe514_Input_Registers)
 
