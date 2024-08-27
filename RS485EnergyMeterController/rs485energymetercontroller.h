@@ -59,7 +59,7 @@ private:
 
     int m_slaveId = 1;
 
-    OrnoWe::OrnoTypes m_type;
+    OrnoWe::OrnoTypes m_type = OrnoWe::WE514;
 
 };
 

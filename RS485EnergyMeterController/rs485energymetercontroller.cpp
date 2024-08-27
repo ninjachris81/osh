@@ -24,7 +24,16 @@ void RS485EnergyMeterController::init() {
 
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
-    m_type = static_cast<OrnoWe::OrnoTypes>(m_config->getInt(this, "type", 0));
+    QString type = m_config->getString(this, "type", "we514");
+    if (type == "we514") {
+        m_type = OrnoWe::WE514;
+    } else if (type == "we516") {
+        m_type = OrnoWe::WE516;
+    } else {
+        iWarning() << "Unknown type" << type << "assuming" << m_type;
+    }
+
+    iInfo() << "Using type" << m_type;
 
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialPortNameParameter, m_config->getString(this, "serial.port", "COM1"));
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::EvenParity);
@@ -49,9 +58,9 @@ void RS485EnergyMeterController::init() {
         //registerInput(OrnoWe514::OrnoWe514_Input_Registers::WE514_TOTAL_ACTIVE_POWER, QVariant::Int, 0.001, true);
         break;
     case OrnoWe::WE516:
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P1, QVariant::Double, 0.01, false);
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P2, QVariant::Double, 0.01, false);
-        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P3, QVariant::Double, 0.01, false);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P1, QVariant::Double, 0.01, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P2, QVariant::Double, 0.01, true);
+        registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER_P3, QVariant::Double, 0.01, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_PHASE_ACTIVE_POWER, QVariant::Double, 0.001, true);
         registerInput(OrnoWe::OrnoWe516_Input_Registers::WE516_TOTAL_ACTIVE_ENERGY, QVariant::Double, 0.001, true);
         break;
