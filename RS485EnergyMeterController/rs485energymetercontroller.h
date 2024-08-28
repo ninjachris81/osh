@@ -31,6 +31,7 @@ public:
     struct RetrieveValue {
         OrnoWe::OrnoRegisters regType;
         QVariant::Type type;
+        QVariant::Type valueType;
         double multiplier;
         QString mqttName;
         bool twoByte;
@@ -44,9 +45,9 @@ protected slots:
     void retrieveStatus();
 
 private:
-    void registerInput(OrnoWe::OrnoRegisters regType, int reg, QVariant::Type type, double multiplier, bool twoByte);
+    void registerInput(OrnoWe::OrnoRegisters regType, int reg, QVariant::Type type, QVariant::Type valueType, double multiplier, bool twoByte);
     void _readInput(int reg, RetrieveValue val);
-    QVariant parseValue(QVector<quint16> values, QVariant::Type targetType, double multiplier, bool twoByte);
+    QVariant parseValue(QVector<quint16> values, QVariant::Type sourceType, QVariant::Type valueType, double multiplier, bool twoByte);
 
     ClientSystemWarningsManager* m_warnManager;
     ValueManagerBase* m_valueManager = nullptr;
