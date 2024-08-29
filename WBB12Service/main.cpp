@@ -26,15 +26,18 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("WBB12Service");
+    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "wbb12");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << ValueActor::staticMetaObject.className());
+    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << ValueActor::staticMetaObject.className(), QStringList() << valueGroup);
     ActorManager actorManager;
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -47,7 +50,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    WBB12Controller wbb12Controller(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "wbb12"));
+    WBB12Controller wbb12Controller(&controllerManager, valueGroup);
     controllerManager.registerController(&wbb12Controller);
 
     managerRegistration.init(&config);

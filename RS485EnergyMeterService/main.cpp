@@ -26,15 +26,18 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("EnergyMeterService");
+    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "energyMeter0");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false, false);
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false, QStringList(), QStringList() << valueGroup);
     ActorManager actorManager;
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -47,7 +50,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    RS485EnergyMeterController energyMeterController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "energyMeter0"));
+    RS485EnergyMeterController energyMeterController(&controllerManager, valueGroup);
     controllerManager.registerController(&energyMeterController);
 
     managerRegistration.init(&config);

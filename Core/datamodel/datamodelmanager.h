@@ -15,7 +15,7 @@ class SHARED_LIB_EXPORT DatamodelManager : public ManagerBase
 {
     Q_OBJECT
 public:
-    explicit DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, bool loadUsers, QStringList actorClassTypeFilter = QStringList(), QObject *parent = nullptr);
+    explicit DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, bool loadUsers, QStringList actorClassTypeFilter = QStringList(), QStringList valueGroupFilter = QStringList(), QObject *parent = nullptr);
 
     static QLatin1String MANAGER_ID;
 

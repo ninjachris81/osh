@@ -15,7 +15,7 @@
 
 QLatin1String DatamodelManager::MANAGER_ID = QLatin1String("DatamodelManager");
 
-DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, bool loadUsers, QStringList actorClassTypeFilter, QObject *parent) : ManagerBase(parent)
+DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, bool loadActors, bool loadValues, bool loadProcessorTasks, bool loadKnownDevices, bool loadUsers, QStringList actorClassTypeFilter, QStringList valueGroupFilter, QObject *parent) : ManagerBase(parent)
 {
     m_loadingOptions.loadKnownAreas = loadKnownAreas;
     m_loadingOptions.loadKnownRooms = loadKnownRooms;
@@ -25,9 +25,15 @@ DatamodelManager::DatamodelManager(bool loadKnownAreas, bool loadKnownRooms, boo
     m_loadingOptions.loadKnownDevices = loadKnownDevices;
     m_loadingOptions.loadUsers = loadUsers;
     m_loadingOptions.actorClassTypeFilter = actorClassTypeFilter;
+    m_loadingOptions.valueGroupFilter = valueGroupFilter;
 
     if (!actorClassTypeFilter.isEmpty() && !loadActors) {
         iWarning() << "Actor filter set, but actors not loaded";
+        Q_ASSERT(false);
+    }
+
+    if (!valueGroupFilter.isEmpty() && (!loadValues && !loadActors)) {
+        iWarning() << "Value Group filter set, but neither values or actors loaded";
         Q_ASSERT(false);
     }
 

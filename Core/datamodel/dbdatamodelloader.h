@@ -35,8 +35,8 @@ private:
     void loadKnownAreas(DynamicDatamodel *datamodel);
     void loadKnownRooms(DynamicDatamodel *datamodel);
     void loadValueGroups(DynamicDatamodel *datamodel);
-    void loadValues(DynamicDatamodel *datamodel);
-    void loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter);
+    void loadValues(DynamicDatamodel *datamodel, QStringList valueGroupFilter);
+    void loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter, QStringList valueGroupFilter);
     void loadProcessorVariables(DynamicDatamodel *datamodel);
     void loadProcessorTasks(DynamicDatamodel *datamodel);
     void loadKnownDevices(DynamicDatamodel *datamodel);

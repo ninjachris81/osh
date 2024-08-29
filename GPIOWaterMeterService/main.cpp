@@ -26,14 +26,14 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("WaterMeterService");
+    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "waterLevels0");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false, false);
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false, QStringList(), QStringList() << valueGroup);
     LogManager logManager;
-
-    QString groupdId = config.getString(&clientManager, "inputValueGroupId", "waterLevels0");
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    GPIOWaterMeterController waterLevelController(&controllerManager, groupdId);
+    GPIOWaterMeterController waterLevelController(&controllerManager, valueGroup);
     controllerManager.registerController(&waterLevelController);
 
     managerRegistration.init(&config);

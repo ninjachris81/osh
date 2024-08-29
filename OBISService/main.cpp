@@ -28,14 +28,17 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("EnergyMeterService");
+    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "obis");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false, false);
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false, QStringList(), QStringList() << valueGroup);
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -47,17 +50,17 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    OBISController2 obisController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "obis"));
+    OBISController2 obisController(&controllerManager, valueGroup);
     controllerManager.registerController(&obisController);
 
     managerRegistration.init(&config);
 
     qInfo() << "Init value group" << obisController.id();
-    ValueGroup *valueGroup = datamodelManager.datamodel()->valueGroup(obisController.id());
-    Q_ASSERT(valueGroup != nullptr);
+    ValueGroup *valueGroupObj = datamodelManager.datamodel()->valueGroup(obisController.id());
+    Q_ASSERT(valueGroupObj != nullptr);
 
     for (quint8 i=0;i<OBISController2::SML_INDEX::COUNT;i++) {
-        DoubleValue* value = static_cast<DoubleValue*>(valueManager.getValue(valueGroup, QString::number(i)));
+        DoubleValue* value = static_cast<DoubleValue*>(valueManager.getValue(valueGroupObj, QString::number(i)));
         Q_ASSERT(value != nullptr);
         obisController.bindValue(value);
     }

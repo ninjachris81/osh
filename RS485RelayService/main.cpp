@@ -26,15 +26,19 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("RelayService");
+    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "allRelays0");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << DigitalActor::staticMetaObject.className());
+    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << DigitalActor::staticMetaObject.className(), QStringList() << valueGroup);
     ActorManager actorManager;
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
+    commManager.setCustomActorValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -47,7 +51,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    RS485RelayController relayController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "allRelays0"), static_cast<RS485RelayController::RELAY_MODEL>(config.getInt(&clientManager, "relayModel", RS485RelayController::RS485_SERIAL_32PORT)));
+    RS485RelayController relayController(&controllerManager, valueGroup, static_cast<RS485RelayController::RELAY_MODEL>(config.getInt(&clientManager, "relayModel", RS485RelayController::RS485_SERIAL_32PORT)));
     quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
     controllerManager.registerController(&relayController);
 

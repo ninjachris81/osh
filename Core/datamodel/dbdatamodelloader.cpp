@@ -28,11 +28,11 @@ DatamodelBase *DBDatamodelLoader::load(ProcessorTaskFactory *processorTaskFactor
         }
 
         if (options.loadActors) {
-            loadActors(datamodel, options.actorClassTypeFilter);
+            loadActors(datamodel, options.actorClassTypeFilter, options.valueGroupFilter);
         }
 
         if (options.loadValues) {
-            loadValues(datamodel);
+            loadValues(datamodel, options.valueGroupFilter);
         }
 
         if (options.loadKnownRooms) {
@@ -107,12 +107,29 @@ void DBDatamodelLoader::loadValueGroups(DynamicDatamodel *datamodel) {
     }
 }
 
-void DBDatamodelLoader::loadValues(DynamicDatamodel *datamodel) {
+void DBDatamodelLoader::loadValues(DynamicDatamodel *datamodel, QStringList valueGroupFilter) {
     iInfo() << Q_FUNC_INFO;
 
     QSqlQuery query(*m_databaseManager->db());
 
-    if (query.exec("SELECT * FROM dm_values")) {
+    QString whereClause;
+
+    if (!valueGroupFilter.isEmpty()) {
+        if (!whereClause.isEmpty()) whereClause.append(" AND ");
+        whereClause.append(" (");
+        for (QString valueGroup : valueGroupFilter) {
+            whereClause.append("\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\"='" + valueGroup + "' OR ");
+        }
+        whereClause.chop(4);
+        whereClause.append(") ");
+    }
+
+    if (!whereClause.isEmpty()) {
+        whereClause.prepend(" WHERE ");
+    }
+
+
+    if (query.exec("SELECT * FROM dm_values" + whereClause)) {
         while (query.next()) {
             QString classType;
             QString valueGroup;
@@ -126,19 +143,34 @@ void DBDatamodelLoader::loadValues(DynamicDatamodel *datamodel) {
     }
 }
 
-void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter) {
+void DBDatamodelLoader::loadActors(DynamicDatamodel *datamodel, QStringList classTypeFilter, QStringList valueGroupFilter) {
     iInfo() << Q_FUNC_INFO << classTypeFilter;
 
     QSqlQuery query(*m_databaseManager->db());
 
     QString whereClause;
     if (!classTypeFilter.isEmpty()) {
-        whereClause = " WHERE ";
+        whereClause.append(" (");
 
         for (QString classType : classTypeFilter) {
             whereClause.append("ac.\"" + ValueBase::PROPERTY_CLASSTYPE + "\"='" + classType + "' OR ");
         }
         whereClause.chop(4);
+        whereClause.append(") ");
+    }
+
+    if (!valueGroupFilter.isEmpty()) {
+        if (!whereClause.isEmpty()) whereClause.append(" AND ");
+        whereClause.append(" (");
+        for (QString valueGroup : valueGroupFilter) {
+            whereClause.append("ac.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\"='" + valueGroup + "' OR ");
+        }
+        whereClause.chop(4);
+        whereClause.append(") ");
+    }
+
+    if (!whereClause.isEmpty()) {
+        whereClause.prepend(" WHERE ");
     }
 
     if (query.exec("SELECT * FROM dm_actors ac FULL OUTER JOIN dm_actors_audio aca ON ac." + ValueBase::PROPERTY_ID + " = aca.id and ac.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\" = aca.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\" FULL OUTER JOIN dm_actors_shutter acs ON ac." + ValueBase::PROPERTY_ID + " = acs." + ValueBase::PROPERTY_ID + " and ac.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\" = acs.\"" + ValueBase::PROPERTY_VALUE_GROUP_ID + "\"" + whereClause)) {

@@ -46,11 +46,13 @@ public:
 
     void setCustomChannels(QStringList customChannels);
     void setCustomValueGroups(QStringList customValueGroupChannels);
+    void setCustomActorValueGroups(QStringList customActorGroupChannels);
 
 private:
     bool m_hasCustomChannels = false;
     QStringList m_customChannels;
     QStringList m_customValueGroupChannels;
+    QStringList m_customActorGroupChannels;
     //QVariant parseCompactPayload(char typeId, QByteArray payload);
     QVariantMap parseJSONPayload(QByteArray payload);
     QVariant parseSingleValue(QVariantMap value);

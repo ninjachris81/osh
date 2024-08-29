@@ -29,17 +29,17 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("AudioService");
+    QString valueGroup = config.getString(&clientManager, "audioGroupId", "egAudio0");
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << AudioPlaybackActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className());
+    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << AudioPlaybackActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className(), QStringList() << valueGroup);
     ActorManager actorManager;
     LogManager logManager;
 
-    QString audioGroupId = config.getString(&clientManager, "audioGroupId", "egAudio0");
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
-    commManager.setCustomValueGroups(QStringList() << audioGroupId);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    AudioController2 audioController(&controllerManager, audioGroupId);
+    AudioController2 audioController(&controllerManager, valueGroup);
     controllerManager.registerController(&audioController);
 
     managerRegistration.init(&config);

@@ -193,6 +193,7 @@ void MqttCommunicationManagerBase::onMqttConnected() {
         QStringList customChannels;
         customChannels << m_customChannels;
         customChannels << m_customValueGroupChannels;
+        customChannels << m_customActorGroupChannels;
 
         subscribeChannels(customChannels);
     } else {
@@ -431,6 +432,14 @@ void MqttCommunicationManagerBase::setCustomChannels(QStringList customChannels)
 void MqttCommunicationManagerBase::setCustomValueGroups(QStringList customValueGroupChannels) {
     for (QString c : customValueGroupChannels) {
         m_customValueGroupChannels << (QString(MQTT_MESSAGE_TYPE_VA) + QString(MQTT_PATH_SEP) + c);
+    }
+
+    m_hasCustomChannels = true;
+}
+
+void MqttCommunicationManagerBase::setCustomActorValueGroups(QStringList customActorGroupChannels) {
+    for (QString c : customActorGroupChannels) {
+        m_customActorGroupChannels << (QString(MQTT_MESSAGE_TYPE_AC) + QString(MQTT_PATH_SEP) + c);
     }
 
     m_hasCustomChannels = true;

@@ -27,14 +27,17 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("InputService");
+    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "switches");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false, false);
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false, QStringList(), QStringList() << valueGroup);
     ClientValueManager valueManager;
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -46,18 +49,18 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    GPIOInputController inputController(&controllerManager, config.getString(&clientManager, "inputValueGroupId", "switches"));
+    GPIOInputController inputController(&controllerManager, valueGroup);
     controllerManager.registerController(&inputController);
     managerRegistration.init(&config);
 
     qInfo() << "Init value group" << inputController.id();
-    ValueGroup *valueGroup = datamodelManager.datamodel()->valueGroup(inputController.id());
+    ValueGroup *valueGroupObj = datamodelManager.datamodel()->valueGroup(inputController.id());
     Q_ASSERT(valueGroup != nullptr);
 
-    quint16 offset = config.getInt(valueGroup, "inputValueGroupOffset", 0);
+    quint16 offset = config.getInt(valueGroupObj, "inputValueGroupOffset", 0);
 
     for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
-        qDebug() << "Init value" << valueGroup->id() << i;
+        qDebug() << "Init value" << valueGroupObj->id() << i;
         BooleanValue* value = static_cast<BooleanValue*>(valueManager.getValue(valueGroup, QString::number(i)));
         Q_ASSERT(value != nullptr);
         valueManager.registerForMaintenance(value);

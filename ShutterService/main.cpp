@@ -26,15 +26,18 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("ShutterService");
+    QString valueGroup = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
+
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << ShutterActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className());
+    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << ShutterActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className(), QStringList() << valueGroup);
     ClientValueManager valueManager;
     ActorManager actorManager;
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+    commManager.setCustomValueGroups(QStringList() << valueGroup);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -47,14 +50,13 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    QString shutterValueGroupId = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
-    ShutterController shutterController(&controllerManager, &actorManager, shutterValueGroupId);
+    ShutterController shutterController(&controllerManager, &actorManager, valueGroup);
     controllerManager.registerController(&shutterController);
 
     managerRegistration.init(&config);
 
-    qInfo() << "Init shutter group" << shutterValueGroupId;
-    ValueGroup *shutterGroup = datamodelManager.datamodel()->valueGroup(shutterValueGroupId);
+    qInfo() << "Init shutter group" << valueGroup;
+    ValueGroup *shutterGroup = datamodelManager.datamodel()->valueGroup(valueGroup);
     Q_ASSERT(shutterGroup != nullptr);
     quint16 shutterOffset = config.getInt(shutterGroup, "shutterValueGroupOffset", 0);
 

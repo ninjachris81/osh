@@ -23,6 +23,7 @@ public:
         bool loadUsers = true;
 
         QStringList actorClassTypeFilter;
+        QStringList valueGroupFilter;
     };
 
     explicit DatamodelLoaderBase(QObject *parent = nullptr);
