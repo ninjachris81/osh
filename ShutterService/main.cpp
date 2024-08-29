@@ -27,17 +27,18 @@ int main(int argc, char *argv[])
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("ShutterService");
     QString valueGroup = config.getString(&clientManager, "shutterValueGroupId", "allShutters0");
+    QString relayValueGroupId = config.getString(valueGroup, "relayValueGroupId", "allRelays0");
 
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << ShutterActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className(), QStringList() << valueGroup);
+    DatamodelManager datamodelManager(false, false, true, true, false, false, false, QStringList() << ShutterActor::staticMetaObject.className() << DigitalActor::staticMetaObject.className(), QStringList() << valueGroup << relayValueGroupId);
     ClientValueManager valueManager;
     ActorManager actorManager;
     LogManager logManager;
 
     commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
-    commManager.setCustomValueGroups(QStringList() << valueGroup);
+    commManager.setCustomValueGroups(QStringList() << valueGroup << relayValueGroupId);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
@@ -60,7 +61,6 @@ int main(int argc, char *argv[])
     Q_ASSERT(shutterGroup != nullptr);
     quint16 shutterOffset = config.getInt(shutterGroup, "shutterValueGroupOffset", 0);
 
-    QString relayValueGroupId = config.getString(shutterGroup, "relayValueGroupId", "allRelays0");
     qInfo() << "Init relay group" << relayValueGroupId;
     ValueGroup *relayGroup = datamodelManager.datamodel()->valueGroup(relayValueGroupId);
     Q_ASSERT(relayGroup != nullptr);

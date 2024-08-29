@@ -51,11 +51,16 @@ QVariant LocalConfig::getValue(QString key, QVariant defaultValue) {
     }
 }
 
-QVariant LocalConfig::getValue(Identifyable* entity, QString key, QVariant defaultValue) {
-    m_settings->beginGroup(entity->id());
+QVariant LocalConfig::getValue(QString domain, QString key, QVariant defaultValue) {
+    m_settings->beginGroup(domain);
     QVariant value = getValue(key, defaultValue);
     m_settings->endGroup();
     return value;
+}
+
+
+QVariant LocalConfig::getValue(Identifyable* entity, QString key, QVariant defaultValue) {
+    return getValue(entity->id(), key, defaultValue);
 }
 
 QString LocalConfig::getString(QString key, QString defaultValue) {
@@ -67,11 +72,16 @@ QString LocalConfig::getString(QString key, QString defaultValue) {
     }
 }
 
-QString LocalConfig::getString(Identifyable* entity, QString key, QString defaultValue) {
-    m_settings->beginGroup(entity->id());
+
+QString LocalConfig::getString(QString domain, QString key, QString defaultValue) {
+    m_settings->beginGroup(domain);
     QString value = getString(key, defaultValue);
     m_settings->endGroup();
     return value;
+}
+
+QString LocalConfig::getString(Identifyable* entity, QString key, QString defaultValue) {
+    return getString(entity->id(), key, defaultValue);
 }
 
 int LocalConfig::getInt(QString key, int defaultValue) {

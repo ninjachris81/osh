@@ -22,9 +22,11 @@ public:
 
     QVariant getValue(QString key, QVariant defaultValue);
     QVariant getValue(Identifyable* entity, QString key, QVariant defaultValue);
+    QVariant getValue(QString domain, QString key, QVariant defaultValue);
 
     QString getString(QString key, QString defaultValue);
     QString getString(Identifyable* entity, QString key, QString defaultValue);
+    QString getString(QString domain, QString key, QString defaultValue);
 
     int getInt(QString key, int defaultValue);
     int getInt(Identifyable* entity, QString key, int defaultValue);
