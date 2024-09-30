@@ -37,8 +37,9 @@ int main(int argc, char *argv[])
     ActorManager actorManager;
     LogManager logManager;
 
-    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST << MQTT_MESSAGE_TYPE_AC);
+    commManager.setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
     commManager.setCustomValueGroups(QStringList() << valueGroup << relayValueGroupId);
+    commManager.setCustomActorValueGroups(QStringList() << valueGroup << relayValueGroupId);
 
     managerRegistration.registerManager(&commManager);
     managerRegistration.registerManager(&controllerManager);
