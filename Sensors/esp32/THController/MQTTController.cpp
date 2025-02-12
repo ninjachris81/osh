@@ -13,7 +13,6 @@
 MQTTController* MQTTController::m_instance = NULL;
 
 MQTTController::MQTTController() : AbstractTask(), m_clientId("") {
-  client.setClient(espClient);
   m_instance = this;
 }
 
@@ -22,6 +21,10 @@ MQTTController::~MQTTController() {
 
 void MQTTController::setClientId(String clientId) {
   m_clientId = clientId;
+}
+
+void MQTTController::setClient(Client *thisClient) {
+  client.setClient(*thisClient);
 }
 
 void MQTTController::init() {

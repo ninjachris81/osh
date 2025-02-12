@@ -6,13 +6,17 @@
 #include "FlashController.h"
 #include "DeviceController.h"
 #include "LEDController.h"
-#include "WifiController.h"
 #include "MQTTController.h"
 #include "OTAController.h"
 #include <LogHelper.h>
 #include "shared/device.h"
 #include "Pins.h"
 
+#if USES_ETH
+  //#include "EthController.h"
+#else
+  #include "WifiController.h"
+#endif
 #if HAS_TEMP_CONTROLLER
   #include "TempController_AHTx.h"
 #endif
@@ -47,7 +51,11 @@ TaskManager taskManager;
 FlashController flashController;
 DeviceController deviceController(DEVICE_ID_PREFIX, SERVICE_ID_PREFIX);
 LEDController ledController;
-WifiController wifiController;
+#if USES_ETH
+  EthController ethController;
+#else
+  WifiController wifiController;
+#endif
 MQTTController mqttController;
 OTAController otaController;
 
@@ -87,7 +95,15 @@ void setup() {
   taskManager.registerTask(&flashController, FLASH_CONTROLLER);
   taskManager.registerTask(&deviceController, DEVICE_CONTROLLER);
   taskManager.registerTask(&ledController, LED_CONTROLLER);
-  taskManager.registerTask(&wifiController, WIFI_CONTROLLER);
+  
+#if USES_ETH
+  taskManager.registerTask(&ethController, ETH_WIFI_CONTROLLER);
+  mqttController.setClient(ethController.getClient());
+#else
+  taskManager.registerTask(&wifiController, ETH_WIFI_CONTROLLER);
+  mqttController.setClient(wifiController.getClient());
+#endif
+
   taskManager.registerTask(&mqttController, MQTT_CONTROLLER);
   taskManager.registerTask(&otaController, OTA_CONTROLLER);
   

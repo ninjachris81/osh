@@ -86,7 +86,6 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
 
 void AudioController2::onStartPlayback() {
     AudioPlaybackActor* audioActor = static_cast<AudioPlaybackActor*>(sender());
-
     startPlayback(audioActor);
 }
 
@@ -187,6 +186,10 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
     if (m_runningProcesses.contains(audioActor->audioDeviceIds().at(0))) {
         iInfo() << "Terminating running process on" << audioActor->audioDeviceIds().at(0);
         stopProcess(audioActor->audioDeviceIds().at(0));
+    } else {
+        iWarning() << "No running process - setting stopped";
+        audioActor->setPlaybackState(AudioPlaybackActor::STOPPED);
+        m_valueManager->publishValue(audioActor);
     }
 }
 

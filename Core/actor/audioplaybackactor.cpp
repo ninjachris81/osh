@@ -9,12 +9,13 @@ QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_VOLUME_ID = QLatin1String("audi
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL = QLatin1String("audio_url");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_URL_ID = QLatin1String("audio_url_id");
 QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_CURRENT_TITLE_ID = QLatin1String("audio_current_title_id");
+QLatin1String AudioPlaybackActor::PROPERTY_AUDIO_NAME = QLatin1String("audio_name");
 
 AudioPlaybackActor::AudioPlaybackActor() : ActorBase() {
 }
 
-AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QString audioCurrentTitleId, QObject *parent) : ActorBase(valueGroup, id, valueType, QVariant::Int, parent),
-    m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioUrl(audioUrl), m_audioUrlId(audioUrlId)
+AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QString audioCurrentTitleId, QString audioName, QObject *parent) : ActorBase(valueGroup, id, valueType, QVariant::Int, parent),
+    m_audioActivationRelayId(audioActivationRelayId), m_audioVolume(audioVolume), m_audioVolumeId(audioVolumeId), m_audioUrl(audioUrl), m_audioUrlId(audioUrlId), m_audioName(audioName)
 {
     m_audioDeviceIds = audioDeviceIds.split("\n");
 }

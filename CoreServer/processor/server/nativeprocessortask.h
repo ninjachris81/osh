@@ -45,7 +45,8 @@ public:
         NFT_INIT_PLAY_SOUND_ON_CMD =            142,
 
         NFT_INIT_CONNECT_VALUES =               10,
-        NFT_INIT_TRIGGER_CMD_ON_VALUE =         11
+        NFT_INIT_TRIGGER_CMD_ON_VALUE =         11,
+        NFT_INIT_FOLLOW_ACTOR =                 12,
     };
 
     NativeProcessorTask();

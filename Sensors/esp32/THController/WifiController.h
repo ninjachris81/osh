@@ -2,6 +2,7 @@
 #define WIFICONTROLLER_H
 
 #include <AbstractIdleTask.h>
+#include <WiFi.h>
 
 class WifiController : public AbstractIdleTask {
 public:
@@ -12,6 +13,10 @@ public:
 
   void update();
 
+  Client* getClient();
+
+private:
+  WiFiClient myClient;
 };
 
 
