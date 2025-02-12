@@ -187,10 +187,11 @@ void AudioController2::stopPlayback(AudioPlaybackActor *audioActor) {
         iInfo() << "Terminating running process on" << audioActor->audioDeviceIds().at(0);
         stopProcess(audioActor->audioDeviceIds().at(0));
     } else {
-        iWarning() << "No running process - setting stopped";
-        audioActor->setPlaybackState(AudioPlaybackActor::STOPPED);
-        m_valueManager->publishValue(audioActor);
+        iWarning() << "No running process";
     }
+
+    audioActor->setPlaybackState(AudioPlaybackActor::STOPPED);
+    m_valueManager->publishValue(audioActor);
 }
 
 void AudioController2::stopProcess(QString audioDeviceId) {
