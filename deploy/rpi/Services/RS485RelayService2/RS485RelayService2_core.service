@@ -2,7 +2,7 @@
 Description=OSH RS485Relay Service 2
 ## make sure we only start the service after network is up
 Wants=network-online.target
-After=network.target postgresql.service
+After=network.target postgresql.service dev-tty_shutterRelays0.device
 
 [Service]
 ## use 'Type=forking' if the service backgrounds itself
