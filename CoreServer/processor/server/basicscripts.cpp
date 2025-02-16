@@ -84,3 +84,25 @@ void BasicScripts::initTriggerCmdOnValue_valueChanged() {
         qWarning() << "Cannot convert to target type" << triggerValue << valueSource->rawValue();
     }
 }
+
+bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId) {
+    iInfo() << Q_FUNC_INFO;
+
+    ActorBase *sourceActor = m_datamodel->actor(actorSourceId);
+    Q_ASSERT(sourceActor != nullptr);
+
+    ActorBase *triggerActor = m_datamodel->actor(triggerActorId);
+    Q_ASSERT(triggerActor != nullptr);
+
+    m_localStorage->setObject("initFollowActor", "triggerActorId", sourceActor->fullId(), triggerActor);
+
+    Helpers::safeConnect(sourceActor, &ActorBase::cmdTriggered, this, &BasicScripts::initFollowActor_cmdTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(initFollowActor_cmdTriggered(actor::ACTOR_CMDS)));
+}
+
+void BasicScripts::initFollowActor_cmdTriggered(actor::ACTOR_CMDS cmd) {
+
+    ActorBase* sourceActor = static_cast<ActorBase*>(sender());
+    ActorBase *triggerActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initFollowActor", "triggerActorId", sourceActor->fullId()));
+
+    triggerActor->triggerCmd(cmd, "initFollowActor");
+}

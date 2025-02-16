@@ -11,11 +11,11 @@ void MotionControllerSR501::init() {
 
 void MotionControllerSR501::update() {
   m_countsSec++;
-  if (digitalRead(PIN_PIR_SENSOR)==HIGH) {
+  if (digitalRead(PIN_PIR_SENSOR) == HIGH) {
     m_highCountsSec++;
   }
 
-  if (m_countsSec>=10) {
+  if (m_countsSec >= 10) {
     //LOG_PRINTLN(m_highCountsSec);
     //LOG_PRINTLN(m_status.getValue());
 

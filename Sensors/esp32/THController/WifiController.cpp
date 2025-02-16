@@ -4,7 +4,6 @@
 #include "DeviceController.h"
 #include "TaskIDs.h"
 #include "TaskManager.h"
-#include <WiFi.h>
 #include "shared/device.h"
 #include "credentials.h"
 
@@ -34,4 +33,8 @@ void WifiController::init() {
 }
 
 void WifiController::update() {
+}
+
+Client* WifiController::getClient() {
+  return &myClient;
 }

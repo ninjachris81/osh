@@ -37,6 +37,8 @@ public:
   };
 
   void setClientId(String clientId);
+
+  void setClient(Client *thisClient);
   
   void init();
 
@@ -58,7 +60,6 @@ public:
   void handleCallback(char* topic, byte* payload, unsigned int length);
 
 private:
-  WiFiClient espClient;
   PubSubClient client;
   static MQTTController* m_instance;
   String m_clientId;
