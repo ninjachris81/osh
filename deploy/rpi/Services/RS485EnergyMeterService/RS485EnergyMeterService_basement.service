@@ -2,7 +2,7 @@
 Description=OSH RS485EnergyMeter Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
-After=network.target
+After=network.target dev-tty_EnergyMeter0.device
 
 [Service]
 ## use 'Type=forking' if the service backgrounds itself
