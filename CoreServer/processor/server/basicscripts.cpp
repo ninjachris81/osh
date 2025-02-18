@@ -85,7 +85,7 @@ void BasicScripts::initTriggerCmdOnValue_valueChanged() {
     }
 }
 
-bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId) {
+bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId, int followMode) {
     iInfo() << Q_FUNC_INFO;
 
     ActorBase *sourceActor = m_datamodel->actor(actorSourceId);
@@ -96,7 +96,16 @@ bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId
 
     m_localStorage->setObject("initFollowActor", "triggerActorId", sourceActor->fullId(), triggerActor);
 
-    Helpers::safeConnect(sourceActor, &ActorBase::cmdTriggered, this, &BasicScripts::initFollowActor_cmdTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(initFollowActor_cmdTriggered(actor::ACTOR_CMDS)));
+    if (followMode & 1) {      // only cmd
+        Helpers::safeConnect(sourceActor, &ActorBase::cmdTriggered, this, &BasicScripts::initFollowActor_cmdTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(initFollowActor_cmdTriggered(actor::ACTOR_CMDS)));
+        iDebug() << "Connecting cmd of actor" << actorSourceId << "to" << triggerActor;
+    }
+    if (followMode & 2) {       // only value
+        Helpers::safeConnect(sourceActor, &ActorBase::valueChanged, this, &BasicScripts::initFollowActor_valueChanged, SIGNAL(valueChanged()), SLOT(initFollowActor_valueChanged()));
+        iDebug() << "Connecting value of actor" << actorSourceId << "to" << triggerActor;
+    }
+
+    return true;
 }
 
 void BasicScripts::initFollowActor_cmdTriggered(actor::ACTOR_CMDS cmd) {
@@ -104,5 +113,13 @@ void BasicScripts::initFollowActor_cmdTriggered(actor::ACTOR_CMDS cmd) {
     ActorBase* sourceActor = static_cast<ActorBase*>(sender());
     ActorBase *triggerActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initFollowActor", "triggerActorId", sourceActor->fullId()));
 
-    triggerActor->triggerCmd(cmd, "initFollowActor");
+    publishCmd(triggerActor, cmd, "initFollowActor");
+}
+
+void BasicScripts::initFollowActor_valueChanged() {
+
+    ActorBase* sourceActor = static_cast<ActorBase*>(sender());
+    ActorBase *triggerActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initFollowActor", "triggerActorId", sourceActor->fullId()));
+
+    publishValue(triggerActor, sourceActor->rawValue());
 }

@@ -21,12 +21,13 @@ public:
 
     Q_INVOKABLE bool initTriggerCmdOnValue(QString valueSourceIds, QVariant triggerValue, QString actorId, int actorCmd);
 
-    Q_INVOKABLE bool initFollowActor(QString actorSourceId, QString triggerActorId);
+    Q_INVOKABLE bool initFollowActor(QString actorSourceId, QString triggerActorId, int followMode);
 
 private slots:
     void initConnectValues_valueChanged();
     void initTriggerCmdOnValue_valueChanged();
     void initFollowActor_cmdTriggered(actor::ACTOR_CMDS cmd);
+    void initFollowActor_valueChanged();
 
 signals:
 

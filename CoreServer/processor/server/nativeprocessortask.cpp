@@ -100,7 +100,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_basicScripts->initTriggerCmdOnValue(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt());
             break;            
         case NFT_INIT_FOLLOW_ACTOR:
-            m_lastResult = m_basicScripts->initFollowActor(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
+            m_lastResult = m_basicScripts->initFollowActor(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
             break;
         default:
             iWarning() << "Unhandled script function" << m_nativeFunction;
@@ -180,6 +180,8 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
         return QList<QVariant::Type>() << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_INIT_TRIGGER_CMD_ON_VALUE:
         return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::Int;
+    case NativeProcessorTask::NFT_INIT_FOLLOW_ACTOR:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int;
     default:
         return QList<QVariant::Type>();
     }
