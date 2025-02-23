@@ -102,7 +102,7 @@ bool AMixerVolumeWrapper::searchMapping(const QString deviceId) {
     return false;
 }
 
-int AMixerVolumeWrapper::_searchMapping(quint8 cardId, QString volumeId) {
+int AMixerVolumeWrapper::_searchMapping(quint8 cardId, const QString volumeId) {
     qDebug() << Q_FUNC_INFO << cardId << volumeId;
 
     QStringList args;
@@ -112,9 +112,14 @@ int AMixerVolumeWrapper::_searchMapping(quint8 cardId, QString volumeId) {
 
     QString res = executeAmixer(args);
 
+    qDebug() << Q_FUNC_INFO << res;
+
     QStringList lines = res.split("\n", QString::SkipEmptyParts);
     for (QString line : lines) {
         QStringList tokens = line.split(",", QString::SkipEmptyParts);
+
+        qDebug() << Q_FUNC_INFO << tokens;
+
         if (!tokens.isEmpty()) {
             if (tokens.size() == 3 && tokens[0].startsWith("numid=")) {
                 quint8 id = tokens[0].mid(tokens[0].indexOf("=")+1).toInt();
@@ -132,7 +137,7 @@ int AMixerVolumeWrapper::_searchMapping(quint8 cardId, QString volumeId) {
     return -1;
 }
 
-QString AMixerVolumeWrapper::executeAmixer(QStringList args) {
+QString AMixerVolumeWrapper::executeAmixer(const QStringList args) {
     QProcess proc;
     proc.setProgram("/usr/bin/amixer");
     proc.setArguments(args);
@@ -150,7 +155,7 @@ QString AMixerVolumeWrapper::executeAmixer(QStringList args) {
     return "";
 }
 
-void AMixerVolumeWrapper::addMapping(QString deviceId, int card, int numid) {
+void AMixerVolumeWrapper::addMapping(const QString deviceId, int card, int numid) {
     qInfo() << Q_FUNC_INFO << deviceId << card << numid;
 
     DeviceMapping mapping;

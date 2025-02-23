@@ -63,7 +63,7 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
             audioActor->withAudioVolumeValue(volumeValue);
             valueManager->registerForNotification(volumeValue);
             if (!m_volumeWrapper.searchMapping(audioActor->audioDeviceIds().at(0))) {
-                qWarning() << "Failed to find volume mapping";
+                qWarning() << "Failed to find volume mapping for " << audioActor->audioDeviceIds().at(0);
             }
         }
 
