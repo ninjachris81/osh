@@ -72,7 +72,7 @@ void AMixerVolumeWrapper::init() {
 
         qDebug() << Q_FUNC_INFO << res;
 
-        if (res.startsWith("Invalid card number")) {
+        if (res.isEmpty() || res.startsWith("Invalid card number")) {
             qDebug() << "Max reached";
             m_maxCardId--;
             break;
@@ -136,6 +136,7 @@ QString AMixerVolumeWrapper::executeAmixer(QStringList args) {
     QProcess proc;
     proc.setProgram("/usr/bin/amixer");
     proc.setArguments(args);
+    proc.setProcessChannelMode(QProcess::MergedChannels);
 
     qInfo() << proc.program() << proc.arguments();
 
@@ -143,7 +144,7 @@ QString AMixerVolumeWrapper::executeAmixer(QStringList args) {
     if (!proc.waitForFinished(1000)) {
         qWarning() << "AMixer did not finish in time";
     } else {
-        return proc.readAll();
+        return proc.readAllStandardOutput();
     }
 
     return "";
