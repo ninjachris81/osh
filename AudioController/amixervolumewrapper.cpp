@@ -112,18 +112,20 @@ int AMixerVolumeWrapper::_searchMapping(quint8 cardId, const QString volumeId) {
 
     QString res = executeAmixer(args);
 
-    qDebug() << Q_FUNC_INFO << res;
+    //qDebug() << Q_FUNC_INFO << res;
 
     QStringList lines = res.split("\n", QString::SkipEmptyParts);
     for (QString line : lines) {
         QStringList tokens = line.split(",", QString::SkipEmptyParts);
 
-        qDebug() << Q_FUNC_INFO << tokens;
+        //qDebug() << Q_FUNC_INFO << tokens;
 
         if (!tokens.isEmpty()) {
             if (tokens.size() == 3 && tokens[0].startsWith("numid=")) {
                 quint8 id = tokens[0].mid(tokens[0].indexOf("=")+1).toInt();
-                qDebug() << id << tokens[2].remove("Playback Volume").remove("name='").remove("'").trimmed();
+
+                //qDebug() << id << tokens[2].remove("Playback Volume").remove("name='").remove("'").trimmed();
+
                 if (tokens[2].remove("Playback Volume").remove("name='").remove("'").trimmed() == volumeId) {
                     return id;
                 }
