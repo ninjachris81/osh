@@ -70,7 +70,10 @@ void AMixerVolumeWrapper::init() {
 
         QString res = executeAmixer(args);
 
+        qDebug() << Q_FUNC_INFO << res;
+
         if (res.startsWith("Invalid card number")) {
+            qDebug() << "Max reached";
             m_maxCardId--;
             break;
         } else {
