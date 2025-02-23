@@ -91,10 +91,10 @@ bool AMixerVolumeWrapper::searchMapping(const QString deviceId) {
     }
 
     for (quint8 cardId = 0; cardId <= m_maxCardId; cardId++) {
-        int mapping = _searchMapping(cardId, deviceId);
+        int mapping = _searchMapping(cardId, devId);
         if (mapping != -1) {
-            qInfo() << "Adding mapping" << deviceId << cardId << mapping;
-            addMapping(deviceId, cardId, mapping);
+            qInfo() << "Adding mapping" << devId << cardId << mapping;
+            addMapping(devId, cardId, mapping);
             return true;
         }
     }

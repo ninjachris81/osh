@@ -26,11 +26,11 @@ public:
     void setVolume(AudioPlaybackActor *audioActor);
 
 private:
-    int _searchMapping(quint8 cardId, QString volumeId);
+    int _searchMapping(quint8 cardId, const QString volumeId);
 
-    void addMapping(QString deviceId, int card, int numid);
+    void addMapping(const QString deviceId, int card, int numid);
 
-    QString executeAmixer(QStringList args);
+    QString executeAmixer(const QStringList args);
 
 protected:
     QMap<QString, DeviceMapping> m_cardMap;
