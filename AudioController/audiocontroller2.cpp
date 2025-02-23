@@ -26,6 +26,8 @@ void AudioController2::init() {
     m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
     Q_ASSERT(m_valueManager);
 
+    m_volumeWrapper.init();
+
 }
 
 void AudioController2::start() {
@@ -60,6 +62,9 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
             Q_ASSERT(volumeValue != nullptr);
             audioActor->withAudioVolumeValue(volumeValue);
             valueManager->registerForNotification(volumeValue);
+            if (!m_volumeWrapper.searchMapping(audioActor->audioVolumeId())) {
+                qWarning() << "Failed to find volume mapping";
+            }
         }
 
         if (!audioActor->audioUrlId().isEmpty()) {
