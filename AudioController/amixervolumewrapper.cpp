@@ -4,8 +4,6 @@
 
 AMixerVolumeWrapper::AMixerVolumeWrapper(QObject *parent) : QObject(parent) {
 
-    // some hard-coded stuff now...
-
     /*
     0_0 vz
     0_1 wc
@@ -31,6 +29,8 @@ AMixerVolumeWrapper::AMixerVolumeWrapper(QObject *parent) : QObject(parent) {
 
 
     // amixer -c X controls
+
+    /*
     addMapping("all_mono_mono", 0, 38);
     addMapping("all_mono_stereo", 0, 37);
 
@@ -57,10 +57,98 @@ AMixerVolumeWrapper::AMixerVolumeWrapper(QObject *parent) : QObject(parent) {
 
     addMapping("mono6_0", 8, 11);
     addMapping("mono6_1", 8, 12);
+    */
 
 }
 
+void AMixerVolumeWrapper::init() {
+    for (quint8 cardId = 0; cardId < 255; cardId++) {
+        QStringList args;
+
+        args << "-c" << QString::number(cardId);
+        args << "info";
+
+        QString res = executeAmixer(args);
+
+        if (res.startsWith("Invalid card number")) {
+            m_maxCardId--;
+            break;
+        } else {
+            m_maxCardId++;
+        }
+    }
+
+    qDebug() << "Max card id" << m_maxCardId;
+}
+
+bool AMixerVolumeWrapper::searchMapping(const QString deviceId) {
+    QString devId = deviceId;
+    if (deviceId.endsWith("_sv")) {
+        devId = deviceId.chopped(3);
+    }
+
+    for (quint8 cardId = 0; cardId <= m_maxCardId; cardId++) {
+        int mapping = _searchMapping(cardId, deviceId);
+        if (mapping != -1) {
+            qInfo() << "Adding mapping" << deviceId << cardId << mapping;
+            addMapping(deviceId, cardId, mapping);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int AMixerVolumeWrapper::_searchMapping(quint8 cardId, QString volumeId) {
+    qDebug() << Q_FUNC_INFO << cardId << volumeId;
+
+    QStringList args;
+
+    args << "-c" << QString::number(cardId);
+    args << "controls";
+
+    QString res = executeAmixer(args);
+
+    QStringList lines = res.split("\n", QString::SkipEmptyParts);
+    for (QString line : lines) {
+        QStringList tokens = line.split(",", QString::SkipEmptyParts);
+        if (!tokens.isEmpty()) {
+            if (tokens.size() == 3 && tokens[0].startsWith("numid=")) {
+                quint8 id = tokens[0].mid(tokens[0].indexOf("=")+1).toInt();
+                if (tokens[2].remove("Playback Volume").remove(" ") == volumeId) {
+                    return id;
+                }
+            } else {
+                qWarning() << "Unexpected tokens" << tokens;
+            }
+        } else {
+            qWarning() << "Unexpected output line" << line;
+        }
+    }
+
+    return -1;
+}
+
+QString AMixerVolumeWrapper::executeAmixer(QStringList args) {
+    QProcess proc;
+    proc.setProgram("/usr/bin/amixer");
+    proc.setArguments(args);
+
+    qInfo() << proc.program() << proc.arguments();
+
+    proc.start();
+    if (!proc.waitForFinished(1000)) {
+        qWarning() << "AMixer did not finish in time";
+    } else {
+        return proc.readAll();
+    }
+
+    return "";
+}
+
 void AMixerVolumeWrapper::addMapping(QString deviceId, int card, int numid) {
+    qInfo() << Q_FUNC_INFO << deviceId << card << numid;
+
     DeviceMapping mapping;
     mapping.deviceId = deviceId;
     mapping.card = card;
@@ -74,7 +162,7 @@ void AMixerVolumeWrapper::setVolume(AudioPlaybackActor *audioActor) {
 
     QString deviceId = audioActor->audioDeviceIds().at(0);
     if (deviceId.endsWith("_sv")) {
-        deviceId.chop(3);
+        deviceId = deviceId.chopped(3);
     }
 
     if (m_cardMap.contains(deviceId)) {

@@ -19,12 +19,22 @@ public:
 
     explicit AMixerVolumeWrapper(QObject *parent = nullptr);
 
+    void init();
+
+    bool searchMapping(const QString deviceId);
+
     void setVolume(AudioPlaybackActor *audioActor);
+
+private:
+    int _searchMapping(quint8 cardId, QString volumeId);
 
     void addMapping(QString deviceId, int card, int numid);
 
+    QString executeAmixer(QStringList args);
+
 protected:
     QMap<QString, DeviceMapping> m_cardMap;
+    quint8 m_maxCardId = 0;
 
 signals:
 
