@@ -56,9 +56,9 @@ WBB12Controller::WBB12Controller(ControllerManager *manager, QString id, QObject
     registerInput(WBB12_Input_Registers::WARM_WATER_TARGET_TEMP, WBB12_INTERVAL_FIXED_VALUES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::WARM_WATER_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
 
-    registerInput(WBB12_Input_Registers::HEAT_PUMP_MODE, WBB12_INTERVAL_MODES, QVariant::Int, WDF_OperationStatus);
+    registerInput(WBB12_Input_Registers::HEAT_PUMP_MODE, 10000, QVariant::Int, WDF_OperationStatus);
     registerInput(WBB12_Input_Registers::HEAT_PUMP_ERROR, WBB12_INTERVAL_WARNINGS, QVariant::Int, WDF_Count);
-    registerInput(WBB12_Input_Registers::HEAT_PUMP_CONSUMPTION, 30000, QVariant::Int, WDF_Count);
+    registerInput(WBB12_Input_Registers::HEAT_PUMP_CONSUMPTION, 10000, QVariant::Int, WDF_Count);
     registerInput(WBB12_Input_Registers::HEAT_PUMP_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
     registerInput(WBB12_Input_Registers::HEAT_PUMP_RETURN_FLOW_TEMP, WBB12_INTERVAL_TEMPERATURES, QVariant::Double, WDF_Temperature);
 
