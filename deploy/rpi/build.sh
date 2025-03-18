@@ -19,7 +19,7 @@ function buildWiringPi {
 function buildPjProject {
    cd "$OSH_ROOT/pjproject"
    echo "Configure PJ Project in $PWD"
-   ./configure
+   ./configure --disable-libwebrtc --enable-shared
    cd "$OSH_ROOT/pjproject"
    echo "Building PJ Project in $PWD"
    make dep
