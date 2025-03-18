@@ -39,7 +39,7 @@ INCLUDEPATH += $$PWD/../PJSIPSupport
 DEPENDPATH += $$PWD/../PJSIPSupport
 
 unix:!macx: DEFINES+=PJ_AUTOCONF=1
-unix:!macx: PJ_BASE_DIR = /home/pi/pjproject
+unix:!macx: PJ_BASE_DIR = $$PWD/../pjproject
 
 win32: DEFINES -= UNICODE
 win32: PJ_BASE_DIR = ../../pjproject
