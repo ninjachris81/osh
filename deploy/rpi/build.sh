@@ -18,8 +18,10 @@ function buildWiringPi {
 
 function buildPjProject {
    cd "$OSH_ROOT/pjproject"
-   echo "Building PJ Project in $PWD"
+   echo "Configure PJ Project in $PWD"
    ./configure
+   cd "$OSH_ROOT/pjproject"
+   echo "Building PJ Project in $PWD"
    make dep
    make
 }
