@@ -1,1 +1,7 @@
-echo "test"
+node {
+   stage('Git checkout') {
+      pwd()
+      echo "PWD"
+      git 'https://github.com/ninjachris81/osh.git'
+   }
+}
