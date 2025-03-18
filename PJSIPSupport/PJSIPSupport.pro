@@ -42,10 +42,9 @@ INCLUDEPATH += $$PWD/../Core
 DEPENDPATH += $$PWD/../Core
 
 unix:!macx: DEFINES+=PJ_AUTOCONF=1
-unix:!macx: PJ_BASE_DIR = /home/pi/pjproject
+unix:!macx: PJ_BASE_DIR = $$PWD/../pjproject
 
 win32: DEFINES -= UNICODE
-win32: PJ_BASE_DIR = ../../pjproject
 win32: DEFINES += PJ_USE_STUBS
 
 message($${PJ_BASE_DIR})

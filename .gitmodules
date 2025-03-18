@@ -7,3 +7,6 @@
 [submodule "libsml"]
 	path = libsml
 	url = https://github.com/volkszaehler/libsml.git
+[submodule "pjproject"]
+	path = pjproject
+	url = https://github.com/pjsip/pjproject.git

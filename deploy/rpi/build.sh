@@ -16,6 +16,14 @@ function buildWiringPi {
    ./build
 }
 
+function buildPjProject {
+   cd "$OSH_ROOT/pjproject"
+   echo "Building PJ Project in $PWD"
+   ./configure
+   make dep
+   make
+}
+
 function buildOSHLib {
     cd "$OSH_ROOT/$1"
     echo "Building lib in $PWD"
@@ -158,6 +166,7 @@ case "$1" in
       printInfos
       buildQtMqtt
       buildOSHLib "Core"
+	  buildPjProject
       buildOSHLib "PJSIPSupport"
       buildOSHLib "DoorAudioController"
       buildOSHLib "QMqttCommunicationManager"
