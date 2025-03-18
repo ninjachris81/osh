@@ -5,8 +5,9 @@ node {
       checkout scm
       sh 'git submodule update --init'
    }
+
    stage('Build') {
       dir('deploy/rpi')
-      sh ./build.sh CoreService
+      sh './build.sh CoreService'
    }
 }
