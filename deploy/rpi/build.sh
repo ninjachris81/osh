@@ -3,21 +3,21 @@
 # @see osh.pro
 
 function buildQtMqtt {
+   cd "$OSH_ROOT/qtmqtt"
    echo "Building QtMqtt in $PWD"
-   cd $OSH_ROOT/qtmqtt
    qmake
    make -j$MAKE_CORE_COUNT
    make install
 }
 
 function buildWiringPi {
+   cd "$OSH_ROOT/WiringPi"
    echo "Building WiringPi in $PWD"
-   cd $OSH_ROOT/WiringPi
    ./build
 }
 
 function buildOSHLib {
-    cd $OSH_ROOT/$1
+    cd "$OSH_ROOT/$1"
     echo "Building lib in $PWD"
     qmake
     make -j$MAKE_CORE_COUNT
@@ -25,7 +25,7 @@ function buildOSHLib {
 }
 
 function buildOSHTarget {
-   cd $OSH_ROOT/$1
+   cd "$OSH_ROOT/$1"
    echo "Building target in $PWD"
    qmake
    make -j$MAKE_CORE_COUNT
