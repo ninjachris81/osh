@@ -7,4 +7,4 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-./build.sh
+./build.sh $@
