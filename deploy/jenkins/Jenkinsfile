@@ -8,7 +8,7 @@ node {
 
    stage('Build') {
       dir('deploy/rpi') {
-         sudo sh './deploy.sh CoreService'
+         sudo bash -c './deploy.sh CoreService'
       }
    }
 }
