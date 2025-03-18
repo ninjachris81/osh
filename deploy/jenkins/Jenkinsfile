@@ -1,7 +1,12 @@
 node {
    stage('Git checkout') {
-      pwd()
-      echo "PWD"
-      git 'https://github.com/ninjachris81/osh.git'
+      echo "$PWD"
+
+      checkout scm
+      sh 'git submodule update --init'
+   }
+   stage('Build') {
+      dir('deploy/rpi')
+      sh ./build.sh CoreService
    }
 }
