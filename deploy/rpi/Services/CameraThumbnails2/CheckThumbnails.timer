@@ -1,0 +1,9 @@
+[Unit]
+Description=OSH Create Thumbnail Timer
+
+[Timer]
+OnCalendar=*-*-* 00,12:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
