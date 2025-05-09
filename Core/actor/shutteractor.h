@@ -17,7 +17,7 @@ public:
     #define SHUTTER_CLOSED 100
 
     #define SHUTTER_TILT_OPENED 0
-    #define SHUTTER_TILE_CLOSED 100
+    #define SHUTTER_TILT_CLOSED 100
 
     #define SHUTTER_OPERATION_MODE_AUTO     0
     #define SHUTTER_OPERATION_MODE_MANUAL   1
@@ -45,6 +45,7 @@ public:
     unsigned char closeState();
     unsigned char tiltState();
 
+    bool checkTiltSupport();
     bool tiltSupport();
     int fullCloseDuration();
     int fullTiltDuration();
@@ -60,7 +61,7 @@ protected:
 
     bool m_tiltSupport = false;
     int m_fullCloseDuration = 20000;
-    int m_fullTiltDuration = 2000;
+    int m_fullTiltDuration = 0;
 
 
 signals:

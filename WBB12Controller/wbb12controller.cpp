@@ -474,6 +474,8 @@ quint16 WBB12Controller::generateValue(QVariant val, WBB12_DataFormat format) {
         return shortVal;
     }
     }
+    case WDF_Count:
+        return (unsigned short) val.toUInt();
     case WDF_ConfigHP:
     case WDF_ConfigHeating:
     case WDF_StatusHeating:
@@ -486,7 +488,6 @@ quint16 WBB12Controller::generateValue(QVariant val, WBB12_DataFormat format) {
     case WDF_Locking:
     case WDF_Status:
     case WDF_ConfigRoom:
-    case WDF_Count:
     case WDF_Version:
     case WDF_OperationStatus:
         //return (unsigned short) rawValue;

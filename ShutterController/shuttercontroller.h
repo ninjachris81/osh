@@ -32,11 +32,13 @@ public:
     struct ActiveShutterMovement {
         ShutterActor *shutterActor;
         DigitalActor* relayActor;
+        actor::ACTOR_CMDS originalCmd;
         qint64 startedAt;
         qint64 duration;
         bool directionDown;
         bool updatesStatus;
         bool isInit;
+        bool isTilt;
     };
 
     ShutterController(ControllerManager* manager, ActorManager *actorManager, QString id, QObject *parent = nullptr);
@@ -56,11 +58,12 @@ private slots:
     void onMaintenance();
 
 private:
+    const float m_halfFactor = 2.2;         // 2.2 because duration has additional time
     void initializeShutters();
 
     void insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd, bool isInit = false);
-    void insertShutterMovement(ShutterActor* shutterActor, DigitalActor *relayActor, qint64 duration, bool directionDown, bool updatesStatus, bool isInit);
-    bool cancelShutterMovements(ShutterActor* shutterActor);
+    void insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool updatesStatus, bool isInit, bool isTilt);
+    bool checkShutterInitMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd);
 
     ValueManagerBase *m_valueManager;
 

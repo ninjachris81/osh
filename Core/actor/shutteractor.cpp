@@ -113,6 +113,9 @@ unsigned char ShutterActor::tiltState() {
     return getTiltState(rawValue().toInt());
 }
 
+bool ShutterActor::checkTiltSupport() {
+    return m_tiltSupport && m_fullTiltDuration > 0;
+}
 
 bool ShutterActor::tiltSupport() {
     return m_tiltSupport;
