@@ -131,6 +131,8 @@ void ShutterController::onMaintenance() {
 }
 
 void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd, bool isInit) {
+    iDebug() << Q_FUNC_INFO << shutterActor->id() << cmd << isInit;
+
     if (!checkShutterInitMovements(shutterActor, cmd)) {
         iWarning() << "Cannot insert new movement - still initializing";
         return;
@@ -199,6 +201,8 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
 }
 
 void ShutterController::insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool updatesStatus, bool isInit, bool isTilt) {
+    iDebug() << Q_FUNC_INFO << shutterActor->id() << originalCmd << duration << directionDown << updatesStatus << isInit << isTilt;
+
     QMutexLocker locker(&m_activeShutterMovementsMutex);
 
     ActiveShutterMovement movement;
