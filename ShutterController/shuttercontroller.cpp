@@ -112,13 +112,7 @@ void ShutterController::onMaintenance() {
         double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
         double duration = movement.duration;
 
-        int percentage;
-
-        if (movement.isTilt) {
-            percentage = qBound(SHUTTER_TILT_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_TILT_CLOSED);
-        } else {
-            percentage = qBound(SHUTTER_STATE_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_STATE_CLOSED);
-        }
+        int percentage = qBound(0, (int) ((elapsedTime / duration) * 100), 100);
 
         // invert
         if (!movement.directionDown) {
