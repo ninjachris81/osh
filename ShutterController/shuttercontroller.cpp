@@ -108,23 +108,28 @@ void ShutterController::onMaintenance() {
             it.remove();        // remove the task
         }
 
-        // update value
-        double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
-        double duration = movement.duration;
+        if (!movement.isTilt) {
+            // update value
+            double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
+            double duration = movement.duration;
 
-        int percentage = qBound(0, (int) ((elapsedTime / duration) * 100), 100);
+            int percentage = qBound(0, (int) ((elapsedTime / duration) * 100), 100);
 
-        // invert
-        if (!movement.isTilt && !movement.directionDown) {
-            percentage = 100 - percentage;
-        }
 
-        if (movement.isTilt) {
-            movement.shutterActor->updateTiltPattern(percentage);
+            // invert
+            if (!movement.directionDown) {
+                percentage = 100 - percentage;
+            }
+
+            if (movement.isTilt) {
+                movement.shutterActor->updateTiltPattern(percentage);
+            } else {
+                movement.shutterActor->updateClosePattern(percentage);
+            }
+            m_valueManager->publishValue(movement.shutterActor);
         } else {
-            movement.shutterActor->updateClosePattern(percentage);
+            // do not update when tilting
         }
-        m_valueManager->publishValue(movement.shutterActor);
     }
 }
 
