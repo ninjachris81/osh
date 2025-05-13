@@ -115,7 +115,7 @@ void ShutterController::onMaintenance() {
         int percentage = qBound(0, (int) ((elapsedTime / duration) * 100), 100);
 
         // invert
-        if (!movement.directionDown) {
+        if (!movement.isTilt && !movement.directionDown) {
             percentage = 100 - percentage;
         }
 
