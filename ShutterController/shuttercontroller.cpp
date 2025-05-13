@@ -100,9 +100,10 @@ void ShutterController::onMaintenance() {
             if (movement.isTilt) {
                 movement.shutterActor->updateTiltPattern(movement.directionDown ? SHUTTER_TILT_CLOSED : SHUTTER_TILT_OPENED);
             } else {
+                movement.shutterActor->updateTiltPattern(SHUTTER_TILT_CLOSED);
                 movement.shutterActor->updateClosePattern(movement.directionDown ? SHUTTER_CLOSED : SHUTTER_OPENED);
             }
-
+            m_valueManager->publishValue(movement.shutterActor);
             m_actorManager->publishCmd(movement.relayActor, actor::ACTOR_CMD_OFF);
             it.remove();        // remove the task
         }
@@ -110,11 +111,14 @@ void ShutterController::onMaintenance() {
         // update value
         double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
         double duration = movement.duration;
-        int percentage = qBound(SHUTTER_STATE_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_STATE_CLOSED);
 
-        // border handling
-        if (percentage > 95) percentage = SHUTTER_STATE_CLOSED;
-        if (percentage < 5) percentage = SHUTTER_STATE_OPENED;
+        int percentage;
+
+        if (movement.isTilt) {
+            percentage = qBound(SHUTTER_TILT_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_TILT_CLOSED);
+        } else {
+            percentage = qBound(SHUTTER_STATE_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_STATE_CLOSED);
+        }
 
         // invert
         if (!movement.directionDown) {
