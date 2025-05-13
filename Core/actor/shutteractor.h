@@ -16,8 +16,8 @@ public:
     #define SHUTTER_OPENED 0
     #define SHUTTER_CLOSED 100
 
-    #define SHUTTER_TILT_OPENED 0
-    #define SHUTTER_TILT_CLOSED 100
+    #define SHUTTER_TILT_OPENED 100
+    #define SHUTTER_TILT_CLOSED 0
 
     #define SHUTTER_OPERATION_MODE_AUTO     0
     #define SHUTTER_OPERATION_MODE_MANUAL   1
