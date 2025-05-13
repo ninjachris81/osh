@@ -36,7 +36,6 @@ public:
         qint64 startedAt;
         qint64 duration;
         bool directionDown;
-        bool updatesStatus;
         bool isInit;
         bool isTilt;
     };
@@ -62,7 +61,7 @@ private:
     void initializeShutters();
 
     void insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd, bool isInit = false);
-    void insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool updatesStatus, bool isInit, bool isTilt);
+    void insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool isInit, bool isTilt);
     bool checkShutterInitMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd);
 
     ValueManagerBase *m_valueManager;

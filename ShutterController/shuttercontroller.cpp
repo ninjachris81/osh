@@ -105,28 +105,28 @@ void ShutterController::onMaintenance() {
 
             m_actorManager->publishCmd(movement.relayActor, actor::ACTOR_CMD_OFF);
             it.remove();        // remove the task
-        } else if (movement.updatesStatus) {
-            // update value
-            double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
-            double duration = movement.duration;
-            int percentage = qBound(SHUTTER_STATE_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_STATE_CLOSED);
-
-            // border handling
-            if (percentage > 95) percentage = SHUTTER_STATE_CLOSED;
-            if (percentage < 5) percentage = SHUTTER_STATE_OPENED;
-
-            // invert
-            if (!movement.directionDown) {
-                percentage = 100 - percentage;
-            }
-
-            if (movement.isTilt) {
-                movement.shutterActor->updateTiltPattern(percentage);
-            } else {
-                movement.shutterActor->updateClosePattern(percentage);
-            }
-            m_valueManager->publishValue(movement.shutterActor);
         }
+
+        // update value
+        double elapsedTime = QDateTime::currentMSecsSinceEpoch() - movement.startedAt;
+        double duration = movement.duration;
+        int percentage = qBound(SHUTTER_STATE_OPENED, (int) ((elapsedTime / duration) * 100), SHUTTER_STATE_CLOSED);
+
+        // border handling
+        if (percentage > 95) percentage = SHUTTER_STATE_CLOSED;
+        if (percentage < 5) percentage = SHUTTER_STATE_OPENED;
+
+        // invert
+        if (!movement.directionDown) {
+            percentage = 100 - percentage;
+        }
+
+        if (movement.isTilt) {
+            movement.shutterActor->updateTiltPattern(percentage);
+        } else {
+            movement.shutterActor->updateClosePattern(percentage);
+        }
+        m_valueManager->publishValue(movement.shutterActor);
     }
 }
 
@@ -145,52 +145,52 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
         m_actorManager->publishCmd(m_actorsDown.value(shutterActor), actor::ACTOR_CMD_OFF);
         break;
     case actor::ACTOR_CMD_UP:
-        insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() + shutterActor->fullTiltDuration(), false, true, isInit, false);
+        insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() + shutterActor->fullTiltDuration(), false, isInit, false);
         break;
     case actor::ACTOR_CMD_DOWN:
-        insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration(), true, true, isInit, false);
+        insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration(), true, isInit, false);
         break;
     case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
         if (shutterActor->checkTiltSupport()) {
             if (shutterActor->closeState() == SHUTTER_OPENED) {
                 // first, all down
-                insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration(), true, true, isInit, false);
+                insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration(), true, isInit, false);
             }
 
             // then, turn open
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, false, isInit, true);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, isInit, true);
         } else {
             iWarning() << "Actor does not support tilting";
         }
         break;
     case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
         if (shutterActor->checkTiltSupport()) {
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), true, false, isInit, true);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), true, isInit, true);
         } else {
             iWarning() << "Actor does not support tilting";
         }
         break;
     case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
         if (shutterActor->checkTiltSupport()) {
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, false, isInit, true);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, isInit, true);
         } else {
             iWarning() << "Actor does not support tilting";
         }
         break;
     case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
         if (shutterActor->closeState() == SHUTTER_CLOSED) {
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, false, true, isInit, false);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, false, isInit, false);
             if (shutterActor->checkTiltSupport()) {
-                insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, false, isInit, true);
+                insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, isInit, true);
             }
         } else {
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, true, true, isInit, false);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, true, isInit, false);
         }
         break;
     case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
         if (shutterActor->checkTiltSupport()) {
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, true, false, isInit, false);
-            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, false, false, isInit, true);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, true, isInit, false);
+            insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, false, isInit, true);
         } else {
             iWarning() << "Actor does not support tilting";
         }
@@ -200,8 +200,8 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
     }
 }
 
-void ShutterController::insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool updatesStatus, bool isInit, bool isTilt) {
-    iDebug() << Q_FUNC_INFO << shutterActor->id() << originalCmd << duration << directionDown << updatesStatus << isInit << isTilt;
+void ShutterController::insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool isInit, bool isTilt) {
+    iDebug() << Q_FUNC_INFO << shutterActor->id() << originalCmd << duration << directionDown << isInit << isTilt;
 
     QMutexLocker locker(&m_activeShutterMovementsMutex);
 
@@ -213,7 +213,6 @@ void ShutterController::insertShutterMovement(ShutterActor* shutterActor, actor:
     movement.duration = duration;
     movement.startedAt = -1;
     movement.directionDown = directionDown;
-    movement.updatesStatus = updatesStatus;
     movement.isInit = isInit;
     movement.isTilt = isTilt;
 
