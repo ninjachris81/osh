@@ -7,7 +7,7 @@ AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localSt
 {
 }
 
-bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset) {
+bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
 
@@ -33,19 +33,44 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     sunset = sunset.addSecs((sun.calcSunset()  + adjustmentSunset) * 60);
 
     bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
+    bool isTiltDownState = false;
+
+    if (tiltThresholdTempFullId != nullptr && !tiltThresholdTempFullId.isEmpty()) {
+        DoubleValue* tempValue = static_cast<DoubleValue*>(m_datamodel->value(tiltThresholdTempFullId));
+        Q_ASSERT(tempValue != nullptr);
+
+        if (tempValue->rawValue().isValid() && tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport() && shutterActor->tiltState() == SHUTTER_TILT_CLOSED) {
+            isTiltDownState = true;
+        }
+    }
+
 
     if (!shutterMode->rawValue().isValid() || (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO)) {
         if (isDownTime) {
             // down: check is presence active
             if (!presenceActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
-                publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+                if (isTiltDownState) {
+                    iDebug() << "Full tilt open";
+                    publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_FULL_OPEN, "applyShutterLogic");
+                } else {
+                    iDebug() << "Shutter down";
+                    publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+                }
             } else {
                 iDebug() << "Room still active - pausing shutter actions";
             }
         } else {
             // up: just time-based
             if (shutterActor->rawValue().toInt() != SHUTTER_OPENED) {
-                publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
+                if (isTiltDownState) {
+                    // just turn open
+                    iDebug() << "Turn open";
+                    publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_TURN_OPEN, "applyShutterLogic");
+                } else {
+                    // full up
+                    iDebug() << "Shutter up";
+                    publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
+                }
             }
         }
     } else {

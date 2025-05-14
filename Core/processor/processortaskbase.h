@@ -12,6 +12,7 @@ class SHARED_LIB_EXPORT ProcessorTaskBase : public QObject, public SerializableI
     Q_OBJECT
 public:
     static qint64 INTERVAL_REALTIME;
+    static quint8 PARAM_COUNT;
 
     static QLatin1String PROPERTY_GROUP_ID;
     static QLatin1String PROPERTY_TASK_TYPE;

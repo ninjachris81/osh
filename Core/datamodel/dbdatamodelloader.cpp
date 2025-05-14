@@ -232,7 +232,7 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
             int functionCode = query.value(ProcessorTaskBase::PROPERTY_FUNCTION_CODE).toInt();
 
             QStringList params;
-            for (quint8 i=0;i<10;i++) {
+            for (quint8 i=0;i<ProcessorTaskBase::PARAM_COUNT;i++) {
                 params << query.value(ProcessorTaskBase::PROPERTY_PARAM_PREFIX + QString::number(i)).toString();
             }
 
