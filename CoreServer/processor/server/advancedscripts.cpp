@@ -33,14 +33,14 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     sunset = sunset.addSecs((sun.calcSunset()  + adjustmentSunset) * 60);
 
     bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
-    bool isTiltDownState = false;
+    bool isTiltDownOpenState = false;       // should be down, but tilt open
 
     if (tiltThresholdTempFullId != nullptr && !tiltThresholdTempFullId.isEmpty()) {
         DoubleValue* tempValue = static_cast<DoubleValue*>(m_datamodel->value(tiltThresholdTempFullId));
         Q_ASSERT(tempValue != nullptr);
 
-        if (tempValue->rawValue().isValid() && tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport() && shutterActor->tiltState() == SHUTTER_TILT_CLOSED) {
-            isTiltDownState = true;
+        if (tempValue->rawValue().isValid() && tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport()) {
+            isTiltDownOpenState = true;
         }
     }
 
@@ -48,29 +48,34 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     if (!shutterMode->rawValue().isValid() || (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO)) {
         if (isDownTime) {
             // down: check is presence active
-            if (!presenceActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
-                if (isTiltDownState) {
-                    iDebug() << "Full tilt open";
-                    publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_FULL_OPEN, "applyShutterLogic");
-                } else {
+            if (!presenceActive) {
+                if (shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
                     iDebug() << "Shutter down";
                     publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+                } else {
+                    iDebug() << "Shutter already down";
                 }
             } else {
-                iDebug() << "Room still active - pausing shutter actions";
+                iDebug() << "Presence still active";
             }
         } else {
             // up: just time-based
             if (shutterActor->rawValue().toInt() != SHUTTER_OPENED) {
-                if (isTiltDownState) {
+                if (isTiltDownOpenState) {
                     // just turn open
-                    iDebug() << "Turn open";
-                    publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_TURN_OPEN, "applyShutterLogic");
+                    if (shutterActor->tiltState() == SHUTTER_TILT_CLOSED) {
+                        iDebug() << "Turn open";
+                        publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_TURN_OPEN, "applyShutterLogic");
+                    } else {
+                        iDebug() << "Already tilted";
+                    }
                 } else {
                     // full up
                     iDebug() << "Shutter up";
                     publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
                 }
+            } else {
+                iDebug() << "Shutter already open";
             }
         }
     } else {
