@@ -74,6 +74,9 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
                     iDebug() << "Shutter up";
                     publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
                 }
+            } else if (shutterActor->rawValue().toInt() == SHUTTER_OPENED && isTiltDownOpenState) {
+                iDebug() << "Full down open";
+                publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_FULL_OPEN, "applyShutterLogic");
             } else {
                 iDebug() << "Shutter already open";
             }
