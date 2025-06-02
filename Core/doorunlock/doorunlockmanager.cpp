@@ -53,32 +53,37 @@ void DoorUnlockManager::handleReceivedMessage(MessageBase* msg) {
     OshUser* user = m_userManager->user(duMessage->userId());
     DoorActor *door = static_cast<DoorActor*>(m_actorManager->getActor(duMessage->doorId()));
 
-    if (user != nullptr && door != nullptr) {
-        if (user->rights().contains(OshUser::USER_RIGHT_UNLOCK_DOOR)) {
-            if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_STAGE)) {
-                DoorUnlockMessage::DU_AUTH_STAGE stage = static_cast<DoorUnlockMessage::DU_AUTH_STAGE>(duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_STAGE).toUInt());
+    if (door != nullptr) {
+        if (user != nullptr) {
+            if (user->rights().contains(OshUser::USER_RIGHT_UNLOCK_DOOR)) {
+                if (duMessage->values().contains(DoorUnlockMessage::DU_ATTRIB_STAGE)) {
+                    DoorUnlockMessage::DU_AUTH_STAGE stage = static_cast<DoorUnlockMessage::DU_AUTH_STAGE>(duMessage->values().value(DoorUnlockMessage::DU_ATTRIB_STAGE).toUInt());
 
-                switch(stage) {
-                case DoorUnlockMessage::CHALLENGE_REQUEST:
-                    handleChallengeRequest(duMessage);
-                    break;
-                case DoorUnlockMessage::CHALLENGE_CALCULATED:
-                    handleChallengeCalculated(duMessage);
-                    break;
-                default:
-                    iWarning() << "Unsupported stage" << stage;
+                    switch(stage) {
+                    case DoorUnlockMessage::CHALLENGE_REQUEST:
+                        handleChallengeRequest(duMessage);
+                        break;
+                    case DoorUnlockMessage::CHALLENGE_CALCULATED:
+                        handleChallengeCalculated(duMessage);
+                        break;
+                    default:
+                        iWarning() << "Unsupported stage" << stage;
+                    }
+
+                } else {
+                    iWarning() << "Stage attribute missing";
+                    sendResult(duMessage->userId(), duMessage->doorId(), false);
                 }
-
             } else {
-                iWarning() << "Stage attribute missing";
+                iWarning() << "Insufficient user rights" << duMessage->userId();
                 sendResult(duMessage->userId(), duMessage->doorId(), false);
             }
         } else {
-            iWarning() << "Insufficient user rights" << duMessage->userId();
+            iWarning() << "User could not be resolved" << duMessage->userId();
             sendResult(duMessage->userId(), duMessage->doorId(), false);
         }
     } else {
-        iWarning() << "User could not be resolved" << duMessage->userId();
+        iWarning() << "Invalid door id" << duMessage->doorId();
         sendResult(duMessage->userId(), duMessage->doorId(), false);
     }
 }
