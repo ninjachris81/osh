@@ -40,9 +40,11 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
         Q_ASSERT(tempValue != nullptr);
 
         if (tempValue->rawValue().isValid()) {
-            if (tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport()) {
+            if (tiltThresholdTemperature > 0 && tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport()) {
                 isTiltDownOpenState = true;
-            } else if (tempValue->rawValue().toDouble() > closeThresholdTemperature) {
+            }
+
+            if (closeThresholdTemperature > 0 && tempValue->rawValue().toDouble() > closeThresholdTemperature) {
                 isDownTime = true;
             }
         } else {
