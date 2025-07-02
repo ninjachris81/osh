@@ -7,7 +7,7 @@ AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localSt
 {
 }
 
-bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature) {
+bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
 
@@ -35,12 +35,18 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
     bool isTiltDownOpenState = false;       // should be down, but tilt open
 
-    if (tiltThresholdTempFullId != nullptr && !tiltThresholdTempFullId.isEmpty()) {
+    if (!isDownTime && (tiltThresholdTempFullId != nullptr && !tiltThresholdTempFullId.isEmpty())) {
         DoubleValue* tempValue = static_cast<DoubleValue*>(m_datamodel->value(tiltThresholdTempFullId));
         Q_ASSERT(tempValue != nullptr);
 
-        if (tempValue->rawValue().isValid() && tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport()) {
-            isTiltDownOpenState = true;
+        if (tempValue->rawValue().isValid()) {
+            if (tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport()) {
+                isTiltDownOpenState = true;
+            } else if (tempValue->rawValue().toDouble() > closeThresholdTemperature) {
+                isDownTime = true;
+            }
+        } else {
+            // temp not valid
         }
     }
 

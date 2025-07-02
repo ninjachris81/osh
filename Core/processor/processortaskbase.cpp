@@ -2,7 +2,7 @@
 #include <QDateTime>
 
 qint64 ProcessorTaskBase::INTERVAL_REALTIME = 0;
-quint8 ProcessorTaskBase::PARAM_COUNT = 10;
+quint8 ProcessorTaskBase::PARAM_COUNT = 12;
 
 QLatin1String ProcessorTaskBase::PROPERTY_GROUP_ID = QLatin1String("group_id");
 QLatin1String ProcessorTaskBase::PROPERTY_TASK_TYPE = QLatin1String("task_type");
