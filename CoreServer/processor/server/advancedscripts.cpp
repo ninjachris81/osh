@@ -7,12 +7,13 @@ AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localSt
 {
 }
 
-bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature) {
+bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature, QString reportTiltModeFullId) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
-    EnumValue* shutterMode = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
+    EnumValue* shutterModeValue = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
+    IntegerValue* reportTiltModeValue = static_cast<IntegerValue*>(m_datamodel->value(reportTiltModeFullId));
 
     Q_ASSERT(shutterActor != nullptr);
-    Q_ASSERT(shutterMode != nullptr);
+    Q_ASSERT(shutterModeValue != nullptr);
 
     bool presenceActive = false;
     if (!presenceFullId.isEmpty()) {
@@ -34,6 +35,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
 
     bool isDownTime = isWithin(sunset.hour(), sunset.minute(), sunrise.hour(), sunrise.minute(), utcTime);
     bool isTiltDownOpenState = false;       // should be down, but tilt open
+    int shutterTiltMode = SHUTTER_TILT_MODE_NORMAL;
 
     if (!isDownTime && (tiltThresholdTempFullId != nullptr && !tiltThresholdTempFullId.isEmpty())) {
         DoubleValue* tempValue = static_cast<DoubleValue*>(m_datamodel->value(tiltThresholdTempFullId));
@@ -42,10 +44,12 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
         if (tempValue->rawValue().isValid()) {
             if (tiltThresholdTemperature > 0 && tempValue->rawValue().toDouble() > tiltThresholdTemperature && shutterActor->checkTiltSupport()) {
                 isTiltDownOpenState = true;
+                shutterTiltMode = SHUTTER_TILT_MODE_TILT;
             }
 
             if (closeThresholdTemperature > 0 && tempValue->rawValue().toDouble() > closeThresholdTemperature) {
                 isDownTime = true;
+                shutterTiltMode = SHUTTER_TILT_MODE_CLOSE;
             }
         } else {
             // temp not valid
@@ -53,7 +57,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     }
 
 
-    if (!shutterMode->rawValue().isValid() || (shutterMode->rawValue().isValid() && shutterMode->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO)) {
+    if (!shutterModeValue->rawValue().isValid() || (shutterModeValue->rawValue().isValid() && shutterModeValue->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO)) {
         if (isDownTime) {
             // down: check is presence active
             if (!presenceActive) {
@@ -91,6 +95,10 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
         }
     } else {
         // set to manual
+    }
+
+    if (reportTiltModeValue != nullptr) {
+        publishValue(reportTiltModeValue, shutterTiltMode);
     }
 
     return true;
