@@ -409,7 +409,7 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterMode
     return true;
 }
 
-bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRingActorFullId) {
+bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRingActorFullId, int retriggerTimeout) {
     BooleanValue* inputSensor = static_cast<BooleanValue*>(m_datamodel->value(inputSensorFullId));
     DigitalActor* ringActor = static_cast<DigitalActor*>(m_datamodel->actor(doorRingActorFullId));
 
@@ -417,6 +417,8 @@ bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRin
     Q_ASSERT(ringActor != nullptr);
 
     m_localStorage->setObject("initDoorRingLogic", "ringActor", inputSensor->fullId(), ringActor);
+    m_localStorage->set("initDoorRingLogic", "ringTimeout", inputSensor->fullId(), retriggerTimeout);
+
     Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitDoorRingLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitDoorRingLogic_inputSensorValueChanged()));
 
     return true;
@@ -428,15 +430,22 @@ void CommonScripts::onInitDoorRingLogic_inputSensorValueChanged() {
     DigitalActor* ringActor = static_cast<DigitalActor*>(m_localStorage->getObject("initDoorRingLogic", "ringActor", inputSensor->fullId()));
 
     bool lastInputVal = m_localStorage->get("initDoorRingLogic", "lastVal", inputSensor->fullId(), false).toBool();
-    if (lastInputVal != inputSensor->rawValue().toBool()) {     // on toggle true
-        setTimeout(ringActor->fullId());
+    int ringTimeout = m_localStorage->get("initDoorRingLogic", "ringTimeout", inputSensor->fullId(), 3000).toInt();
+    quint64 lastRing = m_localStorage->get("initDoorRingLogic", "lastRing", inputSensor->fullId(), 0).toLongLong();
 
-        if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
-            publishCmd(ringActor, actor::ACTOR_CMD_ON, "input sensor");
-            m_localStorage->set("initDoorRingLogic", "lastVal", inputSensor->fullId(), true);
+    if (lastRing == 0 || QDateTime::currentMSecsSinceEpoch() - lastRing > ringTimeout) {
+        if (lastInputVal != inputSensor->rawValue().toBool()) {     // on toggle true
+            setTimeout(ringActor->fullId());
+
+            if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
+                publishCmd(ringActor, actor::ACTOR_CMD_ON, "input sensor");
+                m_localStorage->set("initDoorRingLogic", "lastVal", inputSensor->fullId(), true);
+                m_localStorage->set("initDoorRingLogic", "lastRing", inputSensor->fullId(), QDateTime::currentMSecsSinceEpoch());
+            }
         }
+    } else {
+        // last ring too recent
     }
-
 }
 
 bool CommonScripts::applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint64 triggerTimeoutMs) {

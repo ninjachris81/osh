@@ -37,7 +37,7 @@ public:
 
     Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, quint8 hourFrom, quint8 minuteFrom, quint8 hourTo, quint8 minuteTo);
 
-    Q_INVOKABLE bool initDoorRingLogic(QString inputSensorFullId, QString doorRingActorFullId);
+    Q_INVOKABLE bool initDoorRingLogic(QString inputSensorFullId, QString doorRingActorFullId, int retriggerTimeout = 3000);
 
     Q_INVOKABLE bool applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint64 triggerTimeoutMs);
 
