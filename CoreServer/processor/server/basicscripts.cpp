@@ -43,7 +43,7 @@ void BasicScripts::initConnectValues_valueChanged() {
     publishValue(valueTarget, valueSource->rawValue());
 }
 
-bool BasicScripts::initTriggerCmdOnValue(QString valueSourceIds, QVariant triggerValue, QString actorId, int actorCmd) {
+bool BasicScripts::initTriggerCmdOnValue(QString valueSourceIds, QVariant triggerValue, QString actorId, int actorCmd, int retriggerTimeout) {
     iInfo() << Q_FUNC_INFO;
 
     ActorBase *actor = m_datamodel->actor(actorId);
@@ -61,6 +61,7 @@ bool BasicScripts::initTriggerCmdOnValue(QString valueSourceIds, QVariant trigge
         m_localStorage->setObject("initTriggerCmdOnValue", "actor", valueSource->fullId(), actor);
         m_localStorage->set("initTriggerCmdOnValue", "actorCmd", valueSource->fullId(), actorCmd);
         m_localStorage->set("initTriggerCmdOnValue", "triggerValue", valueSource->fullId(), triggerValue);
+        m_localStorage->set("initTriggerCmdOnValue", "retriggerTimeout", valueSource->fullId(), retriggerTimeout);
 
         Helpers::safeConnect(valueSource, &ValueBase::valueChanged, this, &BasicScripts::initTriggerCmdOnValue_valueChanged, SIGNAL(valueChanged()), SLOT(initTriggerCmdOnValue_valueChanged()));
     }
@@ -75,10 +76,17 @@ void BasicScripts::initTriggerCmdOnValue_valueChanged() {
     ActorBase *actor = static_cast<ActorBase*>(m_localStorage->getObject("initTriggerCmdOnValue", "actor", valueSource->fullId()));
     int cmd = m_localStorage->get("initTriggerCmdOnValue", "actorCmd", valueSource->fullId()).toInt();
     QVariant triggerValue = m_localStorage->get("initTriggerCmdOnValue", "triggerValue", valueSource->fullId());
+    int retriggerTimeout = m_localStorage->get("initTriggerCmdOnValue", "retriggerTimeout", valueSource->fullId()).toInt();
+    qint64 lastTrigger = m_localStorage->get("initTriggerCmdOnValue", "lastTrigger", valueSource->fullId(), 0).toULongLong();
 
     if (triggerValue.convert(valueSource->rawValue().type())) {
         if (triggerValue == valueSource->rawValue()) {
-            publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), "initTriggerCmdOnValue_valueChanged");
+            if (lastTrigger == 0 || QDateTime::currentMSecsSinceEpoch() - lastTrigger > retriggerTimeout) {
+                publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), "initTriggerCmdOnValue_valueChanged");
+                m_localStorage->set("initTriggerCmdOnValue", "lastTrigger", valueSource->fullId(), QDateTime:: currentMSecsSinceEpoch());
+            } else {
+                qInfo() << "Trigger too recent" << lastTrigger << retriggerTimeout;
+            }
         }
     } else {
         qWarning() << "Cannot convert to target type" << triggerValue << valueSource->rawValue();

@@ -79,7 +79,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_advScripts->applyShutterLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toDouble(), m_nativeParams.at(4).toDouble(), m_nativeParams.at(5).toInt(), m_nativeParams.at(6).toInt(), m_nativeParams.at(7).toInt(), m_nativeParams.at(8).toString(), m_nativeParams.at(9).toDouble(), m_nativeParams.at(10).toDouble(), m_nativeParams.at(11).toString());
             break;
         case NFT_INIT_DOOR_RING_LOGIC:
-            m_lastResult = m_commonScripts->initDoorRingLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
+            m_lastResult = m_commonScripts->initDoorRingLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
             break;
         case NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
             m_lastResult = m_commonScripts->applyDoorRingTimeoutLogic(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toLongLong());
@@ -97,7 +97,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_basicScripts->initConnectValues(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
             break;
         case NFT_INIT_TRIGGER_CMD_ON_VALUE:
-            m_lastResult = m_basicScripts->initTriggerCmdOnValue(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt());
+            m_lastResult = m_basicScripts->initTriggerCmdOnValue(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt());
             break;            
         case NFT_INIT_FOLLOW_ACTOR:
             m_lastResult = m_basicScripts->initFollowActor(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
@@ -167,7 +167,7 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
     case NativeProcessorTask::NFT_APPLY_SHUTTER_LOGIC_ADV:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::String << QVariant::Double << QVariant::Double << QVariant::Int << QVariant::Int << QVariant::Int << QVariant::String << QVariant::Double << QVariant::Double << QVariant::String;
     case NativeProcessorTask::NFT_INIT_DOOR_RING_LOGIC:
-        return QList<QVariant::Type>() << QVariant::String << QVariant::String;
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int;
     case NativeProcessorTask::NFT_APPLY_DOOR_RING_TIMEOUT_LOGIC:
         return QList<QVariant::Type>() << QVariant::String << QVariant::LongLong;
     case NativeProcessorTask::NFT_INIT_PLAY_SOUND_ON_VALUE:
@@ -179,7 +179,7 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
     case NativeProcessorTask::NFT_INIT_CONNECT_VALUES:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String;
     case NativeProcessorTask::NFT_INIT_TRIGGER_CMD_ON_VALUE:
-        return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::Int;
+        return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::Int << QVariant::Int;
     case NativeProcessorTask::NFT_INIT_FOLLOW_ACTOR:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int;
     default:

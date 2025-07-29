@@ -19,7 +19,7 @@ public:
 
     Q_INVOKABLE bool initConnectValues(QString valueSourceIds, QString valueTargetId);
 
-    Q_INVOKABLE bool initTriggerCmdOnValue(QString valueSourceIds, QVariant triggerValue, QString actorId, int actorCmd);
+    Q_INVOKABLE bool initTriggerCmdOnValue(QString valueSourceIds, QVariant triggerValue, QString actorId, int actorCmd, int retriggerTimeout = 0);
 
     Q_INVOKABLE bool initFollowActor(QString actorSourceId, QString triggerActorId, int followMode);
 
