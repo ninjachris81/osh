@@ -7,7 +7,7 @@ AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localSt
 {
 }
 
-bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature, QString reportTiltModeFullId) {
+bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature, QString reportTiltModeFullId, QString windowOpenFullId) {
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterModeValue = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
     IntegerValue* reportTiltModeValue = static_cast<IntegerValue*>(m_datamodel->value(reportTiltModeFullId));
@@ -19,6 +19,12 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     if (!presenceFullId.isEmpty()) {
         ValueBase* presenceVal = m_datamodel->value(presenceFullId);
         presenceActive = presenceVal->rawValue().toBool();
+    }
+
+    bool windowClosed = true;
+    if (!windowOpenFullId.isEmpty()) {
+        ValueBase* windowVal = m_datamodel->value(windowOpenFullId);
+        windowClosed = windowVal->rawValue().toBool();
     }
 
     QTime utcTime = QDateTime::currentDateTimeUtc().time();
@@ -60,7 +66,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     if (!shutterModeValue->rawValue().isValid() || (shutterModeValue->rawValue().isValid() && shutterModeValue->rawValue().toInt() == SHUTTER_OPERATION_MODE_AUTO)) {
         if (isDownTime) {
             // down: check is presence active
-            if (!presenceActive) {
+            if (!presenceActive && windowClosed) {
                 if (shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
                     iDebug() << "Shutter down";
                     publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
@@ -68,7 +74,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
                     iDebug() << "Shutter already down";
                 }
             } else {
-                iDebug() << "Presence still active";
+                iDebug() << "Presence still active or window not closed";
             }
         } else {
             // up: just time-based
