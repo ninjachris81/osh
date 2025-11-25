@@ -549,7 +549,7 @@ bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString so
         playbackActors << playbackActor;
     }
 
-    connect(actor, &ActorBase::cmdTriggered, this, [this, cmdValue, playbackActors, soundValue](actor::ACTOR_CMDS cmd){
+    connect(actor, &ActorBase::cmdTriggered, this, [this, cmdValue, playbackActors, &soundValue](actor::ACTOR_CMDS cmd){
         if (cmd == cmdValue) {
             iInfo() << "Is target cmd, proceed" << soundValue;
 
