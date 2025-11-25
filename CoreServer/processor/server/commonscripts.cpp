@@ -541,9 +541,10 @@ bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString so
         AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(playbackActorFullId));
         Q_ASSERT(playbackActor != nullptr);
         if (!soundValue.isEmpty()) {
+            iInfo() << "Getting URL" << playbackActor->audioUrlId() << "to play" << soundValue;
             StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
-            iInfo() << "Using fixed sound value" << soundValue << urlValue;
             Q_ASSERT(urlValue != nullptr);
+            iInfo() << "Using fixed sound value" << soundValue << urlValue->fullId();
         }
         playbackActors << playbackActor;
     }
