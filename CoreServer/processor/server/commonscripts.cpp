@@ -525,7 +525,6 @@ void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
     }
 }
 
-
 bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
     iInfo() << Q_FUNC_INFO;
 
@@ -534,38 +533,47 @@ bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString so
 
     m_localStorage->set("initPlaySoundOnCmd", "cmdValue", actor->fullId(), cmdValue);
 
-    QList<AudioPlaybackActor*> playbackActors;
-
+    quint8 index = 0;
     for (QString playbackActorFullId : soundActorId.split("|", QString::SkipEmptyParts)) {
         iInfo() << "Register" << playbackActorFullId;
         AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(playbackActorFullId));
         Q_ASSERT(playbackActor != nullptr);
-        if (!soundValue.isEmpty()) {
-            iInfo() << "Getting URL" << playbackActor->audioUrlId() << "to play" << soundValue;
-            StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
-            Q_ASSERT(urlValue != nullptr);
-            iInfo() << "Using fixed sound value" << soundValue << urlValue->fullId();
-        }
-        playbackActors << playbackActor;
+        m_localStorage->setObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index, playbackActor);
+        m_localStorage->set("initPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index, soundValue);
+        index++;
     }
 
-    connect(actor, &ActorBase::cmdTriggered, this, [this, cmdValue, playbackActors, &soundValue](actor::ACTOR_CMDS cmd){
-        if (cmd == cmdValue) {
-            iInfo() << "Is target cmd, proceed" << soundValue;
-
-            for (AudioPlaybackActor* playbackActor : playbackActors) {
-                if (!soundValue.isEmpty()) {
-                    StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
-                    Q_ASSERT(urlValue != nullptr);
-                    iDebug() << "Setting url" << soundValue;
-                    publishValue(urlValue, soundValue);
-                }
-
-                iInfo() << "Start playback" << playbackActor->fullId();
-                publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
-            }
-        }
-    });
+    Helpers::safeConnect(actor, &ActorBase::cmdTriggered, this, &CommonScripts::onInitPlaySoundOnCmd_triggeredCmd, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS)));
 
     return true;
+}
+
+void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd) {
+    iInfo() << Q_FUNC_INFO;
+
+    ActorBase* actor = static_cast<ActorBase*>(sender());
+    actor::ACTOR_CMDS targetCmd = static_cast<actor::ACTOR_CMDS>(m_localStorage->get("initPlaySoundOnCmd", "cmdValue", actor->fullId()).toInt());
+    if (cmd == targetCmd) {
+        iInfo() << "Is target cmd, proceed";
+
+        for (quint8 index = 0; index<255; index++) {
+            AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index));
+            if (playbackActor == nullptr) {
+                break;
+            }
+
+            if (m_localStorage->contains("onInitPlaySoundOnCmd", "urlValue", actor->fullId() + "_" + index)) {
+                QString soundValue = m_localStorage->get("onInitPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index).toString();
+                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("onInitPlaySoundOnCmd", "urlValue", actor->fullId() + "_" + index));
+                iDebug() << "Setting url" << soundValue;
+                publishValue(urlValue, soundValue);
+            } else {
+                // playback static url
+                iDebug() << "Playback static url";
+            }
+
+            iInfo() << "Start playback" << playbackActor->fullId();
+            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+        }
+    }
 }
