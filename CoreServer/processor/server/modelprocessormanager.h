@@ -54,6 +54,7 @@ private:
     QTimer m_scheduleTimer;
 
     LocalStorage m_localStorage;
+    TaskStorage m_taskStorage;
 
     CommunicationManagerBase* m_commManager;
     DatamodelManager* m_dmManager;

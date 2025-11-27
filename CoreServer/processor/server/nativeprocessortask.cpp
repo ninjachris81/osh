@@ -91,7 +91,7 @@ QVariant NativeProcessorTask::run() {
             m_lastResult = m_commonScripts->initPlaySoundOnValue2(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2), m_nativeParams.at(3).toString(), m_nativeParams.at(4).toString());
             break;
         case NFT_INIT_PLAY_SOUND_ON_CMD:
-            m_lastResult = m_commonScripts->initPlaySoundOnCmd(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
+            m_lastResult = m_commonScripts->initPlaySoundOnCmd(m_id, m_nativeParams.at(0).toString(), m_nativeParams.at(1).toInt(), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toString());
             break;
         case NFT_INIT_CONNECT_VALUES:
             m_lastResult = m_basicScripts->initConnectValues(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());

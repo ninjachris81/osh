@@ -6,7 +6,7 @@
 #include "helpers.h"
 
 
-CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", datamodel, localStorage, valueManager, actorManager, parent)
+CommonScripts::CommonScripts(DatamodelBase *datamodel, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", datamodel, localStorage, taskStorage, valueManager, actorManager, parent)
 {
 }
 
@@ -525,23 +525,46 @@ void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
     }
 }
 
-bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
+bool CommonScripts::initPlaySoundOnCmd(QString taskId, QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
     iInfo() << Q_FUNC_INFO;
 
     ActorBase* actor = m_actorManager->getActor(actorId);
     Q_ASSERT(actor != nullptr);
 
-    m_localStorage->set("initPlaySoundOnCmd", "cmdValue", actor->fullId(), cmdValue);
-
-    quint8 index = 0;
+    QList<AudioPlaybackActor*> playbackActors;
     for (QString playbackActorFullId : soundActorId.split("|", QString::SkipEmptyParts)) {
         iInfo() << "Register" << playbackActorFullId;
         AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(playbackActorFullId));
         Q_ASSERT(playbackActor != nullptr);
-        m_localStorage->setObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index, playbackActor);
-        m_localStorage->set("initPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index, soundValue);
-        index++;
+        playbackActors << playbackActor;
     }
+
+    m_taskStorage->registerExecution(actor, [this, taskId, cmdValue, soundValue, playbackActors](QVariantList params) {
+        if (cmdValue == params.at(0).toInt()) {
+            iInfo() << "Is target cmd, proceed";
+
+            // avoid multiple callbacks in a row
+            if (QDateTime::currentMSecsSinceEpoch() - m_localStorage->get("initPlaySoundOnCmd", "lastTrigger", taskId).toLongLong() > 2000) {
+                m_localStorage->set("initPlaySoundOnCmd", "lastTrigger", taskId, QDateTime::currentMSecsSinceEpoch());
+
+                for (AudioPlaybackActor *playbackActor : playbackActors) {
+                    if (!soundValue.isEmpty() && !playbackActor->audioUrlId().isEmpty()) {
+                        StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
+                        iDebug() << "Setting url" << soundValue;
+                        publishValue(urlValue, soundValue);
+                    } else {
+                        // playback static url
+                        iDebug() << "Playback static url";
+                    }
+
+                    iInfo() << "Start playback" << playbackActor->fullId();
+                    publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_START, "event play playback");
+                }
+            } else {
+                iDebug() << "Method called too fast in a row";
+            }
+        }
+    });
 
     Helpers::safeConnect(actor, &ActorBase::cmdTriggered, this, &CommonScripts::onInitPlaySoundOnCmd_triggeredCmd, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(onInitPlaySoundOnCmd_triggeredCmd(ACTOR_CMDS)));
 
@@ -550,30 +573,5 @@ bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString so
 
 void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(ACTOR_CMDS cmd) {
     iInfo() << Q_FUNC_INFO;
-
-    ActorBase* actor = static_cast<ActorBase*>(sender());
-    ACTOR_CMDS targetCmd = static_cast<ACTOR_CMDS>(m_localStorage->get("initPlaySoundOnCmd", "cmdValue", actor->fullId()).toInt());
-    if (cmd == targetCmd) {
-        iInfo() << "Is target cmd, proceed";
-
-        for (quint8 index = 0; index<255; index++) {
-            AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnCmd", "soundActorId", actor->fullId() + "_" + index));
-            if (playbackActor == nullptr) {
-                break;
-            }
-
-            if (m_localStorage->contains("onInitPlaySoundOnCmd", "urlValue", actor->fullId() + "_" + index)) {
-                QString soundValue = m_localStorage->get("onInitPlaySoundOnCmd", "soundValue", actor->fullId() + "_" + index).toString();
-                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("onInitPlaySoundOnCmd", "urlValue", actor->fullId() + "_" + index));
-                iDebug() << "Setting url" << soundValue;
-                publishValue(urlValue, soundValue);
-            } else {
-                // playback static url
-                iDebug() << "Playback static url";
-            }
-
-            iInfo() << "Start playback" << playbackActor->fullId();
-            publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_START, "event play playback");
-        }
-    }
+    m_taskStorage->triggerExecution(sender(), { QVariant((int) cmd) });
 }

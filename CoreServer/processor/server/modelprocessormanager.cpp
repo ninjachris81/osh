@@ -74,9 +74,9 @@ void ModelProcessorManager::init(LocalConfig* config) {
     m_dmManager = getManager<DatamodelManager>(DatamodelManager::MANAGER_ID);
 
     // init executors
-    m_processorExecutors.insert(ProcessorTaskBase::PTT_NATIVE, new NativeProcessorExecutor(m_dmManager, &m_localStorage, m_valueManager, m_actorManager, this));
+    m_processorExecutors.insert(ProcessorTaskBase::PTT_NATIVE, new NativeProcessorExecutor(m_dmManager, &m_localStorage, &m_taskStorage, m_valueManager, m_actorManager, this));
 #ifdef PROCESSOR_JS_SUPPORT
-    m_processorExecutors.insert(ProcessorTaskBase::PTT_JS, new JSProcessorExecutor(m_dmManager, &m_localStorage, m_valueManager, m_actorManager, this));
+    m_processorExecutors.insert(ProcessorTaskBase::PTT_JS, new JSProcessorExecutor(m_dmManager, &m_localStorage, &m_taskStorage, m_valueManager, m_actorManager, this));
 #endif
 
 }

@@ -14,7 +14,7 @@ class BasicScripts : public ScriptBase
 {
     Q_OBJECT
 public:
-    explicit BasicScripts(DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit BasicScripts(DatamodelBase* datamodel, LocalStorage* localStorage, TaskStorage* taskStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
 
     Q_INVOKABLE bool initConnectValues(QString valueSourceIds, QString valueTargetId);

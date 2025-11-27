@@ -3,7 +3,7 @@
 
 #include "helpers.h"
 
-BasicScripts::BasicScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("BasicScripts", datamodel, localStorage, valueManager, actorManager, parent)
+BasicScripts::BasicScripts(DatamodelBase *datamodel, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("BasicScripts", datamodel, localStorage, taskStorage, valueManager, actorManager, parent)
 {
 
 }

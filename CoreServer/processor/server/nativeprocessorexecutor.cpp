@@ -1,11 +1,11 @@
 #include "nativeprocessorexecutor.h"
 
-NativeProcessorExecutor::NativeProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent)
-    : ProcessorExecutorBase("NativeProcessorExecutor", dmManager, localStorage, valueManager, actorManager, parent)
+NativeProcessorExecutor::NativeProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent)
+    : ProcessorExecutorBase("NativeProcessorExecutor", dmManager, localStorage, taskStorage, valueManager, actorManager, parent)
 {
-    m_basicScripts = new BasicScripts(dmManager->datamodel(), localStorage, valueManager, actorManager, this);
-    m_commonScripts = new CommonScripts(dmManager->datamodel(), localStorage, valueManager, actorManager, this);
-    m_advScripts = new AdvancedScripts(dmManager->datamodel(), localStorage, valueManager, actorManager, this);
+    m_basicScripts = new BasicScripts(dmManager->datamodel(), localStorage, taskStorage, valueManager, actorManager, this);
+    m_commonScripts = new CommonScripts(dmManager->datamodel(), localStorage, taskStorage, valueManager, actorManager, this);
+    m_advScripts = new AdvancedScripts(dmManager->datamodel(), localStorage, taskStorage, valueManager, actorManager, this);
 }
 
 

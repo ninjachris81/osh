@@ -2,8 +2,8 @@
 
 #include <QDebug>
 
-JSProcessorExecutor::JSProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent)
-    : ProcessorExecutorBase("JSProcessorExecutor", dmManager, localStorage, valueManager, actorManager, parent)
+JSProcessorExecutor::JSProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent)
+    : ProcessorExecutorBase("JSProcessorExecutor", dmManager, localStorage, taskStorage, valueManager, actorManager, parent)
 {
     m_engine.installExtensions(QJSEngine::AllExtensions);
 

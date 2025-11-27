@@ -3,7 +3,7 @@
 
 #include <QDateTime>
 
-AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", datamodel, localStorage, valueManager, actorManager, parent)
+AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", datamodel, localStorage, taskStorage, valueManager, actorManager, parent)
 {
 }
 

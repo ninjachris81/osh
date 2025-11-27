@@ -12,7 +12,7 @@ class NativeProcessorExecutor : public ProcessorExecutorBase
 {
     Q_OBJECT
 public:
-    explicit NativeProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit NativeProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
     /*virtual*/ QVariant execute(ProcessorTaskBase* task) override;
 

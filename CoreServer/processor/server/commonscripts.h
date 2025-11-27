@@ -15,7 +15,7 @@ class SHARED_LIB_EXPORT CommonScripts : public ScriptBase
 {
     Q_OBJECT
 public:
-    explicit CommonScripts(DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit CommonScripts(DatamodelBase* datamodel, LocalStorage* localStorage, TaskStorage* taskStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
     //Q_INVOKABLE bool ensureState(ValueBase* actualValue, ValueBase* expectedValue, QVariant actualInvalid, QJSValue function);
 
@@ -45,7 +45,7 @@ public:
 
     Q_INVOKABLE bool initPlaySoundOnValue2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue);
 
-    Q_INVOKABLE bool initPlaySoundOnCmd(QString actorId, int cmdValue, QString soundActorId, QString soundValue);
+    Q_INVOKABLE bool initPlaySoundOnCmd(QString taskId, QString actorId, int cmdValue, QString soundActorId, QString soundValue);
 
 private slots:
     void onInitSwitchPresenceLogic_presenceValueChanged();

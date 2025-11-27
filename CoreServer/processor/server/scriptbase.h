@@ -8,9 +8,10 @@
 #include "value/valuebase.h"
 #include "actor/actorbase.h"
 #include "datamodel/datamodelbase.h"
-#include "processor/server/localstorage.h"
+#include "localstorage.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
+#include "taskstorage.h"
 
 class ScriptBase : public QObject, public Identifyable
 {
@@ -24,7 +25,7 @@ public:
 
     static QLatin1String TIMOUT_LAST_TS;
 
-    explicit ScriptBase(QString name, DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit ScriptBase(QString name, DatamodelBase* datamodel, LocalStorage* localStorage, TaskStorage* taskStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
     LogCat::LOGCAT logCat();
 
@@ -46,6 +47,7 @@ public:
 protected:
     DatamodelBase* m_datamodel;
     LocalStorage* m_localStorage;
+    TaskStorage* m_taskStorage;
     ValueManagerBase* m_valueManager;
     ActorManager* m_actorManager;
 

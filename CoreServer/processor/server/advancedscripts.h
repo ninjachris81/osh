@@ -14,7 +14,7 @@ class AdvancedScripts : public ScriptBase
 {
     Q_OBJECT
 public:
-    explicit AdvancedScripts(DatamodelBase* datamodel, LocalStorage* localStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit AdvancedScripts(DatamodelBase* datamodel, LocalStorage* localStorage, TaskStorage* taskStorage, ValueManagerBase* valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
     Q_INVOKABLE bool applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature, QString reportTiltModeFullId, QString windowOpenFullId);
 

@@ -15,7 +15,7 @@ class SHARED_LIB_EXPORT JSProcessorExecutor : public ProcessorExecutorBase
 {
     Q_OBJECT
 public:
-    explicit JSProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent = nullptr);
+    explicit JSProcessorExecutor(DatamodelManager *dmManager, LocalStorage *localStorage, TaskStorage* taskStorage, ValueManagerBase *valueManager, ActorManager *actorManager, QObject *parent = nullptr);
 
     /*virtual*/ QVariant execute(ProcessorTaskBase* task) override;
 

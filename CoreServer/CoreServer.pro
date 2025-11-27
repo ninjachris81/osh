@@ -42,6 +42,7 @@ SOURCES += \
     processor/server/nativeprocessortask.cpp \
     processor/server/processorexecutorbase.cpp \
     processor/server/scriptbase.cpp \
+    processor/server/taskstorage.cpp \
     time/server/systemtimemanager.cpp \
     value/server/environmentvaluemanager.cpp \
     value/server/servervaluemanager.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     processor/server/nativeprocessortask.h \
     processor/server/processorexecutorbase.h \
     processor/server/scriptbase.h \
+    processor/server/taskstorage.h \
     processor/server/threadsafeqjsengine.h \
     sharedlib.h \
     time/server/systemtimemanager.h \
