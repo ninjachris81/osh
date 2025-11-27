@@ -13,6 +13,7 @@ QT       -= gui
 TARGET = CoreServer
 TEMPLATE = lib
 #CONFIG += staticlib
+CONFIG += c++17
 
 DEFINES += MAKE_SHARED_LIB
 

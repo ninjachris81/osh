@@ -32,7 +32,7 @@ public:
     AudioPlaybackActor();
     explicit AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioUrl, QString audioUrlId, QString audioCurrentTitleId, QString audioName, QObject *parent = nullptr);
 
-    /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
+    /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue);
 
@@ -70,7 +70,7 @@ protected:
     StringValue* m_audioUrlValue = nullptr;
     StringValue* m_audioCurrentTitleValue = nullptr;
 
-    /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
+    /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd);
 
 protected slots:
     void onVolumeChanged();

@@ -13,7 +13,7 @@
 namespace unit {
 SHARED_LIB_EXPORT Q_NAMESPACE
 
-    enum UNIT_TYPE {
+    enum class UNIT_TYPE {
         UT_UNKNOWN = ENUM_UNKNOWN,
         UT_DEGREES = UNIT_TYPE_DEGREES,
         UT_PERCENT = UNIT_TYPE_PERCENT,

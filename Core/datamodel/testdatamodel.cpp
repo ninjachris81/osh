@@ -74,276 +74,276 @@ TestDatamodel::TestDatamodel(ProcessorTaskFactory *processorTaskFactory, QObject
 
     // TEMP VALVES
     ValueGroup* nodeTempValves = addValueGroup("tempValves");
-    heatingRoom->addActor(  addDigitalActor(nodeTempValves, "0", VALTYPE_RELAY_TEMP_VALVE, ValueBase::VT_MID, true));
+    heatingRoom->addActor(  addDigitalActor(nodeTempValves, "0", VALUE_TYPE::VALTYPE_RELAY_TEMP_VALVE, ValueBase::VT_MID, true));
 
     // RELAYS
     ValueGroup* nodeBasementRelays = addValueGroup("basementRelays0");
-    heatingRoom->addActor(  addDigitalActor(nodeBasementRelays, "0", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    workshop->addActor(     addDigitalActor(nodeBasementRelays, "1", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-                            addDigitalActor(nodeBasementRelays, "2", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
-                            addDigitalActor(nodeBasementRelays, "3", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
-                            addDigitalActor(nodeBasementRelays, "4", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
-                            addDigitalActor(nodeBasementRelays, "5", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
-                            addDigitalActor(nodeBasementRelays, "6", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
-                            addDigitalActor(nodeBasementRelays, "7", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+    heatingRoom->addActor(  addDigitalActor(nodeBasementRelays, "0", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    workshop->addActor(     addDigitalActor(nodeBasementRelays, "1", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+                            addDigitalActor(nodeBasementRelays, "2", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+                            addDigitalActor(nodeBasementRelays, "3", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+                            addDigitalActor(nodeBasementRelays, "4", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+                            addDigitalActor(nodeBasementRelays, "5", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+                            addDigitalActor(nodeBasementRelays, "6", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+                            addDigitalActor(nodeBasementRelays, "7", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
 
     ValueGroup* nodeAllRelays0 = addValueGroup("allRelays0");
 
     // EG
-    egFloor->addActor(      addDigitalActor(nodeAllRelays0, "0", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    workingRoom->addActor(  addDigitalActor(nodeAllRelays0, "1", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    kitchen->addActor(      addDigitalActor(nodeAllRelays0, "2", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    diningRoom->addActor(   addDigitalActor(nodeAllRelays0, "3", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    toilet->addActor(       addDigitalActor(nodeAllRelays0, "4", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    supplyRoom->addActor(   addDigitalActor(nodeAllRelays0, "5", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    egMainFloor->addActor(  addDigitalActor(nodeAllRelays0, "6", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    egSideFloor->addActor(  addDigitalActor(nodeAllRelays0, "7", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    egFloor->addActor(      addDigitalActor(nodeAllRelays0, "0", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    workingRoom->addActor(  addDigitalActor(nodeAllRelays0, "1", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    kitchen->addActor(      addDigitalActor(nodeAllRelays0, "2", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    diningRoom->addActor(   addDigitalActor(nodeAllRelays0, "3", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    toilet->addActor(       addDigitalActor(nodeAllRelays0, "4", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    supplyRoom->addActor(   addDigitalActor(nodeAllRelays0, "5", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    egMainFloor->addActor(  addDigitalActor(nodeAllRelays0, "6", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    egSideFloor->addActor(  addDigitalActor(nodeAllRelays0, "7", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
 
     // OG
-    sleepingRoom->addActor( addDigitalActor(nodeAllRelays0, "16", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    clothingRoom->addActor( addDigitalActor(nodeAllRelays0, "17", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    bathRoom->addActor(     addDigitalActor(nodeAllRelays0, "18", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    livingRoom->addActor(   addDigitalActor(nodeAllRelays0, "19", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    ogFloor->addActor(      addDigitalActor(nodeAllRelays0, "20", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-    ogMainFloor->addActor(  addDigitalActor(nodeAllRelays0, "21", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
-                            addDigitalActor(nodeAllRelays0, "22", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
-                            addDigitalActor(nodeAllRelays0, "23", VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+    sleepingRoom->addActor( addDigitalActor(nodeAllRelays0, "16", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    clothingRoom->addActor( addDigitalActor(nodeAllRelays0, "17", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    bathRoom->addActor(     addDigitalActor(nodeAllRelays0, "18", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    livingRoom->addActor(   addDigitalActor(nodeAllRelays0, "19", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    ogFloor->addActor(      addDigitalActor(nodeAllRelays0, "20", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+    ogMainFloor->addActor(  addDigitalActor(nodeAllRelays0, "21", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true));
+                            addDigitalActor(nodeAllRelays0, "22", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
+                            addDigitalActor(nodeAllRelays0, "23", VALUE_TYPE::VALTYPE_RELAY_LIGHT, ValueBase::VT_MID, true);
 
     // SHUTTERS
     ValueGroup* nodeAllShutters = addValueGroup("allShutters0");
 
-    workingRoom->addActor(  addShutterActor(nodeAllShutters, "0", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
-    kitchen->addActor(      addShutterActor(nodeAllShutters, "1", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
-    diningRoom->addActor(   addShutterActor(nodeAllShutters, "2", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 30000, 0));
-    toilet->addActor(       addShutterActor(nodeAllShutters, "3", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
-    supplyRoom->addActor(   addShutterActor(nodeAllShutters, "4", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
-    egSideFloor->addActor(  addShutterActor(nodeAllShutters, "5", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    workingRoom->addActor(  addShutterActor(nodeAllShutters, "0", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    kitchen->addActor(      addShutterActor(nodeAllShutters, "1", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    diningRoom->addActor(   addShutterActor(nodeAllShutters, "2", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 30000, 0));
+    toilet->addActor(       addShutterActor(nodeAllShutters, "3", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    supplyRoom->addActor(   addShutterActor(nodeAllShutters, "4", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    egSideFloor->addActor(  addShutterActor(nodeAllShutters, "5", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
 
-    sleepingRoom->addActor( addShutterActor(nodeAllShutters, "6", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 50000, 2000));
-    clothingRoom->addActor( addShutterActor(nodeAllShutters, "7", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
-    bathRoom->addActor(     addShutterActor(nodeAllShutters, "8", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
-    livingRoom->addActor(   addShutterActor(nodeAllShutters, "9", VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 50000, 2000));
+    sleepingRoom->addActor( addShutterActor(nodeAllShutters, "6", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 50000, 2000));
+    clothingRoom->addActor( addShutterActor(nodeAllShutters, "7", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    bathRoom->addActor(     addShutterActor(nodeAllShutters, "8", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, false, 20000, 0));
+    livingRoom->addActor(   addShutterActor(nodeAllShutters, "9", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_NONE, true, 50000, 2000));
 
     ValueGroup* nodeShutterRelays0 = addValueGroup("shutterRelays0");
 
     // shutter relays
-    workingRoom->addActor(  addDigitalActor(nodeShutterRelays0, "0", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    workingRoom->addActor(  addDigitalActor(nodeShutterRelays0, "1", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    kitchen->addActor(      addDigitalActor(nodeShutterRelays0, "2", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    kitchen->addActor(      addDigitalActor(nodeShutterRelays0, "3", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    diningRoom->addActor(   addDigitalActor(nodeShutterRelays0, "4", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    diningRoom->addActor(   addDigitalActor(nodeShutterRelays0, "5", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    toilet->addActor(       addDigitalActor(nodeShutterRelays0, "6", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    toilet->addActor(       addDigitalActor(nodeShutterRelays0, "7", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    supplyRoom->addActor(   addDigitalActor(nodeShutterRelays0, "8", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    supplyRoom->addActor(   addDigitalActor(nodeShutterRelays0, "9", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    egSideFloor->addActor(  addDigitalActor(nodeShutterRelays0, "10", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    egSideFloor->addActor(  addDigitalActor(nodeShutterRelays0, "11", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    workingRoom->addActor(  addDigitalActor(nodeShutterRelays0, "0", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    workingRoom->addActor(  addDigitalActor(nodeShutterRelays0, "1", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    kitchen->addActor(      addDigitalActor(nodeShutterRelays0, "2", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    kitchen->addActor(      addDigitalActor(nodeShutterRelays0, "3", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    diningRoom->addActor(   addDigitalActor(nodeShutterRelays0, "4", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    diningRoom->addActor(   addDigitalActor(nodeShutterRelays0, "5", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    toilet->addActor(       addDigitalActor(nodeShutterRelays0, "6", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    toilet->addActor(       addDigitalActor(nodeShutterRelays0, "7", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    supplyRoom->addActor(   addDigitalActor(nodeShutterRelays0, "8", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    supplyRoom->addActor(   addDigitalActor(nodeShutterRelays0, "9", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    egSideFloor->addActor(  addDigitalActor(nodeShutterRelays0, "10", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    egSideFloor->addActor(  addDigitalActor(nodeShutterRelays0, "11", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
 
     // shutter replays
-    sleepingRoom->addActor( addDigitalActor(nodeShutterRelays0, "12", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    sleepingRoom->addActor( addDigitalActor(nodeShutterRelays0, "13", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    clothingRoom->addActor( addDigitalActor(nodeShutterRelays0, "14", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    clothingRoom->addActor( addDigitalActor(nodeShutterRelays0, "15", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    bathRoom->addActor(     addDigitalActor(nodeShutterRelays0, "16", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    bathRoom->addActor(     addDigitalActor(nodeShutterRelays0, "17", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    livingRoom->addActor(   addDigitalActor(nodeShutterRelays0, "18", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
-    livingRoom->addActor(   addDigitalActor(nodeShutterRelays0, "19", value::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    sleepingRoom->addActor( addDigitalActor(nodeShutterRelays0, "12", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    sleepingRoom->addActor( addDigitalActor(nodeShutterRelays0, "13", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    clothingRoom->addActor( addDigitalActor(nodeShutterRelays0, "14", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    clothingRoom->addActor( addDigitalActor(nodeShutterRelays0, "15", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    bathRoom->addActor(     addDigitalActor(nodeShutterRelays0, "16", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    bathRoom->addActor(     addDigitalActor(nodeShutterRelays0, "17", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    livingRoom->addActor(   addDigitalActor(nodeShutterRelays0, "18", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
+    livingRoom->addActor(   addDigitalActor(nodeShutterRelays0, "19", VALUE_TYPE::VALTYPE_RELAY_SHUTTER, ValueBase::VT_MID, true));
 
     // REED CONTACTS
     ValueGroup* nodeReedContacts = addValueGroup("reedContacts");
-    kitchen->addValue(      addBooleanValue(nodeReedContacts, "20", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodeReedContacts, "21", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    toilet->addValue(       addBooleanValue(nodeReedContacts, "22", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    egMainFloor->addValue(    addBooleanValue(nodeReedContacts, "23", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    egFloor->addValue(      addBooleanValue(nodeReedContacts, "24", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodeReedContacts, "25", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    supplyRoom->addValue(   addBooleanValue(nodeReedContacts, "26", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    kitchen->addValue(      addBooleanValue(nodeReedContacts, "20", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    diningRoom->addValue(   addBooleanValue(nodeReedContacts, "21", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    toilet->addValue(       addBooleanValue(nodeReedContacts, "22", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    egMainFloor->addValue(    addBooleanValue(nodeReedContacts, "23", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    egFloor->addValue(      addBooleanValue(nodeReedContacts, "24", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    workingRoom->addValue(  addBooleanValue(nodeReedContacts, "25", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    supplyRoom->addValue(   addBooleanValue(nodeReedContacts, "26", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
 
-    ogFloor->addValue(      addBooleanValue(nodeReedContacts, "40", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    clothingRoom->addValue( addBooleanValue(nodeReedContacts, "41", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    livingRoom->addValue(   addBooleanValue(nodeReedContacts, "42", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    sleepingRoom->addValue( addBooleanValue(nodeReedContacts, "43", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
-    bathRoom->addValue(     addBooleanValue(nodeReedContacts, "44", VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    ogFloor->addValue(      addBooleanValue(nodeReedContacts, "40", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    clothingRoom->addValue( addBooleanValue(nodeReedContacts, "41", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    livingRoom->addValue(   addBooleanValue(nodeReedContacts, "42", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    sleepingRoom->addValue( addBooleanValue(nodeReedContacts, "43", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
+    bathRoom->addValue(     addBooleanValue(nodeReedContacts, "44", VALUE_TYPE::VALTYPE_REED_CONTACT, ValueBase::VT_MID));
 
     // SWITCHES
     ValueGroup* nodeBasementSwitches = addValueGroup("basementSwitches");
     // Basement
-    heatingRoom->addValue(  addBooleanValue(nodeBasementSwitches, "0", VALTYPE_SWITCH, ValueBase::VT_MID));
-    workshop->addValue(     addBooleanValue(nodeBasementSwitches, "1", VALTYPE_SWITCH, ValueBase::VT_MID));
-                            addBooleanValue(nodeBasementSwitches, "2", VALTYPE_SWITCH, ValueBase::VT_MID);
+    heatingRoom->addValue(  addBooleanValue(nodeBasementSwitches, "0", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    workshop->addValue(     addBooleanValue(nodeBasementSwitches, "1", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+                            addBooleanValue(nodeBasementSwitches, "2", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID);
 
     ValueGroup* nodeAllSwitches0 = addValueGroup("allSwitches0");
     // EG
-    egFloor->addValue(      addBooleanValue(nodeAllSwitches0, "0", VALTYPE_SWITCH, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodeAllSwitches0, "1", VALTYPE_SWITCH, ValueBase::VT_MID));
-    kitchen->addValue(      addBooleanValue(nodeAllSwitches0, "2", VALTYPE_SWITCH, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodeAllSwitches0, "3", VALTYPE_SWITCH, ValueBase::VT_MID));
-    toilet->addValue(       addBooleanValue(nodeAllSwitches0, "4", VALTYPE_SWITCH, ValueBase::VT_MID));
-    supplyRoom->addValue(   addBooleanValue(nodeAllSwitches0, "5", VALTYPE_SWITCH, ValueBase::VT_MID));
-    egMainFloor->addValue(  addBooleanValue(nodeAllSwitches0, "6", VALTYPE_SWITCH, ValueBase::VT_MID));
-    egSideFloor->addValue(  addBooleanValue(nodeAllSwitches0, "7", VALTYPE_SWITCH, ValueBase::VT_MID));
+    egFloor->addValue(      addBooleanValue(nodeAllSwitches0, "0", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    workingRoom->addValue(  addBooleanValue(nodeAllSwitches0, "1", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    kitchen->addValue(      addBooleanValue(nodeAllSwitches0, "2", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    diningRoom->addValue(   addBooleanValue(nodeAllSwitches0, "3", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    toilet->addValue(       addBooleanValue(nodeAllSwitches0, "4", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    supplyRoom->addValue(   addBooleanValue(nodeAllSwitches0, "5", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    egMainFloor->addValue(  addBooleanValue(nodeAllSwitches0, "6", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    egSideFloor->addValue(  addBooleanValue(nodeAllSwitches0, "7", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
 
     // OG
-    sleepingRoom->addValue( addBooleanValue(nodeAllSwitches0, "8", VALTYPE_SWITCH, ValueBase::VT_MID));
-    clothingRoom->addValue( addBooleanValue(nodeAllSwitches0, "9", VALTYPE_SWITCH, ValueBase::VT_MID));
-    bathRoom->addValue(     addBooleanValue(nodeAllSwitches0, "10", VALTYPE_SWITCH, ValueBase::VT_MID));
-    livingRoom->addValue(   addBooleanValue(nodeAllSwitches0, "11", VALTYPE_SWITCH, ValueBase::VT_MID));
-    ogFloor->addValue(      addBooleanValue(nodeAllSwitches0, "12", VALTYPE_SWITCH, ValueBase::VT_MID));
-    ogMainFloor->addValue(  addBooleanValue(nodeAllSwitches0, "13", VALTYPE_SWITCH, ValueBase::VT_MID));
+    sleepingRoom->addValue( addBooleanValue(nodeAllSwitches0, "8", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    clothingRoom->addValue( addBooleanValue(nodeAllSwitches0, "9", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    bathRoom->addValue(     addBooleanValue(nodeAllSwitches0, "10", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    livingRoom->addValue(   addBooleanValue(nodeAllSwitches0, "11", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    ogFloor->addValue(      addBooleanValue(nodeAllSwitches0, "12", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
+    ogMainFloor->addValue(  addBooleanValue(nodeAllSwitches0, "13", VALUE_TYPE::VALTYPE_SWITCH, ValueBase::VT_MID));
 
     ValueGroup* nodeTemps = addValueGroup("temps");
     // EG
-    kitchen->addValue(      addDoubleValue(nodeTemps, "20", VALTYPE_TEMP, ValueBase::VT_MID));
-    diningRoom->addValue(   addDoubleValue(nodeTemps, "21", VALTYPE_TEMP, ValueBase::VT_MID));
-    toilet->addValue(       addDoubleValue(nodeTemps, "22", VALTYPE_TEMP, ValueBase::VT_MID));
-    egMainFloor->addValue(    addDoubleValue(nodeTemps, "23", VALTYPE_TEMP, ValueBase::VT_MID));
-    egFloor->addValue(      addDoubleValue(nodeTemps, "24", VALTYPE_TEMP, ValueBase::VT_MID));
-    workingRoom->addValue(  addDoubleValue(nodeTemps, "25", VALTYPE_TEMP, ValueBase::VT_MID));
-    supplyRoom->addValue(   addDoubleValue(nodeTemps, "26", VALTYPE_TEMP, ValueBase::VT_MID));
+    kitchen->addValue(      addDoubleValue(nodeTemps, "20", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    diningRoom->addValue(   addDoubleValue(nodeTemps, "21", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    toilet->addValue(       addDoubleValue(nodeTemps, "22", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    egMainFloor->addValue(    addDoubleValue(nodeTemps, "23", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    egFloor->addValue(      addDoubleValue(nodeTemps, "24", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    workingRoom->addValue(  addDoubleValue(nodeTemps, "25", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    supplyRoom->addValue(   addDoubleValue(nodeTemps, "26", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
     // OG
-    ogFloor->addValue(      addDoubleValue(nodeTemps, "40", VALTYPE_TEMP, ValueBase::VT_MID));
-    clothingRoom->addValue( addDoubleValue(nodeTemps, "41", VALTYPE_TEMP, ValueBase::VT_MID));
-    livingRoom->addValue(   addDoubleValue(nodeTemps, "42", VALTYPE_TEMP, ValueBase::VT_MID));
-    sleepingRoom->addValue( addDoubleValue(nodeTemps, "43", VALTYPE_TEMP, ValueBase::VT_MID));
-    bathRoom->addValue(     addDoubleValue(nodeTemps, "44", VALTYPE_TEMP, ValueBase::VT_MID));
+    ogFloor->addValue(      addDoubleValue(nodeTemps, "40", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    clothingRoom->addValue( addDoubleValue(nodeTemps, "41", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    livingRoom->addValue(   addDoubleValue(nodeTemps, "42", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    sleepingRoom->addValue( addDoubleValue(nodeTemps, "43", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
+    bathRoom->addValue(     addDoubleValue(nodeTemps, "44", VALUE_TYPE::VALTYPE_TEMP, ValueBase::VT_MID));
 
     ValueGroup* nodeTargetTemps = addValueGroup("targetTemps");
     // EG
-    kitchen->addValue(      addDoubleValue(nodeTargetTemps, "20", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    diningRoom->addValue(   addDoubleValue(nodeTargetTemps, "21", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    toilet->addValue(       addDoubleValue(nodeTargetTemps, "22", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    egMainFloor->addValue(    addDoubleValue(nodeTargetTemps, "23", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    egFloor->addValue(      addDoubleValue(nodeTargetTemps, "24", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    workingRoom->addValue(  addDoubleValue(nodeTargetTemps, "25", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    supplyRoom->addValue(   addDoubleValue(nodeTargetTemps, "26", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    kitchen->addValue(      addDoubleValue(nodeTargetTemps, "20", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    diningRoom->addValue(   addDoubleValue(nodeTargetTemps, "21", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    toilet->addValue(       addDoubleValue(nodeTargetTemps, "22", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    egMainFloor->addValue(    addDoubleValue(nodeTargetTemps, "23", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    egFloor->addValue(      addDoubleValue(nodeTargetTemps, "24", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    workingRoom->addValue(  addDoubleValue(nodeTargetTemps, "25", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    supplyRoom->addValue(   addDoubleValue(nodeTargetTemps, "26", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
     // OG
-    ogFloor->addValue(      addDoubleValue(nodeTargetTemps, "40", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    clothingRoom->addValue( addDoubleValue(nodeTargetTemps, "41", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    livingRoom->addValue(   addDoubleValue(nodeTargetTemps, "42", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    sleepingRoom->addValue( addDoubleValue(nodeTargetTemps, "43", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
-    bathRoom->addValue(     addDoubleValue(nodeTargetTemps, "44", VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    ogFloor->addValue(      addDoubleValue(nodeTargetTemps, "40", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    clothingRoom->addValue( addDoubleValue(nodeTargetTemps, "41", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    livingRoom->addValue(   addDoubleValue(nodeTargetTemps, "42", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    sleepingRoom->addValue( addDoubleValue(nodeTargetTemps, "43", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
+    bathRoom->addValue(     addDoubleValue(nodeTargetTemps, "44", VALUE_TYPE::VALTYPE_STATIC_TEMP, ValueBase::VT_NONE)->withPersist(true));
 
     ValueGroup* nodeHums = addValueGroup("hums");
     // EG
-    kitchen->addValue(      addDoubleValue(nodeHums, "20", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    diningRoom->addValue(   addDoubleValue(nodeHums, "21", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    toilet->addValue(       addDoubleValue(nodeHums, "22", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    egMainFloor->addValue(  addDoubleValue(nodeHums, "23", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    egFloor->addValue(      addDoubleValue(nodeHums, "24", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    workingRoom->addValue(  addDoubleValue(nodeHums, "25", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    supplyRoom->addValue(   addDoubleValue(nodeHums, "26", VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    kitchen->addValue(      addDoubleValue(nodeHums, "20", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    diningRoom->addValue(   addDoubleValue(nodeHums, "21", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    toilet->addValue(       addDoubleValue(nodeHums, "22", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    egMainFloor->addValue(  addDoubleValue(nodeHums, "23", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    egFloor->addValue(      addDoubleValue(nodeHums, "24", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    workingRoom->addValue(  addDoubleValue(nodeHums, "25", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    supplyRoom->addValue(   addDoubleValue(nodeHums, "26", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
     // OG
-    ogFloor->addValue(      addDoubleValue(nodeHums, "40", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    clothingRoom->addValue( addDoubleValue(nodeHums, "41", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    livingRoom->addValue(   addDoubleValue(nodeHums, "42", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    sleepingRoom->addValue( addDoubleValue(nodeHums, "43", VALTYPE_HUMIDITY, ValueBase::VT_MID));
-    bathRoom->addValue(     addDoubleValue(nodeHums, "44", VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    ogFloor->addValue(      addDoubleValue(nodeHums, "40", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    clothingRoom->addValue( addDoubleValue(nodeHums, "41", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    livingRoom->addValue(   addDoubleValue(nodeHums, "42", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    sleepingRoom->addValue( addDoubleValue(nodeHums, "43", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
+    bathRoom->addValue(     addDoubleValue(nodeHums, "44", VALUE_TYPE::VALTYPE_HUMIDITY, ValueBase::VT_MID));
 
 
     ValueGroup* nodeMotions = addValueGroup("motions");
     // basement
     //heatingRoom->addValue(  addBooleanValue(nodePirs, "0", VT_MOTION, ValueBase::VT_MID));
     // eg
-    egFloor->addValue(      addBooleanValue(nodeMotions, "20", VALTYPE_MOTION, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodeMotions, "21", VALTYPE_MOTION, ValueBase::VT_MID));
-    kitchen->addValue(      addBooleanValue(nodeMotions, "22", VALTYPE_MOTION, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodeMotions, "23", VALTYPE_MOTION, ValueBase::VT_MID));
-    toilet->addValue(       addBooleanValue(nodeMotions, "24", VALTYPE_MOTION, ValueBase::VT_MID));
-    supplyRoom->addValue(   addBooleanValue(nodeMotions, "25", VALTYPE_MOTION, ValueBase::VT_MID));
-    egMainFloor->addValue(  addBooleanValue(nodeMotions, "26", VALTYPE_MOTION, ValueBase::VT_MID));
-    egSideFloor->addValue(  addBooleanValue(nodeMotions, "27", VALTYPE_MOTION, ValueBase::VT_MID));
+    egFloor->addValue(      addBooleanValue(nodeMotions, "20", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    workingRoom->addValue(  addBooleanValue(nodeMotions, "21", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    kitchen->addValue(      addBooleanValue(nodeMotions, "22", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    diningRoom->addValue(   addBooleanValue(nodeMotions, "23", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    toilet->addValue(       addBooleanValue(nodeMotions, "24", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    supplyRoom->addValue(   addBooleanValue(nodeMotions, "25", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    egMainFloor->addValue(  addBooleanValue(nodeMotions, "26", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    egSideFloor->addValue(  addBooleanValue(nodeMotions, "27", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
 
     // og
-    sleepingRoom->addValue( addBooleanValue(nodeMotions, "40", VALTYPE_MOTION, ValueBase::VT_MID));
-    clothingRoom->addValue( addBooleanValue(nodeMotions, "41", VALTYPE_MOTION, ValueBase::VT_MID));
-    bathRoom->addValue(     addBooleanValue(nodeMotions, "42", VALTYPE_MOTION, ValueBase::VT_MID));
-    livingRoom->addValue(   addBooleanValue(nodeMotions, "43", VALTYPE_MOTION, ValueBase::VT_MID));
-    ogFloor->addValue(      addBooleanValue(nodeMotions, "44", VALTYPE_MOTION, ValueBase::VT_MID));
-    ogMainFloor->addValue(  addBooleanValue(nodeMotions, "45", VALTYPE_MOTION, ValueBase::VT_MID));
+    sleepingRoom->addValue( addBooleanValue(nodeMotions, "40", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    clothingRoom->addValue( addBooleanValue(nodeMotions, "41", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    bathRoom->addValue(     addBooleanValue(nodeMotions, "42", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    livingRoom->addValue(   addBooleanValue(nodeMotions, "43", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    ogFloor->addValue(      addBooleanValue(nodeMotions, "44", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
+    ogMainFloor->addValue(  addBooleanValue(nodeMotions, "45", VALUE_TYPE::VALTYPE_MOTION, ValueBase::VT_MID));
 
     ValueGroup* nodePirs = addValueGroup("motions_pirs");
     // basement
     //heatingRoom->addValue(  addBooleanValue(nodePirs, "0", VT_MOTION, ValueBase::VT_MID));
     // eg
-    kitchen->addValue(      addBooleanValue(nodePirs, "20", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodePirs, "21", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    toilet->addValue(       addBooleanValue(nodePirs, "22", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    egMainFloor->addValue(    addBooleanValue(nodePirs, "23", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    egFloor->addValue(      addBooleanValue(nodePirs, "24", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodePirs, "25", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    supplyRoom->addValue(   addBooleanValue(nodePirs, "26", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    kitchen->addValue(      addBooleanValue(nodePirs, "20", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    diningRoom->addValue(   addBooleanValue(nodePirs, "21", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    toilet->addValue(       addBooleanValue(nodePirs, "22", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    egMainFloor->addValue(    addBooleanValue(nodePirs, "23", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    egFloor->addValue(      addBooleanValue(nodePirs, "24", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    workingRoom->addValue(  addBooleanValue(nodePirs, "25", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    supplyRoom->addValue(   addBooleanValue(nodePirs, "26", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
     // og
-    ogFloor->addValue(      addBooleanValue(nodePirs, "40", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    clothingRoom->addValue( addBooleanValue(nodePirs, "41", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    livingRoom->addValue(   addBooleanValue(nodePirs, "42", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    sleepingRoom->addValue( addBooleanValue(nodePirs, "43", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
-    bathRoom->addValue(     addBooleanValue(nodePirs, "44", VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    ogFloor->addValue(      addBooleanValue(nodePirs, "40", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    clothingRoom->addValue( addBooleanValue(nodePirs, "41", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    livingRoom->addValue(   addBooleanValue(nodePirs, "42", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    sleepingRoom->addValue( addBooleanValue(nodePirs, "43", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
+    bathRoom->addValue(     addBooleanValue(nodePirs, "44", VALUE_TYPE::VALTYPE_MOTION_PIR, ValueBase::VT_MID));
 
     ValueGroup* nodeRadars = addValueGroup("motions_radars");
     // basement
     //heatingRoom->addValue(  addBooleanValue(nodePirs, "0", VT_MOTION, ValueBase::VT_MID));
     // eg
-    kitchen->addValue(      addBooleanValue(nodeRadars, "20", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    diningRoom->addValue(   addBooleanValue(nodeRadars, "21", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    toilet->addValue(       addBooleanValue(nodeRadars, "22", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    egMainFloor->addValue(    addBooleanValue(nodeRadars, "23", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    egFloor->addValue(      addBooleanValue(nodeRadars, "24", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    workingRoom->addValue(  addBooleanValue(nodeRadars, "25", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    supplyRoom->addValue(   addBooleanValue(nodeRadars, "26", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    kitchen->addValue(      addBooleanValue(nodeRadars, "20", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    diningRoom->addValue(   addBooleanValue(nodeRadars, "21", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    toilet->addValue(       addBooleanValue(nodeRadars, "22", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    egMainFloor->addValue(    addBooleanValue(nodeRadars, "23", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    egFloor->addValue(      addBooleanValue(nodeRadars, "24", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    workingRoom->addValue(  addBooleanValue(nodeRadars, "25", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    supplyRoom->addValue(   addBooleanValue(nodeRadars, "26", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
     // og
-    ogFloor->addValue(      addBooleanValue(nodeRadars, "40", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    clothingRoom->addValue( addBooleanValue(nodeRadars, "41", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    livingRoom->addValue(   addBooleanValue(nodeRadars, "42", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    sleepingRoom->addValue( addBooleanValue(nodeRadars, "43", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
-    bathRoom->addValue(     addBooleanValue(nodeRadars, "44", VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    ogFloor->addValue(      addBooleanValue(nodeRadars, "40", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    clothingRoom->addValue( addBooleanValue(nodeRadars, "41", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    livingRoom->addValue(   addBooleanValue(nodeRadars, "42", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    sleepingRoom->addValue( addBooleanValue(nodeRadars, "43", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
+    bathRoom->addValue(     addBooleanValue(nodeRadars, "44", VALUE_TYPE::VALTYPE_MOTION_RADAR, ValueBase::VT_MID));
 
     ValueGroup* nodeBrightnesses = addValueGroup("brightnesses");
     // eg
-    kitchen->addValue(      addDoubleValue(nodeBrightnesses, "20", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    diningRoom->addValue(   addDoubleValue(nodeBrightnesses, "21", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    toilet->addValue(       addDoubleValue(nodeBrightnesses, "22", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    egMainFloor->addValue(    addDoubleValue(nodeBrightnesses, "23", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    egFloor->addValue(      addDoubleValue(nodeBrightnesses, "24", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    workingRoom->addValue(  addDoubleValue(nodeBrightnesses, "25", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    supplyRoom->addValue(   addDoubleValue(nodeBrightnesses, "26", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    kitchen->addValue(      addDoubleValue(nodeBrightnesses, "20", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    diningRoom->addValue(   addDoubleValue(nodeBrightnesses, "21", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    toilet->addValue(       addDoubleValue(nodeBrightnesses, "22", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    egMainFloor->addValue(    addDoubleValue(nodeBrightnesses, "23", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    egFloor->addValue(      addDoubleValue(nodeBrightnesses, "24", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    workingRoom->addValue(  addDoubleValue(nodeBrightnesses, "25", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    supplyRoom->addValue(   addDoubleValue(nodeBrightnesses, "26", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
     // og
-    ogFloor->addValue(      addDoubleValue(nodeBrightnesses, "40", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    clothingRoom->addValue( addDoubleValue(nodeBrightnesses, "41", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    livingRoom->addValue(   addDoubleValue(nodeBrightnesses, "42", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    sleepingRoom->addValue( addDoubleValue(nodeBrightnesses, "43", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
-    bathRoom->addValue(     addDoubleValue(nodeBrightnesses, "44", VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    ogFloor->addValue(      addDoubleValue(nodeBrightnesses, "40", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    clothingRoom->addValue( addDoubleValue(nodeBrightnesses, "41", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    livingRoom->addValue(   addDoubleValue(nodeBrightnesses, "42", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    sleepingRoom->addValue( addDoubleValue(nodeBrightnesses, "43", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
+    bathRoom->addValue(     addDoubleValue(nodeBrightnesses, "44", VALUE_TYPE::VALTYPE_BRIGHTNESS, ValueBase::VT_MID));
 
     ValueGroup* nodeAlarms = addValueGroup("alarms");
     // eg
-    kitchen->addActor(      addDigitalActor(nodeAlarms, "20", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    diningRoom->addActor(   addDigitalActor(nodeAlarms, "21", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    toilet->addActor(       addDigitalActor(nodeAlarms, "22", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    egMainFloor->addActor(    addDigitalActor(nodeAlarms, "23", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    egFloor->addActor(      addDigitalActor(nodeAlarms, "24", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    workingRoom->addActor(  addDigitalActor(nodeAlarms, "25", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    supplyRoom->addActor(   addDigitalActor(nodeAlarms, "26", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    kitchen->addActor(      addDigitalActor(nodeAlarms, "20", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    diningRoom->addActor(   addDigitalActor(nodeAlarms, "21", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    toilet->addActor(       addDigitalActor(nodeAlarms, "22", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    egMainFloor->addActor(    addDigitalActor(nodeAlarms, "23", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    egFloor->addActor(      addDigitalActor(nodeAlarms, "24", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    workingRoom->addActor(  addDigitalActor(nodeAlarms, "25", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    supplyRoom->addActor(   addDigitalActor(nodeAlarms, "26", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
 
-    ogFloor->addValue(      addDigitalActor(nodeBrightnesses, "40", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    clothingRoom->addValue( addDigitalActor(nodeBrightnesses, "41", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    livingRoom->addValue(   addDigitalActor(nodeBrightnesses, "42", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    sleepingRoom->addValue( addDigitalActor(nodeBrightnesses, "43", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
-    bathRoom->addValue(     addDigitalActor(nodeBrightnesses, "44", VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    ogFloor->addValue(      addDigitalActor(nodeBrightnesses, "40", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    clothingRoom->addValue( addDigitalActor(nodeBrightnesses, "41", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    livingRoom->addValue(   addDigitalActor(nodeBrightnesses, "42", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    sleepingRoom->addValue( addDigitalActor(nodeBrightnesses, "43", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
+    bathRoom->addValue(     addDigitalActor(nodeBrightnesses, "44", VALUE_TYPE::VALTYPE_ALARM_SOUND, ValueBase::VT_MID, true));
 
     ValueGroup* nodeWaterFlows = addValueGroup("waterFlows");
-    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "toilet", VALTYPE_WATER_FLOW, ValueBase::VT_MID));
-    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "cold", VALTYPE_WATER_FLOW, ValueBase::VT_MID));
-    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "warm", VALTYPE_WATER_FLOW, ValueBase::VT_MID));
-    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "garden", VALTYPE_WATER_FLOW, ValueBase::VT_MID));
+    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "toilet", VALUE_TYPE::VALTYPE_WATER_FLOW, ValueBase::VT_MID));
+    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "cold", VALUE_TYPE::VALTYPE_WATER_FLOW, ValueBase::VT_MID));
+    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "warm", VALUE_TYPE::VALTYPE_WATER_FLOW, ValueBase::VT_MID));
+    heatingRoom->addValue(addDoubleValue(nodeWaterFlows, "garden", VALUE_TYPE::VALTYPE_WATER_FLOW, ValueBase::VT_MID));
 
     ValueGroup* nodeWaterLevels = addValueGroup("waterLevels");
-    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "toilet", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
-    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "cold", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
-    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "warm", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
-    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "garden", VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "toilet", VALUE_TYPE::VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "cold", VALUE_TYPE::VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "warm", VALUE_TYPE::VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
+    heatingRoom->addValue(addIntegerValue(nodeWaterLevels, "garden", VALUE_TYPE::VALTYPE_WATER_LEVEL, ValueBase::VT_NONE)->withPersist(true));
 
     ValueGroup *nodeWbb12 = addValueGroup("wbb12");
-    addValueActor(nodeWbb12, "hk1HeatingPauseParty", VALTYPE_HEAT_PUMP_DATA, ValueBase::VT_LONG, QVariant::Int);
+    addValueActor(nodeWbb12, "hk1HeatingPauseParty", VALUE_TYPE::VALTYPE_HEAT_PUMP_DATA, ValueBase::VT_LONG, QVariant::Int);
 
     /*
     // test interval

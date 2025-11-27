@@ -26,7 +26,7 @@ public:
 private slots:
     void initConnectValues_valueChanged();
     void initTriggerCmdOnValue_valueChanged();
-    void initFollowActor_cmdTriggered(actor::ACTOR_CMDS cmd);
+    void initFollowActor_cmdTriggered(ACTOR_CMDS cmd);
     void initFollowActor_valueChanged();
 
 signals:

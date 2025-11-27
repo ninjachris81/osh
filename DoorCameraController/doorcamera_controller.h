@@ -29,7 +29,7 @@ public:
     void bindDoorRingActor(DigitalActor *doorRingActor);
 
 protected slots:
-    void onRingTriggered(actor::ACTOR_CMDS cmd);
+    void onRingTriggered(ACTOR_CMDS cmd);
 
 private:
     void startRecording();

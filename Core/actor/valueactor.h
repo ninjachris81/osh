@@ -17,14 +17,14 @@ class SHARED_LIB_EXPORT ValueActor : public ActorBase
 public:
     explicit ValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, QVariant::Type typeHint, QObject *parent = nullptr);
 
-    /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd) override;
+    /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd) override;
 
     /*virtual*/ bool isAsync() override;
 
     /*virtual*/ QVariant _updateValue(QVariant newValue) override;
 
 protected:
-    /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd) override;
+    /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd) override;
 
 signals:
     void requestSetValue();

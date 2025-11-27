@@ -62,7 +62,7 @@ private slots:
     void onInitDoorRingLogic_inputSensorValueChanged();
     void onInitPlaySoundOnValue_valueChanged();
 
-    void onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd);
+    void onInitPlaySoundOnCmd_triggeredCmd(ACTOR_CMDS cmd);
 
 private:
     void _onInitSwitchPresenceLogic_presenceValueChanged(BooleanValue *presenceSensor);

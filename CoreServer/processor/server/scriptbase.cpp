@@ -32,26 +32,26 @@ void ScriptBase::publishValue(QString fullId, QVariant value) {
 
 void ScriptBase::publishCmd(QString fullId, int cmd, QString reason) {
     ActorBase* actor = m_datamodel->actor(fullId);
-    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), reason);
+    publishCmd(actor, static_cast<ACTOR_CMDS>(cmd), reason);
 }
 
 void ScriptBase::publishCmd(QString fullId, int cmd, QVariant value, QString reason) {
     ActorBase* actor = m_datamodel->actor(fullId);
-    publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), value, reason);
+    publishCmd(actor, static_cast<ACTOR_CMDS>(cmd), value, reason);
 }
 
 void ScriptBase::publishValue(ValueBase* val, QVariant value) {
     m_valueManager->updateAndPublishValue(val, value);
 }
 
-void ScriptBase::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QString reason) {
+void ScriptBase::publishCmd(ActorBase* actor, ACTOR_CMDS cmd, QString reason) {
     iDebug() << actor->fullId() << cmd << reason;
     actor->triggerCmd(cmd, reason);
     m_actorManager->publishCmd(actor, cmd);
     m_valueManager->publishValue(actor);
 }
 
-void ScriptBase::publishCmd(ActorBase* actor, actor::ACTOR_CMDS cmd, QVariant value, QString reason) {
+void ScriptBase::publishCmd(ActorBase* actor, ACTOR_CMDS cmd, QVariant value, QString reason) {
     iDebug() << actor->fullId() << cmd << value << reason;
     actor->updateValue(value, true);
     actor->triggerCmd(cmd, reason);

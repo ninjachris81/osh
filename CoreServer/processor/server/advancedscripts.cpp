@@ -69,7 +69,7 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
             if (!presenceActive && windowClosed) {
                 if (shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
                     iDebug() << "Shutter down";
-                    publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+                    publishCmd(shutterActor, ACTOR_CMDS::ACTOR_CMD_DOWN, "applyShutterLogic");
                 } else {
                     iDebug() << "Shutter already down";
                 }
@@ -83,18 +83,18 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
                     // just turn open
                     if (shutterActor->tiltState() == SHUTTER_TILT_CLOSED) {
                         iDebug() << "Turn open";
-                        publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_TURN_OPEN, "applyShutterLogic");
+                        publishCmd(shutterActor, ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN, "applyShutterLogic");
                     } else {
                         iDebug() << "Already tilted";
                     }
                 } else {
                     // full up
                     iDebug() << "Shutter up";
-                    publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
+                    publishCmd(shutterActor, ACTOR_CMDS::ACTOR_CMD_UP, "applyShutterLogic");
                 }
             } else if (shutterActor->rawValue().toInt() == SHUTTER_OPENED && isTiltDownOpenState) {
                 iDebug() << "Full down open";
-                publishCmd(shutterActor, actor::ACTOR_CMD_SHUTTER_FULL_OPEN, "applyShutterLogic");
+                publishCmd(shutterActor, ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN, "applyShutterLogic");
             } else {
                 iDebug() << "Shutter already open";
             }

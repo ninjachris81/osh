@@ -11,10 +11,10 @@ DigitalActor::DigitalActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueT
 }
 
 
-bool DigitalActor::cmdSupported(actor::ACTOR_CMDS cmd) {
+bool DigitalActor::cmdSupported(ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_ON:
-    case actor::ACTOR_CMD_OFF:
+    case ACTOR_CMDS::ACTOR_CMD_ON:
+    case ACTOR_CMDS::ACTOR_CMD_OFF:
         return true;
     default:
         return false;
@@ -35,10 +35,10 @@ bool DigitalActor::isAsync() {
     return m_isAsync;
 }
 
-void DigitalActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
-    Q_EMIT(statusRequested(cmd == actor::ACTOR_CMD_ON));
+void DigitalActor::_triggerCmd(ACTOR_CMDS cmd) {
+    Q_EMIT(statusRequested(cmd == ACTOR_CMDS::ACTOR_CMD_ON));
 
     if (!m_isAsync) {
-        updateValue(cmd == actor::ACTOR_CMD_ON);
+        updateValue(cmd == ACTOR_CMDS::ACTOR_CMD_ON);
     }
 }

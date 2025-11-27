@@ -10,7 +10,6 @@ SUBDIRS += \
     CoreService \
     CoreServiceSimulator \
     CoreSimulation \
-    CoreUI \
     DoorAudioController \
     DoorAudioService \
     DoorCameraController \
@@ -47,7 +46,6 @@ SUBDIRS += \
     qtmqtt
 
 CoreService.depends = Core CoreServer QMqttCommunicationManager
-CoreUI.depends = Core CoreServer CoreSimulation QMqttCommunicationManager
 CoreServer.depends = Core
 CoreSimulation.depends = Core CoreServer QMqttCommunicationManager
 CoreServiceSimulator.depends = Core CoreServer CoreSimulation QMqttCommunicationManager

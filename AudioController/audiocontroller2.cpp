@@ -240,7 +240,7 @@ void AudioController2::executeActivation(AudioPlaybackActor *audioActor, bool ac
 
     if (m_actorRelayMappings.contains(audioActor)) {
         DigitalActor *relayActor = m_actorRelayMappings.value(audioActor);
-        m_actorManager->publishCmd(relayActor, activate ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF);
+        m_actorManager->publishCmd(relayActor, activate ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF);
     }
 }
 

@@ -82,7 +82,7 @@ void BasicScripts::initTriggerCmdOnValue_valueChanged() {
     if (triggerValue.convert(valueSource->rawValue().type())) {
         if (triggerValue == valueSource->rawValue()) {
             if (lastTrigger == 0 || QDateTime::currentMSecsSinceEpoch() - lastTrigger > retriggerTimeout) {
-                publishCmd(actor, static_cast<actor::ACTOR_CMDS>(cmd), "initTriggerCmdOnValue_valueChanged");
+                publishCmd(actor, static_cast<ACTOR_CMDS>(cmd), "initTriggerCmdOnValue_valueChanged");
                 m_localStorage->set("initTriggerCmdOnValue", "lastTrigger", valueSource->fullId(), QDateTime:: currentMSecsSinceEpoch());
             } else {
                 qInfo() << "Trigger too recent" << lastTrigger << retriggerTimeout;
@@ -105,7 +105,7 @@ bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId
     m_localStorage->setObject("initFollowActor", "triggerActorId", sourceActor->fullId(), triggerActor);
 
     if (followMode & 1) {      // only cmd
-        Helpers::safeConnect(sourceActor, &ActorBase::cmdTriggered, this, &BasicScripts::initFollowActor_cmdTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(initFollowActor_cmdTriggered(actor::ACTOR_CMDS)));
+        Helpers::safeConnect(sourceActor, &ActorBase::cmdTriggered, this, &BasicScripts::initFollowActor_cmdTriggered, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(initFollowActor_cmdTriggered(ACTOR_CMDS)));
         iDebug() << "Connecting cmd of actor" << actorSourceId << "to" << triggerActor;
     }
     if (followMode & 2) {       // only value
@@ -116,12 +116,12 @@ bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId
     return true;
 }
 
-void BasicScripts::initFollowActor_cmdTriggered(actor::ACTOR_CMDS cmd) {
+void BasicScripts::initFollowActor_cmdTriggered(ACTOR_CMDS cmd) {
 
     ActorBase* sourceActor = static_cast<ActorBase*>(sender());
     ActorBase *triggerActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initFollowActor", "triggerActorId", sourceActor->fullId()));
 
-    publishCmd(triggerActor, cmd, "initFollowActor");
+    publishCmd(triggerActor, static_cast<ACTOR_CMDS>(cmd), "initFollowActor");
 }
 
 void BasicScripts::initFollowActor_valueChanged() {

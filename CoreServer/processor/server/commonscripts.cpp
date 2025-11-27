@@ -58,7 +58,7 @@ void CommonScripts::_onInitSwitchPresenceLogic_presenceValueChanged(BooleanValue
 
                 if (QDateTime::currentMSecsSinceEpoch() > (lastSwitchOff + switchCooldownPeriodMs)) {
                     // ok, it's too dark, light is off and presence detected -> switch it ON
-                    publishCmd(toggleActor, actor::ACTOR_CMD_ON, true, "presence");
+                    publishCmd(toggleActor, ACTOR_CMDS::ACTOR_CMD_ON, true, "presence");
                 } else {
                     // user just pressed turned it OFF, so ignore this one
                 }
@@ -84,7 +84,7 @@ bool CommonScripts::applySwitchPresenceLogic(QString presenceId) {
             _onInitSwitchPresenceLogic_presenceValueChanged(presenceSensor);
         } else {
             if (toggleActor->rawValue().toBool()) {
-                publishCmd(toggleActor, actor::ACTOR_CMD_OFF, false, "presence");
+                publishCmd(toggleActor, ACTOR_CMDS::ACTOR_CMD_OFF, false, "presence");
             }
         }
     }
@@ -129,7 +129,7 @@ void CommonScripts::onInitSwitchLogic_inputSensorValueChanged() {
         if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool()) {
             // toggle controller is in server, so just emit
             //Q_EMIT(toggleActor->requestToggle());
-            publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "input sensor");
+            publishCmd(toggleActor, ACTOR_CMDS::ACTOR_CMD_TOGGLE, "input sensor");
 
             if (!toggleActor->rawValue().toBool()) {
                 m_localStorage->set("initSwitchLogic", "lastSwitchOff", toggleActor->fullId(), QDateTime::currentMSecsSinceEpoch());       // for initSwitchPresenceLogic and applySwitchPresenceLogic
@@ -157,7 +157,7 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
             //m_localStorage->unset(lastTsInputKey);
         }
 
-        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
+        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF, "toggle");
     }
 }
 
@@ -202,7 +202,7 @@ void CommonScripts::onInitSwitchLogic2_toggleActorValueChanged() {
             //m_localStorage->unset(lastTsInputKey);
         }
 
-        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "toggle");
+        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF, "toggle");
     }
 }
 
@@ -217,7 +217,7 @@ bool CommonScripts::applySwitchTimeoutLogic(QString toggleActorFullId, quint64 t
         if (toggleActor->rawValue().toBool()) {
             // toggle controller is in server, to just emit
             //Q_EMIT(toggleActor->requestToggle());
-            publishCmd(toggleActor, actor::ACTOR_CMD_TOGGLE, "Timeout");
+            publishCmd(toggleActor, ACTOR_CMDS::ACTOR_CMD_TOGGLE, "Timeout");
         } else {
             // hmm, already off
         }
@@ -245,7 +245,7 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
                         if (deltaTemp > fullDeltaThresholdTemp) {
                             // always on, delta is too big
                             if (!tempValve->rawValue().toBool()) {
-                                tempValve->triggerCmd(actor::ACTOR_CMD_ON, "Always on");
+                                tempValve->triggerCmd(ACTOR_CMDS::ACTOR_CMD_ON, "Always on");
                             }
                         } else {
                             qlonglong offMs;
@@ -279,7 +279,7 @@ bool CommonScripts::applyTempValveLogic(QString tempFullId, QString tempTargetFu
             bool targetValveState = getIntervalState(valveKey);
 
             if (tempValve->rawValue().toBool() != targetValveState) {
-                tempValve->triggerCmd(targetValveState ? actor::ACTOR_CMD_ON : actor::ACTOR_CMD_OFF, "Interval timeout");
+                tempValve->triggerCmd(targetValveState ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF, "Interval timeout");
             }
 
             return true;
@@ -392,14 +392,14 @@ bool CommonScripts::applyShutterLogic(QString shutterFullId, QString shutterMode
         if (isDownTime) {
             // down: check is presence active
             if (!presenceActive && shutterActor->rawValue().toInt() != SHUTTER_CLOSED) {
-                publishCmd(shutterActor, actor::ACTOR_CMD_DOWN, "applyShutterLogic");
+                publishCmd(shutterActor, ACTOR_CMDS::ACTOR_CMD_DOWN, "applyShutterLogic");
             } else {
                 iDebug() << "Room still active - pausing shutter actions";
             }
         } else {
             // up: just time-based
             if (shutterActor->rawValue().toInt() != SHUTTER_OPENED) {
-                publishCmd(shutterActor, actor::ACTOR_CMD_UP, "applyShutterLogic");
+                publishCmd(shutterActor, ACTOR_CMDS::ACTOR_CMD_UP, "applyShutterLogic");
             }
         }
     } else {
@@ -438,7 +438,7 @@ void CommonScripts::onInitDoorRingLogic_inputSensorValueChanged() {
             setTimeout(ringActor->fullId());
 
             if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
-                publishCmd(ringActor, actor::ACTOR_CMD_ON, "input sensor");
+                publishCmd(ringActor, ACTOR_CMDS::ACTOR_CMD_ON, "input sensor");
                 m_localStorage->set("initDoorRingLogic", "lastVal", inputSensor->fullId(), true);
                 m_localStorage->set("initDoorRingLogic", "lastRing", inputSensor->fullId(), QDateTime::currentMSecsSinceEpoch());
             }
@@ -516,9 +516,9 @@ void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
                 iDebug() << "Playback static url";
             }
 
-            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+            publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_START, "event play playback");
         } else if (value->rawValue() == stopValue) {
-            publishCmd(playbackActor, actor::ACTOR_CMD_STOP, "event stop playback");
+            publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_STOP, "event stop playback");
         }
     } else {
         iWarning() << "Failed to convert to target type";
@@ -543,16 +543,16 @@ bool CommonScripts::initPlaySoundOnCmd(QString actorId, int cmdValue, QString so
         index++;
     }
 
-    Helpers::safeConnect(actor, &ActorBase::cmdTriggered, this, &CommonScripts::onInitPlaySoundOnCmd_triggeredCmd, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS)));
+    Helpers::safeConnect(actor, &ActorBase::cmdTriggered, this, &CommonScripts::onInitPlaySoundOnCmd_triggeredCmd, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(onInitPlaySoundOnCmd_triggeredCmd(ACTOR_CMDS)));
 
     return true;
 }
 
-void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd) {
+void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(ACTOR_CMDS cmd) {
     iInfo() << Q_FUNC_INFO;
 
     ActorBase* actor = static_cast<ActorBase*>(sender());
-    actor::ACTOR_CMDS targetCmd = static_cast<actor::ACTOR_CMDS>(m_localStorage->get("initPlaySoundOnCmd", "cmdValue", actor->fullId()).toInt());
+    ACTOR_CMDS targetCmd = static_cast<ACTOR_CMDS>(m_localStorage->get("initPlaySoundOnCmd", "cmdValue", actor->fullId()).toInt());
     if (cmd == targetCmd) {
         iInfo() << "Is target cmd, proceed";
 
@@ -573,7 +573,7 @@ void CommonScripts::onInitPlaySoundOnCmd_triggeredCmd(actor::ACTOR_CMDS cmd) {
             }
 
             iInfo() << "Start playback" << playbackActor->fullId();
-            publishCmd(playbackActor, actor::ACTOR_CMD_START, "event play playback");
+            publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_START, "event play playback");
         }
     }
 }

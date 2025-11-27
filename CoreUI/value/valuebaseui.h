@@ -15,7 +15,7 @@ public:
     Q_PROPERTY(QString fullId READ fullId NOTIFY fullIdChanged)
     Q_PROPERTY(bool isValid READ isValid NOTIFY isValidChanged)
     Q_PROPERTY(QVariant rawValue READ rawValue NOTIFY rawValueChanged)
-    Q_PROPERTY(value::VALUE_TYPE valueType READ valueType NOTIFY valueTypeChanged)
+    Q_PROPERTY(VALUE_TYPE valueType READ valueType NOTIFY valueTypeChanged)
     Q_PROPERTY(double signalRate READ signalRate NOTIFY signalRateChanged)
     Q_PROPERTY(QString unitTypeSuffix READ unitTypeSuffix NOTIFY unitTypeSuffixChanged)
 
@@ -26,7 +26,7 @@ public:
     QString fullId();
     bool isValid();
     QVariant rawValue();
-    value::VALUE_TYPE valueType();
+    VALUE_TYPE valueType();
     double signalRate();
     QString unitTypeSuffix();
 

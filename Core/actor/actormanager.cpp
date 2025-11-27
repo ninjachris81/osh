@@ -66,7 +66,7 @@ void ActorManager::registerActor(ActorBase* actor, ValueManagerBase *valueManage
 
     m_actors.insert(actor->fullId(), actor);
     /*
-    Q_ASSERT(connect(actor, &ActorBase::cmdTriggered, this, [this, actor](actor::ACTOR_CMDS cmd) {
+    Q_ASSERT(connect(actor, &ActorBase::cmdTriggered, this, [this, actor](ACTOR_CMDS cmd) {
         // TODO
     }) != nullptr);
     */
@@ -74,27 +74,27 @@ void ActorManager::registerActor(ActorBase* actor, ValueManagerBase *valueManage
     valueManager->registerValue(actor);
 }
 
-void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd) {
+void ActorManager::publishCmd(ActorBase *actor, ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << actor->fullId();
 
     ActorMessage msg(actor->valueGroup()->id(), actor->id(), QVariant(), cmd);
     m_commManager->sendMessage(msg);
 }
 
-void ActorManager::publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd, QVariant value) {
+void ActorManager::publishCmd(ActorBase *actor, ACTOR_CMDS cmd, QVariant value) {
     iDebug() << Q_FUNC_INFO << actor->fullId();
 
     ActorMessage msg(actor->valueGroup()->id(), actor->id(), value, cmd);
     m_commManager->sendMessage(msg);
 
-    if (cmd != actor::ACTOR_CMD_SET_VALUE) {        // in this case, receiver will explicitly set the value
+    if (cmd != ACTOR_CMDS::ACTOR_CMD_SET_VALUE) {        // in this case, receiver will explicitly set the value
         ValueMessage valMsg(actor->valueGroup()->id(), actor->id(), value);
         m_commManager->sendMessage(valMsg);
     }
 }
 
 /*
-void ActorManager::onCmdTriggered(ActorBase* actor, actor::ACTOR_CMDS cmd) {
+void ActorManager::onCmdTriggered(ActorBase* actor, ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << cmd;
 
     ActorMessage msg(actor->valueGroup()->id(), actor->id(), cmd);

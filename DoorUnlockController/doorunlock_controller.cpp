@@ -65,13 +65,13 @@ void DoorUnlockController::onUnlockDoor(QString doorId) {
         iDebug() << "Unlock door" << doorId;
         m_isUnlocking = true;
 
-        m_actorManager->publishCmd(m_relay, actor::ACTOR_CMD_ON, true);
-        m_actorManager->publishCmd(m_door, actor::ACTOR_CMD_ON, true);
+        m_actorManager->publishCmd(m_relay, ACTOR_CMDS::ACTOR_CMD_ON, true);
+        m_actorManager->publishCmd(m_door, ACTOR_CMDS::ACTOR_CMD_ON, true);
         enableRelay(true);
 
         QTimer::singleShot(relayEnableDurationMs, this, [this] () {
-            m_actorManager->publishCmd(m_relay, actor::ACTOR_CMD_OFF, false);
-            m_actorManager->publishCmd(m_door, actor::ACTOR_CMD_OFF, false);
+            m_actorManager->publishCmd(m_relay, ACTOR_CMDS::ACTOR_CMD_OFF, false);
+            m_actorManager->publishCmd(m_door, ACTOR_CMDS::ACTOR_CMD_OFF, false);
             enableRelay(false);
             iDebug() << "Unlock door finished" << m_door->id();
             m_isUnlocking = false;

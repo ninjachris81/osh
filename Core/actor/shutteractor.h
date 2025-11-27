@@ -29,9 +29,9 @@ public:
     static QLatin1String CONFIG_OPERATION_MODE;
 
     explicit ShutterActor();
-    explicit ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, int fullTiltDuration, QObject *parent = nullptr);
+    ShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool tiltSupport, int fullCloseDuration, int fullTiltDuration, QObject *parent = nullptr);
 
-    /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
+    /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue);
 
@@ -51,7 +51,7 @@ public:
     int fullTiltDuration();
 
 protected:
-    /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
+    /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd);
 
     int setState(unsigned char closeState, unsigned char tiltState);
     int setCloseState(int state, unsigned char closeState);

@@ -281,7 +281,7 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         if (actorMessage->rawValue().isValid()) {
             map.insert(MQTT_SINGLE_VALUE_ATTR, actorMessage->rawValue());
         }
-        map.insert(MQTT_ACTOR_CMD_ATTR, actorMessage->cmd());
+        map.insert(MQTT_ACTOR_CMD_ATTR, (int) actorMessage->cmd());
         return serializeJSONValue(map);
     }
     case MessageBase::MESSAGE_TYPE_SYSTEM_TIME: {

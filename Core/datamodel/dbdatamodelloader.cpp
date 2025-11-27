@@ -223,7 +223,7 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
 
     QSqlQuery query(*m_databaseManager->db());
 
-    if (query.exec("SELECT * FROM dm_processor_tasks")) {
+    if (query.exec("SELECT * FROM dm_processor_tasks WHERE enabled=true")) {
         while (query.next()) {
             QString groupId = query.value(ProcessorTaskBase::PROPERTY_GROUP_ID).toString();
             QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();

@@ -29,11 +29,11 @@ public:
 
     void registerActor(ActorBase* actor, ValueManagerBase* valueManager);
 
-    void publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd);
+    void publishCmd(ActorBase *actor, ACTOR_CMDS cmd);
 
-    void publishCmd(ActorBase *actor, actor::ACTOR_CMDS cmd, QVariant value);
+    void publishCmd(ActorBase *actor, ACTOR_CMDS cmd, QVariant value);
 
-    //void onCmdTriggered(ActorBase *actor, actor::ACTOR_CMDS cmd);
+    //void onCmdTriggered(ActorBase *actor, ACTOR_CMDS cmd);
 
     ActorBase* getActor(QString fullId);
     ActorBase* getActor(QString valueGroupId, QString actorId);

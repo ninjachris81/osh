@@ -12,9 +12,9 @@
 #include <QVariant>
 
 namespace actor {
-Q_DECL_EXPORT Q_NAMESPACE
+SHARED_LIB_EXPORT Q_NAMESPACE
 
-    enum ACTOR_CMDS {
+    enum class ACTOR_CMDS : int {
         ACTOR_CMD_UNKNOWN = ENUM_UNKNOWN,
         ACTOR_CMD_ON = ACTOR_ON,
         ACTOR_CMD_OFF = ACTOR_OFF,

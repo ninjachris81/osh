@@ -1,20 +1,19 @@
 #ifndef VALUE_QT_H
 #define VALUE_QT_H
 
+#define USES_VALUE_QT
+
 #include <QObject>
 
 #include "sharedlib.h"
 
-#define USES_VALUE_QT
-
 #include "constants.h"
 #include "value.h"
-
 
 namespace value {
 SHARED_LIB_EXPORT Q_NAMESPACE
 
-    enum VALUE_TYPE {
+    enum class VALUE_TYPE {
         VALTYPE_UNKNOWN = ENUM_UNKNOWN,
         VALTYPE_BRIGHTNESS = VALUE_TYPE_BRIGHTNESS,
         VALTYPE_TEMP = VALUE_TYPE_TEMP,

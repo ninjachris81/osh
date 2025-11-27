@@ -15,16 +15,16 @@ ShutterActor::ShutterActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueT
 
 }
 
-bool ShutterActor::cmdSupported(actor::ACTOR_CMDS cmd) {
+bool ShutterActor::cmdSupported(ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_STOP:
-    case actor::ACTOR_CMD_UP:
-    case actor::ACTOR_CMD_DOWN:
-    case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
-    case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_STOP:
+    case ACTOR_CMDS::ACTOR_CMD_UP:
+    case ACTOR_CMDS::ACTOR_CMD_DOWN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_CLOSE:
         return true;
     default:
         return false;
@@ -46,18 +46,18 @@ bool ShutterActor::isAsync() {
 }
 
 
-void ShutterActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
+void ShutterActor::_triggerCmd(ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << cmd;
 
     switch(cmd) {
-    case actor::ACTOR_CMD_STOP:
-    case actor::ACTOR_CMD_UP:
-    case actor::ACTOR_CMD_DOWN:
-    case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
-    case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_STOP:
+    case ACTOR_CMDS::ACTOR_CMD_UP:
+    case ACTOR_CMDS::ACTOR_CMD_DOWN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_CLOSE:
         break;
     default:
         iWarning() << "Cmd not supported" << cmd;

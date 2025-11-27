@@ -16,14 +16,14 @@ class SHARED_LIB_EXPORT ToggleActor : public ActorBase
 public:
     explicit ToggleActor(ValueGroup* valueGroup, QString id, QObject *parent = nullptr);
 
-    /*virtual*/ bool cmdSupported(actor::ACTOR_CMDS cmd);
+    /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);
 
     /*virtual*/ QVariant _updateValue(QVariant newValue);
 
     /*virtual*/ bool isAsync();
 
 protected:
-    /*virtual*/ void _triggerCmd(actor::ACTOR_CMDS cmd);
+    /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd);
 
 
 signals:

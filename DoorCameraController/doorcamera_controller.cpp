@@ -37,7 +37,7 @@ void DoorCameraController::init() {
 void DoorCameraController::start() {
     iDebug() << Q_FUNC_INFO;
 
-    Helpers::safeConnect(m_doorRingActor, &DigitalActor::cmdTriggered, this, &DoorCameraController::onRingTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onRingTriggered(actor::ACTOR_CMDS)));
+    Helpers::safeConnect(m_doorRingActor, &DigitalActor::cmdTriggered, this, &DoorCameraController::onRingTriggered, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(onRingTriggered(ACTOR_CMDS)));
 }
 
 void DoorCameraController::handleMessage(ControllerMessage *msg) {
@@ -48,14 +48,14 @@ void DoorCameraController::bindDoorRingActor(DigitalActor *doorRingActor) {
     this->m_doorRingActor = doorRingActor;
 }
 
-void DoorCameraController::onRingTriggered(actor::ACTOR_CMDS cmd) {
+void DoorCameraController::onRingTriggered(ACTOR_CMDS cmd) {
     iInfo() << Q_FUNC_INFO << cmd;
 
     switch(cmd) {
-    case actor::ACTOR_CMD_ON:
+    case ACTOR_CMDS::ACTOR_CMD_ON:
         startRecording();
         break;
-    case actor::ACTOR_CMD_OFF:
+    case ACTOR_CMDS::ACTOR_CMD_OFF:
         break;
     default:
         break;

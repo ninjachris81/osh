@@ -27,7 +27,7 @@ void ValueBase::serialize(QJsonObject &obj) {
     SerializableIdentifyable::serialize(obj);
     //m_metaInfo.serialize(obj);
 
-    obj.insert("valueType", m_valueType);
+    obj.insert("valueType", (int) m_valueType);
     obj.insert("alwaysEmit", m_alwaysEmit);
     obj.insert("valueGroupId", m_valueGroup->id());
 }
@@ -174,24 +174,24 @@ QVariant::Type ValueBase::typeHint() {
 
 UNIT_TYPE ValueBase::valueTypeToUnitType(VALUE_TYPE valueType) {
     switch(valueType) {
-    case VALUE_TYPE_BRIGHTNESS: return UT_PERCENT;
-    case VALUE_TYPE_TEMP: return UT_DEGREES;
-    case VALTYPE_HUMIDITY: return UT_PERCENT;
-    case VALTYPE_WATER_FLOW: return UT_LITER_PER_MIN;
-    case VALTYPE_WATER_LEVEL: return UT_LITERS;
-    case VALTYPE_TIMESTAMP: return UT_TIMESTAMP;
-    default: return UT_UNKNOWN;
+    case VALUE_TYPE::VALTYPE_BRIGHTNESS: return UNIT_TYPE::UT_PERCENT;
+    case VALUE_TYPE::VALTYPE_TEMP: return UNIT_TYPE::UT_DEGREES;
+    case VALUE_TYPE::VALTYPE_HUMIDITY: return UNIT_TYPE::UT_PERCENT;
+    case VALUE_TYPE::VALTYPE_WATER_FLOW: return UNIT_TYPE::UT_LITER_PER_MIN;
+    case VALUE_TYPE::VALTYPE_WATER_LEVEL: return UNIT_TYPE::UT_LITERS;
+    case VALUE_TYPE::VALTYPE_TIMESTAMP: return UNIT_TYPE::UT_TIMESTAMP;
+    default: return UNIT_TYPE::UT_UNKNOWN;
     }
 }
 
 QString ValueBase::unitTypeToSuffix(UNIT_TYPE unitType) {
     switch(unitType) {
-    case UT_UNKNOWN: return "";
-    case UT_DEGREES: return "°";
-    case UT_PERCENT: return "%";
-    case UT_TIMESTAMP: return "";
-    case UT_LITER_PER_MIN: return "l/min";
-    case UT_LITERS: return "l";
+    case UNIT_TYPE::UT_UNKNOWN: return "";
+    case UNIT_TYPE::UT_DEGREES: return "°";
+    case UNIT_TYPE::UT_PERCENT: return "%";
+    case UNIT_TYPE::UT_TIMESTAMP: return "";
+    case UNIT_TYPE::UT_LITER_PER_MIN: return "l/min";
+    case UNIT_TYPE::UT_LITERS: return "l";
     }
     return QString();
 }

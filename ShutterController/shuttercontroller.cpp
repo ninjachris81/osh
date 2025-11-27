@@ -38,7 +38,7 @@ void ShutterController::initializeShutters() {
     for (ShutterActor* actor : m_actorsUp.keys()) {
         actor->updateClosePattern(SHUTTER_CLOSED);      // assume it's closed
         m_valueManager->publishValue(actor);
-        insertShutterMovements(actor, actor::ACTOR_CMD_UP, true);
+        insertShutterMovements(actor, ACTOR_CMDS::ACTOR_CMD_UP, true);
     }
 
     m_maintenanceTimer.start();
@@ -48,23 +48,23 @@ void ShutterController::bindActor(ShutterActor *shutterActor, DigitalActor* rela
     m_actorsUp.insert(shutterActor, relayActorUp);
     m_actorsDown.insert(shutterActor, relayActorDown);
 
-    Helpers::safeConnect(shutterActor, &ShutterActor::cmdTriggered, this, &ShutterController::onCmdTriggered, SIGNAL(cmdTriggered(actor::ACTOR_CMDS)), SLOT(onCmdTriggered(actor::ACTOR_CMDS)));
+    Helpers::safeConnect(shutterActor, &ShutterActor::cmdTriggered, this, &ShutterController::onCmdTriggered, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(onCmdTriggered(ACTOR_CMDS)));
 }
 
-void ShutterController::onCmdTriggered(actor::ACTOR_CMDS cmd) {
+void ShutterController::onCmdTriggered(ACTOR_CMDS cmd) {
     ShutterActor *shutterActor = qobject_cast<ShutterActor*>(sender());
 
     switch(cmd) {
-    case actor::ACTOR_CMD_STOP:
-    case actor::ACTOR_CMD_UP:
-    case actor::ACTOR_CMD_DOWN:
+    case ACTOR_CMDS::ACTOR_CMD_STOP:
+    case ACTOR_CMDS::ACTOR_CMD_UP:
+    case ACTOR_CMDS::ACTOR_CMD_DOWN:
         insertShutterMovements(shutterActor, cmd);
         break;
-    case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
-    case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
-    case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_CLOSE:
         if (shutterActor->tiltSupport()) {
             insertShutterMovements(shutterActor, cmd);
         } else {
@@ -93,7 +93,7 @@ void ShutterController::onMaintenance() {
         activeShutters << movement.shutterActor->fullId();
 
         if (movement.startedAt == -1) {     // not started, so start it
-            m_actorManager->publishCmd(movement.relayActor, actor::ACTOR_CMD_ON);
+            m_actorManager->publishCmd(movement.relayActor, ACTOR_CMDS::ACTOR_CMD_ON);
             movement.startedAt = QDateTime::currentMSecsSinceEpoch();
             it.setValue(movement);
         } else if (QDateTime::currentMSecsSinceEpoch() - movement.startedAt > movement.duration) {      // stop it
@@ -104,7 +104,7 @@ void ShutterController::onMaintenance() {
                 movement.shutterActor->updateClosePattern(movement.directionDown ? SHUTTER_CLOSED : SHUTTER_OPENED);
             }
             m_valueManager->publishValue(movement.shutterActor);
-            m_actorManager->publishCmd(movement.relayActor, actor::ACTOR_CMD_OFF);
+            m_actorManager->publishCmd(movement.relayActor, ACTOR_CMDS::ACTOR_CMD_OFF);
             it.remove();        // remove the task
         }
 
@@ -133,7 +133,7 @@ void ShutterController::onMaintenance() {
     }
 }
 
-void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd, bool isInit) {
+void ShutterController::insertShutterMovements(ShutterActor* shutterActor, ACTOR_CMDS cmd, bool isInit) {
     iDebug() << Q_FUNC_INFO << shutterActor->id() << cmd << isInit;
 
     if (!checkShutterInitMovements(shutterActor, cmd)) {
@@ -142,18 +142,18 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
     }
 
     switch(cmd) {
-    case actor::ACTOR_CMD_STOP:
+    case ACTOR_CMDS::ACTOR_CMD_STOP:
         // just make sure both as off
-        m_actorManager->publishCmd(m_actorsUp.value(shutterActor), actor::ACTOR_CMD_OFF);
-        m_actorManager->publishCmd(m_actorsDown.value(shutterActor), actor::ACTOR_CMD_OFF);
+        m_actorManager->publishCmd(m_actorsUp.value(shutterActor), ACTOR_CMDS::ACTOR_CMD_OFF);
+        m_actorManager->publishCmd(m_actorsDown.value(shutterActor), ACTOR_CMDS::ACTOR_CMD_OFF);
         break;
-    case actor::ACTOR_CMD_UP:
+    case ACTOR_CMDS::ACTOR_CMD_UP:
         insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() + shutterActor->fullTiltDuration(), false, isInit, false);
         break;
-    case actor::ACTOR_CMD_DOWN:
+    case ACTOR_CMDS::ACTOR_CMD_DOWN:
         insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration(), true, isInit, false);
         break;
-    case actor::ACTOR_CMD_SHUTTER_FULL_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN:
         if (shutterActor->checkTiltSupport()) {
             if (shutterActor->closeState() == SHUTTER_OPENED) {
                 // first, all down
@@ -166,21 +166,21 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
             iWarning() << "Actor does not support tilting";
         }
         break;
-    case actor::ACTOR_CMD_SHUTTER_TURN_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_CLOSE:
         if (shutterActor->checkTiltSupport()) {
             insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), true, isInit, true);
         } else {
             iWarning() << "Actor does not support tilting";
         }
         break;
-    case actor::ACTOR_CMD_SHUTTER_TURN_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN:
         if (shutterActor->checkTiltSupport()) {
             insertShutterMovement(shutterActor, cmd, shutterActor->fullTiltDuration(), false, isInit, true);
         } else {
             iWarning() << "Actor does not support tilting";
         }
         break;
-    case actor::ACTOR_CMD_SHUTTER_HALF_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_CLOSE:
         if (shutterActor->closeState() == SHUTTER_CLOSED) {
             insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, false, isInit, false);
             if (shutterActor->checkTiltSupport()) {
@@ -190,7 +190,7 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
             insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, true, isInit, false);
         }
         break;
-    case actor::ACTOR_CMD_SHUTTER_HALF_OPEN:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_HALF_OPEN:
         if (shutterActor->checkTiltSupport()) {
             insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, true, isInit, false);
             insertShutterMovement(shutterActor, cmd, shutterActor->fullCloseDuration() / m_halfFactor, false, isInit, true);
@@ -203,7 +203,7 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, actor
     }
 }
 
-void ShutterController::insertShutterMovement(ShutterActor* shutterActor, actor::ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool isInit, bool isTilt) {
+void ShutterController::insertShutterMovement(ShutterActor* shutterActor, ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool isInit, bool isTilt) {
     iDebug() << Q_FUNC_INFO << shutterActor->id() << originalCmd << duration << directionDown << isInit << isTilt;
 
     QMutexLocker locker(&m_activeShutterMovementsMutex);
@@ -222,7 +222,7 @@ void ShutterController::insertShutterMovement(ShutterActor* shutterActor, actor:
     m_activeShutterMovements.enqueue(movement);
 }
 
-bool ShutterController::checkShutterInitMovements(ShutterActor* shutterActor, actor::ACTOR_CMDS cmd) {
+bool ShutterController::checkShutterInitMovements(ShutterActor* shutterActor, ACTOR_CMDS cmd) {
     QMutexLocker locker(&m_activeShutterMovementsMutex);
 
     QMutableListIterator<ActiveShutterMovement> it(m_activeShutterMovements);
@@ -231,9 +231,9 @@ bool ShutterController::checkShutterInitMovements(ShutterActor* shutterActor, ac
         if (movement.shutterActor->id() == shutterActor->id()) {
             if (movement.isInit) return false;          // init cannot be cancelled
             if (movement.originalCmd != cmd) {
-                if (cmd == actor::ACTOR_CMD_UP && movement.originalCmd == actor::ACTOR_CMD_DOWN) {
+                if (cmd == ACTOR_CMDS::ACTOR_CMD_UP && movement.originalCmd == ACTOR_CMDS::ACTOR_CMD_DOWN) {
                     it.remove();
-                } else if (cmd == actor::ACTOR_CMD_DOWN && movement.originalCmd == actor::ACTOR_CMD_UP) {
+                } else if (cmd == ACTOR_CMDS::ACTOR_CMD_DOWN && movement.originalCmd == ACTOR_CMDS::ACTOR_CMD_UP) {
                     it.remove();
                 } else {
                     // other cmds must be executed, otherwise out of sync

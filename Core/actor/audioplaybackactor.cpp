@@ -20,34 +20,34 @@ AudioPlaybackActor::AudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE
     m_audioDeviceIds = audioDeviceIds.split("\n");
 }
 
-bool AudioPlaybackActor::cmdSupported(actor::ACTOR_CMDS cmd) {
+bool AudioPlaybackActor::cmdSupported(ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_START:
-    case actor::ACTOR_CMD_PAUSE:
-    case actor::ACTOR_CMD_STOP:
-    case actor::ACTOR_CMD_NEXT:
-    case actor::ACTOR_CMD_PREVIOUS:
+    case ACTOR_CMDS::ACTOR_CMD_START:
+    case ACTOR_CMDS::ACTOR_CMD_PAUSE:
+    case ACTOR_CMDS::ACTOR_CMD_STOP:
+    case ACTOR_CMDS::ACTOR_CMD_NEXT:
+    case ACTOR_CMDS::ACTOR_CMD_PREVIOUS:
         return true;
     default:
         return false;
     }
 }
 
-void AudioPlaybackActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
+void AudioPlaybackActor::_triggerCmd(ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_START:
+    case ACTOR_CMDS::ACTOR_CMD_START:
         Q_EMIT(startPlaybackRequested());
         break;
-    case actor::ACTOR_CMD_PAUSE:
+    case ACTOR_CMDS::ACTOR_CMD_PAUSE:
         Q_EMIT(pausePlaybackRequested());
         break;
-    case actor::ACTOR_CMD_STOP:
+    case ACTOR_CMDS::ACTOR_CMD_STOP:
         Q_EMIT(stopPlaybackRequested());
         break;
-    case actor::ACTOR_CMD_NEXT:
+    case ACTOR_CMDS::ACTOR_CMD_NEXT:
         Q_EMIT(nextRequested());
         break;
-    case actor::ACTOR_CMD_PREVIOUS:
+    case ACTOR_CMDS::ACTOR_CMD_PREVIOUS:
         Q_EMIT(previousRequested());
         break;
     default:
@@ -118,7 +118,7 @@ StringValue *AudioPlaybackActor::audioCurrentTitle() {
 AudioPlaybackActor* AudioPlaybackActor::withAudioVolumeValue(DoubleValue* volume) {
     iDebug() << Q_FUNC_INFO << volume->fullId();
 
-    if (volume->valueType() != value::VALTYPE_AUDIO_VOLUME) {
+    if (volume->valueType() != VALUE_TYPE::VALTYPE_AUDIO_VOLUME) {
         iWarning() << "Value" << volume->fullId() << "has wrong value type";
     }
 
@@ -133,7 +133,7 @@ AudioPlaybackActor* AudioPlaybackActor::withAudioVolumeValue(DoubleValue* volume
 AudioPlaybackActor* AudioPlaybackActor::withAudioUrlValue(StringValue* url) {
     iDebug() << Q_FUNC_INFO << url->fullId();
 
-    if (url->valueType() != value::VALTYPE_SOUND_URL) {
+    if (url->valueType() != VALUE_TYPE::VALTYPE_SOUND_URL) {
         iWarning() << "Value" << url->fullId() << "has wrong value type";
     }
 

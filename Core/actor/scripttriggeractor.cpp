@@ -6,15 +6,15 @@ ScriptTriggerActor::ScriptTriggerActor(ValueGroup *valueGroup, QString id, VALUE
     Q_UNUSED(parent)
 }
 
-bool ScriptTriggerActor::cmdSupported(actor::ACTOR_CMDS cmd) {
-    return cmd == actor::ACTOR_CMD_TRIGGER_SCRIPT;
+bool ScriptTriggerActor::cmdSupported(ACTOR_CMDS cmd) {
+    return cmd == ACTOR_CMDS::ACTOR_CMD_TRIGGER_SCRIPT;
 }
 
-void ScriptTriggerActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
+void ScriptTriggerActor::_triggerCmd(ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << cmd;
 
     switch(cmd) {
-    case actor::ACTOR_CMD_TRIGGER_SCRIPT:
+    case ACTOR_CMDS::ACTOR_CMD_TRIGGER_SCRIPT:
         Q_EMIT(triggerScript());
         break;
     default:

@@ -15,7 +15,7 @@ public:
 
     ActorBase* parent();
 
-    Q_INVOKABLE void triggerCmd(actor::ACTOR_CMDS cmd, QString reason);
+    Q_INVOKABLE void triggerCmd(ACTOR_CMDS cmd, QString reason);
 
 private:
     ActorBase* m_actor;

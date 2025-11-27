@@ -11,23 +11,23 @@ DoorActor::DoorActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, Q
 }
 
 
-bool DoorActor::cmdSupported(actor::ACTOR_CMDS cmd) {
+bool DoorActor::cmdSupported(ACTOR_CMDS cmd) {
     switch(cmd) {
-    case actor::ACTOR_CMD_ON:
-    case actor::ACTOR_CMD_OFF:
+    case ACTOR_CMDS::ACTOR_CMD_ON:
+    case ACTOR_CMDS::ACTOR_CMD_OFF:
         return true;
     default:
         return false;
     }
 }
 
-void DoorActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
+void DoorActor::_triggerCmd(ACTOR_CMDS cmd) {
     iDebug() << Q_FUNC_INFO << cmd;
 
     switch(cmd) {
-    case actor::ACTOR_CMD_ON:
+    case ACTOR_CMDS::ACTOR_CMD_ON:
         break;
-    case actor::ACTOR_CMD_OFF:
+    case ACTOR_CMDS::ACTOR_CMD_OFF:
         break;
     default:
         iWarning() << "Cmd not supported" << cmd;

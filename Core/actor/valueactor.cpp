@@ -6,16 +6,16 @@ ValueActor::ValueActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType,
 
 }
 
-bool ValueActor::cmdSupported(actor::ACTOR_CMDS cmd) {
-    return cmd == actor::ACTOR_CMD_SET_VALUE;
+bool ValueActor::cmdSupported(ACTOR_CMDS cmd) {
+    return cmd == ACTOR_CMDS::ACTOR_CMD_SET_VALUE;
 }
 
 bool ValueActor::isAsync() {
     return true;
 }
 
-void ValueActor::_triggerCmd(actor::ACTOR_CMDS cmd) {
-    if (cmd == actor::ACTOR_CMD_SET_VALUE) {
+void ValueActor::_triggerCmd(ACTOR_CMDS cmd) {
+    if (cmd == ACTOR_CMDS::ACTOR_CMD_SET_VALUE) {
         Q_EMIT(requestSetValue());
     }
 }
