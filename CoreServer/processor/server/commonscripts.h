@@ -41,9 +41,9 @@ public:
 
     Q_INVOKABLE bool applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint64 triggerTimeoutMs);
 
-    Q_INVOKABLE bool initPlaySoundOnValue(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue);
+    Q_INVOKABLE bool initPlaySoundOnValue(QString valueEventId, QString playValue, QString soundActorId, QString soundValue);
 
-    Q_INVOKABLE bool initPlaySoundOnValue2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue);
+    Q_INVOKABLE bool initPlaySoundOnValue2(QString valueEventId, QString playValue, QString stopValue, QString soundActorId, QString soundValue);
 
     Q_INVOKABLE bool initPlaySoundOnCmd(QString taskId, QString actorId, int cmdValue, QString soundActorId, QString soundValue);
 

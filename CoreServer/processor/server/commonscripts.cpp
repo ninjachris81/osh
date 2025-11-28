@@ -452,11 +452,11 @@ bool CommonScripts::applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint
     return isTimeout(doorRingActorFullId, triggerTimeoutMs, true);
 }
 
-bool CommonScripts::initPlaySoundOnValue(QString valueEventId, QVariant playValue, QString soundActorId, QString soundValue) {
-    return initPlaySoundOnValue2(valueEventId, playValue, QVariant(), soundActorId, soundValue);
+bool CommonScripts::initPlaySoundOnValue(QString valueEventId, QString playValue, QString soundActorId, QString soundValue) {
+    return initPlaySoundOnValue2(valueEventId, playValue, "", soundActorId, soundValue);
 }
 
-bool CommonScripts::initPlaySoundOnValue2(QString valueEventId, QVariant playValue, QVariant stopValue, QString soundActorId, QString soundValue) {
+bool CommonScripts::initPlaySoundOnValue2(QString valueEventId, QString playValue, QString stopValue, QString soundActorId, QString soundValue) {
     iInfo() << Q_FUNC_INFO;
     ValueBase *value = m_datamodel->value(valueEventId);
     if (value == nullptr) {
@@ -468,25 +468,52 @@ bool CommonScripts::initPlaySoundOnValue2(QString valueEventId, QVariant playVal
     Q_ASSERT(value != nullptr);
     Q_ASSERT(playbackActor != nullptr);
 
-    m_localStorage->set("initPlaySoundOnEvent", "playValue", value->fullId(), playValue);
-    m_localStorage->set("initPlaySoundOnEvent", "stopValue", value->fullId(), stopValue);
-    m_localStorage->setObject("initPlaySoundOnEvent", "soundActorId", value->fullId(), playbackActor);
-
     if (soundValue.isEmpty()) {
         if (playbackActor->audioUrl().isEmpty()) {
             iWarning() << "Audio actors must have static url value set if soundValue is empty" << playbackActor->fullId();
             Q_ASSERT(false);
         } else {
             // play static url
+            iDebug() << "Using static Url" << playbackActor->audioUrl();
         }
-    } else {
-        StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
-
-        Q_ASSERT(urlValue != nullptr);
-
-        m_localStorage->setObject("initPlaySoundOnEvent", "urlValue", value->fullId(), urlValue);
-        m_localStorage->set("initPlaySoundOnEvent", "soundValue", value->fullId(), soundValue);
     }
+
+    m_taskStorage->registerExecution(value, [this, value, playValue, stopValue, soundValue, playbackActor](QVariantList params) {
+
+        QVariant playValueVar = playValue;
+        QVariant stopValueVar = stopValue;
+
+        if (playValueVar.convert(value->rawValue().type())) {
+            if (value->rawValue() == playValue) {
+                iInfo() << "Play Trigger";
+
+                if (!soundValue.isEmpty()) {
+                    StringValue *urlValue = static_cast<StringValue*>(m_datamodel->value(playbackActor->audioUrlId()));
+                    Q_ASSERT(urlValue != nullptr);
+                    iDebug() << "Setting url" << soundValue;
+                    publishValue(urlValue, soundValue);
+                } else {
+                    // playback static url
+                    iDebug() << "Playback static url";
+                }
+
+                publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_START, "event play playback");
+            }
+        } else {
+            iWarning() << "Failed to convert play value to target type";
+        }
+
+        if (stopValueVar.convert(value->rawValue().type())) {
+            if (value->rawValue() == stopValue) {
+                iInfo() << "Stop Trigger";
+                publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_STOP, "event stop playback");
+            }
+        } else {
+            iWarning() << "Failed to convert stop value to target type";
+        }
+
+
+    });
 
     Helpers::safeConnect(value, &ValueBase::valueChanged, this, &CommonScripts::onInitPlaySoundOnValue_valueChanged, SIGNAL(valueChanged()), SLOT(onInitPlaySoundOnValue_valueChanged()));
 
@@ -495,34 +522,7 @@ bool CommonScripts::initPlaySoundOnValue2(QString valueEventId, QVariant playVal
 
 void CommonScripts::onInitPlaySoundOnValue_valueChanged() {
     iInfo() << Q_FUNC_INFO;
-
-    ValueBase* value = static_cast<ValueBase*>(sender());
-    QVariant playValue = m_localStorage->get("initPlaySoundOnEvent", "playValue", value->fullId());
-    QVariant stopValue = m_localStorage->get("initPlaySoundOnEvent", "stopValue", value->fullId());
-
-    if (playValue.convert(value->rawValue().type())) {
-        AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initPlaySoundOnEvent", "soundActorId", value->fullId()));
-
-        if (value->rawValue() == playValue) {
-            iInfo() << "Play Trigger";
-
-            if (m_localStorage->contains("initPlaySoundOnEvent", "urlValue", value->fullId())) {
-                QString soundValue = m_localStorage->get("initPlaySoundOnEvent", "soundValue", value->fullId()).toString();
-                StringValue *urlValue = static_cast<StringValue*>(m_localStorage->getObject("initPlaySoundOnEvent", "urlValue", value->fullId()));
-                iDebug() << "Setting url" << soundValue;
-                publishValue(urlValue, soundValue);
-            } else {
-                // playback static url
-                iDebug() << "Playback static url";
-            }
-
-            publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_START, "event play playback");
-        } else if (value->rawValue() == stopValue) {
-            publishCmd(playbackActor, ACTOR_CMDS::ACTOR_CMD_STOP, "event stop playback");
-        }
-    } else {
-        iWarning() << "Failed to convert to target type";
-    }
+    m_taskStorage->triggerExecution(sender(), {});
 }
 
 bool CommonScripts::initPlaySoundOnCmd(QString taskId, QString actorId, int cmdValue, QString soundActorId, QString soundValue) {
