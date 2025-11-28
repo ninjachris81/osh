@@ -126,7 +126,7 @@ int AMixerVolumeWrapper::_searchMapping(quint8 cardId, const QString volumeId) {
 
                 //qDebug() << id << tokens[2].remove("Playback Volume").remove("name='").remove("'").trimmed();
 
-                if (tokens[2].remove("Playback Volume").remove("name='").remove("'").trimmed() == volumeId) {
+                if (tokens[2].contains(volumeId)) {
                     return id;
                 }
             } else {

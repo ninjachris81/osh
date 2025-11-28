@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QList>
 #include <QAudioOutput>
-#include <QMediaPlayer>
 #include <QMutex>
 #include <QProcess>
 
