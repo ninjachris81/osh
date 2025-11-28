@@ -85,6 +85,13 @@ void AMixerVolumeWrapper::init() {
 }
 
 bool AMixerVolumeWrapper::searchMapping(const QString deviceId) {
+    qDebug() << Q_FUNC_INFO << deviceId;
+
+    if (m_cardMap.contains(deviceId)) {
+        qInfo() << "Already mapped" << deviceId;
+        return true;
+    }
+
     QString devId = deviceId;
     if (deviceId.endsWith("_sv")) {
         devId = deviceId.chopped(3);
@@ -136,6 +143,8 @@ int AMixerVolumeWrapper::_searchMapping(quint8 cardId, const QString volumeId) {
             qWarning() << "Unexpected output line" << line;
         }
     }
+
+    qWarning() << "Unable to find" << volumeId << "on card" << cardId;
 
     return -1;
 }

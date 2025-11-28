@@ -62,9 +62,6 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
             Q_ASSERT(volumeValue != nullptr);
             audioActor->withAudioVolumeValue(volumeValue);
             valueManager->registerForNotification(volumeValue);
-            if (!m_volumeWrapper.searchMapping(audioActor->audioDeviceIds().at(0))) {
-                qWarning() << "Failed to find volume mapping for " << audioActor->audioDeviceIds().at(0);
-            }
         }
 
         if (!audioActor->audioUrlId().isEmpty()) {
@@ -83,6 +80,12 @@ void AudioController2::loadAudioActors(DatamodelBase *datamodel, ClientValueMana
             StringValue* currentTitleValue = static_cast<StringValue*>(datamodel->value(audioActor->audioCurrentTitleId()));
             Q_ASSERT(currentTitleValue != nullptr);
             audioActor->withAudioCurrentTitleValue(currentTitleValue);
+        }
+
+        for (QString audioDeviceId : audioActor->audioDeviceIds()) {
+            if (!m_volumeWrapper.searchMapping(audioDeviceId)) {
+                qWarning() << "Failed to find volume mapping for " << audioActor->audioDeviceIds().at(0);
+            }
         }
 
         m_playbackActors.insert(audioActor->id(), audioActor);
