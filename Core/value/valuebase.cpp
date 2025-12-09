@@ -82,6 +82,11 @@ void ValueBase::setValueGroup(ValueGroup* valueGroup) {
 bool ValueBase::updateValue(QVariant newValue, bool emitChange) {
     iDebug() << Q_FUNC_INFO << newValue << m_value;
 
+    if (!newValue.isValid()) {
+        iWarning() << "Value is invalid" << newValue;
+        return false;
+    }
+
     m_currentSignalCount++;
 
     bool isDifferent = (m_value != newValue);
