@@ -148,7 +148,6 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
         }
 
         //QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
-
         if (toggleActor->rawValue().toBool()) {
             setTimeout(toggleActor->fullId());
             //m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
@@ -166,44 +165,44 @@ bool CommonScripts::initSwitchLogic2(QString lightRelayActorFullIds, QString tog
     iInfo() << lightRelayActorFullIds << toggleActorFullId;
 
     ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
-
     Q_ASSERT(toggleActor != nullptr);
 
-    Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic2_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic2_toggleActorValueChanged()));
-
-    quint8 index = 0;
+    QList<DigitalActor*> lightRelayActors;
     for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", QString::SkipEmptyParts)) {
         DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightRelayActorFullId));
         Q_ASSERT(lightRelayActor != nullptr);
-        m_localStorage->setObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index, lightRelayActor);
-        index++;
+        lightRelayActors << lightRelayActor;
     }
+
+    m_taskStorage->registerExecution(toggleActor, [this, toggleActor, lightRelayActors](QVariantList params) {
+        Q_UNUSED(params)
+
+
+        for (DigitalActor* lightRelayActor : lightRelayActors) {
+            //QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
+
+            if (toggleActor->rawValue().toBool()) {
+                setTimeout(toggleActor->fullId());
+                //m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
+            } else {
+                clearTimeout(toggleActor->fullId());
+                //m_localStorage->unset(lastTsInputKey);
+            }
+
+            publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF, "toggle");
+        }
+    });
+
+
+    Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic2_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic2_toggleActorValueChanged()));
 
     return true;
 }
 
 
 void CommonScripts::onInitSwitchLogic2_toggleActorValueChanged() {
-    ToggleActor* toggleActor = static_cast<ToggleActor*>(sender());
-
-    for (quint8 index = 0; index<255; index++) {
-        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index));
-        if (lightRelayActor == nullptr) {
-            break;
-        }
-
-        //QString lastTsInputKey = "lastToggleTs_" + toggleActor->fullId();
-
-        if (toggleActor->rawValue().toBool()) {
-            setTimeout(toggleActor->fullId());
-            //m_localStorage->set(lastTsInputKey, QDateTime::currentMSecsSinceEpoch());
-        } else {
-            clearTimeout(toggleActor->fullId());
-            //m_localStorage->unset(lastTsInputKey);
-        }
-
-        publishCmd(lightRelayActor, toggleActor->rawValue().toBool() ? ACTOR_CMDS::ACTOR_CMD_ON : ACTOR_CMDS::ACTOR_CMD_OFF, "toggle");
-    }
+    iDebug() << Q_FUNC_INFO;
+    m_taskStorage->triggerExecution(sender(), {});
 }
 
 
@@ -416,8 +415,27 @@ bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRin
     Q_ASSERT(inputSensor != nullptr);
     Q_ASSERT(ringActor != nullptr);
 
-    m_localStorage->setObject("initDoorRingLogic", "ringActor", inputSensor->fullId(), ringActor);
-    m_localStorage->set("initDoorRingLogic", "ringTimeout", inputSensor->fullId(), retriggerTimeout);
+    m_taskStorage->registerExecution(inputSensor, [this, inputSensor, ringActor, retriggerTimeout](QVariantList params) {
+        Q_UNUSED(params)
+
+        bool lastInputVal = m_localStorage->get("initDoorRingLogic", "lastVal", inputSensor->fullId(), false).toBool();
+        quint64 lastRing = m_localStorage->get("initDoorRingLogic", "lastRing", inputSensor->fullId(), 0).toLongLong();
+
+        if (lastRing == 0 || QDateTime::currentMSecsSinceEpoch() - lastRing > retriggerTimeout) {
+            if (lastInputVal != inputSensor->rawValue().toBool()) {     // on toggle true
+                setTimeout(ringActor->fullId());
+
+                if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
+                    publishCmd(ringActor, ACTOR_CMDS::ACTOR_CMD_ON, "input sensor");
+                    m_localStorage->set("initDoorRingLogic", "lastVal", inputSensor->fullId(), true);
+                    m_localStorage->set("initDoorRingLogic", "lastRing", inputSensor->fullId(), QDateTime::currentMSecsSinceEpoch());
+                }
+            }
+        } else {
+            // last ring too recent
+        }
+    });
+
 
     Helpers::safeConnect(inputSensor, &BooleanValue::valueChanged, this, &CommonScripts::onInitDoorRingLogic_inputSensorValueChanged, SIGNAL(valueChanged()), SLOT(onInitDoorRingLogic_inputSensorValueChanged()));
 
@@ -426,26 +444,7 @@ bool CommonScripts::initDoorRingLogic(QString inputSensorFullId, QString doorRin
 
 void CommonScripts::onInitDoorRingLogic_inputSensorValueChanged() {
     iDebug() << Q_FUNC_INFO;
-    BooleanValue* inputSensor = static_cast<BooleanValue*>(sender());
-    DigitalActor* ringActor = static_cast<DigitalActor*>(m_localStorage->getObject("initDoorRingLogic", "ringActor", inputSensor->fullId()));
-
-    bool lastInputVal = m_localStorage->get("initDoorRingLogic", "lastVal", inputSensor->fullId(), false).toBool();
-    int ringTimeout = m_localStorage->get("initDoorRingLogic", "ringTimeout", inputSensor->fullId(), 3000).toInt();
-    quint64 lastRing = m_localStorage->get("initDoorRingLogic", "lastRing", inputSensor->fullId(), 0).toLongLong();
-
-    if (lastRing == 0 || QDateTime::currentMSecsSinceEpoch() - lastRing > ringTimeout) {
-        if (lastInputVal != inputSensor->rawValue().toBool()) {     // on toggle true
-            setTimeout(ringActor->fullId());
-
-            if (inputSensor->rawValue().isValid() && inputSensor->rawValue().toBool() && !ringActor->rawValue().toBool()) {
-                publishCmd(ringActor, ACTOR_CMDS::ACTOR_CMD_ON, "input sensor");
-                m_localStorage->set("initDoorRingLogic", "lastVal", inputSensor->fullId(), true);
-                m_localStorage->set("initDoorRingLogic", "lastRing", inputSensor->fullId(), QDateTime::currentMSecsSinceEpoch());
-            }
-        }
-    } else {
-        // last ring too recent
-    }
+    m_taskStorage->triggerExecution(sender(), {});
 }
 
 bool CommonScripts::applyDoorRingTimeoutLogic(QString doorRingActorFullId, quint64 triggerTimeoutMs) {
@@ -479,6 +478,7 @@ bool CommonScripts::initPlaySoundOnValue2(QString valueEventId, QString playValu
     }
 
     m_taskStorage->registerExecution(value, [this, value, playValue, stopValue, soundValue, playbackActor](QVariantList params) {
+        Q_UNUSED(params)
 
         QVariant playValueVar = playValue;
         QVariant stopValueVar = stopValue;
