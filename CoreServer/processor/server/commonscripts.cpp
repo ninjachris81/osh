@@ -174,6 +174,8 @@ bool CommonScripts::initSwitchLogic2(QString lightRelayActorFullIds, QString tog
         lightRelayActors << lightRelayActor;
     }
 
+    iDebug() << lightRelayActors;
+
     m_taskStorage->registerExecution(toggleActor, [this, toggleActor, lightRelayActors](QVariantList params) {
         Q_UNUSED(params)
 

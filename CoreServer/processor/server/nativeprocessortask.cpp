@@ -107,6 +107,8 @@ QVariant NativeProcessorTask::run() {
             break;
         }
 
+        iDebug() << "Last result:" << m_lastResult;
+
         Q_EMIT(lastResultChanged());
 
         setLastExecutionNow();
