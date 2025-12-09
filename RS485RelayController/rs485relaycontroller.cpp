@@ -25,7 +25,7 @@ void RS485RelayController::init() {
     REQUIRE_MANAGER_X(m_manager, ValueManagerBase);
     m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
-    m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
+    m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 20000));
 
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
