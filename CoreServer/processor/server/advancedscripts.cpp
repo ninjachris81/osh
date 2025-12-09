@@ -45,13 +45,13 @@ bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterMo
     if (!shutterUpTimeFullId.isEmpty()) {
         IntegerValue* shutterUpTimeValue = static_cast<IntegerValue*>(m_datamodel->value(shutterUpTimeFullId));
         Q_ASSERT(shutterUpTimeValue != nullptr);
-        publishValue(shutterUpTimeValue, sunrise.msecsSinceStartOfDay());
+        publishValue(shutterUpTimeValue, sunrise.msecsSinceStartOfDay() / 1000);
     }
 
     if (!shutterDownTimeFullId.isEmpty()) {
         IntegerValue* shutterDownTimeValue = static_cast<IntegerValue*>(m_datamodel->value(shutterDownTimeFullId));
         Q_ASSERT(shutterDownTimeValue != nullptr);
-        publishValue(shutterDownTimeValue, sunset.msecsSinceStartOfDay());
+        publishValue(shutterDownTimeValue, sunset.msecsSinceStartOfDay() / 1000);
     }
 
 
