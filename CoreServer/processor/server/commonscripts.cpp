@@ -162,7 +162,7 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
 
 
 bool CommonScripts::initSwitchLogic2(QString lightRelayActorFullIds, QString toggleActorFullId) {
-    iInfo() << lightRelayActorFullIds << toggleActorFullId;
+    iInfo() << Q_FUNC_INFO << lightRelayActorFullIds << toggleActorFullId;
 
     ToggleActor* toggleActor = static_cast<ToggleActor*>(m_datamodel->actor(toggleActorFullId));
     Q_ASSERT(toggleActor != nullptr);
