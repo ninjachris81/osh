@@ -9,7 +9,7 @@ AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localSt
 }
 
 bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature, QString reportTiltModeFullId, QString windowOpenFullId, QString shutterUpTimeFullId, QString shutterDownTimeFullId) {
-    qDebug() << shutterFullId;
+    iDebug() << Q_FUNC_INFO << shutterFullId;
 
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterModeValue = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
