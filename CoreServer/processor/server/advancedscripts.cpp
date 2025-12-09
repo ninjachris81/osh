@@ -2,12 +2,15 @@
 #include "3rdparty/sunset.h"
 
 #include <QDateTime>
+#include <QDebug>
 
 AdvancedScripts::AdvancedScripts(DatamodelBase *datamodel, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("CommonScripts", datamodel, localStorage, taskStorage, valueManager, actorManager, parent)
 {
 }
 
 bool AdvancedScripts::applyShutterLogic(QString shutterFullId, QString shutterModeFullId, QString presenceFullId, double lat, double lng, int timezone, int adjustmentSunrise, int adjustmentSunset, QString tiltThresholdTempFullId, double tiltThresholdTemperature, double closeThresholdTemperature, QString reportTiltModeFullId, QString windowOpenFullId, QString shutterUpTimeFullId, QString shutterDownTimeFullId) {
+    qDebug() << shutterFullId;
+
     ShutterActor* shutterActor = static_cast<ShutterActor*>(m_datamodel->actor(shutterFullId));
     EnumValue* shutterModeValue = static_cast<EnumValue*>(m_datamodel->value(shutterModeFullId));
     IntegerValue* reportTiltModeValue = static_cast<IntegerValue*>(m_datamodel->value(reportTiltModeFullId));
