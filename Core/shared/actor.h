@@ -29,4 +29,9 @@
 #define ACTOR_SHUTTER_TURN_OPEN         43      // dont move, just tilt
 #define ACTOR_SHUTTER_TURN_CLOSE        44      // dont move, just tilt
 
+// require 1000ms resend
+#define ACTOR_SHUTTER_MANUAL_UP         46      // start up
+#define ACTOR_SHUTTER_MANUAL_DOWN       47      // start down
+
+
 #endif // ACTOR_H

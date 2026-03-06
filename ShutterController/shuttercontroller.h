@@ -63,6 +63,7 @@ private:
     void insertShutterMovements(ShutterActor* shutterActor, ACTOR_CMDS cmd, bool isInit = false);
     void insertShutterMovement(ShutterActor* shutterActor, ACTOR_CMDS originalCmd, qint64 duration, bool directionDown, bool isInit, bool isTilt);
     bool checkShutterInitMovements(ShutterActor* shutterActor, ACTOR_CMDS cmd);
+    void cancelShutterMovements(ShutterActor* shutterActor);
 
     ValueManagerBase *m_valueManager;
 

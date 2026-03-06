@@ -71,6 +71,11 @@ void ShutterController::onCmdTriggered(ACTOR_CMDS cmd) {
             iWarning() << "Tilt not supported";
         }
         break;
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_UP:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_DOWN:
+        insertShutterMovements(shutterActor, ACTOR_CMDS::ACTOR_CMD_STOP);
+        insertShutterMovements(shutterActor, cmd);
+        break;
     default:
         iWarning() << "Unsupported cmd" << cmd;
     }
@@ -144,6 +149,7 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, ACTOR
     switch(cmd) {
     case ACTOR_CMDS::ACTOR_CMD_STOP:
         // just make sure both as off
+        cancelShutterMovements(shutterActor);
         m_actorManager->publishCmd(m_actorsUp.value(shutterActor), ACTOR_CMDS::ACTOR_CMD_OFF);
         m_actorManager->publishCmd(m_actorsDown.value(shutterActor), ACTOR_CMDS::ACTOR_CMD_OFF);
         break;
@@ -198,6 +204,12 @@ void ShutterController::insertShutterMovements(ShutterActor* shutterActor, ACTOR
             iWarning() << "Actor does not support tilting";
         }
         break;
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_UP:
+        insertShutterMovement(shutterActor, cmd, 1000, false, isInit, false);
+        break;
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_DOWN:
+        insertShutterMovement(shutterActor, cmd, 1000, true, isInit, false);
+        break;
     default:
         break;
     }
@@ -246,4 +258,17 @@ bool ShutterController::checkShutterInitMovements(ShutterActor* shutterActor, AC
     }
 
     return true;
+}
+
+void ShutterController::cancelShutterMovements(ShutterActor* shutterActor) {
+    QMutexLocker locker(&m_activeShutterMovementsMutex);
+
+    QMutableListIterator<ActiveShutterMovement> it(m_activeShutterMovements);
+    while(it.hasNext()) {
+        ActiveShutterMovement movement = it.next();
+        if (movement.shutterActor->id() == shutterActor->id()) {
+            if (movement.isInit) break;          // init cannot be cancelled
+            it.remove();
+        }
+    }
 }

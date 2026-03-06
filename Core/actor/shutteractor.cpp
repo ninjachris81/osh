@@ -25,6 +25,8 @@ bool ShutterActor::cmdSupported(ACTOR_CMDS cmd) {
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN:
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN:
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_UP:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_DOWN:
         return true;
     default:
         return false;
@@ -58,6 +60,8 @@ void ShutterActor::_triggerCmd(ACTOR_CMDS cmd) {
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_FULL_OPEN:
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_OPEN:
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_TURN_CLOSE:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_UP:
+    case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_DOWN:
         break;
     default:
         iWarning() << "Cmd not supported" << cmd;
