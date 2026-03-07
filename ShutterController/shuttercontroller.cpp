@@ -73,7 +73,7 @@ void ShutterController::onCmdTriggered(ACTOR_CMDS cmd) {
         break;
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_UP:
     case ACTOR_CMDS::ACTOR_CMD_SHUTTER_MANUAL_DOWN:
-        insertShutterMovements(shutterActor, ACTOR_CMDS::ACTOR_CMD_STOP);
+        cancelShutterMovements(shutterActor);
         insertShutterMovements(shutterActor, cmd);
         break;
     default:
