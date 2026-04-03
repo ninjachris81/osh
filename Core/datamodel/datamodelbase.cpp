@@ -114,8 +114,16 @@ DigitalActor* DatamodelBase::addDigitalActor(ValueGroup* valueGroup, QString id,
     return actor;
 }
 
-ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration) {
-    ShutterActor* actor = new ShutterActor(valueGroupState, id, valueType, tiltSupport, fullCloseDuration, fullTiltDuration);
+ShutterActor* DatamodelBase::addShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration) {
+    ShutterActor* actor = new ShutterActor(valueGroup, id, valueType, tiltSupport, fullCloseDuration, fullTiltDuration);
+    actor->withValueTimeout(timeout);
+    m_actors.insert(actor->fullId(), actor);
+    Q_EMIT(datamodelContentChanged());
+    return actor;
+}
+
+TimerActor* DatamodelBase::addTimerActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout) {
+    TimerActor* actor = new TimerActor(valueGroup, id, valueType);
     actor->withValueTimeout(timeout);
     m_actors.insert(actor->fullId(), actor);
     Q_EMIT(datamodelContentChanged());

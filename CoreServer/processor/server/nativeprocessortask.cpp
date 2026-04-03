@@ -102,6 +102,12 @@ QVariant NativeProcessorTask::run() {
         case NFT_INIT_FOLLOW_ACTOR:
             m_lastResult = m_basicScripts->initFollowActor(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
             break;
+        case NFT_START_TIMER:
+            m_lastResult = m_basicScripts->startTimer(m_nativeParams.at(0).toString());
+            break;
+        case NFT_STOP_TIMER:
+            m_lastResult = m_basicScripts->stopTimer(m_nativeParams.at(0).toString());
+            break;
         default:
             iWarning() << "Unhandled script function" << m_nativeFunction;
             break;

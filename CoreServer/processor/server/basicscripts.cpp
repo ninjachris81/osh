@@ -2,6 +2,7 @@
 #include <QDateTime>
 
 #include "helpers.h"
+#include "actor/timeractor.h"
 
 BasicScripts::BasicScripts(DatamodelBase *datamodel, LocalStorage *localStorage, TaskStorage *taskStorage, ValueManagerBase *valueManager, ActorManager* actorManager, QObject *parent) : ScriptBase("BasicScripts", datamodel, localStorage, taskStorage, valueManager, actorManager, parent)
 {
@@ -130,4 +131,20 @@ void BasicScripts::initFollowActor_valueChanged() {
     ActorBase *triggerActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initFollowActor", "triggerActorId", sourceActor->fullId()));
 
     publishValue(triggerActor, sourceActor->rawValue());
+}
+
+bool BasicScripts::startTimer(QString timerActorId) {
+    TimerActor* timerActor = static_cast<TimerActor*>(m_datamodel->actor(timerActorId));
+    Q_ASSERT(timerActor != nullptr);
+
+    timerActor->triggerCmd(actor::ACTOR_CMDS::ACTOR_CMD_START, "Timer start");
+    return true;
+}
+
+bool BasicScripts::stopTimer(QString timerActorId) {
+    TimerActor* timerActor = static_cast<TimerActor*>(m_datamodel->actor(timerActorId));
+    Q_ASSERT(timerActor != nullptr);
+
+    timerActor->triggerCmd(actor::ACTOR_CMDS::ACTOR_CMD_STOP, "Timer stop");
+    return true;
 }

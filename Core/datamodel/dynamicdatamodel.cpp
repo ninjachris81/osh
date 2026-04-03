@@ -158,8 +158,10 @@ void DynamicDatamodel::addActor(QString typeName, ValueGroup *valueGroup, QStrin
         actor = addDigitalActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
                         properties.value(DigitalActor::PROPERTY_IS_ASYNC).toBool());
     } else if (typeName == "ShutterActor") {
-        actor =addShutterActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
+        actor = addShutterActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()),
                         properties.value(ShutterActor::PROPERTY_TILT_SUPPORT).toBool(), properties.value(ShutterActor::PROPERTY_FULL_CLOSE_DURATION).toInt(), properties.value(ShutterActor::PROPERTY_FULL_TILT_DURATION).toInt());
+    } else if (typeName == "TimerActor") {
+        actor = addTimerActor(valueGroup, id, static_cast<VALUE_TYPE>(properties.value(DigitalActor::PROPERTY_VALUE_TYPE).toInt()), static_cast<ValueBase::VALUE_TIMEOUT>(properties.value(DigitalActor::PROPERTY_VALUE_TIMEOUT).toInt()));
     } else if (typeName == "ToggleActor") {
         actor = addToggleActor(valueGroup, id);
     } else if (typeName == "ValueActor") {

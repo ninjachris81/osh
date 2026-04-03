@@ -23,6 +23,10 @@ public:
 
     Q_INVOKABLE bool initFollowActor(QString actorSourceId, QString triggerActorId, int followMode);
 
+    Q_INVOKABLE bool startTimer(QString timerActorId);
+
+    Q_INVOKABLE bool stopTimer(QString timerActorId);
+
 private slots:
     void initConnectValues_valueChanged();
     void initTriggerCmdOnValue_valueChanged();

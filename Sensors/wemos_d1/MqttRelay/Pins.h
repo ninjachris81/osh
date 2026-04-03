@@ -1,0 +1,7 @@
+// COMMON PIN LAYOUT
+#define PIN_LED 2
+
+#define PIN_RELAY D2
+#define PIN_TEMP_SENSOR_ONEWIRE D8
+
+#define PIN_ANALOG_INPUT A0

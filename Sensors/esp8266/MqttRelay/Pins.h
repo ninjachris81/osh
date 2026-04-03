@@ -1,0 +1,2 @@
+// COMMON PIN LAYOUT
+#define PIN_LED 26

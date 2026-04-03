@@ -38,6 +38,7 @@ SOURCES += \
         actor/dooractor.cpp \
         actor/scripttriggeractor.cpp \
         actor/shutteractor.cpp \
+        actor/timeractor.cpp \
         actor/toggleactor.cpp \
         actor/valueactor.cpp \
         communication/communicationmanagerbase.cpp \
@@ -118,6 +119,7 @@ HEADERS += \
         actor/dooractor.h \
         actor/scripttriggeractor.h \
         actor/shutteractor.h \
+        actor/timeractor.h \
         actor/toggleactor.h \
         actor/valueactor.h \
         communication/communicationmanagerbase.h \

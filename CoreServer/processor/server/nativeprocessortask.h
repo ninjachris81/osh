@@ -47,6 +47,8 @@ public:
         NFT_INIT_CONNECT_VALUES =               10,
         NFT_INIT_TRIGGER_CMD_ON_VALUE =         11,
         NFT_INIT_FOLLOW_ACTOR =                 12,
+        NFT_START_TIMER =                       13,
+        NFT_STOP_TIMER =                        14,
     };
 
     NativeProcessorTask();

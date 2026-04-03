@@ -25,6 +25,7 @@
 #include "value/stringvalue.h"
 #include "actor/digitalactor.h"
 #include "actor/shutteractor.h"
+#include "actor/timeractor.h"
 #include "processor/processortaskbase.h"
 #include "processor/processortaskfactory.h"
 #include "shared/units_qt.h"
@@ -66,7 +67,8 @@ public:
     ValueGroup* addValueGroup(QString id);
     ToggleActor* addToggleActor(ValueGroup* valueGroup, QString id);
     DigitalActor* addDigitalActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool isAsync);
-    ShutterActor* addShutterActor(ValueGroup* valueGroupState, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration);
+    ShutterActor* addShutterActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, bool tiltSupport, int fullCloseDuration, int fullTiltDuration);
+    TimerActor* addTimerActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);
     ValueActor* addValueActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QVariant::Type typeHint);
     AudioPlaybackActor* addAudioPlaybackActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout, QString audioDeviceIds, QString audioActivationRelayId, float audioVolume, QString audioVolumeId, QString audioDefaultUrl, QString audioUrlId, QString audioCurrentTitleId, QString audioName);
     DoorActor* addDoorActor(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, ValueBase::VALUE_TIMEOUT timeout);

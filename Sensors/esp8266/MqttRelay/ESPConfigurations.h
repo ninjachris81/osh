@@ -1,0 +1,11 @@
+#define WIFI_SSID_HOME21 "Home21"
+
+#define DEVICE_ID_PREFIX "00"
+#define SERVICE_ID_PREFIX "RELS-"
+#define WIFI_SSID WIFI_SSID_HOME21
+
+#define TEMP_INTERVAL_MS 6000
+#define TEMPS_VALUE_GROUP_ID "temps1"
+
+#define HAS_TEMP_CONTROLLER_ONEWIRE false
+#define RELAY_VALUE_GROUP_ID "shutterRelays1"
