@@ -53,6 +53,13 @@ void SerialPortClient::start() {
     }
 }
 
+void SerialPortClient::stop() {
+    qDebug() << Q_FUNC_INFO;
+
+    m_serialPort.close();
+    m_isConnected = false;
+}
+
 void SerialPortClient::write(QByteArray data, int responseTimeout) {
     qDebug() << Q_FUNC_INFO << data.toHex();
 

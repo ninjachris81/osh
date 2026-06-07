@@ -2,6 +2,8 @@
 #define JSMETHODS_H
 
 #include <QObject>
+#include <QJsonValue>
+
 #include "identifyable.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"

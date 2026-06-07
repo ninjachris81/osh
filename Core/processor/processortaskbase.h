@@ -5,9 +5,9 @@
 
 #include "sharedlib.h"
 
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 
-class SHARED_LIB_EXPORT ProcessorTaskBase : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT ProcessorTaskBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
@@ -39,10 +39,6 @@ public:
     explicit ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval = 0, bool enabled = true, QObject *parent = nullptr);
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
 
     virtual QVariant run() = 0;
 

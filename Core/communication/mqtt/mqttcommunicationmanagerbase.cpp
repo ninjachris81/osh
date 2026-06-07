@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QMetaEnum>
+#include <QJsonObject>
 
 #include "shared/mqtt_qt.h"
 #include "value/valuemessage.h"

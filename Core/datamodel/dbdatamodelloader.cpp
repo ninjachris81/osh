@@ -72,7 +72,7 @@ void DBDatamodelLoader::loadKnownAreas(DynamicDatamodel *datamodel) {
     QSqlQuery query(*m_databaseManager->db());
     if (query.exec("SELECT * FROM dm_known_areas")) {
         while (query.next()) {
-            datamodel->addKnownArea(query.value(SerializableIdentifyable::PROPERTY_ID).toString(), query.value(KnownArea::PROPERTY_NAME).toString());
+            datamodel->addKnownArea(query.value(Identifyable::PROPERTY_ID).toString(), query.value(KnownArea::PROPERTY_NAME).toString());
         }
     } else {
         iWarning() << query.lastError();
@@ -87,7 +87,7 @@ void DBDatamodelLoader::loadKnownRooms(DynamicDatamodel *datamodel) {
     if (query.exec("SELECT * FROM dm_known_rooms")) {
         while (query.next()) {
             KnownArea *knownArea = datamodel->knownArea(query.value(KnownRoom::PROPERTY_KNOWN_AREA).toString());
-            datamodel->addKnownRoom(knownArea, query.value(SerializableIdentifyable::PROPERTY_ID).toString(), query.value(KnownArea::PROPERTY_NAME).toString());
+            datamodel->addKnownRoom(knownArea, query.value(Identifyable::PROPERTY_ID).toString(), query.value(KnownArea::PROPERTY_NAME).toString());
         }
     } else {
         iWarning() << query.lastError();
@@ -100,7 +100,7 @@ void DBDatamodelLoader::loadValueGroups(DynamicDatamodel *datamodel) {
     QSqlQuery query(*m_databaseManager->db());
     if (query.exec("SELECT * FROM dm_value_groups")) {
         while (query.next()) {
-            datamodel->addValueGroup(query.value(SerializableIdentifyable::PROPERTY_ID).toString());
+            datamodel->addValueGroup(query.value(Identifyable::PROPERTY_ID).toString());
         }
     } else {
         iWarning() << query.lastError();
@@ -194,7 +194,7 @@ void DBDatamodelLoader::loadKnownDevices(DynamicDatamodel *datamodel) {
 
     if (query.exec("SELECT * FROM dm_known_devices")) {
         while (query.next()) {
-            datamodel->addKnownDevice(query.value(SerializableIdentifyable::PROPERTY_ID).toString(), query.value(KnownDevice::PROPERTY_SERVICE_ID).toString(), query.value(KnownDevice::PROPERTY_NAME).toString());
+            datamodel->addKnownDevice(query.value(Identifyable::PROPERTY_ID).toString(), query.value(KnownDevice::PROPERTY_SERVICE_ID).toString(), query.value(KnownDevice::PROPERTY_NAME).toString());
         }
     } else {
         iWarning() << query.lastError();
@@ -208,7 +208,7 @@ void DBDatamodelLoader::loadProcessorVariables(DynamicDatamodel *datamodel) {
 
     if (query.exec("SELECT * FROM dm_processor_variables")) {
         while (query.next()) {
-            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            QString id = query.value(Identifyable::PROPERTY_ID).toString();
             QString value = query.value(ProcessorVariable::PROPERTY_VALUE).toString();
 
             datamodel->addProcessorVariable(id, value);
@@ -226,7 +226,7 @@ void DBDatamodelLoader::loadProcessorTasks(DynamicDatamodel *datamodel) {
     if (query.exec("SELECT * FROM dm_processor_tasks WHERE enabled=true")) {
         while (query.next()) {
             QString groupId = query.value(ProcessorTaskBase::PROPERTY_GROUP_ID).toString();
-            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            QString id = query.value(Identifyable::PROPERTY_ID).toString();
             ProcessorTaskBase::ProcessorTaskType taskType = static_cast<ProcessorTaskBase::ProcessorTaskType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TYPE).toInt());
             ProcessorTaskBase::ProcessorTaskTriggerType taskTriggerType = static_cast<ProcessorTaskBase::ProcessorTaskTriggerType>(query.value(ProcessorTaskBase::PROPERTY_TASK_TRIGGER_TYPE).toInt());
             int functionCode = query.value(ProcessorTaskBase::PROPERTY_FUNCTION_CODE).toInt();
@@ -255,7 +255,7 @@ void DBDatamodelLoader::loadUsers(DynamicDatamodel *datamodel) {
 
     if (query.exec("SELECT * FROM dm_users")) {
         while (query.next()) {
-            QString id = query.value(SerializableIdentifyable::PROPERTY_ID).toString();
+            QString id = query.value(Identifyable::PROPERTY_ID).toString();
             QString name = query.value(OshUser::PROPERTY_NAME).toString();
             QString rights = query.value(OshUser::PROPERTY_RIGHTS).toString();
             QStringList allRights = rights.split(" ", QString::SkipEmptyParts);
@@ -275,15 +275,15 @@ QVariantMap DBDatamodelLoader::collectValues(QSqlQuery &query, QString &classTyp
     QSqlRecord record = query.record();
 
     for (int i = 0;i<record.count();i++) {
-        if ( record.field(i).name() == SerializableIdentifyable::PROPERTY_CLASSTYPE) {
+        if ( record.field(i).name() == Identifyable::PROPERTY_CLASSTYPE) {
             classType = query.value(i).toString();
-        } else if (record.field(i).name() == SerializableIdentifyable::PROPERTY_VALUE_GROUP_ID) {
+        } else if (record.field(i).name() == Identifyable::PROPERTY_VALUE_GROUP_ID) {
             if (tableName.isEmpty() || (!tableName.isEmpty() && record.field(i).tableName() == tableName)) {
                 valueGroup = query.value(i).toString();
             } else {
                 // ignore
             }
-        } else if (record.field(i).name() == SerializableIdentifyable::PROPERTY_ID) {
+        } else if (record.field(i).name() == Identifyable::PROPERTY_ID) {
             if (tableName.isEmpty() || (!tableName.isEmpty() && record.field(i).tableName() == tableName)) {
                 id = query.value(i).toString();
             } else {

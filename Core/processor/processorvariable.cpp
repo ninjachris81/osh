@@ -8,17 +8,12 @@ ProcessorVariable::ProcessorVariable() {
 }
 
 ProcessorVariable::ProcessorVariable(QString id, QString value, QObject *parent)
-    : QObject{parent}, SerializableIdentifyable(id), m_value(value)
+    : QObject{parent}, Identifyable(id), m_value(value)
 {
-
 }
 
 QString ProcessorVariable::value() {
     return m_value;
-}
-
-QString ProcessorVariable::getClassName() {
-    return staticMetaObject.className();
 }
 
 QString ProcessorVariable::variableId() {

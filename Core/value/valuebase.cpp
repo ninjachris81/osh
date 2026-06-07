@@ -12,36 +12,15 @@ QLatin1String ValueBase::PROPERTY_ALWAYS_EMIT = QLatin1String("always_emit");
 QLatin1String ValueBase::PROPERTY_PERSIST = QLatin1String("persist");
 QLatin1String ValueBase::PROPERTY_TYPE_HINT = QLatin1String("type_hint");
 
-ValueBase::ValueBase() : SerializableIdentifyable() {
+ValueBase::ValueBase() : Identifyable() {
 }
 
-ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QVariant::Type typeHint, QObject *parent) : QObject(parent), SerializableIdentifyable (id),
+ValueBase::ValueBase(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QVariant::Type typeHint, QObject *parent) : QObject(parent), Identifyable (id),
     m_alwaysEmit(alwaysEmit), m_typeHint(typeHint), m_valueType(valueType), m_valueGroup(valueGroup)
 {
     Q_ASSERT(m_valueGroup != nullptr);
 
     connect(this, &ValueBase::updateSignalRate, this, &ValueBase::onUpdateSignalRate);
-}
-
-void ValueBase::serialize(QJsonObject &obj) {
-    SerializableIdentifyable::serialize(obj);
-    //m_metaInfo.serialize(obj);
-
-    obj.insert("valueType", (int) m_valueType);
-    obj.insert("alwaysEmit", m_alwaysEmit);
-    obj.insert("valueGroupId", m_valueGroup->id());
-}
-
-void ValueBase::deserialize(QJsonObject obj) {
-    SerializableIdentifyable::deserialize(obj);
-    //m_metaInfo.deserialize(obj);
-
-    m_valueType = (VALUE_TYPE) obj.value("valueType").toInt();
-    m_alwaysEmit = obj.value("alwaysEmit").toBool();
-}
-
-QString ValueBase::getClassName() {
-    return metaObject()->className();
 }
 
 QString ValueBase::fullId() {

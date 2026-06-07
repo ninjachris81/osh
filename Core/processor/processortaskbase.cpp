@@ -18,17 +18,9 @@ ProcessorTaskBase::ProcessorTaskBase() : QObject() {
 }
 
 ProcessorTaskBase::ProcessorTaskBase(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval, bool enabled, QObject *parent)
-    : QObject{parent}, SerializableIdentifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_functionCode(functionCode), m_paramList(params), m_scheduleInterval(scheduleInterval), m_enabled(enabled), m_groupId(groupId)
+    : QObject{parent}, Identifyable(id), m_processorTaskType(taskType), m_processorTaskTriggerType(taskTriggerType), m_functionCode(functionCode), m_paramList(params), m_scheduleInterval(scheduleInterval), m_enabled(enabled), m_groupId(groupId)
 {
 
-}
-
-void ProcessorTaskBase::serialize(QJsonObject &obj) {
-    SerializableIdentifyable::serialize(obj);
-}
-
-void ProcessorTaskBase::deserialize(QJsonObject obj) {
-    SerializableIdentifyable::deserialize(obj);
 }
 
 LogCat::LOGCAT ProcessorTaskBase::logCat() {

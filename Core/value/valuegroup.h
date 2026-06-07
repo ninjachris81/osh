@@ -5,16 +5,14 @@
 
 #include "sharedlib.h"
 
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 
-class SHARED_LIB_EXPORT ValueGroup : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT ValueGroup : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
     ValueGroup();
     explicit ValueGroup(QString id, QObject *parent = nullptr);
-
-    /*virtual*/ QString getClassName() override;
 
 signals:
 

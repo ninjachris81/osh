@@ -32,6 +32,7 @@ public:
 
 public slots:
     void start();
+    void stop();
 
 private:
     void startRestart();

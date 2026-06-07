@@ -5,11 +5,11 @@
 
 #include "sharedlib.h"
 
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 #include "actor/actorbase.h"
 #include "value/valuebase.h"
 
-class SHARED_LIB_EXPORT KnownRoom : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT KnownRoom : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
@@ -18,12 +18,6 @@ public:
 
     KnownRoom();
     explicit KnownRoom(QString id, QObject *parent = nullptr);
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
-
-    /*virtual*/ QString getClassName() override;
 
     void setName(QString name);
     QString name();

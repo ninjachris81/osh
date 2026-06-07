@@ -15,6 +15,10 @@ class SHARED_LIB_EXPORT Identifyable
 public:
     explicit Identifyable(QString id = "");
 
+    static QLatin1String PROPERTY_ID;
+    static QLatin1String PROPERTY_CLASSTYPE;
+    static QLatin1String PROPERTY_VALUE_GROUP_ID;
+
     virtual QString id();
 
     virtual LogCat::LOGCAT logCat();

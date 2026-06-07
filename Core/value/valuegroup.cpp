@@ -1,13 +1,9 @@
 #include "valuegroup.h"
 
-ValueGroup::ValueGroup() : SerializableIdentifyable() {
+ValueGroup::ValueGroup() : Identifyable() {
 
 }
 
-ValueGroup::ValueGroup(QString id, QObject *parent) : QObject(parent), SerializableIdentifyable (id)
+ValueGroup::ValueGroup(QString id, QObject *parent) : QObject(parent), Identifyable (id)
 {
-}
-
-QString ValueGroup::getClassName() {
-    return staticMetaObject.className();
 }

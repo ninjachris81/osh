@@ -55,11 +55,9 @@ SOURCES += \
         datamodel/dbdatamodelloader.cpp \
         datamodel/dynamicdatamodel.cpp \
         datamodel/emptydatamodel.cpp \
-        datamodel/filedatamodelloader.cpp \
         datamodel/httpdatamodelloader.cpp \
         datamodel/meta/knownarea.cpp \
         datamodel/meta/knownroom.cpp \
-        datamodel/serializationsupport.cpp \
         datamodel/testdatamodel.cpp \
         datamodel/testdatamodelloader.cpp \
         device/client/clientdevice.cpp \
@@ -74,12 +72,9 @@ SOURCES += \
         log/logforwarderbase.cpp \
         log/logmanager.cpp \
         log/logmessage.cpp \
-        meta/itemmetainfo.cpp \
-        meta/metainfosupport.cpp \
         processor/processortaskbase.cpp \
         processor/processorvariable.cpp \
         processor/scriptresultmessage.cpp \
-        serializableidentifyable.cpp \
         time/client/clientsystemtimemanager.cpp \
         time/systemtimemessage.cpp \
         user/oshuser.cpp \
@@ -136,11 +131,9 @@ HEADERS += \
         datamodel/dbdatamodelloader.h \
         datamodel/dynamicdatamodel.h \
         datamodel/emptydatamodel.h \
-        datamodel/filedatamodelloader.h \
         datamodel/httpdatamodelloader.h \
         datamodel/meta/knownarea.h \
         datamodel/meta/knownroom.h \
-        datamodel/serializationsupport.h \
         datamodel/testdatamodel.h \
         datamodel/testdatamodelloader.h \
         device/client/clientdevice.h \
@@ -158,13 +151,10 @@ HEADERS += \
         log/logmanager.h \
         log/logmessage.h \
         macros.h \
-        meta/itemmetainfo.h \
-        meta/metainfosupport.h \
         processor/processortaskbase.h \
         processor/processortaskfactory.h \
         processor/processorvariable.h \
         processor/scriptresultmessage.h \
-        serializableidentifyable.h \
         shared/actor.h \
         shared/actor_qt.h \
         shared/controllercmdtypes.h \

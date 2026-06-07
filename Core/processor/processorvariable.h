@@ -5,9 +5,9 @@
 
 #include "sharedlib.h"
 
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 
-class SHARED_LIB_EXPORT ProcessorVariable : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT ProcessorVariable : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
@@ -19,8 +19,6 @@ public:
     explicit ProcessorVariable(QString id, QString value, QObject *parent = nullptr);
 
     QString value();
-
-    /*virtual*/ QString getClassName() override;
 
     QString variableId();
 

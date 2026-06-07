@@ -4,39 +4,11 @@
 QLatin1String KnownRoom::PROPERTY_NAME = QLatin1String("name");
 QLatin1String KnownRoom::PROPERTY_KNOWN_AREA = QLatin1String("known_area_id");
 
-KnownRoom::KnownRoom() : SerializableIdentifyable() {
+KnownRoom::KnownRoom() : Identifyable() {
 }
 
-KnownRoom::KnownRoom(QString id, QObject *parent) : QObject(parent), SerializableIdentifyable(id)
+KnownRoom::KnownRoom(QString id, QObject *parent) : QObject(parent), Identifyable(id)
 {
-
-}
-void KnownRoom::serialize(QJsonObject &obj) {
-    SerializableIdentifyable::serialize(obj);
-
-    obj.insert("name", m_name);
-
-    QJsonArray values;
-    for (QString valueId : m_values.keys()) {
-        values.append(valueId);
-    }
-    obj.insert("values", values);
-
-    QJsonArray actors;
-    for (QString actorId : m_actors.keys()) {
-        actors.append(actorId);
-    }
-    obj.insert("actors", actors);
-}
-
-void KnownRoom::deserialize(QJsonObject obj) {
-    SerializableIdentifyable::deserialize(obj);
-
-    m_name = obj.value("name").toString();
-}
-
-QString KnownRoom::getClassName() {
-    return staticMetaObject.className();
 }
 
 void KnownRoom::setName(QString name) {

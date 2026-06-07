@@ -4,7 +4,6 @@
 
 #include "datamodel/httpdatamodelloader.h"
 #include "datamodel/testdatamodelloader.h"
-#include "datamodel/filedatamodelloader.h"
 #include "actor/actormanager.h"
 #include "datamodel/emptydatamodel.h"
 #include "datamodel/dbdatamodelloader.h"
@@ -62,8 +61,6 @@ void DatamodelManager::init(LocalConfig* config) {
 
     if (datamodelLoaderName == HttpDataModelLoader::LOADER_TYPE_NAME) {
         m_datamodelLoader = new HttpDataModelLoader(QUrl(config->getString("datamodel.url", "http://localhost/datamodel")));
-    } else if (datamodelLoaderName == FileDataModelLoader::LOADER_TYPE_NAME) {
-        m_datamodelLoader = new FileDataModelLoader(config->getString("datamodel.filePath", "datamodel.json"));
     } else if (datamodelLoaderName == TestDatamodelLoader::LOADER_TYPE_NAME) {
         m_datamodelLoader = new TestDatamodelLoader();
     } else if (datamodelLoaderName == DBDatamodelLoader::LOADER_TYPE_NAME) {

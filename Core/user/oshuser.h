@@ -3,9 +3,9 @@
 
 #include <QObject>
 
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 
-class OshUser : public QObject, public SerializableIdentifyable
+class OshUser : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
@@ -15,12 +15,6 @@ public:
     static QLatin1String PROPERTY_RIGHTS;
 
     explicit OshUser(QString id, QString name, QStringList rights, QObject *parent = nullptr);
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
-
-    /*virtual*/ QString getClassName() override;
 
     /*virtual*/ LogCat::LOGCAT logCat() override;
 

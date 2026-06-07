@@ -7,18 +7,16 @@
 #include "sharedlib.h"
 
 #include "valuegroup.h"
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 #include "shared/units_qt.h"
 #include "shared/value_qt.h"
-#include "meta/itemmetainfo.h"
-#include "meta/metainfosupport.h"
 
 using namespace unit;
 using namespace value;
 
 class ValueManagerBase;
 
-class SHARED_LIB_EXPORT ValueBase : public QObject, public SerializableIdentifyable /*, public MetaInfoSupport*/
+class SHARED_LIB_EXPORT ValueBase : public QObject, public Identifyable /*, public MetaInfoSupport*/
 {
 Q_OBJECT
 
@@ -38,12 +36,6 @@ public:
 
     ValueBase();
     explicit ValueBase(ValueGroup* valueGroup, QString id, VALUE_TYPE valueType, bool alwaysEmit, QVariant::Type typeHint, QObject *parent = nullptr);
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
-
-    /*virtual*/ QString getClassName() override;
 
     ValueBase* withValueTimeout(VALUE_TIMEOUT timeout);
 

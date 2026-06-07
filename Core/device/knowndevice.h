@@ -6,7 +6,6 @@
 #include "sharedlib.h"
 
 #include "device/devicebase.h"
-#include "datamodel/serializationsupport.h"
 
 class SHARED_LIB_EXPORT KnownDevice : public DeviceBase
 {
@@ -19,10 +18,6 @@ public:
     explicit KnownDevice(QString id, QString serviceId, QString name, QObject *parent = nullptr);
 
     QString name();
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
 
 protected:
     QString m_name;

@@ -5,10 +5,10 @@
 
 #include "sharedlib.h"
 
-#include "serializableidentifyable.h"
+#include "identifyable.h"
 #include "datamodel/meta/knownroom.h"
 
-class SHARED_LIB_EXPORT KnownArea : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT KnownArea : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
@@ -16,12 +16,6 @@ public:
 
     KnownArea();
     explicit KnownArea(QString id, QObject *parent = nullptr);
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
-
-    /*virtual*/ QString getClassName() override;
 
     void setName(QString name);
     QString name();

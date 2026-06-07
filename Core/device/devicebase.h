@@ -5,22 +5,14 @@
 
 #include "sharedlib.h"
 
-#include "serializableidentifyable.h"
-#include "shared/controllercmdtypes_qt.h"
-#include "datamodel/serializationsupport.h"
+#include "identifyable.h"
 
-class SHARED_LIB_EXPORT DeviceBase : public QObject, public SerializableIdentifyable
+class SHARED_LIB_EXPORT DeviceBase : public QObject, public Identifyable
 {
     Q_OBJECT
 public:
     explicit DeviceBase();
     explicit DeviceBase(QString id, QString serviceId, QObject *parent = nullptr);
-
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
-
-    /*virtual*/ QString getClassName() override;
 
     QString fullId();
 

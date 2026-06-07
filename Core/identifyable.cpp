@@ -4,6 +4,10 @@
 
 #include <QRandomGenerator64>
 
+QLatin1String Identifyable::PROPERTY_ID = QLatin1String("id");
+QLatin1String Identifyable::PROPERTY_CLASSTYPE = QLatin1String("class_type");
+QLatin1String Identifyable::PROPERTY_VALUE_GROUP_ID = QLatin1String("value_group_id");
+
 Identifyable::Identifyable(QString id) : m_id(id)
 {
 }

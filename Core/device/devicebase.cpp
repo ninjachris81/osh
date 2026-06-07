@@ -3,27 +3,12 @@
 #include <QDateTime>
 #include <QRandomGenerator64>
 
-#include "device/devicediscoverymanagerbase.h"
 #include "shared/device.h"
 
-DeviceBase::DeviceBase() : SerializableIdentifyable() {
+DeviceBase::DeviceBase() : Identifyable() {
 }
 
-DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : QObject(parent), SerializableIdentifyable(id), m_serviceId(serviceId) {
-}
-
-void DeviceBase::serialize(QJsonObject &obj) {
-    SerializableIdentifyable::serialize(obj);
-    obj.insert("serviceId", m_serviceId);
-}
-
-void DeviceBase::deserialize(QJsonObject obj) {
-    SerializableIdentifyable::deserialize(obj);
-    m_serviceId = obj.value("serviceId").toString();
-}
-
-QString DeviceBase::getClassName() {
-    return metaObject()->className();
+DeviceBase::DeviceBase(QString id, QString serviceId, QObject *parent) : QObject(parent), Identifyable(id), m_serviceId(serviceId) {
 }
 
 void DeviceBase::updatePing() {

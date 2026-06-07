@@ -4,6 +4,7 @@
 #include <QSerialPort>
 #include <QDateTime>
 #include <QThread>
+#include <QJsonObject>
 
 #include "controller/controllermanager.h"
 #include "helpers.h"

@@ -14,18 +14,6 @@ JSProcessorTask::JSProcessorTask(QString groupId, QString id, ProcessorTaskType 
 
 }
 
-void JSProcessorTask::serialize(QJsonObject &obj) {
-    ProcessorTaskBase::serialize(obj);
-}
-
-void JSProcessorTask::deserialize(QJsonObject obj) {
-    ProcessorTaskBase::deserialize(obj);
-}
-
-QString JSProcessorTask::getClassName() {
-    return staticMetaObject.className();
-}
-
 QVariant JSProcessorTask::run() {
     iDebug() << Q_FUNC_INFO << m_id;
 

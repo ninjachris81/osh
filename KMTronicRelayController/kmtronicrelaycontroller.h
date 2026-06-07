@@ -21,7 +21,8 @@ public:
         INIT,
         RETRIEVING_STATUS,
         STATUS_RECEIVED,
-        STATUS_ERROR
+        STATUS_ERROR,
+        STATUS_REFRESH_AFTER_SET
     } m_currentStatus = INIT;
 
     enum RELAY_MODEL {
@@ -29,6 +30,7 @@ public:
     } m_model;
 
     KMTronicRelayController(ControllerManager* manager, QString id, RELAY_MODEL model, quint8 relayCount, QObject *parent = nullptr);
+    ~KMTronicRelayController();
 
     /*virtual*/ void init() override;
 
@@ -48,6 +50,7 @@ protected slots:
     void retrieveStatus();
 
 private:
+    ValueManagerBase *m_valueManager;
     ClientSystemWarningsManager* m_warnManager;
     QTimer m_statusTimer;
     SerialPortClient* m_serialClient;

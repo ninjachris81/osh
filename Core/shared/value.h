@@ -49,6 +49,7 @@
 #define VALUE_TYPE_HEAT_PUMP_DATA   80
 
 #define VALUE_TYPE_VIRTUAL_ACTOR    90
+#define VALUE_TYPE_TIMER            91
 
 // static vars
 #define VALUE_TYPE_STATIC_TEMP  100
