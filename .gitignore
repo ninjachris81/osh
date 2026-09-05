@@ -17,6 +17,8 @@ GPIOInputService/GPIOInputService
 ShutterService/ShutterService
 WBB12Service/WBB12Service
 RS485EnergyMeterService/RS485EnergyMeterService
+KMTronicRelayService/KMTronicRelayService
+RS232InputService/RS232InputService
 DoorAudioService/DoorAudioService
 DoorUnlockService/DoorUnlockService
 DoorCameraService/DoorCameraService
