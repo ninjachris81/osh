@@ -8,6 +8,8 @@
 #include "TaskIDs.h"
 //#include "MqttController.h"
 
+#define INVALID_TEMP -127
+
 class TempControllerDS18x : public AbstractIntervalTask {
 public:
   TempControllerDS18x(String valueGroupTemp);
@@ -21,6 +23,7 @@ private:
   bool m_requesting = true;
   OneWire *m_oneWire;
   DallasTemperature *m_sensor;
+  DeviceAddress m_tempDeviceAddress;
   
   String m_valueGroupTemp;
 

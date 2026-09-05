@@ -27,5 +27,11 @@ void TOFControllerAJSR04M::update() {
   
   long duration = pulseIn(PIN_TOF_ECHO, HIGH);
   int distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
-  taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publishSingleValue(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), distance);
+
+  if (m_lastValue == -1 || abs(distance - m_lastValue) < MAX_ERROR_DELTA) {
+    taskManager->getTask<MQTTController*>(MQTT_CONTROLLER)->publishSingleValue(BUILD_PATH(MQTT_MESSAGE_TYPE_VA + String(MQTT_PATH_SEP) + m_valueGroup + String(MQTT_PATH_SEP) + String(taskManager->getTask<FlashController*>(FLASH_CONTROLLER)->getIndex())), distance);
+    m_lastValue = distance;
+  } else {
+    m_lastValue = -1;
+  }
 }

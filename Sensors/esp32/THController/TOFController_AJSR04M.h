@@ -6,6 +6,8 @@
 #include "TaskIDs.h"
 //#include "MqttController.h"
 
+#define MAX_ERROR_DELTA 10
+
 class TOFControllerAJSR04M : public AbstractIntervalTask {
 public:
   TOFControllerAJSR04M(String valueGroup);
@@ -16,6 +18,7 @@ public:
   
 private:
   String m_valueGroup;
+  int m_lastValue = -1;
 
 };
 

@@ -52,7 +52,11 @@ void FlashController::setIndex(uint8_t index) {
 }
 
 uint8_t FlashController::getIndex() {
+#if USE_STATIC_INDEX
+  return STATIC_INDEX;
+#else
   return m_index;
+#endif
 }
 
 bool FlashController::isValidNumber(String str){

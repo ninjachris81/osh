@@ -48,7 +48,6 @@ void RS232WaterMeterController::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-
 void RS232WaterMeterController::onSerialConnected() {
     iDebug() << Q_FUNC_INFO;
 

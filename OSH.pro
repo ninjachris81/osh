@@ -31,6 +31,8 @@ SUBDIRS += \
     OnvifService \
     PJSIPSupport \
     QMqttCommunicationManager \
+    RS232InputController \
+    RS232InputService \
     RS232WaterMeterController \
     RS232WaterMeterService \
     RS485EnergyMeterController \
@@ -64,6 +66,9 @@ AudioService.depends = Core AudioController QMqttCommunicationManager
 
 RS485RelayController.depends = Core CoreSerial
 RS485RelayService.depends = Core RS485RelayController QMqttCommunicationManager
+
+USBInputController.depends = Core CoreSerial
+USBInputService.depends = Core USBInputController QMqttCommunicationManager
 
 WBB12Controller.depends = Core CoreSerial
 WBB12Service.depends = Core WBB12Controller QMqttCommunicationManager
