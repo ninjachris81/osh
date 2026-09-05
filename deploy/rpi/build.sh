@@ -104,6 +104,16 @@ case "$1" in
       buildOSHLib "QMqttCommunicationManager"
       buildOSHTarget $BUILD_TARGET
       ;;
+   RS232InputService )
+      BUILD_TARGET=$1
+      printInfos
+      buildQtMqtt
+      buildOSHLib "Core"
+      buildOSHLib "CoreSerial"
+      buildOSHLib "RS232InputController"
+      buildOSHLib "QMqttCommunicationManager"
+      buildOSHTarget $BUILD_TARGET
+      ;;
    GPIOInputService )
       BUILD_TARGET=$1
       printInfos
