@@ -53,7 +53,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-        int targetAddress = 1;
+        int targetAddress = 0;
 
         quint8 relayNumber = relayIndex + 1;
         quint8 actionValue = status ? 0x01 : 0x02;
