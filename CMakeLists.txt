@@ -16,6 +16,8 @@ set(OSH_QTMQTT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/qtmqtt-install" CACHE PATH "Ins
 if(EXISTS "${OSH_QTMQTT_ROOT}/lib/cmake/Qt6Mqtt/Qt6MqttConfig.cmake")
     list(PREPEND CMAKE_PREFIX_PATH "${OSH_QTMQTT_ROOT}")
     set(Qt6Mqtt_DIR "${OSH_QTMQTT_ROOT}/lib/cmake/Qt6Mqtt" CACHE PATH "Qt MQTT CMake package")
+elseif(CMAKE_LIBRARY_ARCHITECTURE AND EXISTS "${OSH_QTMQTT_ROOT}/lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/Qt6Mqtt/Qt6MqttConfig.cmake")
+    set(Qt6Mqtt_DIR "${OSH_QTMQTT_ROOT}/lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/Qt6Mqtt" CACHE PATH "Qt6Mqtt CMake package")
 endif()
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS
