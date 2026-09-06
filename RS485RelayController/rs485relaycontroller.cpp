@@ -71,7 +71,7 @@ void RS485RelayController::printRawMessage(quint8 slaveId, const QModbusRequest 
 
     QString hexString;
     for (int i = 0; i < rawFrame.size(); ++i) {
-        hexString.append(QString("%1 ").arg(static_cast<quint8>(rawFrame.at(i)), 2, 16, QChar('0')).toUpperCase());
+        hexString.append(QString("%1 ").arg(static_cast<quint8>(rawFrame.at(i)), 2, 16, QChar('0')).toUpper());
     }
     iDebug() << "Raw Modbus Request Sent:" << hexString.trimmed();
 }
