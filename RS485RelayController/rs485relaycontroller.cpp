@@ -9,7 +9,6 @@
 RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, QObject *parent) : RelayControllerBase(manager, id, getRelayCount(model), parent), m_model(model)
 {
     connect(&m_statusTimer, &QTimer::timeout, this, &RS485RelayController::retrieveStatus);
-
 }
 
 RS485RelayController::~RS485RelayController() {
@@ -26,7 +25,6 @@ void RS485RelayController::init() {
     m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 20000));
-
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialPortNameParameter, m_config->getString(this, "serial.port", "COM1"));
@@ -34,7 +32,6 @@ void RS485RelayController::init() {
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud9600);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
-    //m_modbusClient.setTimeout(500);
     m_modbusClient.setNumberOfRetries(1);
 
     iInfo() << "Relay count:" << m_relayCount;
@@ -45,7 +42,6 @@ void RS485RelayController::init() {
 
 void RS485RelayController::start() {
     iDebug() << Q_FUNC_INFO;
-
     iInfo() << "Connecting on" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
 
     m_modbusClient.connectDevice();
@@ -57,34 +53,34 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-        // eletechsup addresses start at 1
         int targetAddress = relayIndex + 1;
+        quint16 controlValue = 0x0000;
 
-        // Value: 0x0001 for ON, 0x0000 for OFF
-        quint16 controlValue = status ? 0x0001 : 0x0000;
+        if (m_model == RS485_SERIAL_8PORT) {
+            controlValue = status ? 0x0101 : 0x0100;
+        } else {
+            controlValue = status ? 0x0001 : 0x0000;
+        }
 
-        // Create a standard Modbus data unit for a single Holding Register
         QModbusDataUnit writeUnit(QModbusDataUnit::HoldingRegisters, targetAddress, 1);
         writeUnit.setValue(0, controlValue);
 
-        // Use the native Qt 5 write request method
         QModbusReply* reply = m_modbusClient.sendWriteRequest(writeUnit, m_slaveId);
 
         if (!reply) {
-            iWarning() << "Failed to enqueue write request. Client might be busy.";
+            iWarning() << "Failed to enqueue write request.";
             return;
         }
 
         connect(reply, &QModbusReply::finished, this, [this, relayIndex, reply, status]() {
             if (reply->error() == QModbusDevice::NoError) {
-                // Write was successful, update internal state
                 setStatus(relayIndex, status);
                 m_valueManager->publishValue(actor(relayIndex));
                 iDebug() << "Relay" << relayIndex << "successfully switched to" << status;
             } else {
                 iWarning() << "Write failed for relay" << relayIndex << "Error:" << reply->errorString();
             }
-            reply->deleteLater(); // Prevent memory leak
+            reply->deleteLater();
         });
     } else {
         m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
@@ -117,7 +113,6 @@ void RS485RelayController::onStateChanged() {
         iDebug() << m_modbusClient.state();
         break;
     }
-
 }
 
 void RS485RelayController::onErrorOccurred() {
@@ -143,8 +138,6 @@ void RS485RelayController::onDataReceived() {
         setSerialRelayStatus(STATUS_RECEIVED);
 
         if (!data.isEmpty()) {
-            // Byte 0 is the Byte Count. Data starts at Index 1.
-            // Each register is 2 bytes (High Byte, Low Byte).
             for (quint8 i = 0; i < m_relayCount; i++) {
                 int highByteIdx = 1 + (i * 2);
                 int lowByteIdx  = 2 + (i * 2);
@@ -153,9 +146,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    // eletechsup: 0x0001 = ON, 0x0000 = OFF
-                    bool isOn = (regValue == 0x0001);
-
+                    bool isOn = (m_model == RS485_SERIAL_8PORT) ? ((regValue & 0x00FF) == 0x0001) : (regValue == 0x0001);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
@@ -167,12 +158,11 @@ void RS485RelayController::onDataReceived() {
         m_errorCount++;
     }
 
-    reply->deleteLater(); // Prevent memory leak
+    reply->deleteLater();
 }
 
 void RS485RelayController::setSerialRelayStatus(RELAY_STATUS status) {
     if (m_currentStatus != status) {
-        //iDebug() << "New status" << status;
         m_currentStatus = status;
     }
 }
@@ -182,7 +172,7 @@ void RS485RelayController::retrieveStatus() {
 
     QMutexLocker locker(&m_Mutex);
 
-    if (m_modbusClient.state() == QModbusDevice::UnconnectedState) {
+    if (m_modbusClient.state() == QModbusClient::UnconnectedState) {
         iDebug() << "Connecting to modbus";
         m_modbusClient.connectDevice();
     } else {
