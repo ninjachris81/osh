@@ -57,34 +57,34 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-        QModbusRequest req(QModbusRequest::WriteSingleRegister);
+        // eletechsup addresses start at 1
+        int targetAddress = relayIndex + 1;
 
-        // Target Register: relayIndex + 1
-        // Action Value: ON = 0x0001, OFF = 0x0000
-        quint16 targetRegister = quint16(relayIndex + 1);
-        quint16 controlValue = status ? quint16(0x0001) : quint16(0x0000);
+        // Value: 0x0001 for ON, 0x0000 for OFF
+        quint16 controlValue = status ? 0x0001 : 0x0000;
 
-        req.encodeData(targetRegister, controlValue);
+        // Create a standard Modbus data unit for a single Holding Register
+        QModbusDataUnit writeUnit(QModbusDataUnit::HoldingRegisters, targetAddress, 1);
+        writeUnit.setValue(0, controlValue);
 
-        QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
+        // Use the native Qt 5 write request method
+        QModbusReply* reply = m_modbusClient.sendWriteRequest(writeUnit, m_slaveId);
 
-        connect(reply, &QModbusReply::finished, this, [this, relayIndex, reply]() {
+        if (!reply) {
+            iWarning() << "Failed to enqueue write request. Client might be busy.";
+            return;
+        }
+
+        connect(reply, &QModbusReply::finished, this, [this, relayIndex, reply, status]() {
             if (reply->error() == QModbusDevice::NoError) {
-                QModbusResponse response = reply->rawResult();
-                QByteArray resData = response.data();
-
-                // On a successful write, Modbus echo back the written value (bytes 2 & 3)
-                if (resData.size() >= 4) {
-                    quint16 echoedValue = (static_cast<quint8>(resData.at(2)) << 8)
-                    |  static_cast<quint8>(resData.at(3));
-
-                    setStatus(relayIndex, echoedValue == 0x0001);
-                    m_valueManager->publishValue(actor(relayIndex));
-                }
+                // Write was successful, update internal state
+                setStatus(relayIndex, status);
+                m_valueManager->publishValue(actor(relayIndex));
+                iDebug() << "Relay" << relayIndex << "successfully switched to" << status;
             } else {
-                iWarning() << "Write failed for relay" << relayIndex << reply->errorString();
+                iWarning() << "Write failed for relay" << relayIndex << "Error:" << reply->errorString();
             }
-            reply->deleteLater(); // Fixed memory leak!
+            reply->deleteLater(); // Prevent memory leak
         });
     } else {
         m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
