@@ -232,7 +232,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (m_model == RS485_SERIAL_8PORT) ? (regValue == 0x0100) : (regValue == 0x0001);
+                    bool isOn = (regValue == 0x0001);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
@@ -275,6 +275,7 @@ void RS485RelayController::retrieveStatus() {
 
             QModbusRequest req(QModbusRequest::ReadHoldingRegisters);
             req.encodeData(quint16(0x0001), quint16(m_relayCount));
+            printRawMessage(m_slaveId, req);
 
             QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
             connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
