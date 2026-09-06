@@ -159,6 +159,7 @@ void RS485RelayController::processNextCommand() {
 
     connect(reply, &QModbusReply::finished, this, [this, rIdx, reply, expectedStatus]() {
         if (reply->error() == QModbusDevice::NoError) {
+            printRawResponse(m_slaveId, reply->rawResult());
             setStatus(rIdx, expectedStatus);
             m_valueManager->publishValue(actor(rIdx));
             iDebug() << "Relay" << rIdx << "successfully switched";
@@ -215,6 +216,7 @@ void RS485RelayController::onDataReceived() {
 
     if (reply->error() == QModbusDevice::NoError) {
         QModbusResponse response = reply->rawResult();
+        printRawResponse(m_slaveId, response);
         QByteArray data = response.data();
 
         iDebug() << "Data size received:" << data.size();
