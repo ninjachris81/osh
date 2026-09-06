@@ -1,2 +1,0 @@
-DEVPATH="/devices/platform/serial8250/tty/ttyS0", SYMLINK+="tty_allSwitches2", TAG+="systemd"
-DEVPATH="/devices/platform/soc/3f201000.serial/tty/ttyAMA0", SYMLINK+="tty_allRelays2", TAG+="systemd"

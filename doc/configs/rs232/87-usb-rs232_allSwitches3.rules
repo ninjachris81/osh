@@ -1,0 +1,1 @@
+DEVPATH=="/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.1/1-1.1:1.0/*", SYMLINK+="tty_allSwitches3", MODE="0666", GROUP="dialout"
