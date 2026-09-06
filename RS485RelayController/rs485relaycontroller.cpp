@@ -6,7 +6,7 @@
 
 #include "controller/controllermanager.h"
 
-RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, QObject *parent) : RelayControllerBase(manager, id, getRelayCount(model), parent), m_model(model)
+RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, int relayCount, QObject *parent) : RelayControllerBase(manager, id, relayCount, parent), m_model(model)
 {
     connect(&m_statusTimer, &QTimer::timeout, this, &RS485RelayController::retrieveStatus);
 }
