@@ -53,14 +53,12 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-        int targetAddress = 0;
+        int targetAddress = relayIndex + 1;
         quint16 controlValue = 0x0000;
 
         if (m_model == RS485_SERIAL_8PORT) {
-            targetAddress = relayIndex + 1;
-            controlValue = status ? 0x0101 : 0x0102;
+            controlValue = status ? 0x0001 : 0x0002;
         } else {
-            targetAddress = relayIndex + 1;
             controlValue = status ? 0x0001 : 0x0000;
         }
 
@@ -148,7 +146,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (regValue == 0x0001 || regValue == 0x0101 || (regValue & 0x00FF) == 0x01);
+                    bool isOn = (regValue == 0x0001);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
