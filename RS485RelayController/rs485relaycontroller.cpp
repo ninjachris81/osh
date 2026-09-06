@@ -46,10 +46,6 @@ void RS485RelayController::start() {
 
     m_modbusClient.connectDevice();
 
-    QModbusRequest resetReq(QModbusRequest::WriteSingleRegister);
-    resetReq.encodeData(quint16(0x0001), quint16(0x0300));
-    m_modbusClient.sendRawRequest(resetReq, m_slaveId);
-
     m_statusTimer.start();
 }
 
@@ -87,13 +83,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
         quint16 targetRegister = quint16(relayIndex + 1);
-        quint16 controlValue = 0x0000;
-
-        if (m_model == RS485_SERIAL_8PORT) {
-            controlValue = status ? quint16(0x0101) : quint16(0x0100);
-        } else {
-            controlValue = status ? quint16(0x0001) : quint16(0x0000);
-        }
+        quint16 controlValue = status ? quint16(0x0001) : quint16(0x0000);
 
         QModbusRequest req(QModbusRequest::WriteSingleRegister);
         req.encodeData(targetRegister, controlValue);
