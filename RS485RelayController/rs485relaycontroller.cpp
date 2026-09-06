@@ -114,7 +114,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     if (m_model == RS485_SERIAL_8PORT) {
         controlValue = status ? quint16(0x0100) : quint16(0x0200);
     } else {
-        controlValue = status ? quint16(0x0001) : quint16(0x0000);
+        controlValue = status ? quint16(0x0100) : quint16(0x0200);
     }
 
     ModbusCommand cmd = { targetRegister, controlValue, relayIndex };
