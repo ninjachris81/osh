@@ -51,7 +51,16 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&actorManager);
     managerRegistration.registerManager(&logManager);
 
-    RS485RelayController relayController(&controllerManager, valueGroup, static_cast<RS485RelayController::RELAY_MODEL>(config.getInt(&clientManager, "relayModel", RS485RelayController::RS485_SERIAL_32PORT)));
+    RS485RelayController::RELAY_MODEL relayModel = static_cast<RS485RelayController::RELAY_MODEL>(config.getInt(&clientManager, "relayModel", RS485RelayController::RS485_SERIAL_32PORT));
+    int relayCount = config.getInt(&clientManager, "relayCount", 0);
+    if (relayCount <= 0) {
+        relayCount = RS485RelayController::getRelayCount(relayModel);
+        qInfo() << "Using default relay count" << relayCount << "of model" << relayModel;
+    } else {
+        qInfo() << "Using custom relay count" << relayCount;
+    }
+
+    RS485RelayController relayController(&controllerManager, valueGroup, relayModel, relayCount);
     quint16 offset = config.getInt(&clientManager, "inputValueGroupOffset", 0);
     controllerManager.registerController(&relayController);
 
