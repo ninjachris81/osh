@@ -163,12 +163,8 @@ void RS485RelayController::retrieveStatus() {
         } else {
             setSerialRelayStatus(RETRIEVING_STATUS);
 
-            QByteArray data;
-            data.append((char) 0x00);
-            data.append((char) 0x20);
-
             QModbusRequest req(QModbusRequest::ReadHoldingRegisters);
-            req.encodeData(quint16(0x0001), quint16(0x0020));
+            req.encodeData(quint16(0x0001), quint16(m_relayCount));
 
             QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
             connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
