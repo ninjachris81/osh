@@ -4,6 +4,7 @@ credentials.h
 /onviflibs/gsoap/gsoap-2.8/gsoap/samples
 /onviflibs/gsoap/gsoap-2.8/gsoap/ios_plugin/examples
 build-*
+!/deploy/rpi/build-cmake.sh
 moc_*
 *.o
 /*/config.ini
@@ -31,3 +32,4 @@ Makefile
 build/
 qtmqtt-build/
 qtmqtt-install/
+qtmqtt-build-rpi/

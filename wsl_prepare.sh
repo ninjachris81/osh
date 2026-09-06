@@ -1,5 +1,7 @@
 sudo apt-get update
 sudo apt-get install -y \
+  gcc-aarch64-linux-gnu \
+  g++-aarch64-linux-gnu \
   qt6-base-dev \
   qt6-base-private-dev \
   qt6-declarative-dev \
