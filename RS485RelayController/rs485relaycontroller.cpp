@@ -82,7 +82,8 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
         quint16 targetRegister = quint16(relayIndex + 1);
-        quint16 controlValue = status ? quint16(0x0001) : quint16(0x0000);
+
+        quint16 controlValue = status ? quint16(0x0101) : quint16(0x0100);
 
         QModbusRequest req(QModbusRequest::WriteSingleRegister);
         req.encodeData(targetRegister, controlValue);
@@ -170,7 +171,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (regValue == 0x0001 || regValue == 0x0101 || (regValue & 0x00FF) == 0x01);
+                    bool isOn = (regValue == 0x0101 || (regValue & 0x00FF) == 0x01);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
