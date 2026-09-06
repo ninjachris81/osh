@@ -76,6 +76,34 @@ void RS485RelayController::printRawMessage(quint8 slaveId, const QModbusRequest 
     iDebug() << "Raw Modbus Request Sent:" << hexString.trimmed();
 }
 
+void RS485RelayController::printRawResponse(quint8 slaveId, const QModbusResponse &response) {
+    QByteArray rawFrame;
+    rawFrame.append(static_cast<char>(slaveId));
+    rawFrame.append(static_cast<char>(response.functionCode()));
+    rawFrame.append(response.data());
+
+    quint16 crc = 0xFFFF;
+    for (int pos = 0; pos < rawFrame.size(); pos++) {
+        crc ^= static_cast<quint8>(rawFrame.at(pos));
+        for (int i = 8; i != 0; i--) {
+            if ((crc & 0x0001) != 0) {
+                crc >>= 1;
+                crc ^= 0xA001;
+            } else {
+                crc >>= 1;
+            }
+        }
+    }
+    rawFrame.append(static_cast<char>(crc & 0xFF));
+    rawFrame.append(static_cast<char>((crc >> 8) & 0xFF));
+
+    QString hexString;
+    for (int i = 0; i < rawFrame.size(); ++i) {
+        hexString.append(QString("%1 ").arg(static_cast<quint8>(rawFrame.at(i)), 2, 16, QChar('0')).toUpper());
+    }
+    iDebug() << "Raw Modbus Response Received:" << hexString.trimmed();
+}
+
 void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     iDebug() << Q_FUNC_INFO << relayIndex << status;
     QMutexLocker locker(&m_Mutex);
@@ -202,7 +230,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (m_model == RS485_SERIAL_8PORT) ? (regValue == 0x0200) : (regValue == 0x0001);
+                    bool isOn = (m_model == RS485_SERIAL_8PORT) ? (regValue == 0x0100) : (regValue == 0x0001);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
