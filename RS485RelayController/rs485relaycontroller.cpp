@@ -37,6 +37,8 @@ void RS485RelayController::init() {
     //m_modbusClient.setTimeout(500);
     m_modbusClient.setNumberOfRetries(1);
 
+    iInfo() << "Relay count:" << m_relayCount;
+
     connect(&m_modbusClient, &QModbusDevice::stateChanged, this, &RS485RelayController::onStateChanged);
     connect(&m_modbusClient, &QModbusDevice::errorOccurred, this, &RS485RelayController::onErrorOccurred);
 }
