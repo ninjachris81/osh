@@ -23,6 +23,7 @@ public:
         quint16 reg;
         quint16 val;
         quint8 idx;
+        bool status;
     };
 
     enum RELAY_STATUS {

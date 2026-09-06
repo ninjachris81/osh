@@ -113,7 +113,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
 
     controlValue = status ? quint16(0x0100) : quint16(0x0200);
 
-    ModbusCommand cmd = { targetRegister, controlValue, relayIndex };
+    ModbusCommand cmd = { targetRegister, controlValue, relayIndex, status };
     m_commandQueue.enqueue(cmd);
 
     if (!m_isSending) {
@@ -151,7 +151,7 @@ void RS485RelayController::processNextCommand() {
     }
 
     quint8 rIdx = cmd.idx;
-    bool expectedStatus = (m_model == RS485_SERIAL_8PORT) ? (cmd.val == 0x0200) : (cmd.val == 0x0001);
+    bool expectedStatus = cmd.status;
 
     connect(reply, &QModbusReply::finished, this, [this, rIdx, reply, expectedStatus]() {
         if (reply->error() == QModbusDevice::NoError) {
