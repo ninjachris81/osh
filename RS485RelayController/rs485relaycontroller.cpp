@@ -84,7 +84,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     quint16 controlValue = 0x0000;
 
     if (m_model == RS485_SERIAL_8PORT) {
-        controlValue = status ? quint16(0x0200) : quint16(0x0300);
+        controlValue = status ? quint16(0x0200) : quint16(0x0100);
     } else {
         controlValue = status ? quint16(0x0001) : quint16(0x0000);
     }
