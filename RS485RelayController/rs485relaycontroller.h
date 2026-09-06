@@ -49,6 +49,8 @@ protected slots:
     void retrieveStatus();
 
 private:
+    void printRawMessage(quint8 slaveId, const QModbusRequest &req);
+
     QMutex m_Mutex;
     ValueManagerBase *m_valueManager;
     ClientSystemWarningsManager* m_warnManager;
