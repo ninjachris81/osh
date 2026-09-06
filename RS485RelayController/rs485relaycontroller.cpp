@@ -58,13 +58,33 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
         QModbusRequest req(QModbusRequest::WriteSingleRegister);
-        req.encodeData(quint16(relayIndex + 1), quint8(status ? '\x01' : '\x02'), quint8(0x00));
+
+        // Target Register: relayIndex + 1
+        // Action Value: ON = 0x0001, OFF = 0x0000
+        quint16 targetRegister = quint16(relayIndex + 1);
+        quint16 controlValue = status ? quint16(0x0001) : quint16(0x0000);
+
+        req.encodeData(targetRegister, controlValue);
+
         QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
+
         connect(reply, &QModbusReply::finished, this, [this, relayIndex, reply]() {
-            QModbusResponse response = reply->rawResult();
-            iDebug() << response.dataSize();
-            setStatus(relayIndex, response.data().at(2) == 0x01);
-            m_valueManager->publishValue(actor(relayIndex));
+            if (reply->error() == QModbusDevice::NoError) {
+                QModbusResponse response = reply->rawResult();
+                QByteArray resData = response.data();
+
+                // On a successful write, Modbus echo back the written value (bytes 2 & 3)
+                if (resData.size() >= 4) {
+                    quint16 echoedValue = (static_cast<quint8>(resData.at(2)) << 8)
+                    |  static_cast<quint8>(resData.at(3));
+
+                    setStatus(relayIndex, echoedValue == 0x0001);
+                    m_valueManager->publishValue(actor(relayIndex));
+                }
+            } else {
+                iWarning() << "Write failed for relay" << relayIndex << reply->errorString();
+            }
+            reply->deleteLater(); // Fixed memory leak!
         });
     } else {
         m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
@@ -110,32 +130,44 @@ void RS485RelayController::onErrorOccurred() {
 void RS485RelayController::onDataReceived() {
     iDebug() << Q_FUNC_INFO;
 
-
     auto reply = qobject_cast<QModbusReply *>(sender());
     if (!reply)
         return;
 
     if (reply->error() == QModbusDevice::NoError) {
         QModbusResponse response = reply->rawResult();
+        QByteArray data = response.data();
 
-        iDebug() << response.dataSize();
+        iDebug() << "Data size received:" << data.size();
 
         setSerialRelayStatus(STATUS_RECEIVED);
 
-        for (quint8 i = 0;i<m_relayCount;i++) {
-            setStatus(i, response.data().at((i * 2) + 2) == 0x01);
-            m_valueManager->publishValue(actor(i));
+        if (!data.isEmpty()) {
+            // Byte 0 is the Byte Count. Data starts at Index 1.
+            // Each register is 2 bytes (High Byte, Low Byte).
+            for (quint8 i = 0; i < m_relayCount; i++) {
+                int highByteIdx = 1 + (i * 2);
+                int lowByteIdx  = 2 + (i * 2);
+
+                if (lowByteIdx < data.size()) {
+                    quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
+                    |  static_cast<quint8>(data.at(lowByteIdx));
+
+                    // eletechsup: 0x0001 = ON, 0x0000 = OFF
+                    bool isOn = (regValue == 0x0001);
+
+                    setStatus(i, isOn);
+                    m_valueManager->publishValue(actor(i));
+                }
+            }
         }
         m_errorCount = 0;
-    } else if (reply->error() == QModbusDevice::ProtocolError) {
-        iWarning() << "Modbus error" << reply->error();
-        m_errorCount++;
     } else {
-        iWarning() << "Modbus error" << reply->error();
+        iWarning() << "Modbus error:" << reply->error() << reply->errorString();
         m_errorCount++;
     }
 
-    reply->deleteLater();
+    reply->deleteLater(); // Prevent memory leak
 }
 
 void RS485RelayController::setSerialRelayStatus(RELAY_STATUS status) {
