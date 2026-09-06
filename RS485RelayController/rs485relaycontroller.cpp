@@ -45,6 +45,11 @@ void RS485RelayController::start() {
     iInfo() << "Connecting on" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
 
     m_modbusClient.connectDevice();
+
+    QModbusRequest resetReq(QModbusRequest::WriteSingleRegister);
+    resetReq.encodeData(quint16(0x0001), quint16(0x0300));
+    m_modbusClient.sendRawRequest(resetReq, m_slaveId);
+
     m_statusTimer.start();
 }
 
