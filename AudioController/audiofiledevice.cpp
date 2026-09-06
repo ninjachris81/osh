@@ -1,5 +1,7 @@
 #include "audiofiledevice.h"
 
+#include <QDebug>
+
 AudioFileDevice::AudioFileDevice(const QString &fileName, const QAudioFormat &format) :
     m_file(fileName),
     m_input(&m_data),
@@ -14,7 +16,6 @@ AudioFileDevice::AudioFileDevice(const QString &fileName, const QAudioFormat &fo
 
     Q_ASSERT(valid);
 
-    m_decoder.setNotifyInterval(10);
     m_decoder.setAudioFormat(format);
 
     isDecodingFinished = false;

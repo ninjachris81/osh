@@ -2,15 +2,15 @@
 
 #include <QObject>
 
-#include <QAudioOutput>
+#include <QAudioSink>
 #include "actor/audioplaybackactor.h"
 #include "identifyable.h"
 
-class AudioOutputWrapper : public QAudioOutput, public Identifyable
+class AudioOutputWrapper : public QAudioSink, public Identifyable
 {
     Q_OBJECT
 public:
-    explicit AudioOutputWrapper(QString id, const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format = QAudioFormat(), QObject *parent = nullptr);
+    explicit AudioOutputWrapper(QString id, const QAudioDevice &audioDevice, const QAudioFormat &format = QAudioFormat(), QObject *parent = nullptr);
 
     void submitPlayback(AudioPlaybackActor *audioActor);
     void cancelPlayback(AudioPlaybackActor *audioActor);

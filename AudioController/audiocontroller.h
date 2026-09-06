@@ -2,14 +2,14 @@
 
 #include <QObject>
 #include <QList>
-#include <QAudioOutput>
+#include <QAudioSink>
 #include <QMediaPlayer>
 #include <QMutex>
 
 #include "actor/actormanager.h"
 #include "audiooutputwrapper.h"
 #include "datamodel/datamodelbase.h"
-#include "qaudiodeviceinfo.h"
+#include <QAudioDevice>
 #include "sharedlib.h"
 
 #include "controller/audiocontrollerbase.h"
@@ -41,7 +41,7 @@ private:
     CommunicationManagerBase* m_commManager;
     ActorManager *m_actorManager;
 
-    QMap<QString, QAudioDeviceInfo> m_availableDeviceInfos;
+    QMap<QString, QAudioDevice> m_availableDeviceInfos;
 
     QMap<QString, AudioOutputWrapper*> m_audioOutputs;
     QMultiMap<AudioPlaybackActor*, AudioOutputWrapper*> m_audioOutputMappings;
@@ -51,7 +51,7 @@ private:
     void initAvailableDevices();
     void initDevice(QString deviceName, AudioPlaybackActor *playbackActor);
 
-    void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
+    void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioSink *output);
     void _stop(AudioPlaybackActor *audioActor);
 
 protected slots:

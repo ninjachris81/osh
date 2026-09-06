@@ -21,13 +21,16 @@ function(osh_add_qt_project target_name)
     endif()
 
     target_compile_definitions(${target_name} PRIVATE QT_DEPRECATED_WARNINGS)
+    target_compile_options(${target_name} PRIVATE
+        $<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>
+    )
     target_include_directories(${target_name} PUBLIC
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/Core"
         "${CMAKE_CURRENT_SOURCE_DIR}"
     )
-    target_link_libraries(${target_name} PRIVATE Qt5::Core)
+    target_link_libraries(${target_name} PRIVATE Qt6::Core)
     foreach(module IN LISTS OSH_QT_MODULES)
-        target_link_libraries(${target_name} PRIVATE Qt5::${module})
+        target_link_libraries(${target_name} PRIVATE Qt6::${module})
     endforeach()
 endfunction()

@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QModbusRtuSerialMaster>
+#include <QModbusRtuSerialClient>
 
 #include "datamodel/datamodelbase.h"
 #include "sharedlib.h"
@@ -50,7 +50,7 @@ private:
 
     ClientSystemWarningsManager* m_warnManager;
     ValueManagerBase* m_valueManager = nullptr;
-    QModbusRtuSerialMaster m_modbusClient;
+    QModbusRtuSerialClient m_modbusClient;
     QTimer m_statusTimer;
 
     QMap<int, RetrieveValue> m_inputRegisters;

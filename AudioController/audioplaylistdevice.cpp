@@ -3,7 +3,7 @@
 #include "qfileinfo.h"
 #include "qrandom.h"
 #include "qregularexpression.h"
-#include "qtextcodec.h"
+#include <QStringDecoder>
 
 #include <QDebug>
 #include <QFile>
@@ -85,6 +85,7 @@ qint64 AudioPlaylistDevice::readData(char *data, qint64 maxlen) {
         return dataRead;
     } else {
         qWarning() << "Current file not readable" << m_currentFile.fileName();
+        return 0;
     }
 
 }
@@ -118,9 +119,8 @@ bool AudioPlaylistDevice::parsePlaylist() {
         if (AudioPlaylistDevice::isUtf8(byteArray.constData())) {
             fileContents = QString::fromUtf8(byteArray);
         } else {
-            // FIXME: replace deprecated QTextCodec with direct usage of libicu
-            fileContents = QTextCodec::codecForName(kStandardM3uTextEncoding)
-                                   ->toUnicode(byteArray);
+            QStringDecoder decoder(kStandardM3uTextEncoding);
+            fileContents = decoder(byteArray);
         }
 
         if (!fileContents.startsWith(kM3uHeader)) {

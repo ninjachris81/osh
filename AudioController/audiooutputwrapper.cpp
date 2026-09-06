@@ -5,18 +5,17 @@
 
 #include <QFile>
 
-AudioOutputWrapper::AudioOutputWrapper(QString id, const QAudioDeviceInfo &audioDeviceInfo, const QAudioFormat &format, QObject *parent)
-    : QAudioOutput(audioDeviceInfo, format, parent), Identifyable(id)
+AudioOutputWrapper::AudioOutputWrapper(QString id, const QAudioDevice &audioDevice, const QAudioFormat &format, QObject *parent)
+    : QAudioSink(audioDevice, format, parent), Identifyable(id)
 {
     iInfo() << this->format();
-    connect(this, &QAudioOutput::stateChanged, this, &AudioOutputWrapper::onStateChanged);
-    connect(this, &QAudioOutput::notify, this, &AudioOutputWrapper::onNotify);
+    connect(this, &QAudioSink::stateChanged, this, &AudioOutputWrapper::onStateChanged);
     this->setObjectName(id);
 }
 
 void AudioOutputWrapper::onStateChanged(QAudio::State state) {
-    QAudioOutput* output = static_cast<QAudioOutput*>(sender());
-    iInfo() << Q_FUNC_INFO << output << state << output->elapsedUSecs();
+    QAudioSink* output = static_cast<QAudioSink*>(sender());
+    iInfo() << Q_FUNC_INFO << output << state;
 
     switch(state) {
         case QAudio::ActiveState:
@@ -98,8 +97,7 @@ void AudioOutputWrapper::_cleanup() {
 }
 
 void AudioOutputWrapper::onNotify() {
-    QAudioOutput* output = static_cast<QAudioOutput*>(sender());
-    iDebug() << output->elapsedUSecs();
+    Q_UNUSED(sender());
 }
 
 void AudioOutputWrapper::submitPlayback(AudioPlaybackActor *audioActor) {

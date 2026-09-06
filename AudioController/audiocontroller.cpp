@@ -1,7 +1,7 @@
 #include "audiocontroller.h"
 
 #include <QFile>
-#include <QAudioDeviceInfo>
+#include <QMediaDevices>
 
 #include "audiofiledevice.h"
 #include "audiooutputwrapper.h"
@@ -64,9 +64,9 @@ void AudioController::loadAudioActors(DatamodelBase *datamodel, ClientValueManag
 
 void AudioController::initAvailableDevices() {
     iInfo() << "Available audio devices:";
-    for (QAudioDeviceInfo audioDeviceInfo : QAudioDeviceInfo::availableDevices(QAudio::AudioOutput)) {
-        iInfo() << audioDeviceInfo.deviceName();
-        m_availableDeviceInfos.insert(audioDeviceInfo.deviceName(), audioDeviceInfo);
+    for (const QAudioDevice &audioDevice : QMediaDevices::audioOutputs()) {
+        iInfo() << audioDevice.description();
+        m_availableDeviceInfos.insert(audioDevice.description(), audioDevice);
     }
 }
 
@@ -74,19 +74,19 @@ void AudioController::initDevice(QString deviceName, AudioPlaybackActor* playbac
     iInfo() << Q_FUNC_INFO << deviceName;
 
     Q_ASSERT(m_availableDeviceInfos.contains(deviceName));
-    QAudioDeviceInfo audioDeviceInfo = m_availableDeviceInfos.value(deviceName);
+    QAudioDevice audioDevice = m_availableDeviceInfos.value(deviceName);
 
     AudioOutputWrapper* audioOutput;
-    if (m_audioOutputs.contains(audioDeviceInfo.deviceName())) {
-        audioOutput = m_audioOutputs.value(audioDeviceInfo.deviceName());
+    if (m_audioOutputs.contains(audioDevice.description())) {
+        audioOutput = m_audioOutputs.value(audioDevice.description());
     } else {
         // create a new one
-        audioOutput = new AudioOutputWrapper(audioDeviceInfo.deviceName(), audioDeviceInfo, audioDeviceInfo.preferredFormat());
+        audioOutput = new AudioOutputWrapper(audioDevice.description(), audioDevice, audioDevice.preferredFormat());
     }
 
     m_audioOutputMappings.insert(playbackActor, audioOutput);
 
-    m_audioOutputs.insert(audioDeviceInfo.deviceName(), audioOutput);
+    m_audioOutputs.insert(audioDevice.description(), audioOutput);
 
     if (!playbackActor->audioActivationRelayId().isEmpty()) {
         connect(audioOutput, &AudioOutputWrapper::requestActivation, [this](AudioPlaybackActor* audioActor){

@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QSerialPort>
 #include <QDateTime>
+#include <QRegularExpression>
 #include <QThread>
 
 #include "controller/controllermanager.h"
@@ -265,8 +266,7 @@ void WBB12Controller::onErrorOccurred() {
 WBB12Controller::WBB12_Holding_Registers WBB12Controller::getHolding(QString name) {
     QString enumName;
 
-    QRegExp ex("(?=[A-Z]+)");
-    ex.setCaseSensitivity(Qt::CaseSensitive);
+    QRegularExpression ex("(?=[A-Z]+)");
 
     for (QString token : name.split(ex)) {
         enumName.append(token.toUpper());

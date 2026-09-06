@@ -106,10 +106,10 @@ bool CommonScripts::initSwitchLogic(QString lightRelayActorFullIds, QString inpu
     Helpers::safeConnect(toggleActor, &ToggleActor::valueChanged, this, &CommonScripts::onInitSwitchLogic_toggleActorValueChanged, SIGNAL(valueChanged()), SLOT(onInitSwitchLogic_toggleActorValueChanged()));
 
     quint8 index = 0;
-    for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", QString::SkipEmptyParts)) {
+    for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", Qt::SkipEmptyParts)) {
         DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightRelayActorFullId));
         Q_ASSERT(lightRelayActor != nullptr);
-        m_localStorage->setObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index, lightRelayActor);
+        m_localStorage->setObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + QString::number(index), lightRelayActor);
         index++;
     }
 
@@ -142,7 +142,7 @@ void CommonScripts::onInitSwitchLogic_toggleActorValueChanged() {
     ToggleActor* toggleActor = static_cast<ToggleActor*>(sender());
 
     for (quint8 index = 0; index<255; index++) {
-        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + index));
+        DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_localStorage->getObject("initSwitchLogic", "lightRelay", toggleActor->fullId() + "_" + QString::number(index)));
         if (lightRelayActor == nullptr) {
             break;
         }
@@ -168,7 +168,7 @@ bool CommonScripts::initSwitchLogic2(QString lightRelayActorFullIds, QString tog
     Q_ASSERT(toggleActor != nullptr);
 
     QList<DigitalActor*> lightRelayActors;
-    for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", QString::SkipEmptyParts)) {
+    for (QString lightRelayActorFullId : lightRelayActorFullIds.split("|", Qt::SkipEmptyParts)) {
         DigitalActor* lightRelayActor = static_cast<DigitalActor*>(m_datamodel->actor(lightRelayActorFullId));
         Q_ASSERT(lightRelayActor != nullptr);
         lightRelayActors << lightRelayActor;
@@ -534,7 +534,7 @@ bool CommonScripts::initPlaySoundOnCmd(QString taskId, QString actorId, int cmdV
     Q_ASSERT(actor != nullptr);
 
     QList<AudioPlaybackActor*> playbackActors;
-    for (QString playbackActorFullId : soundActorId.split("|", QString::SkipEmptyParts)) {
+    for (QString playbackActorFullId : soundActorId.split("|", Qt::SkipEmptyParts)) {
         iInfo() << "Register" << playbackActorFullId;
         AudioPlaybackActor *playbackActor = static_cast<AudioPlaybackActor*>(m_datamodel->actor(playbackActorFullId));
         Q_ASSERT(playbackActor != nullptr);

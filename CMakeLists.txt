@@ -8,23 +8,21 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(OSH_QT_ROOT "D:/Qt2/5.15.2/mingw81_64" CACHE PATH "Qt 5 installation used by OSH")
-if(EXISTS "${OSH_QT_ROOT}/lib/cmake/Qt5/Qt5Config.cmake")
+set(OSH_QT_ROOT "D:/Qt2/6.8.3/mingw_64" CACHE PATH "Qt 6 installation used by OSH")
+if(EXISTS "${OSH_QT_ROOT}/lib/cmake/Qt6/Qt6Config.cmake")
     list(PREPEND CMAKE_PREFIX_PATH "${OSH_QT_ROOT}")
 endif()
+set(OSH_QTMQTT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/qtmqtt-install" CACHE PATH "Installed Qt MQTT module")
+if(EXISTS "${OSH_QTMQTT_ROOT}/lib/cmake/Qt6Mqtt/Qt6MqttConfig.cmake")
+    list(PREPEND CMAKE_PREFIX_PATH "${OSH_QTMQTT_ROOT}")
+    set(Qt6Mqtt_DIR "${OSH_QTMQTT_ROOT}/lib/cmake/Qt6Mqtt" CACHE PATH "Qt MQTT CMake package")
+endif()
 
-find_package(Qt5 5.12 REQUIRED COMPONENTS
-    Core Multimedia Network Qml Quick SerialBus SerialPort Sql XmlPatterns
+find_package(Qt6 6.8 REQUIRED COMPONENTS
+    Core Gui Multimedia Mqtt Network Qml Quick SerialBus SerialPort Sql
 )
-find_package(Qt5 5.12 QUIET COMPONENTS Mqtt)
 
 include(cmake/OSHProject.cmake)
-
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/qtmqtt/CMakeLists.txt")
-    add_subdirectory(qtmqtt)
-elseif(NOT TARGET Qt5::Mqtt)
-    message(FATAL_ERROR "Qt5::Mqtt is unavailable; initialize qtmqtt with git submodule update --init --recursive")
-endif()
 
 add_subdirectory(Core)
 add_subdirectory(CoreProcessorJS)
@@ -74,6 +72,26 @@ add_subdirectory(ScriptingTestService)
 add_subdirectory(ShutterService)
 add_subdirectory(TestService)
 add_subdirectory(WBB12Service)
+
+add_custom_target(OSHServices)
+add_dependencies(OSHServices
+    AudioService
+    CoreService
+    DoorCameraService
+    DoorUnlockService
+    GPIOInputService
+    GPIOInputTest
+    GPIOWaterMeterService
+    KMTronicRelayService
+    OBISService
+    RS232InputService
+    RS232WaterMeterService
+    RS485EnergyMeterService
+    RS485RelayService
+    ShutterService
+    TestService
+    WBB12Service
+)
 
 if(UNIX)
     install(TARGETS

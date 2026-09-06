@@ -1,6 +1,6 @@
 #include "qmqttcommunicationmanager.h"
 
-#include <QStringListIterator>
+#include <QStringList>
 
 #include "qmqttmessageconverter.h"
 #include "device/devicediscoverymanagerbase.h"

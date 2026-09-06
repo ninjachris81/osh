@@ -38,12 +38,12 @@ void I2CSanityChecker::onCheckBusses() {
     proc.waitForFinished(5000);
 
     QString result = proc.readAllStandardOutput();
-    QStringList lines = result.split("\n", QString::SkipEmptyParts);
+    QStringList lines = result.split("\n", Qt::SkipEmptyParts);
 
     QList<int> foundDevs;
 
     for (int i = 1;i<lines.size();i++) {
-        QStringList devices = lines[i].mid(4).split(" ", QString::SkipEmptyParts);
+        QStringList devices = lines[i].mid(4).split(" ", Qt::SkipEmptyParts);
 
         for (QString dev : devices) {
             if (dev != "--") {

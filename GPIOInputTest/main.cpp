@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     QString pins = config.getString("pins", "");       // e.g. "3 21 33"
     QList<int> pinList;
 
-    for (QString pin : pins.split(" ", QString::SkipEmptyParts)) {
+    for (QString pin : pins.split(" ", Qt::SkipEmptyParts)) {
         pinList << pin.toInt();
     }
     int inputCount = pinList.count();

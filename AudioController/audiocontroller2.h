@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QList>
-#include <QAudioOutput>
+#include <QAudioSink>
 #include <QMutex>
 #include <QProcess>
 
@@ -10,7 +10,7 @@
 #include "amixervolumewrapper.h"
 #include "datamodel/datamodelbase.h"
 #include "audioprocesswrapperbase.h"
-#include "qaudiodeviceinfo.h"
+#include <QAudioDevice>
 #include "sharedlib.h"
 
 #include "controller/audiocontrollerbase.h"
@@ -47,7 +47,7 @@ private:
     ValueManagerBase *m_valueManager;
     AMixerVolumeWrapper m_volumeWrapper;
 
-    void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioOutput *output);
+    void _start(AudioPlaybackActor *audioActor, QIODevice *device, QAudioSink *output);
     void _stop(AudioPlaybackActor *audioActor);
 
     void stopProcess(QString audioActorId);

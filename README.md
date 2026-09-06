@@ -30,10 +30,18 @@ Solar Equipment
 BUILDING
 **********************
 
-- Preconditions: CMake 3.16+, a C++17 compiler, and Qt 5.12+ with the modules used by the project.
+- Preconditions: CMake 3.16+, a C++17 compiler, and Qt 6.8 with the modules used by the project.
 - Initialize the required submodules:
 
 	`git submodule update --init --recursive`
+
+- Build and install the Qt 6.8 qtmqtt submodule:
+
+	`cmake -S qtmqtt -B qtmqtt-build -G Ninja -DCMAKE_PREFIX_PATH=D:/Qt2/6.8.3/mingw_64 -DCMAKE_INSTALL_PREFIX=$PWD/qtmqtt-install`
+
+	`cmake --build qtmqtt-build --parallel`
+
+	`cmake --install qtmqtt-build`
 
 - Configure and build:
 
@@ -43,6 +51,6 @@ BUILDING
 
 	On Windows, set `CMAKE_PREFIX_PATH` to the installed Qt kit, for example:
 
-	`cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=C:/Qt/5.12.12/mingw73_64`
+	`cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=D:/Qt2/6.8.3/mingw_64`
 
-	Use the compiler shipped for the same Qt MinGW kit; do not mix it with an unrelated compiler distribution.
+	Install the Qt 6.8 `Multimedia`, `Mqtt`, `SerialBus`, and `SerialPort` add-on modules, and use the compiler shipped for the same Qt MinGW kit.

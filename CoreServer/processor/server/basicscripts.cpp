@@ -20,7 +20,7 @@ bool BasicScripts::initConnectValues(QString valueSourceIds, QString valueTarget
 
     Q_ASSERT(valueTarget != nullptr);
 
-    for (QString valueSourceId : valueSourceIds.split("|", QString::SkipEmptyParts)) {
+    for (QString valueSourceId : valueSourceIds.split("|", Qt::SkipEmptyParts)) {
         ValueBase *valueSource = m_datamodel->value(valueSourceId);
         if (valueSource == nullptr) {
             // could be actor or value
@@ -51,7 +51,7 @@ bool BasicScripts::initTriggerCmdOnValue(QString valueSourceIds, QVariant trigge
     Q_ASSERT(actor != nullptr);
 
 
-    for (QString valueSourceId : valueSourceIds.split("|", QString::SkipEmptyParts)) {
+    for (QString valueSourceId : valueSourceIds.split("|", Qt::SkipEmptyParts)) {
         ValueBase *valueSource = m_datamodel->value(valueSourceId);
         if (valueSource == nullptr) {
             // could be actor or value

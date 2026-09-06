@@ -34,7 +34,7 @@ void GPIOInputController::init() {
         QString pins = m_config->getString(this, "pins", "");       // e.g. "3 21 33"
         QList<int> pinList;
 
-        for (QString pin : pins.split(" ", QString::SkipEmptyParts)) {
+        for (QString pin : pins.split(" ", Qt::SkipEmptyParts)) {
             pinList << pin.toInt();
         }
         m_inputCount = pinList.count();
@@ -58,7 +58,7 @@ void GPIOInputController::init() {
     }
 
     int i2cBus = m_config->getInt(this, "i2cCheck.bus", 1);
-    QStringList i2cDevs = m_config->getString(this, "i2cCheck.addr", "").split(" ", QString::SkipEmptyParts); // 32 33, as dec
+    QStringList i2cDevs = m_config->getString(this, "i2cCheck.addr", "").split(" ", Qt::SkipEmptyParts); // 32 33, as dec
     if (!i2cDevs.isEmpty()) {
         QList<int> devList;
         for (QString s : i2cDevs) {

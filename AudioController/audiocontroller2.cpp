@@ -1,7 +1,6 @@
 #include "audiocontroller2.h"
 
 #include <QFile>
-#include <QAudioDeviceInfo>
 
 #include "aplayprocesswrapper.h"
 #include "audiofiledevice.h"

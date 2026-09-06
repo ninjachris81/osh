@@ -29,3 +29,5 @@ Makefile
 /Core/doorunlock/psk.h
 /deploy/rpi/localservices.txt
 build/
+qtmqtt-build/
+qtmqtt-install/

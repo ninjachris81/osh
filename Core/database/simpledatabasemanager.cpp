@@ -1,5 +1,7 @@
 #include "simpledatabasemanager.h"
 
+#include <QIODevice>
+
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlDatabase>

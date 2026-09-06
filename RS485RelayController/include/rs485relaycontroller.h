@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QMutex>
-#include <QModbusRtuSerialMaster>
+#include <QModbusRtuSerialClient>
 
 #include "sharedlib.h"
 
@@ -65,7 +65,7 @@ private:
     QMutex m_Mutex;
     ValueManagerBase *m_valueManager;
     ClientSystemWarningsManager* m_warnManager;
-    QModbusRtuSerialMaster m_modbusClient;
+    QModbusRtuSerialClient m_modbusClient;
     QTimer m_statusTimer;
     int m_slaveId = 1;
     quint8 m_errorCount = 0;
