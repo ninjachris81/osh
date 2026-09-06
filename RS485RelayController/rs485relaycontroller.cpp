@@ -53,22 +53,22 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-        int targetAddress = relayIndex + 1;
+        quint16 targetRegister = quint16(relayIndex + 1);
         quint16 controlValue = 0x0000;
 
         if (m_model == RS485_SERIAL_8PORT) {
-            controlValue = status ? 0x0101 : 0x0102;
+            controlValue = status ? quint16(0x0101) : quint16(0x0102);
         } else {
-            controlValue = status ? 0x0001 : 0x0000;
+            controlValue = status ? quint16(0x0001) : quint16(0x0000);
         }
 
-        QModbusDataUnit writeUnit(QModbusDataUnit::HoldingRegisters, targetAddress, 1);
-        writeUnit.setValue(0, controlValue);
+        QModbusRequest req(QModbusRequest::WriteSingleRegister);
+        req.encodeData(targetRegister, controlValue);
 
-        QModbusReply* reply = m_modbusClient.sendWriteRequest(writeUnit, m_slaveId);
+        QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
 
         if (!reply) {
-            iWarning() << "Failed to enqueue write request.";
+            iWarning() << "Failed to enqueue raw write request.";
             return;
         }
 
@@ -146,7 +146,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (regValue == 0x0001);
+                    bool isOn = (regValue == 0x0001 || regValue == 0x0101 || (regValue & 0x00FF) == 0x01);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
