@@ -57,8 +57,8 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
         quint16 controlValue = 0x0000;
 
         if (m_model == RS485_SERIAL_8PORT) {
-            targetAddress = relayIndex + 2;
-            controlValue = status ? 0x0101 : 0x0100;
+            targetAddress = relayIndex + 1;
+            controlValue = status ? 0x0001 : 0x0000;
         } else {
             targetAddress = relayIndex + 1;
             controlValue = status ? 0x0001 : 0x0000;
@@ -148,7 +148,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (m_model == RS485_SERIAL_8PORT) ? ((regValue & 0x00FF) == 0x0001) : (regValue == 0x0001);
+                    bool isOn = (regValue == 0x0001 || (regValue & 0x00FF) == 0x0001);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }
