@@ -45,7 +45,6 @@ void RS485RelayController::start() {
     iInfo() << "Connecting on" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
 
     m_modbusClient.connectDevice();
-
     m_statusTimer.start();
 }
 
@@ -81,41 +80,67 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     iDebug() << Q_FUNC_INFO << relayIndex << status;
     QMutexLocker locker(&m_Mutex);
 
-    if (m_modbusClient.state() == QModbusClient::ConnectedState) {
-        quint16 targetRegister = quint16(relayIndex + 1);
-        quint16 controlValue = 0x0000;
+    quint16 targetRegister = quint16(relayIndex + 1);
+    quint16 controlValue = 0x0000;
 
-        if (m_model == RS485_SERIAL_8PORT) {
-            controlValue = status ? quint16(0x0200) : quint16(0x0100);
-        } else {
-            controlValue = status ? quint16(0x0001) : quint16(0x0000);
-        }
-
-        QModbusRequest req(QModbusRequest::WriteSingleRegister);
-        req.encodeData(targetRegister, controlValue);
-
-        printRawMessage(m_slaveId, req);
-
-        QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
-
-        if (!reply) {
-            iWarning() << "Failed to enqueue raw write request.";
-            return;
-        }
-
-        connect(reply, &QModbusReply::finished, this, [this, relayIndex, reply, status]() {
-            if (reply->error() == QModbusDevice::NoError) {
-                setStatus(relayIndex, status);
-                m_valueManager->publishValue(actor(relayIndex));
-                iDebug() << "Relay" << relayIndex << "successfully switched to" << status;
-            } else {
-                iWarning() << "Write failed for relay" << relayIndex << "Error:" << reply->errorString();
-            }
-            reply->deleteLater();
-        });
+    if (m_model == RS485_SERIAL_8PORT) {
+        controlValue = status ? quint16(0x0200) : quint16(0x0300);
     } else {
-        m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
+        controlValue = status ? quint16(0x0001) : quint16(0x0000);
     }
+
+    ModbusCommand cmd = { targetRegister, controlValue, relayIndex };
+    m_commandQueue.enqueue(cmd);
+
+    if (!m_isSending) {
+        m_isSending = true;
+        QTimer::singleShot(10, this, &RS485RelayController::processNextCommand);
+    }
+}
+
+void RS485RelayController::processNextCommand() {
+    if (m_commandQueue.isEmpty()) {
+        m_isSending = false;
+        return;
+    }
+
+    if (m_modbusClient.state() != QModbusClient::ConnectedState) {
+        m_commandQueue.clear();
+        m_isSending = false;
+        m_warnManager->raiseWarning("Serial not connected", QtCriticalMsg);
+        return;
+    }
+
+    ModbusCommand cmd = m_commandQueue.dequeue();
+
+    QModbusRequest req(QModbusRequest::WriteSingleRegister);
+    req.encodeData(cmd.reg, cmd.val);
+
+    printRawMessage(m_slaveId, req);
+
+    QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
+
+    if (!reply) {
+        iWarning() << "Failed to enqueue raw write request.";
+        QTimer::singleShot(80, this, &RS485RelayController::processNextCommand);
+        return;
+    }
+
+    quint8 rIdx = cmd.idx;
+    bool expectedStatus = (m_model == RS485_SERIAL_8PORT) ? (cmd.val == 0x0200) : (cmd.val == 0x0001);
+
+    connect(reply, &QModbusReply::finished, this, [this, rIdx, reply, expectedStatus]() {
+        if (reply->error() == QModbusDevice::NoError) {
+            setStatus(rIdx, expectedStatus);
+            m_valueManager->publishValue(actor(rIdx));
+            iDebug() << "Relay" << rIdx << "successfully switched";
+        } else {
+            iWarning() << "Write failed for relay" << rIdx << "Error:" << reply->errorString();
+        }
+        reply->deleteLater();
+
+        QTimer::singleShot(80, this, &RS485RelayController::processNextCommand);
+    });
 }
 
 quint8 RS485RelayController::getRelayCount(RELAY_MODEL model) {
@@ -177,7 +202,7 @@ void RS485RelayController::onDataReceived() {
                     quint16 regValue = (static_cast<quint8>(data.at(highByteIdx)) << 8)
                     |  static_cast<quint8>(data.at(lowByteIdx));
 
-                    bool isOn = (regValue == 0x0101 || (regValue & 0x00FF) == 0x01);
+                    bool isOn = (m_model == RS485_SERIAL_8PORT) ? (regValue == 0x0200) : (regValue == 0x0001);
                     setStatus(i, isOn);
                     m_valueManager->publishValue(actor(i));
                 }

@@ -11,11 +11,20 @@
 #include "controller/relaycontrollerbase.h"
 #include "warn/client/clientsystemwarningsmanager.h"
 
+#include <QQueue>
+#include <QTimer>
+
 class SHARED_LIB_EXPORT RS485RelayController : public RelayControllerBase
 {
 Q_OBJECT
 
 public:
+    struct ModbusCommand {
+        quint16 reg;
+        quint16 val;
+        quint8 idx;
+    };
+
     enum RELAY_STATUS {
         INIT,
         RETRIEVING_STATUS,
@@ -58,6 +67,10 @@ private:
     QTimer m_statusTimer;
     int m_slaveId = 1;
     quint8 m_errorCount = 0;
+
+    QQueue<ModbusCommand> m_commandQueue;
+    bool m_isSending = false;
+    void processNextCommand();
 
 };
 
