@@ -111,11 +111,7 @@ void RS485RelayController::switchStatus(quint8 relayIndex, bool status) {
     quint16 targetRegister = quint16(relayIndex + 1);
     quint16 controlValue = 0x0000;
 
-    if (m_model == RS485_SERIAL_8PORT) {
-        controlValue = status ? quint16(0x0100) : quint16(0x0200);
-    } else {
-        controlValue = status ? quint16(0x0100) : quint16(0x0200);
-    }
+    controlValue = status ? quint16(0x0100) : quint16(0x0200);
 
     ModbusCommand cmd = { targetRegister, controlValue, relayIndex };
     m_commandQueue.enqueue(cmd);
@@ -150,7 +146,7 @@ void RS485RelayController::processNextCommand() {
 
     if (!reply) {
         iWarning() << "Failed to enqueue raw write request.";
-        QTimer::singleShot(80, this, &RS485RelayController::processNextCommand);
+        QTimer::singleShot(60, this, &RS485RelayController::processNextCommand);
         return;
     }
 
@@ -176,6 +172,8 @@ quint8 RS485RelayController::getRelayCount(RELAY_MODEL model) {
     switch (model) {
     case RS485_SERIAL_32PORT:
         return 32;
+    case RS485_SERIAL_16PORT:
+        return 16;
     case RS485_SERIAL_8PORT:
         return 8;
     default:

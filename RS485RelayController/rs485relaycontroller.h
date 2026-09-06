@@ -34,6 +34,7 @@ public:
 
     enum RELAY_MODEL {
         RS485_SERIAL_32PORT,
+        RS485_SERIAL_16PORT,
         RS485_SERIAL_8PORT
     } m_model;
 
