@@ -1,5 +1,4 @@
-#ifndef AUDIOCONTROLLER_H
-#define AUDIOCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -71,4 +70,3 @@ protected:
 
 };
 
-#endif // AUDIOCONTROLLER_H

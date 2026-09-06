@@ -1,0 +1,2 @@
+osh_add_qt_project(GPIOInputService QT_MODULES Mqtt Sql)
+target_link_libraries(GPIOInputService PRIVATE Core GPIOInputController QMqttCommunicationManager)

@@ -1,5 +1,4 @@
-#ifndef DATAMODELMANAGER_H
-#define DATAMODELMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -60,4 +59,3 @@ signals:
 public slots:
 };
 
-#endif // DATAMODELMANAGER_H

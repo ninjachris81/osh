@@ -1,5 +1,4 @@
-#ifndef CONNECTORITEMBASE_H
-#define CONNECTORITEMBASE_H
+#pragma once
 
 #include <QObject>
 #include <QtQuick/QQuickItem>
@@ -59,4 +58,3 @@ private:
     int m_segmentCount;
 };
 
-#endif // CONNECTORITEMBASE_H

@@ -1,5 +1,4 @@
-#ifndef DIGITALACTOR_H
-#define DIGITALACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -35,4 +34,3 @@ signals:
 public slots:
 };
 
-#endif // DIGITALACTOR_H

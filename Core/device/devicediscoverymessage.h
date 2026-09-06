@@ -1,5 +1,4 @@
-#ifndef DEVICEDISCOVERYMESSAGE_H
-#define DEVICEDISCOVERYMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -49,4 +48,3 @@ signals:
 public slots:
 };
 
-#endif // DEVICEDISCOVERYMESSAGE_H

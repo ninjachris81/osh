@@ -1,5 +1,4 @@
-#ifndef SHARED_LIB_GLOBAL_H
-#define SHARED_LIB_GLOBAL_H
+#pragma once
 
 #include <QtCore/QtGlobal>
 
@@ -9,4 +8,3 @@
     #define SHARED_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // SHARED_LIB_GLOBAL_H

@@ -1,5 +1,4 @@
-#ifndef I2CSANITYCHECKER_H
-#define I2CSANITYCHECKER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -33,4 +32,3 @@ signals:
 
 };
 
-#endif // I2CSANITYCHECKER_H

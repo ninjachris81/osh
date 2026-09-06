@@ -1,5 +1,4 @@
-#ifndef PTZSERVICEWRAPPER_H
-#define PTZSERVICEWRAPPER_H
+#pragma once
 
 #include "soap/stdsoap2.h"
 
@@ -12,4 +11,3 @@ public:
     void deleteObj();
 };
 
-#endif // PTZSERVICEWRAPPER_H

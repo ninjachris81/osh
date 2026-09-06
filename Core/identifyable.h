@@ -1,5 +1,4 @@
-#ifndef IDENTIFYABLE_H
-#define IDENTIFYABLE_H
+#pragma once
 
 #include <QObject>
 
@@ -37,4 +36,3 @@ signals:
 public slots:
 };
 
-#endif // IDENTIFYABLE_H

@@ -1,5 +1,4 @@
-#ifndef BOOLEANVALUE_H
-#define BOOLEANVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -21,4 +20,3 @@ signals:
 public slots:
 };
 
-#endif // BOOLEANVALUE_H

@@ -1,5 +1,4 @@
-#ifndef TOGGLECONTROLLER_H
-#define TOGGLECONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include "actor/actormanager.h"
@@ -34,4 +33,3 @@ signals:
 
 };
 
-#endif // TOGGLECONTROLLER_H

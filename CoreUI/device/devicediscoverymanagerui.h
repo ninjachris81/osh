@@ -1,5 +1,4 @@
-#ifndef DEVICEDISCOVERYMANAGERUI_H
-#define DEVICEDISCOVERYMANAGERUI_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -46,4 +45,3 @@ public slots:
 
 };
 
-#endif // DEVICEDISCOVERYMANAGERUI_H

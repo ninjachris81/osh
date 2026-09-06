@@ -30,6 +30,19 @@ Solar Equipment
 BUILDING
 **********************
 
-- check preconditions (Qt5.12+)
-- clone
-- git submodule update --init
+- Preconditions: CMake 3.16+, a C++17 compiler, and Qt 5.12+ with the modules used by the project.
+- Initialize the required submodules:
+
+	`git submodule update --init --recursive`
+
+- Configure and build:
+
+	`cmake -S . -B build`
+
+	`cmake --build build --parallel`
+
+	On Windows, set `CMAKE_PREFIX_PATH` to the installed Qt kit, for example:
+
+	`cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=C:/Qt/5.12.12/mingw73_64`
+
+	Use the compiler shipped for the same Qt MinGW kit; do not mix it with an unrelated compiler distribution.

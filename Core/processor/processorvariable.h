@@ -1,5 +1,4 @@
-#ifndef PROCESSORVARIABLE_H
-#define PROCESSORVARIABLE_H
+#pragma once
 
 #include <QObject>
 
@@ -31,4 +30,3 @@ signals:
 
 };
 
-#endif // PROCESSORVARIABLE_H

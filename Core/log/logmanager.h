@@ -1,5 +1,4 @@
-#ifndef LOGMANAGER_H
-#define LOGMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -61,4 +60,3 @@ signals:
 public slots:
 };
 
-#endif // LOGMANAGER_H

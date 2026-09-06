@@ -1,5 +1,4 @@
-#ifndef CAMBASE_H
-#define CAMBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -16,4 +15,3 @@ signals:
 
 };
 
-#endif // CAMBASE_H

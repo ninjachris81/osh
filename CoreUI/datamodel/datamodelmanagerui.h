@@ -1,5 +1,4 @@
-#ifndef DATAMODELMANAGERUI_H
-#define DATAMODELMANAGERUI_H
+#pragma once
 
 #include <QObject>
 #include <QQmlEngine>
@@ -30,4 +29,3 @@ signals:
 public slots:
 };
 
-#endif // DATAMODELMANAGERUI_H

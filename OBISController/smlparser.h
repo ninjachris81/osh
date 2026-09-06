@@ -1,5 +1,4 @@
-#ifndef SMLPARSER_H
-#define SMLPARSER_H
+#pragma once
 
 #include <QObject>
 
@@ -146,4 +145,3 @@ signals:
 
 };
 
-#endif // SMLPARSER_H

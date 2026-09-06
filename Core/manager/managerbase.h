@@ -1,5 +1,4 @@
-#ifndef MANAGERBASE_H
-#define MANAGERBASE_H
+#pragma once
 
 #include <QObject>
 #include <QLoggingCategory>
@@ -59,4 +58,3 @@ signals:
 public slots:
 };
 
-#endif // MANAGERBASE_H

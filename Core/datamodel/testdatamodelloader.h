@@ -1,5 +1,4 @@
-#ifndef TESTDATAMODELLOADER_H
-#define TESTDATAMODELLOADER_H
+#pragma once
 
 #include <QObject>
 #include "datamodelloaderbase.h"
@@ -23,4 +22,3 @@ signals:
 public slots:
 };
 
-#endif // TESTDATAMODELLOADER_H

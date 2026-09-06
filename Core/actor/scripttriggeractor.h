@@ -1,5 +1,4 @@
-#ifndef SCRIPTTRIGGERACTOR_H
-#define SCRIPTTRIGGERACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -27,4 +26,3 @@ signals:
 
 };
 
-#endif // SCRIPTTRIGGERACTOR_H

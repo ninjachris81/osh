@@ -1,5 +1,4 @@
-#ifndef RS485ENERGYMETERCONTROLLER_H
-#define RS485ENERGYMETERCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -65,4 +64,3 @@ private:
 
 };
 
-#endif // RS485ENERGYMETERCONTROLLER_H

@@ -1,5 +1,4 @@
-#ifndef DEVICESERVICEWRAPPER_H
-#define DEVICESERVICEWRAPPER_H
+#pragma once
 #include "soap/stdsoap2.h"
 
 class DeviceServiceWrapper
@@ -10,4 +9,3 @@ public:
     void deleteObj();
 };
 
-#endif // DEVICESERVICEWRAPPER_H

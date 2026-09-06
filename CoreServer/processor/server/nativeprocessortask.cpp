@@ -28,19 +28,6 @@ NativeProcessorTask::NativeProcessorTask(QString groupId, QString id, ProcessorT
     }
 }
 
-
-void NativeProcessorTask::serialize(QJsonObject &obj) {
-    ProcessorTaskBase::serialize(obj);
-}
-
-void NativeProcessorTask::deserialize(QJsonObject obj) {
-    ProcessorTaskBase::deserialize(obj);
-}
-
-QString NativeProcessorTask::getClassName() {
-    return staticMetaObject.className();
-}
-
 QVariant NativeProcessorTask::run() {
     iDebug() << Q_FUNC_INFO;
 

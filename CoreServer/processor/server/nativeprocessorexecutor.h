@@ -1,5 +1,4 @@
-#ifndef NATIVEPROCESSOREXECUTOR_H
-#define NATIVEPROCESSOREXECUTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -27,4 +26,3 @@ signals:
 
 };
 
-#endif // NATIVEPROCESSOREXECUTOR_H

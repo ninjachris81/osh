@@ -1,5 +1,4 @@
-#ifndef COMMONSCRIPTS_H
-#define COMMONSCRIPTS_H
+#pragma once
 
 #include <QObject>
 
@@ -72,4 +71,3 @@ signals:
 public slots:
 };
 
-#endif // COMMONSCRIPTS_H

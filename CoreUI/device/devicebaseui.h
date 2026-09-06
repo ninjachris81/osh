@@ -1,5 +1,4 @@
-#ifndef DEVICEBASEUI_H
-#define DEVICEBASEUI_H
+#pragma once
 
 #include <QObject>
 #include "identifyableui.h"
@@ -36,4 +35,3 @@ signals:
 public slots:
 };
 
-#endif // DEVICEBASEUI_H

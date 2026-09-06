@@ -1,5 +1,4 @@
-#ifndef SYSTEMWARNINGMESSAGE_H
-#define SYSTEMWARNINGMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -31,4 +30,3 @@ signals:
 public slots:
 };
 
-#endif // SYSTEMWARNINGMESSAGE_H

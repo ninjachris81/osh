@@ -1,0 +1,3 @@
+osh_add_qt_project(CoreServer QT_MODULES Network Sql)
+target_compile_definitions(CoreServer PRIVATE MAKE_SHARED_LIB IS_OSH_CORE_SERVICE)
+target_link_libraries(CoreServer PRIVATE Core)

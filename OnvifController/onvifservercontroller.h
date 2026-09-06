@@ -1,5 +1,4 @@
-#ifndef ONVIFSERVERCONTROLLER_H
-#define ONVIFSERVERCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
@@ -31,4 +30,3 @@ signals:
 
 };
 
-#endif // ONVIFSERVERCONTROLLER_H

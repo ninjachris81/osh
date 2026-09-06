@@ -1,0 +1,2 @@
+osh_add_qt_project(ScriptingTestService QT_MODULES Mqtt Qml Sql)
+target_link_libraries(ScriptingTestService PRIVATE Core QMqttCommunicationManager)

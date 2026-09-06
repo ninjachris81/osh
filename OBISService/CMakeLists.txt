@@ -1,0 +1,2 @@
+osh_add_qt_project(OBISService QT_MODULES Mqtt Sql SerialPort SerialBus)
+target_link_libraries(OBISService PRIVATE Core CoreSerial OBISController QMqttCommunicationManager)

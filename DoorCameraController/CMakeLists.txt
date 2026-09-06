@@ -1,0 +1,3 @@
+osh_add_qt_project(DoorCameraController QT_MODULES Sql)
+target_compile_definitions(DoorCameraController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(DoorCameraController PRIVATE Core)

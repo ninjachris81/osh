@@ -1,5 +1,4 @@
-#ifndef PROCESSOREXECUTORBASE_H
-#define PROCESSOREXECUTORBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -35,4 +34,3 @@ signals:
 
 };
 
-#endif // PROCESSOREXECUTORBASE_H

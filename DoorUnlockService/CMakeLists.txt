@@ -1,0 +1,2 @@
+osh_add_qt_project(DoorUnlockService QT_MODULES Mqtt Sql)
+target_link_libraries(DoorUnlockService PRIVATE Core DoorUnlockController QMqttCommunicationManager)

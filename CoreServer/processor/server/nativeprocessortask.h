@@ -1,5 +1,4 @@
-#ifndef NATIVEPROCESSORTASK_H
-#define NATIVEPROCESSORTASK_H
+#pragma once
 
 #include <QObject>
 
@@ -54,12 +53,6 @@ public:
     NativeProcessorTask();
     explicit NativeProcessorTask(QString groupId, QString id, ProcessorTaskType taskType, ProcessorTaskTriggerType taskTriggerType, int functionCode, QStringList params, qint64 scheduleInterval = 0, bool publishResult = false, bool enabled = true, QObject *parent = nullptr);
 
-    /*virtual*/ void serialize(QJsonObject &obj) override;
-
-    /*virtual*/ void deserialize(QJsonObject obj) override;
-
-    /*virtual*/ QString getClassName() override;
-
     /*virtual*/ QVariant run() override;
 
     void setScripts(BasicScripts* basicScripts, CommonScripts* commonScripts, AdvancedScripts* advScripts);
@@ -85,4 +78,3 @@ signals:
 
 };
 
-#endif // NATIVEPROCESSORTASK_H

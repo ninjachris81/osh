@@ -1,0 +1,2 @@
+osh_add_qt_project(TestService QT_MODULES Mqtt)
+target_link_libraries(TestService PRIVATE Core QMqttCommunicationManager)

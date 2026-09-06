@@ -1,5 +1,4 @@
-#ifndef QMQTTCOMMUNICATIONMANAGER_H
-#define QMQTTCOMMUNICATIONMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -46,4 +45,3 @@ protected slots:
 
 };
 
-#endif // QMQTTCOMMUNICATIONMANAGER_H

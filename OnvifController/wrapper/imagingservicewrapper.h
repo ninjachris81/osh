@@ -1,5 +1,4 @@
-#ifndef IMAGINGSERVICEWRAPPER_H
-#define IMAGINGSERVICEWRAPPER_H
+#pragma once
 
 #include "soap/stdsoap2.h"
 
@@ -12,4 +11,3 @@ public:
     void deleteObj();
 };
 
-#endif // IMAGINGSERVICEWRAPPER_H

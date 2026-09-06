@@ -1,5 +1,4 @@
-#ifndef UNITS_H
-#define UNITS_H
+#pragma once
 
 #ifdef QT_VERSION
     #ifndef USES_UNITS_QT
@@ -13,4 +12,3 @@
 #define UNIT_TYPE_LITER_PER_MIN 4
 #define UNIT_TYPE_LITER         5
 
-#endif // UNITS_H

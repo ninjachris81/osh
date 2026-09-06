@@ -1,5 +1,4 @@
-#ifndef ANALYTICSSERVICEWRAPPER_H
-#define ANALYTICSSERVICEWRAPPER_H
+#pragma once
 
 #include "soap/stdsoap2.h"
 
@@ -12,4 +11,3 @@ public:
     void deleteObj();
 };
 
-#endif // ANALYTICSSERVICEWRAPPER_H

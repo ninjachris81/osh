@@ -1,5 +1,4 @@
-#ifndef KNOWNROOMUI_H
-#define KNOWNROOMUI_H
+#pragma once
 
 #include <QObject>
 #include "visualitembase.h"
@@ -36,4 +35,3 @@ signals:
 
 };
 
-#endif // KNOWNROOMUI_H

@@ -1,5 +1,4 @@
-#ifndef DATAMODELBASE_H
-#define DATAMODELBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -112,4 +111,3 @@ signals:
 public slots:
 };
 
-#endif // DATAMODELBASE_H

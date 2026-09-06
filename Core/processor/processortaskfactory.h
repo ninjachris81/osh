@@ -1,5 +1,4 @@
-#ifndef PROCESSORTASKFACTORY_H
-#define PROCESSORTASKFACTORY_H
+#pragma once
 
 #include <QObject>
 
@@ -13,4 +12,3 @@ public:
 
 };
 
-#endif // PROCESSORTASKFACTORY_H

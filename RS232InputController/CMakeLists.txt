@@ -1,0 +1,3 @@
+osh_add_qt_project(RS232InputController QT_MODULES SerialPort)
+target_compile_definitions(RS232InputController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(RS232InputController PRIVATE Core CoreSerial)

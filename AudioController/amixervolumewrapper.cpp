@@ -121,9 +121,9 @@ int AMixerVolumeWrapper::_searchMapping(quint8 cardId, const QString volumeId) {
 
     //qDebug() << Q_FUNC_INFO << res;
 
-    QStringList lines = res.split("\n", QString::SkipEmptyParts);
+    QStringList lines = res.split("\n", Qt::SkipEmptyParts);
     for (QString line : lines) {
-        QStringList tokens = line.split(",", QString::SkipEmptyParts);
+        QStringList tokens = line.split(",", Qt::SkipEmptyParts);
 
         //qDebug() << Q_FUNC_INFO << tokens;
 

@@ -1,5 +1,4 @@
-#ifndef AMIXERVOLUMEWRAPPER_H
-#define AMIXERVOLUMEWRAPPER_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -40,4 +39,3 @@ signals:
 
 };
 
-#endif // AMIXERVOLUMEWRAPPER_H

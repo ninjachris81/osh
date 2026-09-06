@@ -1,5 +1,4 @@
-#ifndef ACTORBASE_H
-#define ACTORBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -46,4 +45,3 @@ protected:
 public slots:
 };
 
-#endif // ACTORBASE_H

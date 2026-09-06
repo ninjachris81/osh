@@ -1,5 +1,4 @@
-#ifndef EVENTSERVICEWRAPPER_H
-#define EVENTSERVICEWRAPPER_H
+#pragma once
 
 #include "soap/stdsoap2.h"
 
@@ -11,4 +10,3 @@ public:
     void deleteObj();
 };
 
-#endif // EVENTSERVICEWRAPPER_H

@@ -1,5 +1,4 @@
-#ifndef STRINGVALUE_H
-#define STRINGVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -21,4 +20,3 @@ signals:
 public slots:
 };
 
-#endif // STRINGVALUE_H

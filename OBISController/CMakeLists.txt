@@ -1,0 +1,3 @@
+osh_add_qt_project(OBISController QT_MODULES SerialPort SerialBus)
+target_compile_definitions(OBISController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(OBISController PRIVATE Core CoreSerial)

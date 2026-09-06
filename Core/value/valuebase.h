@@ -1,5 +1,4 @@
-#ifndef VALUEBASE_H
-#define VALUEBASE_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
@@ -110,4 +109,3 @@ signals:
 
 };
 
-#endif // VALUEBASE_H

@@ -1,0 +1,2 @@
+osh_add_qt_project(GPIOWaterMeterService QT_MODULES Mqtt Sql)
+target_link_libraries(GPIOWaterMeterService PRIVATE Core GPIOWaterMeterController QMqttCommunicationManager)

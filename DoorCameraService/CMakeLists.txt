@@ -1,0 +1,2 @@
+osh_add_qt_project(DoorCameraService QT_MODULES Mqtt Sql)
+target_link_libraries(DoorCameraService PRIVATE Core DoorCameraController QMqttCommunicationManager)

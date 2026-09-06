@@ -1,5 +1,4 @@
-#ifndef ADVANCEDSCRIPTS_H
-#define ADVANCEDSCRIPTS_H
+#pragma once
 
 #include <QObject>
 
@@ -22,4 +21,3 @@ signals:
 
 };
 
-#endif // ADVANCEDSCRIPTS_H

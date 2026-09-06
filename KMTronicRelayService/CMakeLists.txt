@@ -1,0 +1,2 @@
+osh_add_qt_project(KMTronicRelayService QT_MODULES Mqtt Sql SerialPort)
+target_link_libraries(KMTronicRelayService PRIVATE Core CoreSerial KMTronicRelayController QMqttCommunicationManager)

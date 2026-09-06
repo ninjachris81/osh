@@ -1,5 +1,4 @@
-#ifndef CONTROLLERMESSAGE_H
-#define CONTROLLERMESSAGE_H
+#pragma once
 
 #include <QObject>
 #include <QJsonDocument>
@@ -40,4 +39,3 @@ signals:
 public slots:
 };
 
-#endif // CONTROLLERMESSAGE_H

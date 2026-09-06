@@ -1,5 +1,4 @@
-#ifndef KNOWNAREA_H
-#define KNOWNAREA_H
+#pragma once
 
 #include <QObject>
 
@@ -33,4 +32,3 @@ signals:
     void nameChanged();
 };
 
-#endif // KNOWNAREA_H

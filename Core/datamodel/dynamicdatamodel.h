@@ -1,5 +1,4 @@
-#ifndef DYNAMICDATAMODEL_H
-#define DYNAMICDATAMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -23,4 +22,3 @@ signals:
 public slots:
 };
 
-#endif // DYNAMICDATAMODEL_H

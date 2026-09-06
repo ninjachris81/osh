@@ -1,5 +1,4 @@
-#ifndef PROCESSORTASKBASE_H
-#define PROCESSORTASKBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -81,4 +80,3 @@ signals:
 
 };
 
-#endif // PROCESSORTASKBASE_H

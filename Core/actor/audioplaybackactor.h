@@ -1,5 +1,4 @@
-#ifndef AUDIOPLAYBACKACTOR_H
-#define AUDIOPLAYBACKACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -90,4 +89,3 @@ signals:
 public slots:
 };
 
-#endif // AUDIOPLAYBACKACTOR_H

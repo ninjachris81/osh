@@ -1,5 +1,4 @@
-#ifndef EMPTYDATAMODEL_H
-#define EMPTYDATAMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -17,4 +16,3 @@ signals:
 
 };
 
-#endif // EMPTYDATAMODEL_H

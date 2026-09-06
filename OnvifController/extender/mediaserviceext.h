@@ -1,5 +1,4 @@
-#ifndef MEDIASERVICEEXT_H
-#define MEDIASERVICEEXT_H
+#pragma once
 #include "onvif/mediaserviceextabst.h"
 
 
@@ -247,4 +246,3 @@ public:
 
 };
 
-#endif // MEDIASERVICEEXT_H

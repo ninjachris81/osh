@@ -1,5 +1,4 @@
-#ifndef ACTORMANAGER_H
-#define ACTORMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -53,4 +52,3 @@ signals:
 public slots:
 };
 
-#endif // ACTORMANAGER_H

@@ -1,5 +1,4 @@
-#ifndef PTZSERVICEEXT_H
-#define PTZSERVICEEXT_H
+#pragma once
 #include "onvif/ptzserviceextabst.h"
 
 
@@ -91,4 +90,3 @@ public:
 
 };
 
-#endif // PTZSERVICEEXT_H

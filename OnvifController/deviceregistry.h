@@ -1,5 +1,4 @@
-#ifndef DEVICEREGISTRY_H
-#define DEVICEREGISTRY_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -52,4 +51,3 @@ signals:
 
 };
 
-#endif // DEVICEREGISTRY_H

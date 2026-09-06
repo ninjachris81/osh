@@ -1,5 +1,4 @@
-#ifndef JSPROCESSORTASK_H
-#define JSPROCESSORTASK_H
+#pragma once
 
 #include <QObject>
 #include <QJSEngine>
@@ -32,4 +31,3 @@ signals:
 public slots:
 };
 
-#endif // JSPROCESSORTASK_H

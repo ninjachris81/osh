@@ -1,0 +1,3 @@
+osh_add_qt_project(RS485EnergyMeterController QT_MODULES SerialPort SerialBus)
+target_compile_definitions(RS485EnergyMeterController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(RS485EnergyMeterController PRIVATE Core CoreSerial)

@@ -1,5 +1,4 @@
-#ifndef DOORUNLOCKMANAGER_H
-#define DOORUNLOCKMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -70,4 +69,3 @@ signals:
 
 };
 
-#endif // DOORUNLOCKMANAGER_H

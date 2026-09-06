@@ -1,5 +1,4 @@
-#ifndef MODELPROCESSORMANAGERUI_H
-#define MODELPROCESSORMANAGERUI_H
+#pragma once
 
 #include <QObject>
 #include <QQmlEngine>
@@ -43,4 +42,3 @@ signals:
 public slots:
 };
 
-#endif // MODELPROCESSORMANAGERUI_H

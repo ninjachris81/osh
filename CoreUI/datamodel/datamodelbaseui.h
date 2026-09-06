@@ -1,5 +1,4 @@
-#ifndef DATAMODELBASEUI_H
-#define DATAMODELBASEUI_H
+#pragma once
 
 #include <QObject>
 #include "identifyableui.h"
@@ -38,4 +37,3 @@ signals:
 public slots:
 };
 
-#endif // DATAMODELBASEUI_H

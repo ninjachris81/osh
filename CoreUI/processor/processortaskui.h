@@ -1,5 +1,4 @@
-#ifndef PROCESSORTASKUI_H
-#define PROCESSORTASKUI_H
+#pragma once
 
 #include <QObject>
 #include "identifyableui.h"
@@ -36,4 +35,3 @@ signals:
 public slots:
 };
 
-#endif // PROCESSORTASKUI_H

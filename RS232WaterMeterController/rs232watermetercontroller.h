@@ -1,5 +1,4 @@
-#ifndef RS232WATERMETERCONTROLLER_H
-#define RS232WATERMETERCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -64,4 +63,3 @@ signals:
 
 };
 
-#endif // RS232WATERMETERCONTROLLER_H

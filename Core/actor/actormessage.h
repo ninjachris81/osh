@@ -1,5 +1,4 @@
-#ifndef ACTORMESSAGE_H
-#define ACTORMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -29,4 +28,3 @@ signals:
 public slots:
 };
 
-#endif // ACTORMESSAGE_H

@@ -1,5 +1,4 @@
-#ifndef SUNSET_H
-#define SUNSET_H
+#pragma once
 
 
 
@@ -103,4 +102,3 @@ private:
 };
 
 
-#endif // SUNSET_H

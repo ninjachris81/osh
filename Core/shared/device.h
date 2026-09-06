@@ -1,5 +1,4 @@
-#ifndef DEVICE_H
-#define DEVICE_H
+#pragma once
 
 #define DEVICE_CONFIG_SERIAL_ID "device.serialId"
 
@@ -11,4 +10,3 @@
 
 #define DEVICE_FULLID_SEP "-"
 
-#endif // DEVICE_H

@@ -28,3 +28,4 @@ Makefile
 /AndroidApp/app/google-services.json
 /Core/doorunlock/psk.h
 /deploy/rpi/localservices.txt
+build/

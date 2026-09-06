@@ -1,5 +1,4 @@
-#ifndef CONTROLLERBASE_H
-#define CONTROLLERBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -53,4 +52,3 @@ signals:
 public slots:
 };
 
-#endif // CONTROLLERBASE_H

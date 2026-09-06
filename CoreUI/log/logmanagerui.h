@@ -1,5 +1,4 @@
-#ifndef LOGMANAGERUI_H
-#define LOGMANAGERUI_H
+#pragma once
 
 #include <QObject>
 #include <QQmlEngine>
@@ -38,4 +37,3 @@ signals:
 public slots:
 };
 
-#endif // LOGMANAGERUI_H

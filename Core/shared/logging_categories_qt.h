@@ -1,5 +1,4 @@
-#ifndef LOGGING_CATEGORIES_QT_H
-#define LOGGING_CATEGORIES_QT_H
+#pragma once
 
 #include <QObject>
 #include "logging_categories.h"
@@ -42,4 +41,3 @@ Q_NAMESPACE
 }
 
 
-#endif // LOGGING_CATEGORIES_QT_H

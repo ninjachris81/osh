@@ -1,5 +1,4 @@
-#ifndef MEDIASERVICEWRAPPER_H
-#define MEDIASERVICEWRAPPER_H
+#pragma once
 
 #include "soap/stdsoap2.h"
 
@@ -12,4 +11,3 @@ public:
     void deleteObj();
 };
 
-#endif // MEDIASERVICEWRAPPER_H

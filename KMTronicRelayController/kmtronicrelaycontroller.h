@@ -1,5 +1,4 @@
-#ifndef KMTRONICRELAYCONTROLLER_H
-#define KMTRONICRELAYCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -57,4 +56,3 @@ private:
 
 };
 
-#endif // KMTRONICRELAYCONTROLLER_H

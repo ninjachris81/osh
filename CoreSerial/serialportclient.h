@@ -1,5 +1,4 @@
-#ifndef SERIALPORTCLIENT_H
-#define SERIALPORTCLIENT_H
+#pragma once
 
 #include <QByteArray>
 #include <QSerialPort>
@@ -61,4 +60,3 @@ Q_SIGNALS:
 
 };
 
-#endif // SERIALPORTCLIENT_H

@@ -1,5 +1,4 @@
-#ifndef MULTIVALUE_H
-#define MULTIVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -20,4 +19,3 @@ signals:
 
 };
 
-#endif // MULTIVALUE_H

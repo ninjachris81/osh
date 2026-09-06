@@ -1,5 +1,4 @@
-#ifndef DOUBLEVALUE_H
-#define DOUBLEVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -21,4 +20,3 @@ signals:
 public slots:
 };
 
-#endif // DOUBLEVALUE_H

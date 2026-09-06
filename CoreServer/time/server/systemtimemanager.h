@@ -1,5 +1,4 @@
-#ifndef SYSTEMTIMEMANAGER_H
-#define SYSTEMTIMEMANAGER_H
+#pragma once
 
 #ifndef IS_OSH_CORE_SERVICE
     #error Should use client version
@@ -46,4 +45,3 @@ signals:
 public slots:
 };
 
-#endif // SYSTEMTIMEMANAGER_H

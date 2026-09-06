@@ -1,5 +1,4 @@
-#ifndef HELPERS_H
-#define HELPERS_H
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/qobjectdefs.h>
@@ -31,7 +30,7 @@ public:
     }
 
     static QString generateMqttNameFromConstant(QString enumName) {
-        QStringList parts = enumName.toLower().split('_', QString::SkipEmptyParts);
+        QStringList parts = enumName.toLower().split('_', Qt::SkipEmptyParts);
         for (int i=1; i<parts.size(); ++i) {
             parts[i].replace(0, 1, parts[i][0].toUpper());
         }
@@ -44,4 +43,3 @@ public:
 
 };
 
-#endif // HELPERS_H

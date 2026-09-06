@@ -1,5 +1,4 @@
-#ifndef TESTDATAMODEL_H
-#define TESTDATAMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -16,4 +15,3 @@ signals:
 public slots:
 };
 
-#endif // TESTDATAMODEL_H

@@ -1,5 +1,4 @@
-#ifndef RS232INPUTCONTROLLER_H
-#define RS232INPUTCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
@@ -38,4 +37,3 @@ private:
 signals:
 };
 
-#endif // RS232INPUTCONTROLLER_H

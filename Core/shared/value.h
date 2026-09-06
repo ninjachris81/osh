@@ -1,5 +1,4 @@
-#ifndef VALUE_H
-#define VALUE_H
+#pragma once
 
 #ifdef QT_VERSION
     #ifndef USES_VALUE_QT
@@ -54,4 +53,3 @@
 // static vars
 #define VALUE_TYPE_STATIC_TEMP  100
 
-#endif // VALUE_H

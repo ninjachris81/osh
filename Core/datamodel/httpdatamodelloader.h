@@ -1,5 +1,4 @@
-#ifndef HTTPDATAMODELLOADER_H
-#define HTTPDATAMODELLOADER_H
+#pragma once
 
 #include <QObject>
 #include <QUrl>
@@ -31,4 +30,3 @@ signals:
 public slots:
 };
 
-#endif // HTTPDATAMODELLOADER_H

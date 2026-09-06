@@ -1,5 +1,4 @@
-#ifndef TASKSTORAGE_H
-#define TASKSTORAGE_H
+#pragma once
 
 #include <QObject>
 #include <QMultiMap>
@@ -26,4 +25,3 @@ signals:
 
 };
 
-#endif // TASKSTORAGE_H

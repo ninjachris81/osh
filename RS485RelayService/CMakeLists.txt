@@ -1,0 +1,2 @@
+osh_add_qt_project(RS485RelayService QT_MODULES Mqtt Sql SerialPort SerialBus)
+target_link_libraries(RS485RelayService PRIVATE Core CoreSerial RS485RelayController QMqttCommunicationManager)

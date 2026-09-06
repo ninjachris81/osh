@@ -1,5 +1,4 @@
-#ifndef RELAYCONTROLLERBASE_H
-#define RELAYCONTROLLERBASE_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -43,4 +42,3 @@ signals:
 public slots:
 };
 
-#endif // RELAYCONTROLLERBASE_H

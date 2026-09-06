@@ -1,5 +1,4 @@
-#ifndef SIMPLEDATABASEMANAGER_H
-#define SIMPLEDATABASEMANAGER_H
+#pragma once
 
 #include <QObject>
 #include "manager/managerbase.h"
@@ -37,4 +36,3 @@ signals:
 
 };
 
-#endif // SIMPLEDATABASEMANAGER_H

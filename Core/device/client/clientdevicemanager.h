@@ -1,5 +1,4 @@
-#ifndef CLIENTDEVICEMANAGER_H
-#define CLIENTDEVICEMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -26,4 +25,3 @@ signals:
 public slots:
 };
 
-#endif // CLIENTDEVICEMANAGER_H

@@ -1,5 +1,4 @@
-#ifndef VALUEBASEUI_H
-#define VALUEBASEUI_H
+#pragma once
 
 #include <QObject>
 #include "identifyableui.h"
@@ -44,4 +43,3 @@ signals:
 public slots:
 };
 
-#endif // VALUEBASEUI_H

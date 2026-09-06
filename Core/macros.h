@@ -1,5 +1,4 @@
-#ifndef MACROS_H
-#define MACROS_H
+#pragma once
 
 #include <QtGlobal>
 #include <QLoggingCategory>
@@ -12,4 +11,3 @@
 #define iWarning() qCWarning(QLoggingCategory(this->logCatName().toUtf8()))
 #define iCritical() qCCritical(QLoggingCategory(this->logCatName().toUtf8()))
 
-#endif // MACROS_H

@@ -1,5 +1,4 @@
-#ifndef DOORAUDIO_CONTROLLER_H
-#define DOORAUDIO_CONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -51,4 +50,3 @@ signals:
 
 };
 
-#endif // DOORAUDIO_CONTROLLER_H

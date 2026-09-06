@@ -1,0 +1,3 @@
+osh_add_qt_project(AudioController QT_MODULES Multimedia)
+target_compile_definitions(AudioController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(AudioController PRIVATE Core)

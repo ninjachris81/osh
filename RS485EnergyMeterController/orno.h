@@ -1,5 +1,4 @@
-#ifndef ORNOH_H
-#define ORNOH_H
+#pragma once
 
 #include <QObject>
 
@@ -94,4 +93,3 @@ public:
     }
 };
 
-#endif // ORNOH_H

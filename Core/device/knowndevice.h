@@ -1,5 +1,4 @@
-#ifndef KNOWNDEVICE_H
-#define KNOWNDEVICE_H
+#pragma once
 
 #include <QObject>
 
@@ -27,4 +26,3 @@ signals:
 public slots:
 };
 
-#endif // KNOWNDEVICE_H

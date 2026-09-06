@@ -1,5 +1,4 @@
-#ifndef RS485RELAYCONTROLLER_H
-#define RS485RELAYCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -77,4 +76,3 @@ private:
 
 };
 
-#endif // RS485RELAYCONTROLLER_H

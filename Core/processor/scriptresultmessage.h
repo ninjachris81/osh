@@ -1,5 +1,4 @@
-#ifndef SCRIPTRESULTMESSAGE_H
-#define SCRIPTRESULTMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -32,4 +31,3 @@ private:
 public slots:
 };
 
-#endif // SCRIPTRESULTMESSAGE_H

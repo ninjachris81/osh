@@ -1,5 +1,4 @@
-#ifndef OSHUSER_H
-#define OSHUSER_H
+#pragma once
 
 #include <QObject>
 
@@ -29,4 +28,3 @@ signals:
 
 };
 
-#endif // OSHUSER_H

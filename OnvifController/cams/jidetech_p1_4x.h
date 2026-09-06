@@ -1,5 +1,4 @@
-#ifndef JIDETECH_P1_4X_H
-#define JIDETECH_P1_4X_H
+#pragma once
 
 #include <QObject>
 #include "cambase.h"
@@ -14,4 +13,3 @@ signals:
 
 };
 
-#endif // JIDETECH_P1_4X_H

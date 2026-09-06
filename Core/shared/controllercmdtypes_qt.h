@@ -1,5 +1,4 @@
-#ifndef CONTROLLERCMDTYPES_QT_H
-#define CONTROLLERCMDTYPES_QT_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
@@ -21,4 +20,3 @@ Q_NAMESPACE
     Q_ENUM_NS(CONTROLLER_CMD_TYPE)
 }*/
 
-#endif // CONTROLLERCMDTYPES_QT_H

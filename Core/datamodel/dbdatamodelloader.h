@@ -1,5 +1,4 @@
-#ifndef DBDATAMODELLOADER_H
-#define DBDATAMODELLOADER_H
+#pragma once
 
 #include <QObject>
 #include <QSqlResult>
@@ -44,4 +43,3 @@ private:
 
 };
 
-#endif // DBDATAMODELLOADER_H

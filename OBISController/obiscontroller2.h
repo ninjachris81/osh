@@ -1,5 +1,4 @@
-#ifndef OBISCONTROLLER2_H
-#define OBISCONTROLLER2_H
+#pragma once
 
 #include <QObject>
 #include <QProcess>
@@ -83,4 +82,3 @@ Q_SIGNALS:
 
 };
 
-#endif // OBISCONTROLLER2_H

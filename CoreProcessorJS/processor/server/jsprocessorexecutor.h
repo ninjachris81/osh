@@ -1,5 +1,4 @@
-#ifndef JSPROCESSOREXECUTOR_H
-#define JSPROCESSOREXECUTOR_H
+#pragma once
 
 #include <QObject>
 #include <QQmlEngine>
@@ -29,4 +28,3 @@ signals:
 
 };
 
-#endif // JSPROCESSOREXECUTOR_H

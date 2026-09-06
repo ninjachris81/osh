@@ -1,5 +1,4 @@
-#ifndef ENVIRONMENTVALUEMANAGER_H
-#define ENVIRONMENTVALUEMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -39,4 +38,3 @@ signals:
 public slots:
 };
 
-#endif // ENVIRONMENTVALUEMANAGER_H

@@ -1,5 +1,4 @@
-#ifndef VISUALITEMBASE_H
-#define VISUALITEMBASE_H
+#pragma once
 
 #include <QObject>
 #include "identifyableui.h"
@@ -33,4 +32,3 @@ signals:
 
 };
 
-#endif // VISUALITEMBASE_H

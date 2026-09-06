@@ -1,0 +1,3 @@
+osh_add_qt_project(CoreSimulation QT_MODULES Qml Sql Mqtt)
+target_compile_definitions(CoreSimulation PRIVATE MAKE_SHARED_LIB IS_OSH_CORE_SERVICE)
+target_link_libraries(CoreSimulation PRIVATE Core CoreServer QMqttCommunicationManager)

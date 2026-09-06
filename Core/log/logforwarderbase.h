@@ -1,5 +1,4 @@
-#ifndef LOGFORWARDERBASE_H
-#define LOGFORWARDERBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -16,4 +15,3 @@ signals:
 public slots:
 };
 
-#endif // LOGFORWARDERBASE_H

@@ -1,5 +1,4 @@
-#ifndef DOORUNLOCKMESSAGE_H
-#define DOORUNLOCKMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -48,4 +47,3 @@ signals:
 
 };
 
-#endif // DOORUNLOCKMESSAGE_H

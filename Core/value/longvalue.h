@@ -1,5 +1,4 @@
-#ifndef LONGVALUE_H
-#define LONGVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -21,4 +20,3 @@ signals:
 public slots:
 };
 
-#endif // LONGVALUE_H

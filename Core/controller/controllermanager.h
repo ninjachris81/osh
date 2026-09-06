@@ -1,5 +1,4 @@
-#ifndef CONTROLLERMANAGER_H
-#define CONTROLLERMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -47,4 +46,3 @@ signals:
 public slots:
 };
 
-#endif // CONTROLLERMANAGER_H

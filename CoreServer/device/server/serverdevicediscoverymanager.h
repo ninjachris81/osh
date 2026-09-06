@@ -1,5 +1,4 @@
-#ifndef SERVERDEVICEDISCOVERMANAGER_H
-#define SERVERDEVICEDISCOVERMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -34,4 +33,3 @@ signals:
 public slots:
 };
 
-#endif // SERVERDEVICEDISCOVERMANAGER_H

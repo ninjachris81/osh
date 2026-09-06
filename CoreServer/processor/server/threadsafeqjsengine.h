@@ -1,5 +1,4 @@
-#ifndef THREADSAFEQJSENGINE_H
-#define THREADSAFEQJSENGINE_H
+#pragma once
 
 #include <QJSEngine>
 #include <QThread>
@@ -43,4 +42,3 @@ auto call(QJSEngine* engine, F&& f) -> typename std::enable_if<std::is_void<decl
 
 };
 
-#endif // THREADSAFEQJSENGINE_H

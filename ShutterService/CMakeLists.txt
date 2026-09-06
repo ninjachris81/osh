@@ -1,0 +1,2 @@
+osh_add_qt_project(ShutterService QT_MODULES Mqtt Sql)
+target_link_libraries(ShutterService PRIVATE Core ShutterController QMqttCommunicationManager)

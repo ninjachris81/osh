@@ -1,5 +1,4 @@
-#ifndef MQTTCOMMUNICATIONMANAGERBASE_H
-#define MQTTCOMMUNICATIONMANAGERBASE_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -78,4 +77,3 @@ signals:
 public slots:
 };
 
-#endif // MQTTCOMMUNICATIONMANAGERBASE_H

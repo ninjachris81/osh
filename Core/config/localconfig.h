@@ -1,5 +1,4 @@
-#ifndef LOCALCONFIG_H
-#define LOCALCONFIG_H
+#pragma once
 
 #include <QObject>
 #include <QSettings>
@@ -47,4 +46,3 @@ signals:
 public slots:
 };
 
-#endif // LOCALCONFIG_H

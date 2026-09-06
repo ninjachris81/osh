@@ -1,5 +1,4 @@
-#ifndef SIMULATOR_H
-#define SIMULATOR_H
+#pragma once
 
 #include <QObject>
 
@@ -49,4 +48,3 @@ signals:
 
 };
 
-#endif // SIMULATOR_H

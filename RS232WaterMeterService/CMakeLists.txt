@@ -1,0 +1,2 @@
+osh_add_qt_project(RS232WaterMeterService QT_MODULES Mqtt Sql SerialPort)
+target_link_libraries(RS232WaterMeterService PRIVATE Core CoreSerial RS232WaterMeterController QMqttCommunicationManager)

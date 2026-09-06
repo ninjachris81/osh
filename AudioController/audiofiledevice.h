@@ -1,5 +1,4 @@
-#ifndef AUDIOFILEDEVICE_H
-#define AUDIOFILEDEVICE_H
+#pragma once
 
 #include <QIODevice>
 #include <QBuffer>
@@ -49,4 +48,3 @@ signals:
     void newData(const QByteArray& data);
 };
 
-#endif // AUDIOFILEDEVICE_H

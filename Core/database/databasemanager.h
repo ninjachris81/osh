@@ -1,5 +1,4 @@
-#ifndef DATABASEMANAGER_H
-#define DATABASEMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QSqlDatabase>
@@ -44,4 +43,3 @@ signals:
 
 };
 
-#endif // DATABASEMANAGER_H

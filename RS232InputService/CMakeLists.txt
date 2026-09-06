@@ -1,0 +1,2 @@
+osh_add_qt_project(RS232InputService QT_MODULES Mqtt Sql SerialPort)
+target_link_libraries(RS232InputService PRIVATE Core CoreSerial RS232InputController QMqttCommunicationManager)

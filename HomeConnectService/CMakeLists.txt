@@ -1,0 +1,2 @@
+osh_add_qt_project(HomeConnectService QT_MODULES Mqtt Sql)
+target_link_libraries(HomeConnectService PRIVATE Core HomeConnectController QMqttCommunicationManager)

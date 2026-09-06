@@ -1,5 +1,4 @@
-#ifndef WBB12CONTROLLER_H
-#define WBB12CONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -373,4 +372,3 @@ signals:
 
 };
 
-#endif // WBB12CONTROLLER_H

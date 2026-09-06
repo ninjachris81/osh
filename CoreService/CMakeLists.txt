@@ -1,0 +1,3 @@
+osh_add_qt_project(CoreService QT_MODULES Mqtt Sql Network)
+target_compile_definitions(CoreService PRIVATE IS_OSH_CORE_SERVICE)
+target_link_libraries(CoreService PRIVATE Core CoreServer QMqttCommunicationManager)

@@ -1,5 +1,4 @@
-#ifndef CLIENTSYSTEMTIMEMANAGER_H
-#define CLIENTSYSTEMTIMEMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -35,4 +34,3 @@ signals:
 public slots:
 };
 
-#endif // CLIENTSYSTEMTIMEMANAGER_H

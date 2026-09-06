@@ -1,0 +1,3 @@
+osh_add_qt_project(HomeConnectController QT_MODULES Network XmlPatterns)
+target_compile_definitions(HomeConnectController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(HomeConnectController PRIVATE Core)

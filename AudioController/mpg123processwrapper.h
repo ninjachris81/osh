@@ -1,5 +1,4 @@
-#ifndef MPG123PROCESSWRAPPER_H
-#define MPG123PROCESSWRAPPER_H
+#pragma once
 
 #include "actor/audioplaybackactor.h"
 #include "audioprocesswrapperbase.h"
@@ -19,4 +18,3 @@ signals:
 
 };
 
-#endif // MPG123PROCESSWRAPPER_H

@@ -1,5 +1,4 @@
-#ifndef DEVICEIOSERVICEWRAPPER_H
-#define DEVICEIOSERVICEWRAPPER_H
+#pragma once
 
 #include "soap/stdsoap2.h"
 
@@ -12,4 +11,3 @@ public:
     void deleteObj();
 };
 
-#endif // DEVICEIOSERVICEWRAPPER_H

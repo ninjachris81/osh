@@ -1,0 +1,2 @@
+osh_add_qt_project(RS485EnergyMeterService QT_MODULES Mqtt Sql SerialPort SerialBus)
+target_link_libraries(RS485EnergyMeterService PRIVATE Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager)

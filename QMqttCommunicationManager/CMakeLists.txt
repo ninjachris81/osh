@@ -1,0 +1,3 @@
+osh_add_qt_project(QMqttCommunicationManager QT_MODULES Mqtt Network)
+target_compile_definitions(QMqttCommunicationManager PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(QMqttCommunicationManager PRIVATE Core Qt5::Mqtt)

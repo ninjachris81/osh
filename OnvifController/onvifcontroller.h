@@ -1,5 +1,4 @@
-#ifndef ONVIFCONTROLLER_H
-#define ONVIFCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
@@ -72,4 +71,3 @@ Q_SIGNALS:
 
 };
 
-#endif // ONVIFCONTROLLER_H

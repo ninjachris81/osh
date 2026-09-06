@@ -1,5 +1,4 @@
-#ifndef OSHSTATECALLBACK_H
-#define OSHSTATECALLBACK_H
+#pragma once
 
 #include <QObject>
 #include "oshcall.h"
@@ -11,4 +10,3 @@ public:
 
 };
 
-#endif // OSHSTATECALLBACK_H

@@ -1,0 +1,3 @@
+osh_add_qt_project(ShutterController)
+target_compile_definitions(ShutterController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(ShutterController PRIVATE Core)

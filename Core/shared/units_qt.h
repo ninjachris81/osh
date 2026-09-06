@@ -1,5 +1,4 @@
-#ifndef UNITS_QT_H
-#define UNITS_QT_H
+#pragma once
 
 #include <QObject>
 
@@ -11,7 +10,7 @@
 #include "units.h"
 
 namespace unit {
-SHARED_LIB_EXPORT Q_NAMESPACE
+Q_NAMESPACE_EXPORT(SHARED_LIB_EXPORT)
 
     enum class UNIT_TYPE {
         UT_UNKNOWN = ENUM_UNKNOWN,
@@ -27,4 +26,3 @@ SHARED_LIB_EXPORT Q_NAMESPACE
 
 
 
-#endif // UNITS_QT_H

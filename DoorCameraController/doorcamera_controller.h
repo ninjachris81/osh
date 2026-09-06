@@ -1,5 +1,4 @@
-#ifndef DOORCAMERA_CONTROLLER_H
-#define DOORCAMERA_CONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -49,4 +48,3 @@ signals:
 
 };
 
-#endif // DOORCAMERA_CONTROLLER_H

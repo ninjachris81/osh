@@ -1,5 +1,4 @@
-#ifndef VALUE_QT_H
-#define VALUE_QT_H
+#pragma once
 
 #define USES_VALUE_QT
 
@@ -11,7 +10,7 @@
 #include "value.h"
 
 namespace value {
-SHARED_LIB_EXPORT Q_NAMESPACE
+Q_NAMESPACE_EXPORT(SHARED_LIB_EXPORT)
 
     enum class VALUE_TYPE {
         VALTYPE_UNKNOWN = ENUM_UNKNOWN,
@@ -57,4 +56,3 @@ SHARED_LIB_EXPORT Q_NAMESPACE
 
     Q_ENUM_NS(VALUE_TYPE)
 }
-#endif // VALUE_QT_H

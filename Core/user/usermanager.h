@@ -1,5 +1,4 @@
-#ifndef USERMANAGER_H
-#define USERMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -37,4 +36,3 @@ signals:
 
 };
 
-#endif // USERMANAGER_H

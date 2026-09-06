@@ -1,5 +1,4 @@
-#ifndef OSHENDPOINT_H
-#define OSHENDPOINT_H
+#pragma once
 
 #include <QObject>
 
@@ -25,4 +24,3 @@ signals:
 
 };
 
-#endif // OSHENDPOINT_H

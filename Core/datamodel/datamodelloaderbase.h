@@ -1,5 +1,4 @@
-#ifndef DATAMODELLOADERBASE_H
-#define DATAMODELLOADERBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -43,4 +42,3 @@ signals:
 public slots:
 };
 
-#endif // DATAMODELLOADERBASE_H

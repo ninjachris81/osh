@@ -1,5 +1,4 @@
-#ifndef ACTOR_H
-#define ACTOR_H
+#pragma once
 
 #ifdef QT_VERSION
     #ifndef USES_ACTOR_QT
@@ -34,4 +33,3 @@
 #define ACTOR_SHUTTER_MANUAL_DOWN       47      // start down
 
 
-#endif // ACTOR_H

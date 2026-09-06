@@ -1,0 +1,2 @@
+osh_add_qt_project(WBB12Service QT_MODULES Mqtt Sql SerialPort SerialBus)
+target_link_libraries(WBB12Service PRIVATE Core CoreSerial WBB12Controller QMqttCommunicationManager)

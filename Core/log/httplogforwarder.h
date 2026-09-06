@@ -1,5 +1,4 @@
-#ifndef HTTPLOGFORWARDER_H
-#define HTTPLOGFORWARDER_H
+#pragma once
 
 #include <QObject>
 
@@ -18,4 +17,3 @@ signals:
 public slots:
 };
 
-#endif // HTTPLOGFORWARDER_H

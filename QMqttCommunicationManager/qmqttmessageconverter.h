@@ -1,5 +1,4 @@
-#ifndef QMQTTMESSAGECONVERTER_H
-#define QMQTTMESSAGECONVERTER_H
+#pragma once
 
 #include <QObject>
 
@@ -32,4 +31,3 @@ signals:
 public slots:
 };
 
-#endif // QMQTTMESSAGECONVERTER_H

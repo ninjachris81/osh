@@ -1,5 +1,4 @@
-#ifndef JSMETHODS_H
-#define JSMETHODS_H
+#pragma once
 
 #include <QObject>
 #include <QJsonValue>
@@ -24,4 +23,3 @@ signals:
 
 };
 
-#endif // JSMETHODS_H

@@ -1,5 +1,4 @@
-#ifndef AUDIOSTREAMDEVICE_H
-#define AUDIOSTREAMDEVICE_H
+#pragma once
 
 #include "qurl.h"
 #include <QObject>
@@ -48,4 +47,3 @@ signals:
 
 };
 
-#endif // AUDIOSTREAMDEVICE_H

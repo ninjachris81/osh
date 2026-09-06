@@ -1,5 +1,4 @@
-#ifndef LOGMESSAGE_H
-#define LOGMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -33,4 +32,3 @@ signals:
 public slots:
 };
 
-#endif // LOGMESSAGE_H

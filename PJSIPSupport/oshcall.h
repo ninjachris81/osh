@@ -1,5 +1,4 @@
-#ifndef OSHCALL_H
-#define OSHCALL_H
+#pragma once
 
 #include <QObject>
 
@@ -63,4 +62,3 @@ signals:
 
 };
 
-#endif // OSHCALL_H

@@ -1,5 +1,4 @@
-#ifndef AUDIOOUTPUTWRAPPER_H
-#define AUDIOOUTPUTWRAPPER_H
+#pragma once
 
 #include <QObject>
 
@@ -43,4 +42,3 @@ signals:
 
 };
 
-#endif // AUDIOOUTPUTWRAPPER_H

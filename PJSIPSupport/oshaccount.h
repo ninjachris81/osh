@@ -1,5 +1,4 @@
-#ifndef OSHACCOUNT_H
-#define OSHACCOUNT_H
+#pragma once
 
 #include <QObject>
 
@@ -52,4 +51,3 @@ signals:
 
 };
 
-#endif // OSHACCOUNT_H

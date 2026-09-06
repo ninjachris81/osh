@@ -1,5 +1,4 @@
-#ifndef VALUEGROUP_H
-#define VALUEGROUP_H
+#pragma once
 
 #include <QObject>
 
@@ -19,4 +18,3 @@ signals:
 public slots:
 };
 
-#endif // VALUEGROUP_H

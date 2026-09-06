@@ -1,5 +1,4 @@
-#ifndef APLAYPROCESSWRAPPER_H
-#define APLAYPROCESSWRAPPER_H
+#pragma once
 
 #include "actor/audioplaybackactor.h"
 #include "audioprocesswrapperbase.h"
@@ -17,4 +16,3 @@ signals:
 
 };
 
-#endif // APLAYPROCESSWRAPPER_H

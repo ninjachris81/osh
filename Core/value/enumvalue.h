@@ -1,5 +1,4 @@
-#ifndef ENUMVALUE_H
-#define ENUMVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -27,4 +26,3 @@ signals:
 public slots:
 };
 
-#endif // ENUMVALUE_H

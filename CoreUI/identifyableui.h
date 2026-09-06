@@ -1,5 +1,4 @@
-#ifndef IDENTIFYABLEUI_H
-#define IDENTIFYABLEUI_H
+#pragma once
 
 #include <QObject>
 #include "identifyable.h"
@@ -23,4 +22,3 @@ signals:
 public slots:
 };
 
-#endif // IDENTIFYABLEUI_H

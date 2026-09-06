@@ -1,5 +1,4 @@
-#ifndef ACTORBASEUI_H
-#define ACTORBASEUI_H
+#pragma once
 
 #include <QObject>
 #include "value/valuebaseui.h"
@@ -25,4 +24,3 @@ signals:
 public slots:
 };
 
-#endif // ACTORBASEUI_H

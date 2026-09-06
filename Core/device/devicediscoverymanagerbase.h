@@ -1,5 +1,4 @@
-#ifndef DEVICEDISCOVERYMANAGER_H
-#define DEVICEDISCOVERYMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -47,4 +46,3 @@ private slots:
 public slots:
 };
 
-#endif // DEVICEDISCOVERYMANAGER_H

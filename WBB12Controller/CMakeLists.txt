@@ -1,0 +1,3 @@
+osh_add_qt_project(WBB12Controller QT_MODULES SerialPort SerialBus)
+target_compile_definitions(WBB12Controller PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(WBB12Controller PRIVATE Core CoreSerial)

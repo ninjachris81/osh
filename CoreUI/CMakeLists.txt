@@ -1,0 +1,3 @@
+osh_add_qt_project(CoreUI QT_MODULES Quick Mqtt)
+target_compile_definitions(CoreUI PRIVATE MAKE_SHARED_LIB IS_OSH_UI)
+target_link_libraries(CoreUI PRIVATE Core CoreServer CoreSimulation QMqttCommunicationManager)

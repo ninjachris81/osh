@@ -1,0 +1,2 @@
+osh_add_qt_project(OnvifService QT_MODULES Mqtt SerialPort SerialBus)
+target_link_libraries(OnvifService PRIVATE Core OnvifController QMqttCommunicationManager)

@@ -1,5 +1,4 @@
-#ifndef ANALYTICSSERVICEEXT_H
-#define ANALYTICSSERVICEEXT_H
+#pragma once
 #include "onvif/analyticsserviceextabst.h"
 
 
@@ -44,4 +43,3 @@ public:
 
 };
 
-#endif // ANALYTICSSERVICEEXT_H

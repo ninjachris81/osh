@@ -1,5 +1,4 @@
-#ifndef SHUTTERACTOR_H
-#define SHUTTERACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -68,4 +67,3 @@ signals:
 
 };
 
-#endif // SHUTTERACTOR_H

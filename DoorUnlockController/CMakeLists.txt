@@ -1,0 +1,3 @@
+osh_add_qt_project(DoorUnlockController QT_MODULES Sql)
+target_compile_definitions(DoorUnlockController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(DoorUnlockController PRIVATE Core)

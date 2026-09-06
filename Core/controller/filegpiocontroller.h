@@ -1,5 +1,4 @@
-#ifndef FILEGPIOCONTROLLER_H
-#define FILEGPIOCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include "sharedlib.h"
@@ -24,4 +23,3 @@ signals:
 public slots:
 };
 
-#endif // FILEGPIOCONTROLLER_H

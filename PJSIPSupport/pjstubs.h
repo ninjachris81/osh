@@ -1,5 +1,4 @@
-#ifndef PJSTUBS_H
-#define PJSTUBS_H
+#pragma once
 
 #include <QDebug>
 #include <QTimer>
@@ -399,4 +398,3 @@ public:
 
 }
 
-#endif // PJSTUBS_H

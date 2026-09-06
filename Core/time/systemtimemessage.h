@@ -1,5 +1,4 @@
-#ifndef SYSTEMTIMEMESSAGE_H
-#define SYSTEMTIMEMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -30,4 +29,3 @@ signals:
 public slots:
 };
 
-#endif // SYSTEMTIMEMESSAGE_H

@@ -1,5 +1,4 @@
-#ifndef HOMECONNECTCONTROLLER_H
-#define HOMECONNECTCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -52,4 +51,3 @@ private:
 
 };
 
-#endif // HOMECONNECTCONTROLLER_H

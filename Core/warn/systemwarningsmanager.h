@@ -1,5 +1,4 @@
-#ifndef SYSTEMWARNINGSMANAGER_H
-#define SYSTEMWARNINGSMANAGER_H
+#pragma once
 
 #ifndef IS_OSH_CORE_SERVICE
     #error Should use client version
@@ -32,4 +31,3 @@ signals:
 public slots:
 };
 
-#endif // SYSTEMWARNINGSMANAGER_H

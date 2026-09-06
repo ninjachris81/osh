@@ -1,5 +1,4 @@
-#ifndef RELAYCONTROLLERSIMULATOR_H
-#define RELAYCONTROLLERSIMULATOR_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -27,4 +26,3 @@ signals:
 public slots:
 };
 
-#endif // RELAYCONTROLLERSIMULATOR_H

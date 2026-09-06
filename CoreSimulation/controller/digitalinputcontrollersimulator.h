@@ -1,5 +1,4 @@
-#ifndef DIGITALINPUTCONTROLLERSIMULATOR_H
-#define DIGITALINPUTCONTROLLERSIMULATOR_H
+#pragma once
 
 #include <QObject>
 #include <QBitArray>
@@ -26,4 +25,3 @@ signals:
 public slots:
 };
 
-#endif // DIGITALINPUTCONTROLLERSIMULATOR_H

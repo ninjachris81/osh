@@ -1,5 +1,4 @@
-#ifndef COMMUNICATIONMANAGERBASE_H
-#define COMMUNICATIONMANAGERBASE_H
+#pragma once
 
 #include <QObject>
 #include "sharedlib.h"
@@ -55,4 +54,3 @@ private:
 public slots:
 };
 
-#endif // COMMUNICATIONMANAGERBASE_H

@@ -1,5 +1,4 @@
-#ifndef DEVICEIOSERVICEEXT_H
-#define DEVICEIOSERVICEEXT_H
+#pragma once
 #include "onvif/deviceioserviceextabst.h"
 
 
@@ -91,4 +90,3 @@ public:
 
 };
 
-#endif // DEVICEIOSERVICEEXT_H

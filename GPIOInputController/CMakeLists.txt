@@ -1,0 +1,7 @@
+osh_add_qt_project(GPIOInputController)
+target_compile_definitions(GPIOInputController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(GPIOInputController PRIVATE Core)
+find_library(WIRINGPI_LIBRARY wiringPi)
+if(WIRINGPI_LIBRARY)
+    target_link_libraries(GPIOInputController PRIVATE ${WIRINGPI_LIBRARY})
+endif()

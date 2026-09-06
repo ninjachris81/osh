@@ -1,5 +1,4 @@
-#ifndef VALUEACTOR_H
-#define VALUEACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -31,4 +30,3 @@ signals:
 
 };
 
-#endif // VALUEACTOR_H

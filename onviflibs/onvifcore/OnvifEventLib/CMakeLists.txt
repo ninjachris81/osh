@@ -1,0 +1,1 @@
+osh_add_qt_project(OnvifEventLib)

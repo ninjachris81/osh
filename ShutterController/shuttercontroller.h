@@ -1,5 +1,4 @@
-#ifndef SHUTTERCONTROLLER_H
-#define SHUTTERCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -77,4 +76,3 @@ private:
     QTimer m_maintenanceTimer;
 };
 
-#endif // SHUTTERCONTROLLER_H

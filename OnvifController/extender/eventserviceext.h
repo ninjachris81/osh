@@ -1,5 +1,4 @@
-#ifndef EVENTSERVICEEXT_H
-#define EVENTSERVICEEXT_H
+#pragma once
 #include "onvif/eventserviceextabst.h"
 
 
@@ -71,4 +70,3 @@ public:
 
 };
 
-#endif // EVENTSERVICEEXT_H

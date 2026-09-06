@@ -1,5 +1,4 @@
-#ifndef DOORACTOR_H
-#define DOORACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -27,4 +26,3 @@ signals:
 
 };
 
-#endif // DOORACTOR_H

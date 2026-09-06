@@ -1,0 +1,3 @@
+osh_add_qt_project(DoorAudioController QT_MODULES Sql)
+target_compile_definitions(DoorAudioController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(DoorAudioController PRIVATE Core PJSIPSupport)

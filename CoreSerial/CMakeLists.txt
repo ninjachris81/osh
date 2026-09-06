@@ -1,0 +1,2 @@
+osh_add_qt_project(CoreSerial QT_MODULES SerialPort)
+target_compile_definitions(CoreSerial PRIVATE MAKE_SHARED_LIB)

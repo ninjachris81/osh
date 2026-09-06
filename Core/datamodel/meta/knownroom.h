@@ -1,5 +1,4 @@
-#ifndef KNOWNROOM_H
-#define KNOWNROOM_H
+#pragma once
 
 #include <QObject>
 
@@ -38,4 +37,3 @@ signals:
 
 };
 
-#endif // KNOWNROOM_H

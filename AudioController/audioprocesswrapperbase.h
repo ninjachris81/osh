@@ -1,5 +1,4 @@
-#ifndef AUDIOPROCESSWRAPPERBASE_H
-#define AUDIOPROCESSWRAPPERBASE_H
+#pragma once
 
 #include "actor/audioplaybackactor.h"
 #include <QProcess>
@@ -21,4 +20,3 @@ signals:
 
 };
 
-#endif // AUDIOPROCESSWRAPPERBASE_H

@@ -1,5 +1,4 @@
-#ifndef CLIENTDEVICE_H
-#define CLIENTDEVICE_H
+#pragma once
 
 #include <QObject>
 
@@ -18,4 +17,3 @@ signals:
 public slots:
 };
 
-#endif // CLIENTDEVICE_H

@@ -1,5 +1,4 @@
-#ifndef PLAINGPIOREADER_H
-#define PLAINGPIOREADER_H
+#pragma once
 
 #include <QObject>
 #include <QThread>
@@ -34,4 +33,3 @@ signals:
 
 };
 
-#endif // PLAINGPIOREADER_H

@@ -1,5 +1,4 @@
-#ifndef REDUNDANTVALUE_H
-#define REDUNDANTVALUE_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -26,4 +25,3 @@ signals:
 public slots:
 };
 
-#endif // REDUNDANTVALUE_H

@@ -1,5 +1,4 @@
-#ifndef DEVICEDISCOVERYMODELBRIDGE_H
-#define DEVICEDISCOVERYMODELBRIDGE_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -47,4 +46,3 @@ private slots:
 public slots:
 };
 
-#endif // DEVICEDISCOVERYMODELBRIDGE_H

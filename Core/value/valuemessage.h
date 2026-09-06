@@ -1,5 +1,4 @@
-#ifndef VALUEMESSAGE_H
-#define VALUEMESSAGE_H
+#pragma once
 
 #include <QObject>
 
@@ -38,4 +37,3 @@ signals:
 public slots:
 };
 
-#endif // VALUEMESSAGE_H

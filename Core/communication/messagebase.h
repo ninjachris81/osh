@@ -1,5 +1,4 @@
-#ifndef MESSAGEBASE_H
-#define MESSAGEBASE_H
+#pragma once
 
 #include <QObject>
 #include <QVariant>
@@ -48,4 +47,3 @@ signals:
 public slots:
 };
 
-#endif // MESSAGEBASE_H

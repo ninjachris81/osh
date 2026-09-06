@@ -1,5 +1,4 @@
-#ifndef ACTOR_QT_H
-#define ACTOR_QT_H
+#pragma once
 
 #define USES_ACTOR_QT
 
@@ -12,7 +11,7 @@
 #include <QVariant>
 
 namespace actor {
-SHARED_LIB_EXPORT Q_NAMESPACE
+Q_NAMESPACE_EXPORT(SHARED_LIB_EXPORT)
 
     enum class ACTOR_CMDS : int {
         ACTOR_CMD_UNKNOWN = ENUM_UNKNOWN,
@@ -44,4 +43,3 @@ SHARED_LIB_EXPORT Q_NAMESPACE
 }
 
 
-#endif // ACTOR_QT_H

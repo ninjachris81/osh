@@ -1,5 +1,4 @@
-#ifndef TOGGLEACTOR_H
-#define TOGGLEACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -31,4 +30,3 @@ signals:
 
 };
 
-#endif // TOGGLEACTOR_H

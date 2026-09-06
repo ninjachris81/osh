@@ -1,5 +1,4 @@
-#ifndef LOCALSTORAGE_H
-#define LOCALSTORAGE_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -39,4 +38,3 @@ signals:
 
 };
 
-#endif // LOCALSTORAGE_H

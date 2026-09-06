@@ -1,5 +1,4 @@
-#ifndef MCPREADER_H
-#define MCPREADER_H
+#pragma once
 
 #include <QObject>
 #include <QThread>
@@ -38,4 +37,3 @@ signals:
 public slots:
 };
 
-#endif // MCPREADER_H

@@ -1,5 +1,4 @@
-#ifndef CLIENTSYSTEMWARNINGSMANAGER_H
-#define CLIENTSYSTEMWARNINGSMANAGER_H
+#pragma once
 
 #include <QObject>
 
@@ -36,4 +35,3 @@ signals:
 public slots:
 };
 
-#endif // CLIENTSYSTEMWARNINGSMANAGER_H

@@ -1,5 +1,4 @@
-#ifndef BASICSCRIPTS_H
-#define BASICSCRIPTS_H
+#pragma once
 
 #include <QObject>
 #include "processor/server/scriptbase.h"
@@ -37,4 +36,3 @@ signals:
 
 };
 
-#endif // BASICSCRIPTS_H

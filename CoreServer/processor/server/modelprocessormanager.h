@@ -1,5 +1,4 @@
-#ifndef MODELPROCESSORMANAGER_H
-#define MODELPROCESSORMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QList>
@@ -73,4 +72,3 @@ signals:
 public slots:
 };
 
-#endif // MODELPROCESSORMANAGER_H

@@ -1,5 +1,4 @@
-#ifndef MANAGERREGISTRATION_H
-#define MANAGERREGISTRATION_H
+#pragma once
 
 #include <QObject>
 #include <QMap>
@@ -45,4 +44,3 @@ signals:
 public slots:
 };
 
-#endif // MANAGERREGISTRATION_H

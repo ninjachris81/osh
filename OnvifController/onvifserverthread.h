@@ -1,5 +1,4 @@
-#ifndef ONVIFSERVERTHREAD_H
-#define ONVIFSERVERTHREAD_H
+#pragma once
 #include <QThread>
 
 
@@ -22,6 +21,4 @@ public:
 protected:
     void run();
 };
-
-#endif // ONVIFSERVERTHREAD_H
 

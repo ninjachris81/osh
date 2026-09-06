@@ -1,5 +1,4 @@
-#ifndef SCRIPTBASE_H
-#define SCRIPTBASE_H
+#pragma once
 
 #include <QObject>
 #include <QTime>
@@ -62,4 +61,3 @@ signals:
 public slots:
 };
 
-#endif // SCRIPTBASE_H

@@ -1,5 +1,4 @@
-#ifndef CAMERAACTOR_H
-#define CAMERAACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -27,4 +26,3 @@ signals:
 
 };
 
-#endif // CAMERAACTOR_H

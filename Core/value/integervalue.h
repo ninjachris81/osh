@@ -1,5 +1,4 @@
-#ifndef INTEGERVALUE_H
-#define INTEGERVALUE_H
+#pragma once
 
 #include <QObject>
 
@@ -21,4 +20,3 @@ signals:
 public slots:
 };
 
-#endif // INTEGERVALUE_H

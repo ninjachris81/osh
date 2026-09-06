@@ -1,5 +1,4 @@
-#ifndef LOGGING_CATEGORIES_H
-#define LOGGING_CATEGORIES_H
+#pragma once
 
 #define LOGCAT_COMMON           "common"
 #define LOGCAT_ACTOR            "actor"
@@ -15,4 +14,3 @@
 #define LOGCAT_DOOR_UNLOCK      "door_unlock"
 #define LOGCAT_USER             "user"
 
-#endif // LOGGING_CATEGORIES_H

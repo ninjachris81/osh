@@ -1,0 +1,3 @@
+osh_add_qt_project(KMTronicRelayController QT_MODULES SerialPort)
+target_compile_definitions(KMTronicRelayController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(KMTronicRelayController PRIVATE Core CoreSerial)

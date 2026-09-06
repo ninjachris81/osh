@@ -1,5 +1,4 @@
-#ifndef DEVICESERVICEEXT_H
-#define DEVICESERVICEEXT_H
+#pragma once
 #include "onvif/deviceserviceextabst.h"
 
 
@@ -272,4 +271,3 @@ public:
 
 };
 
-#endif // DEVICESERVICEEXT_H

@@ -1,0 +1,2 @@
+osh_add_qt_project(DoorAudioService QT_MODULES Mqtt Sql)
+target_link_libraries(DoorAudioService PRIVATE Core DoorAudioController PJSIPSupport QMqttCommunicationManager)

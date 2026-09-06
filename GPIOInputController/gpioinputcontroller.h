@@ -1,5 +1,4 @@
-#ifndef GPIOINPUTCONTROLLER_H
-#define GPIOINPUTCONTROLLER_H
+#pragma once
 
 #include <QObject>
 
@@ -44,4 +43,3 @@ private slots:
 
 };
 
-#endif // GPIOINPUTCONTROLLER_H

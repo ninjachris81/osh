@@ -1,5 +1,4 @@
-#ifndef MQTT_H
-#define MQTT_H
+#pragma once
 
 #ifdef QT_VERSION
     #ifndef USES_MQTT_QT
@@ -76,4 +75,3 @@
 
 #define MQTT_JSON_MAX_LENGTH 256
 
-#endif // MQTT_H

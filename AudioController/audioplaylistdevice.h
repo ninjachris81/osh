@@ -1,5 +1,4 @@
-#ifndef AUDIOPLAYLISTDEVICE_H
-#define AUDIOPLAYLISTDEVICE_H
+#pragma once
 
 #include "qdir.h"
 #include "qrandom.h"
@@ -66,4 +65,3 @@ signals:
 
 };
 
-#endif // AUDIOPLAYLISTDEVICE_H

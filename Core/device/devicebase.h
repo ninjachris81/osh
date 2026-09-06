@@ -1,5 +1,4 @@
-#ifndef DEVICEBASE_H
-#define DEVICEBASE_H
+#pragma once
 
 #include <QObject>
 
@@ -40,4 +39,3 @@ signals:
 public slots:
 };
 
-#endif // DEVICEBASE_H

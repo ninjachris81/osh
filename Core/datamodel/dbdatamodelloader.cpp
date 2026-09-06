@@ -258,7 +258,7 @@ void DBDatamodelLoader::loadUsers(DynamicDatamodel *datamodel) {
             QString id = query.value(Identifyable::PROPERTY_ID).toString();
             QString name = query.value(OshUser::PROPERTY_NAME).toString();
             QString rights = query.value(OshUser::PROPERTY_RIGHTS).toString();
-            QStringList allRights = rights.split(" ", QString::SkipEmptyParts);
+            QStringList allRights = rights.split(" ", Qt::SkipEmptyParts);
             datamodel->addUser(id, name, allRights);
         }
     } else {

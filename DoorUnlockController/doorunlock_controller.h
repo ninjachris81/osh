@@ -1,5 +1,4 @@
-#ifndef DOORUNLOCK_CONTROLLER_H
-#define DOORUNLOCK_CONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -57,4 +56,3 @@ signals:
 
 };
 
-#endif // DOORUNLOCK_CONTROLLER_H

@@ -1,5 +1,4 @@
-#ifndef MQTT_QT_H
-#define MQTT_QT_H
+#pragma once
 
 #define USES_MQTT_QT
 
@@ -18,4 +17,3 @@ static QString MQTT_MESSAGE_TYPES[] = {
     MQTT_MESSAGE_TYPE_SR
 };
 
-#endif // MQTT_QT_H

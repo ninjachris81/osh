@@ -1,5 +1,4 @@
-#ifndef VALUEMANAGERUI_H
-#define VALUEMANAGERUI_H
+#pragma once
 
 #include <QObject>
 #include <QQmlEngine>
@@ -33,4 +32,3 @@ signals:
 public slots:
 };
 
-#endif // VALUEMANAGERUI_H

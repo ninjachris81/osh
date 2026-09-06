@@ -1,5 +1,4 @@
-#ifndef GPIOWATERMETERCONTROLLER_H
-#define GPIOWATERMETERCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -64,4 +63,3 @@ signals:
 
 };
 
-#endif // GPIOWATERMETERCONTROLLER_H

@@ -1,5 +1,4 @@
-#ifndef TIMERACTOR_H
-#define TIMERACTOR_H
+#pragma once
 
 #include <QObject>
 
@@ -25,4 +24,3 @@ protected:
 
 };
 
-#endif // TIMERACTOR_H

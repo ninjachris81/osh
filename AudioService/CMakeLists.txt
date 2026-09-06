@@ -1,0 +1,2 @@
+osh_add_qt_project(AudioService QT_MODULES Mqtt Sql Multimedia)
+target_link_libraries(AudioService PRIVATE Core AudioController QMqttCommunicationManager)

@@ -1,5 +1,4 @@
-#ifndef GPIOREADERBASE_H
-#define GPIOREADERBASE_H
+#pragma once
 
 #include <QObject>
 #include <QThread>
@@ -27,4 +26,3 @@ signals:
 
 };
 
-#endif // GPIOREADERBASE_H
