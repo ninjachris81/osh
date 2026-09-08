@@ -2,5 +2,8 @@
     "chat.tools.terminal.autoApprove": {
         "&": true,
         "true": true
+    },
+    "cmake.configureSettings": {
+        "CMAKE_PREFIX_PATH": "/home/osh/qt-6.8.2"
     }
 }

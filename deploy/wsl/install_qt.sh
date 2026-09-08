@@ -29,7 +29,7 @@ libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev \
 libxcb-util-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev \
 cmake ninja-build git python3 libasound2-dev libpulse-dev libswresample-dev \
 linux-headers-generic libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libpq-dev \
-libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
+libssl-dev openssl pkg-config libxext-dev
 
 if [ "$CLEAN_SOURCE" = true ] || { [ -d "$SRC_DIR" ] && [ ! -d "$SRC_DIR/.git" ]; }; then
     echo "Cleaning Qt source code..."
@@ -53,6 +53,7 @@ git submodule update --init --recursive \
   qtserialbus \
   qtserialport
 
+rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
@@ -65,6 +66,8 @@ cd "$BUILD_DIR"
     -nomake examples \
     -nomake tests \
     -sql-psql \
+    -openssl-linked \
+    -no-feature-ffmpeg \
     -- -G Ninja -DCMAKE_CXX_FLAGS="-include cstdint"
 
 cmake --build . --parallel
