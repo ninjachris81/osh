@@ -30,6 +30,7 @@ Makefile
 /Core/doorunlock/psk.h
 /deploy/rpi/localservices.txt
 build/
+build-deb/
 qtmqtt-build/
 qtmqtt-install/
 qtmqtt-build-rpi/

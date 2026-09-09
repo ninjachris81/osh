@@ -1,8 +1,8 @@
 [Unit]
-Description=OSH Audio Service
+Description=OSH GPIO Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
-After=network.target postgresql.service
+After=network.target
 
 [Service]
 ## use 'Type=forking' if the service backgrounds itself
@@ -12,16 +12,16 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 
-WorkingDirectory=/etc/osh/AudioService
+WorkingDirectory=/etc/osh/GPIOInputService
 
 #User=root
 
 ## here we can set custom environment variables
-ExecStart=/etc/osh/deploy/rpi/Services/AudioService/start.sh
-ExecStop=/etc/osh/deploy/rpi/Services/AudioService/stop.sh
+ExecStart=/etc/osh/instances/GPIOInputService/start.sh
+ExecStop=/etc/osh/deploy/rpi/Services/GPIOInputService/stop.sh
 
 # Useful during debugging; remove it once the service is working
-#StandardOutput=file:/var/log/osh_core_service.log
+#StandardOutput=file:/var/log/osh_mcp_23017_input_service.log
 #StandardError=syslog
 
 [Install]
