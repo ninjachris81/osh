@@ -8,7 +8,6 @@ sudo apt-get install -y \
   g++-aarch64-linux-gnu
   #qt6-base-dev \
   #qt6-base-private-dev \
-  #qt6-declarative-dev \
   #qt6-multimedia-dev \
   #qt6-serialbus-dev \
   #qt6-serialport-dev

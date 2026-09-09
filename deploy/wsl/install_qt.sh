@@ -7,6 +7,7 @@ INSTALL_PREFIX="$HOME/qt-${QT_VERSION}"
 SRC_DIR="$HOME/qt-src"
 BUILD_DIR="$HOME/qt-build"
 CLEAN_SOURCE=false
+BUILD_JOBS="${BUILD_JOBS:-3}"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -48,7 +49,6 @@ cd "$SRC_DIR"
 git submodule update --init --recursive \
   qtbase \
   qtshadertools \
-  qtdeclarative \
   qtmultimedia \
   qtserialbus \
   qtserialport
@@ -62,7 +62,7 @@ cd "$BUILD_DIR"
     -release \
     -opensource \
     -confirm-license \
-    -submodules qtbase,qtshadertools,qtdeclarative,qtmultimedia,qtserialbus,qtserialport \
+    -submodules qtbase,qtshadertools,qtmultimedia,qtserialbus,qtserialport \
     -nomake examples \
     -nomake tests \
     -sql-psql \
@@ -70,7 +70,7 @@ cd "$BUILD_DIR"
     -no-feature-ffmpeg \
     -- -G Ninja -DCMAKE_CXX_FLAGS="-include cstdint"
 
-cmake --build . --parallel
+cmake --build . --parallel "$BUILD_JOBS"
 cmake --install .
 
 if [ -f "$INSTALL_PREFIX/bin/qmake" ]; then

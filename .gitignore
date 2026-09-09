@@ -34,3 +34,5 @@ qtmqtt-build/
 qtmqtt-install/
 qtmqtt-build-rpi/
 qtmqtt-build-cmake/
+qtmqtt-install-rpi/
+qt-build-rpi/

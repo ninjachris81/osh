@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./deploy/rpi/copy_sysroot.sh <IP> <user>
+    ./deploy/rpi/copy_sysroot.sh [-clean] <IP> <user>
 
 Optional variables:
   RPI_SSH_PORT             SSH port (default: 22)
@@ -16,6 +16,12 @@ EOF
 if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
     usage
     exit 0
+fi
+
+CLEAN_SYSROOT=false
+if [[ ${1:-} == "-clean" ]]; then
+    CLEAN_SYSROOT=true
+    shift
 fi
 
 if [[ $# -ne 2 ]]; then
@@ -68,16 +74,26 @@ fi
 
 sudo mkdir -p "$RPI_SYSROOT"
 
+if [[ "$CLEAN_SYSROOT" == true ]]; then
+    sudo rm -rf "$RPI_SYSROOT"
+    sudo mkdir -p "$RPI_SYSROOT"
+fi
+
+if [[ -n "$(sudo find "$RPI_SYSROOT" -mindepth 1 -print -quit 2>/dev/null)" ]]; then
+    echo "RPI_SYSROOT is not empty: $RPI_SYSROOT" >&2
+    exit 5
+fi
+
 sudo rsync "${RSYNC_ARGS[@]}" \
-    --exclude=/dev \
-    --exclude=/proc \
-    --exclude=/sys \
-    --exclude=/tmp \
-    --exclude=/run \
-    --exclude=/mnt \
-    --exclude=/media \
-    --exclude=/var \
     -e "$RSYNC_SSH" \
+    --include='/lib/***' \
+    --include='/usr/' \
+    --include='/usr/lib/***' \
+    --include='/usr/include/***' \
+    --include='/usr/local/' \
+    --include='/usr/local/lib/***' \
+    --include='/usr/local/include/***' \
+    --exclude='*' \
     "$REMOTE:/" \
     "$RPI_SYSROOT/"
 
