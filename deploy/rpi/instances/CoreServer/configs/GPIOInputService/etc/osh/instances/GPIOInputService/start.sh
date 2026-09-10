@@ -1,4 +1,3 @@
 #!/bin/bash
 
-/etc/osh/deploy/rpi/Services/Shared/start.sh GPIOInputService
-
+/etc/osh/scripts/start.sh GPIOInputService

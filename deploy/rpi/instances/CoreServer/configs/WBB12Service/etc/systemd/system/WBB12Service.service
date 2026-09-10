@@ -1,5 +1,5 @@
 [Unit]
-Description=OSH Audio Service
+Description=OSH WBB12 Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
 After=network.target postgresql.service
@@ -12,16 +12,14 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 
-WorkingDirectory=/etc/osh/instances/AudioService
-
-#User=root
+WorkingDirectory=/etc/osh/instances/WBB12Service
 
 ## here we can set custom environment variables
 ExecStart=%d/start.sh
 ExecStop=%d/stop.sh
 
 # Useful during debugging; remove it once the service is working
-#StandardOutput=file:/var/log/osh_audio_service.log
+#StandardOutput=file:/var/log/osh_wbb12_service.log
 #StandardError=syslog
 
 [Install]
