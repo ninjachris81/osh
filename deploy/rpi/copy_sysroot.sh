@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./deploy/rpi/copy_sysroot.sh [-clean] <IP> <user>
+    ./deploy/rpi/copy_sysroot.sh [--clean] <IP> <user>
 
 Optional variables:
   RPI_SSH_PORT             SSH port (default: 22)
@@ -19,7 +19,7 @@ if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
 fi
 
 CLEAN_SYSROOT=false
-if [[ ${1:-} == "-clean" ]]; then
+if [[ ${1:-} == "--clean" ]]; then
     CLEAN_SYSROOT=true
     shift
 fi
@@ -72,29 +72,26 @@ if ! "${SSH_COMMAND[@]}" "$REMOTE" "$RPI_REMOTE_RSYNC_PATH --version" >/dev/null
     exit 4
 fi
 
-sudo mkdir -p "$RPI_SYSROOT"
-
 if [[ "$CLEAN_SYSROOT" == true ]]; then
     sudo rm -rf "$RPI_SYSROOT"
-    sudo mkdir -p "$RPI_SYSROOT"
 fi
 
-if [[ -n "$(sudo find "$RPI_SYSROOT" -mindepth 1 -print -quit 2>/dev/null)" ]]; then
-    echo "RPI_SYSROOT is not empty: $RPI_SYSROOT" >&2
-    exit 5
-fi
+sudo mkdir -p "$RPI_SYSROOT"
 
-sudo rsync "${RSYNC_ARGS[@]}" \
-    -e "$RSYNC_SSH" \
-    --include='/lib/***' \
-    --include='/usr/' \
-    --include='/usr/lib/***' \
-    --include='/usr/include/***' \
-    --include='/usr/local/' \
-    --include='/usr/local/lib/***' \
-    --include='/usr/local/include/***' \
-    --exclude='*' \
-    "$REMOTE:/" \
-    "$RPI_SYSROOT/"
+sudo mkdir -p "$RPI_SYSROOT/lib" "$RPI_SYSROOT/usr/lib" "$RPI_SYSROOT/usr/include" "$RPI_SYSROOT/usr/local"
+
+for dir in "/lib/" "/usr/lib/" "/usr/include/" "/usr/local/lib/" "/usr/local/include/"; do
+    echo "Kopiere $dir..."
+    sudo rsync "${RSYNC_ARGS[@]}" \
+        -e "$RSYNC_SSH" \
+        "$REMOTE:$dir" \
+        "$RPI_SYSROOT$dir" || true
+done
+
+sudo rm -f "$RPI_SYSROOT"/lib/libQt6*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/libQt6*
+
+sudo rm -f "$RPI_SYSROOT"/lib/libwiringPi*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/libwiringPi*
 
 echo "Sysroot copied from $REMOTE to $RPI_SYSROOT"

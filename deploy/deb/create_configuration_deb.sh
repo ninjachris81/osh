@@ -49,7 +49,7 @@ cd "$PACKAGE_ROOT"
 
 mkdir -p DEBIAN
 cat <<EOF > DEBIAN/control
-Package: osh-${DEB_NAME,,}-configuration
+Package: osh-${INSTANCE_NAME,,}-${DEB_NAME,,}
 Version: ${DEB_VERSION}
 Section: base
 Priority: optional
@@ -66,6 +66,8 @@ if [ "\$1" = "configure" ]; then
     systemctl daemon-reload
     systemctl enable "${DEB_NAME}.service"
     systemctl start "${DEB_NAME}.service"
+    udevadm control --reload-rules
+    udevadm trigger
 fi
 exit 0
 EOF

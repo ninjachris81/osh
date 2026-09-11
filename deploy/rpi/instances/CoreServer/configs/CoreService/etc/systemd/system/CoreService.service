@@ -12,11 +12,10 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 
-WorkingDirectory=/etc/osh/CoreService
+WorkingDirectory=/etc/osh/instances/CoreService
 
 ## here we can set custom environment variables
-ExecStart=%d/start.sh
-ExecStop=%d/stop.sh
+ExecStart=/etc/osh/instances/CoreService/start.sh
 
 # Useful during debugging; remove it once the service is working
 #StandardOutput=file:/var/log/osh_core_service.log

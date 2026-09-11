@@ -15,8 +15,7 @@ RestartSec=5s
 WorkingDirectory=/etc/osh/instances/WBB12Service
 
 ## here we can set custom environment variables
-ExecStart=%d/start.sh
-ExecStop=%d/stop.sh
+ExecStart=/etc/osh/instances/WBB12Service/start.sh
 
 # Useful during debugging; remove it once the service is working
 #StandardOutput=file:/var/log/osh_wbb12_service.log

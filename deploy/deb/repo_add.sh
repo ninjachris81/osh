@@ -21,8 +21,17 @@ if [[ $# -lt 1 || $# -gt 1 ]]; then
     exit 2
 fi
 
-REPO_BASE_DIR="/var/www/debian-repo"
-CODENAME="bookworm"                        # e.g., bookworm, trixie, jammy, focal
+if [[ ! -f "$1" ]]; then
+    echo "Error: File '$1' does not exist." >&2
+    exit 1
+fi
 
-sudo reprepro -b "$REPO_BASE_DIR" remove "$CODENAME" "$1"
+REPO_BASE_DIR="/var/www/debian-repo"
+CODENAME="bookworm"
+
+PKG_NAME=$(dpkg-deb -f "$1" Package)
+
+echo "Removing $PKG_NAME from $CODENAME"
+sudo reprepro -b "$REPO_BASE_DIR" remove "$CODENAME" "$PKG_NAME"
+echo "Adding $PKG_NAME to $CODENAME"
 sudo reprepro -b "$REPO_BASE_DIR" includedeb "$CODENAME" "$1"

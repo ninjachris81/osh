@@ -17,8 +17,7 @@ WorkingDirectory=/etc/osh/instances/AudioService
 #User=root
 
 ## here we can set custom environment variables
-ExecStart=%d/start.sh
-ExecStop=%d/stop.sh
+ExecStart=/etc/osh/instances/AudioService/start.sh
 
 # Useful during debugging; remove it once the service is working
 #StandardOutput=file:/var/log/osh_audio_service.log

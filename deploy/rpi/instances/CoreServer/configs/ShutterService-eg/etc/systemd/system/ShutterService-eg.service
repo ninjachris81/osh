@@ -15,8 +15,7 @@ RestartSec=5s
 WorkingDirectory=/etc/osh/instances/ShutterService-eg
 
 ## here we can set custom environment variables
-ExecStart=%d/start.sh
-ExecStop=%d/stop.sh
+ExecStart=/etc/osh/instances/ShutterService-eg/start.sh
 
 # Useful during debugging; remove it once the service is working
 #StandardOutput=file:/var/log/osh_shutter_service_eg.log
