@@ -49,11 +49,11 @@ cd "$PACKAGE_ROOT"
 
 mkdir -p DEBIAN
 cat <<EOF > DEBIAN/control
-Package: ${DEB_NAME}-Configuration
+Package: osh-${DEB_NAME,,}-configuration
 Version: ${DEB_VERSION}
 Section: base
 Priority: optional
-Architecture: amd64
+Architecture: arm64
 Maintainer: ${DEB_MAINTAINER:-ninjachris81 <${DEB_EMAIL:-cbstar@web.de}>}
 Description: ${DEB_NAME} Configuration package
 EOF

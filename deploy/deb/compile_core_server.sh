@@ -37,7 +37,7 @@ declare -A SERVICE_DEPENDENCIES=(
     ["AudioService"]="mpg123"
     ["CoreService"]="postgresql, mosquitto"
     ["DoorCameraService"]="livemedia-utils"
-    ["GPIOInputService"]="i2c-tools, libi2c-dev"
+    ["GPIOInputService"]="oshwiringpi, i2c-tools, libi2c-dev"
     ["RS485EnergyMeterService"]=""
     ["RS485RelayService"]=""
     ["ShutterService"]=""
@@ -111,6 +111,8 @@ done
 for service in "${!SERVICE_EXECUTABLES[@]}"; do
     version="${SERVICE_EXECUTABLES[$service]}"
     ./build_deb.sh "$INSTANCE_NAME" "$service" "$version" "$OUTPUT_DEB_DIR"
+    # correct filename
+    mv "$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${service}-${version}.deb" "$OUTPUT_DEB_DIR/${INSTANCE_NAME}/Osh-${service}-${version}.deb"
 done
 
 # Create Configuration DEB files
@@ -124,7 +126,10 @@ done
 for service in "${!SERVICE_CONFIGURATIONS[@]}"; do
     version="${SERVICE_CONFIGURATIONS[$service]}"
     FILENAME_PREFIX="${INSTANCE_NAME}-" ./build_deb.sh "$INSTANCE_NAME" "$service" "$version" "$OUTPUT_DEB_DIR"
+    # correct filename
+    mv "$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${INSTANCE_NAME}-${service}-${version}.deb" "$OUTPUT_DEB_DIR/${INSTANCE_NAME}/Osh-${INSTANCE_NAME}-${service}-${version}.deb"
 done
 
 ./compile_common.sh "$INSTANCE_NAME"
+./compile_wiringpi.sh "$INSTANCE_NAME"
 ./compile_qt6.sh "$INSTANCE_NAME"

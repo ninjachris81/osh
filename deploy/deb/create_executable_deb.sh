@@ -51,7 +51,7 @@ cd "$PACKAGE_ROOT"
 
 mkdir -p DEBIAN
 cat <<EOF > DEBIAN/control
-Package: ${DEB_NAME,,}
+Package: osh-${DEB_NAME,,}
 Version: ${DEB_VERSION}
 Depends: ${DEB_DEPENDENCIES}
 Section: base

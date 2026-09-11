@@ -1,5 +1,5 @@
 [Unit]
-Description=OSH GPIO Service
+Description=OSH Door Camera Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
 After=network.target
@@ -12,16 +12,16 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 
-WorkingDirectory=/etc/osh/instances/GPIOInputService
+WorkingDirectory=/etc/osh/instances/DoorCameraService
 
 #User=root
 
 ## here we can set custom environment variables
-ExecStart=%d/GPIOInputService/start.sh
-ExecStop=%d/GPIOInputService/stop.sh
+ExecStart=%d/start.sh
+ExecStop=%d/stop.sh
 
 # Useful during debugging; remove it once the service is working
-#StandardOutput=file:/var/log/osh_gpio_input_service.log
+#StandardOutput=file:/var/log/osh_door_camera_service.log
 #StandardError=syslog
 
 [Install]
