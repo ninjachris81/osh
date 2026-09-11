@@ -5,7 +5,7 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./deploy/deb/create_configuration_deb.sh <rpi_conf_dir> <instance-name> <deb-name> <deb-version> <output-deb-dir>
+    ./create_configuration_deb.sh <rpi_conf_dir> <instance-name> <deb-name> <deb-version> <output-deb-dir>
 
 Optional variables:
     DEB_EMAIL            Email of the maintainer (default: cbstar@web.de)
@@ -61,7 +61,7 @@ EOF
 cat <<EOF > DEBIAN/postinst
 #!/bin/bash
 set -e
-if [ "$1" = "configure" ]; then
+if [ "\$1" = "configure" ]; then
     echo "Enabling and starting ${DEB_NAME}.service..."
     systemctl daemon-reload
     systemctl enable "${DEB_NAME}.service"
@@ -74,7 +74,7 @@ chmod 755 DEBIAN/postinst
 cat <<EOF > DEBIAN/prerm
 #!/bin/bash
 set -e
-if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+if [ "\$1" = "remove" ] || [ "\$1" = "purge" ]; then
     echo "Stopping and disabling ${DEB_NAME}.service..."
     systemctl stop "${DEB_NAME}.service"
     systemctl disable "${DEB_NAME}.service"

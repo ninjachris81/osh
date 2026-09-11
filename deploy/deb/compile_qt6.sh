@@ -5,7 +5,7 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./compile_common.sh <instance_name>
+    ./compile_qt6.sh <instance_name>
 
 Optional variables:
     DEB_EMAIL            Email of the maintainer (default: cbstar@web.de)
@@ -27,17 +27,17 @@ fi
 
 pushd . > /dev/null
 INSTANCE_NAME="$1"
-DEB_NAME="OshCommon"
-DEB_VERSION="1.0"
+DEB_NAME="OshQt6"
+DEB_VERSION="6.8.2"
 
 DEB_FULL_NAME="${DEB_NAME}-${DEB_VERSION}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUTPUT_DEB_DIR="$ROOT_DIR/../../build-deb"
+OUTPUT_DEB_DIR=$(realpath -m "$ROOT_DIR/../../build-deb")
 PACKAGE_ROOT="$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${DEB_FULL_NAME}"
-RPI_CONF_DIR="$ROOT_DIR/../rpi/instances/${DEB_NAME}"
+QT_DIR="/opt/rpi/sysroot/usr/lib"
 
-if [[ ! -e "$RPI_CONF_DIR" ]]; then
-    echo "Required path does not exist: $RPI_CONF_DIR" >&2
+if [[ ! -e "$QT_DIR" ]]; then
+    echo "Required path does not exist: $QT_DIR" >&2
     exit 3
 fi
 
@@ -58,7 +58,10 @@ Description: ${DEB_NAME} package
 EOF
 
 # copy rootfs
-cp -R "$RPI_CONF_DIR/." "${PACKAGE_ROOT}"
+echo "Creating dir ${PACKAGE_ROOT}/usr/lib"
+mkdir -p "${PACKAGE_ROOT}/usr/lib"
+echo "📦 Copying Qt6 libraries to package root from $QT_DIR to ${PACKAGE_ROOT}/usr/lib"
+cp -d "$QT_DIR"/libQt6*.so* "${PACKAGE_ROOT}/usr/lib/"
 
 sudo chown -R root:root "$PACKAGE_ROOT"
 
