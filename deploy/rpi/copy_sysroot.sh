@@ -90,8 +90,14 @@ done
 
 sudo rm -f "$RPI_SYSROOT"/lib/libQt6*
 sudo rm -f "$RPI_SYSROOT"/usr/lib/libQt6*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/aarch64-linux-gnu/libQt6*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/aarch64-linux-gnuabihf/libQt6*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/aarch64-linux-musl/libQt6*
 
 sudo rm -f "$RPI_SYSROOT"/lib/libwiringPi*
 sudo rm -f "$RPI_SYSROOT"/usr/lib/libwiringPi*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/aarch64-linux-gnu/libwiringPi*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/aarch64-linux-gnuabihf/libwiringPi*
+sudo rm -f "$RPI_SYSROOT"/usr/lib/aarch64-linux-musl/libwiringPi*
 
 echo "Sysroot copied from $REMOTE to $RPI_SYSROOT"

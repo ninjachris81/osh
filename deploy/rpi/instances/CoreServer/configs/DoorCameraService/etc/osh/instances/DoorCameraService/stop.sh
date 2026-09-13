@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/etc/osh/scripts/stop.sh GPIOInputService
+/etc/osh/scripts/stop.sh DoorCameraService

@@ -2,8 +2,11 @@
 
 set -euo pipefail
 
+EXEC_NAME="$1"
+PID_NAME="${2:-$1}"
+
 PID_DIR="/run/osh"
-PID_FILE="$PID_DIR/$1.pid"
+PID_FILE="$PID_DIR/$PID_NAME.pid"
 
 mkdir -p "$PID_DIR"
 
@@ -18,5 +21,5 @@ fi
 
 echo "$$" > "$PID_FILE"
 
-cd "/etc/osh/$1"
-exec "./$1"
+cd "/etc/osh/$EXEC_NAME"
+exec "./$EXEC_NAME"

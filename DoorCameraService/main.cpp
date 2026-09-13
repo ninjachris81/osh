@@ -51,12 +51,11 @@ int main(int argc, char *argv[])
     DoorCameraController doorCameraController(&controllerManager, "frontDoorCameraController");
     controllerManager.registerController(&doorCameraController);
 
-    managerRegistration.init(&config);
-
     DigitalActor* doorRingActor = static_cast<DigitalActor*>(actorManager.getActor(config.getString(&doorCameraController, "doorRingActorId", "frontDoor.ring")));
     Q_ASSERT(doorRingActor != nullptr);
-
     doorCameraController.bindDoorRingActor(doorRingActor);
+
+    managerRegistration.init(&config);
 
     return a.exec();
 }

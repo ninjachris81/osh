@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/etc/osh/scripts/start.sh GPIOInputService
+/etc/osh/scripts/start.sh DoorCameraService

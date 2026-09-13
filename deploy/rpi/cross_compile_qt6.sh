@@ -4,16 +4,36 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./deploy/rpi/cross_compile_qt6.sh <sysroot> [qt-target-root]
+    ./deploy/rpi/cross_compile_qt6.sh [--clean] <sysroot> [qt-target-root]
 
 This builds Qt6 into the provided sysroot and then builds & installs qtmqtt
 into the cross target prefix.
 EOF
 }
 
-if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
-    usage
-    exit 0
+CLEAN=false
+POSITIONAL_ARGS=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --clean)
+            CLEAN=true
+            shift
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [[ ${#POSITIONAL_ARGS[@]} -gt 0 ]]; then
+    set -- "${POSITIONAL_ARGS[@]}"
+else
+    set --
 fi
 
 if [[ $# -lt 1 || $# -gt 2 ]]; then
@@ -29,10 +49,11 @@ RPI_QT_HOST_ROOT="${RPI_QT_HOST_ROOT:-$HOME/qt-6.8.2}"
 RPI_CROSS_PREFIX="aarch64-linux-gnu-"
 RPI_QT_BUILD_DIR="${RPI_QT_BUILD_DIR:-$ROOT_DIR/qt-build-rpi}"
 RPI_BUILD_JOBS="${RPI_BUILD_JOBS:-3}"
+RPI_INSTALL_PATH="${RPI_SYSROOT}/usr/local/qt6"
 RPI_QT_TARGET_MKSPEC="${RPI_QT_TARGET_MKSPEC:-linux-aarch64-gnu-g++}"
 RPI_QT_MKSPECS_DIR="${RPI_QT_MKSPECS_DIR:-$RPI_QT_SRC_DIR/qtbase/mkspecs}"
-RPI_QTMQTT_BUILD_DIR="${RPI_QTMQTT_BUILD_DIR:-$ROOT_DIR/qtmqtt-build-rpi}"
-RPI_QTMQTT_INSTALL="${RPI_QTMQTT_INSTALL:-$ROOT_DIR/qtmqtt-install-rpi}"
+RPI_QTMQTT_BUILD_DIR="${RPI_QT_BUILD_DIR}"
+RPI_QTMQTT_INSTALL="${RPI_INSTALL_PATH}"
 
 if [[ -n "${2:-}" ]]; then
     if [[ "${2}" == "/usr" ]]; then
@@ -73,8 +94,14 @@ for compiler in "$CROSS_C_COMPILER" "$CROSS_CXX_COMPILER"; do
 done
 
 QT6_CONFIG="$(find "$RPI_QT_ROOT" -path '*/cmake/Qt6/Qt6Config.cmake' -print -quit)"
-if [[ -z "$QT6_CONFIG" ]]; then
-    echo "Qt6Config.cmake was not found below $RPI_QT_ROOT. Building Qt 6 from source..."
+if [[ "$CLEAN" == "true" || -z "$QT6_CONFIG" ]]; then
+    if [[ "$CLEAN" == "true" ]]; then
+        echo "Clean build requested. Building Qt 6 from source..."
+    else
+        echo "Qt6Config.cmake was not found below $RPI_QT_ROOT. Building Qt 6 from source..."
+    fi
+    echo "Clearing Qt build directory: $RPI_QT_BUILD_DIR"
+
     rm -rf "$RPI_QT_BUILD_DIR"
     mkdir -p "$RPI_QT_BUILD_DIR"
     pushd "$RPI_QT_BUILD_DIR" >/dev/null
@@ -83,7 +110,7 @@ if [[ -z "$QT6_CONFIG" ]]; then
         -release -opensource -confirm-license \
         -submodules qtbase,qtshadertools,qtmultimedia,qtserialbus,qtserialport \
         -nomake examples -nomake tests -sql-psql -openssl-linked -no-feature-ffmpeg \
-        -- -G "Unix Makefiles" \
+        -- -G "Ninja" \
         -DCMAKE_C_COMPILER="$CROSS_C_COMPILER" \
         -DCMAKE_CXX_COMPILER="$CROSS_CXX_COMPILER" \
         -DCMAKE_SYSROOT="$RPI_SYSROOT" \
@@ -93,6 +120,7 @@ if [[ -z "$QT6_CONFIG" ]]; then
         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
         -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH \
         -DCMAKE_PREFIX_PATH="$RPI_SYSROOT/usr;$RPI_QT_HOST_ROOT" \
+        -DCMAKE_INSTALL_PREFIX="$RPI_INSTALL_PATH" \
         -DQT_HOST_PATH="$RPI_QT_HOST_ROOT" \
         -DQt6HostInfo_DIR="$RPI_QT_HOST_ROOT/lib/cmake/Qt6HostInfo" \
         -DQT_MKSPECS_DIR="$RPI_QT_MKSPECS_DIR" \
@@ -130,7 +158,7 @@ TOOLCHAIN_ARGS=(
     "-DCMAKE_SYSROOT=$RPI_SYSROOT"
     "-DCMAKE_C_COMPILER=$CROSS_C_COMPILER"
     "-DCMAKE_CXX_COMPILER=$CROSS_CXX_COMPILER"
-    "-DCMAKE_MAKE_PROGRAM=/usr/bin/gmake"
+    "-DCMAKE_MAKE_PROGRAM=$(command -v ninja)"
     "-DCMAKE_FIND_ROOT_PATH=$RPI_SYSROOT"
     "-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER"
     "-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY"
@@ -143,21 +171,21 @@ if [[ -f "$RPI_QTMQTT_BUILD_DIR/CMakeCache.txt" ]]; then
 fi
 
 cmake -S "$ROOT_DIR/qtmqtt" -B "$RPI_QTMQTT_BUILD_DIR" \
-    -G "Unix Makefiles" \
+    -G "Ninja" \
     -DCMAKE_BUILD_TYPE=Release \
-    "-DCMAKE_PREFIX_PATH=$TARGET_QT_PREFIX_PATH" \
+    -DCMAKE_PREFIX_PATH="$TARGET_QT_PREFIX_PATH" \
     -DQT_HOST_PATH="$RPI_QT_HOST_ROOT" \
     -DQt6HostInfo_DIR="$RPI_QT_HOST_ROOT/lib/cmake/Qt6HostInfo" \
     -DQT_MKSPECS_DIR="$RPI_QT_MKSPECS_DIR" \
     -DQT_QMAKE_TARGET_MKSPEC="$RPI_QT_TARGET_MKSPEC" \
     -DQT_GENERATE_SBOM=OFF \
-    "-DCMAKE_INSTALL_PREFIX=$RPI_QTMQTT_INSTALL" \
+    -DCMAKE_INSTALL_PREFIX="$RPI_QTMQTT_INSTALL" \
     -DQT_NO_PACKAGE_VERSION_CHECK=TRUE \
     -DQT_BUILD_EXAMPLES=OFF \
     -DQT_BUILD_TESTS=OFF \
     -DQT_BUILD_DOCS=OFF \
     "${TOOLCHAIN_ARGS[@]}"
 cmake --build "$RPI_QTMQTT_BUILD_DIR" --parallel "$RPI_BUILD_JOBS"
-cmake --install "$RPI_QTMQTT_BUILD_DIR"
+sudo cmake --install "$RPI_QTMQTT_BUILD_DIR"
 
 echo "Qt6 + qtmqtt cross-build completed: $RPI_QT_ROOT and $RPI_QTMQTT_INSTALL"
