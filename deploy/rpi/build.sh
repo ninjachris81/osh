@@ -56,17 +56,11 @@ else
     MAKE_CORE_COUNT=4
 fi
 
-cmake_prefix_args=()
-if [[ -n "${OSH_QT_ROOT:-}" ]]; then
-    cmake_prefix_args+=("-DCMAKE_PREFIX_PATH=$OSH_QT_ROOT")
-fi
-
 build_qtmqtt() {
     echo "Building QtMqtt in $QTMQTT_BUILD_DIR"
     cmake -S "$ROOT_DIR/qtmqtt" -B "$QTMQTT_BUILD_DIR" \
         -G "$CMAKE_GENERATOR" \
         -DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE" \
-        "${cmake_prefix_args[@]}" \
         -DCMAKE_INSTALL_PREFIX="$QTMQTT_INSTALL_DIR" \
         -DQT_BUILD_EXAMPLES=OFF \
         -DQT_BUILD_TESTS=OFF \
@@ -105,8 +99,6 @@ cmake -S "$ROOT_DIR" -B "$OSH_BUILD_DIR" \
     -G "$CMAKE_GENERATOR" \
     -DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE" \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-    "${cmake_prefix_args[@]}" \
-    -DOSH_QTMQTT_ROOT="$QTMQTT_INSTALL_DIR"
 
 echo "Building $BUILD_TARGET"
 cmake --build "$OSH_BUILD_DIR" --target "$BUILD_TARGET" --parallel "$MAKE_CORE_COUNT"

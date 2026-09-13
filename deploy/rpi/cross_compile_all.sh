@@ -24,6 +24,12 @@ if [[ $# -lt 1 || $# -gt 2 ]]; then
     exit 2
 fi
 
+sudo apt-get update
+sudo apt-get install -y \
+  gcc-aarch64-linux-gnu \
+  g++-aarch64-linux-gnu
+
+
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "[1/3] Building WiringPi"

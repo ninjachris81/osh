@@ -1,5 +1,5 @@
 QT -= gui
-QT += sql qml
+QT += sql
 
 TEMPLATE = lib
 DEFINES += MAKE_SHARED_LIB

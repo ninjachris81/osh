@@ -13,7 +13,7 @@ class SHARED_LIB_EXPORT LocalConfig : public QObject
 {
     Q_OBJECT
 public:
-    explicit LocalConfig(QObject *parent = nullptr);
+    explicit LocalConfig(QString configFile, QObject *parent = nullptr);
     ~LocalConfig();
 
     void updateValue(QString key, QVariant value);

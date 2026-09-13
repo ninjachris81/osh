@@ -44,28 +44,29 @@ fi
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 RPI_SYSROOT="$1"
-RPI_QT_SRC_DIR="${RPI_QT_SRC_DIR:-$HOME/qt-src}"
-RPI_QT_HOST_ROOT="${RPI_QT_HOST_ROOT:-$HOME/qt-6.8.2}"
+RPI_QT_SRC_DIR="${RPI_QT_SRC_DIR:-$ROOT_DIR/qt6}"
 RPI_CROSS_PREFIX="aarch64-linux-gnu-"
 RPI_QT_BUILD_DIR="${RPI_QT_BUILD_DIR:-$ROOT_DIR/qt-build-rpi}"
-RPI_BUILD_JOBS="${RPI_BUILD_JOBS:-3}"
-RPI_INSTALL_PATH="${RPI_SYSROOT}/usr/local/qt6"
+RPI_QT_HOST_ROOT="${RPI_QT_HOST_ROOT:-$HOME/qt-6.8.2}"
+RPI_BUILD_JOBS="${RPI_BUILD_JOBS:-4}"
 RPI_QT_TARGET_MKSPEC="${RPI_QT_TARGET_MKSPEC:-linux-aarch64-gnu-g++}"
 RPI_QT_MKSPECS_DIR="${RPI_QT_MKSPECS_DIR:-$RPI_QT_SRC_DIR/qtbase/mkspecs}"
-RPI_QTMQTT_BUILD_DIR="${RPI_QT_BUILD_DIR}"
-RPI_QTMQTT_INSTALL="${RPI_INSTALL_PATH}"
+RPI_QTMQTT_BUILD_DIR="${RPI_QTMQTT_BUILD_DIR:-$ROOT_DIR/qtmqtt-build-rpi}"
 
 if [[ -n "${2:-}" ]]; then
     if [[ "${2}" == "/usr" ]]; then
-        RPI_QT_ROOT="$RPI_SYSROOT/usr"
+        RPI_QT_ROOT="$RPI_SYSROOT/usr/local/qt6"
     elif [[ "${2}" == /* ]]; then
         RPI_QT_ROOT="$2"
     else
         RPI_QT_ROOT="$RPI_SYSROOT/$2"
     fi
 else
-    RPI_QT_ROOT="$RPI_SYSROOT/usr"
+    RPI_QT_ROOT="$RPI_SYSROOT/usr/local/qt6"
 fi
+
+RPI_INSTALL_PATH="$RPI_QT_ROOT"
+RPI_QTMQTT_INSTALL="$RPI_QT_ROOT"
 
 if [[ ! -e "$RPI_SYSROOT" ]]; then
     echo "Required path does not exist: $RPI_SYSROOT" >&2
@@ -106,10 +107,11 @@ if [[ "$CLEAN" == "true" || -z "$QT6_CONFIG" ]]; then
     mkdir -p "$RPI_QT_BUILD_DIR"
     pushd "$RPI_QT_BUILD_DIR" >/dev/null
     "$RPI_QT_SRC_DIR/configure" \
-        -prefix "$RPI_QT_ROOT" \
+        -prefix "$RPI_INSTALL_PATH" \
         -release -opensource -confirm-license \
         -submodules qtbase,qtshadertools,qtmultimedia,qtserialbus,qtserialport \
         -nomake examples -nomake tests -sql-psql -openssl-linked -no-feature-ffmpeg \
+        -qt-host-path "$RPI_QT_HOST_ROOT" \
         -- -G "Ninja" \
         -DCMAKE_C_COMPILER="$CROSS_C_COMPILER" \
         -DCMAKE_CXX_COMPILER="$CROSS_CXX_COMPILER" \
@@ -120,12 +122,13 @@ if [[ "$CLEAN" == "true" || -z "$QT6_CONFIG" ]]; then
         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
         -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH \
         -DCMAKE_PREFIX_PATH="$RPI_SYSROOT/usr;$RPI_QT_HOST_ROOT" \
-        -DCMAKE_INSTALL_PREFIX="$RPI_INSTALL_PATH" \
-        -DQT_HOST_PATH="$RPI_QT_HOST_ROOT" \
         -DQt6HostInfo_DIR="$RPI_QT_HOST_ROOT/lib/cmake/Qt6HostInfo" \
         -DQT_MKSPECS_DIR="$RPI_QT_MKSPECS_DIR" \
         -DQT_QMAKE_TARGET_MKSPEC="$RPI_QT_TARGET_MKSPEC" \
-        -DCMAKE_CXX_FLAGS="-include cstdint"
+        -DCMAKE_C_FLAGS="--sysroot=$RPI_SYSROOT -B$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -B$RPI_SYSROOT/lib/aarch64-linux-gnu" \
+        -DCMAKE_CXX_FLAGS="--sysroot=$RPI_SYSROOT -B$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -B$RPI_SYSROOT/lib/aarch64-linux-gnu -include cstdint" \
+        -DCMAKE_EXE_LINKER_FLAGS="--sysroot=$RPI_SYSROOT -L$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -L$RPI_SYSROOT/lib/aarch64-linux-gnu" \
+        -DCMAKE_SHARED_LINKER_FLAGS="--sysroot=$RPI_SYSROOT -L$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -L$RPI_SYSROOT/lib/aarch64-linux-gnu"
 
     cmake --build . --parallel "$RPI_BUILD_JOBS"
     sudo "$(command -v cmake)" --install .
@@ -144,7 +147,7 @@ if [[ -d "$QT6_PLATFORM_DIR" ]]; then
     sudo rm -rf "$QT6_PLATFORM_DIR"
 fi
 
-QT6_MKSPECS_DIR="$RPI_QT_ROOT/lib/aarch64-linux-gnu/qt6/mkspecs"
+QT6_MKSPECS_DIR="$RPI_INSTALL_PATH/lib/aarch64-linux-gnu/qt6/mkspecs"
 if [[ ! -d "$QT6_MKSPECS_DIR/linux-g++" ]]; then
     sudo mkdir -p "$QT6_MKSPECS_DIR"
     sudo ln -sfn "$RPI_QT_MKSPECS_DIR/linux-g++" "$QT6_MKSPECS_DIR/linux-g++"
@@ -158,6 +161,10 @@ TOOLCHAIN_ARGS=(
     "-DCMAKE_SYSROOT=$RPI_SYSROOT"
     "-DCMAKE_C_COMPILER=$CROSS_C_COMPILER"
     "-DCMAKE_CXX_COMPILER=$CROSS_CXX_COMPILER"
+    "-DCMAKE_C_FLAGS=--sysroot=$RPI_SYSROOT -B$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -B$RPI_SYSROOT/lib/aarch64-linux-gnu"
+    "-DCMAKE_CXX_FLAGS=--sysroot=$RPI_SYSROOT -B$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -B$RPI_SYSROOT/lib/aarch64-linux-gnu -include cstdint"
+    "-DCMAKE_EXE_LINKER_FLAGS=--sysroot=$RPI_SYSROOT -L$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -L$RPI_SYSROOT/lib/aarch64-linux-gnu"
+    "-DCMAKE_SHARED_LINKER_FLAGS=--sysroot=$RPI_SYSROOT -L$RPI_SYSROOT/usr/lib/aarch64-linux-gnu -L$RPI_SYSROOT/lib/aarch64-linux-gnu"
     "-DCMAKE_MAKE_PROGRAM=$(command -v ninja)"
     "-DCMAKE_FIND_ROOT_PATH=$RPI_SYSROOT"
     "-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER"

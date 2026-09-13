@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QCommandLineParser>
 
 #include "manager/managerregistration.h"
 #include "device/devicediscoverymanagerui.h"
@@ -23,8 +24,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+    QCommandLineParser parser;
+    parser.addPositionalArgument("config", "Configuration");
+    parser.process(app);
 
-    LocalConfig config;
+    LocalConfig config(parser.positionalArguments().value(0, "config.ini"));
 
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\nvalue.*=true\ndatamodel.*=true\ncommunication.*=true"));
 

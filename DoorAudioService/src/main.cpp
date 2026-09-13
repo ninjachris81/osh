@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <QCommandLineParser>
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
@@ -18,9 +19,12 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QCoreApplication app(argc, argv);
+    QCommandLineParser parser;
+    parser.addPositionalArgument("config", "Configuration");
+    parser.process(app);
 
-    LocalConfig config;
+    LocalConfig config(parser.positionalArguments().value(0, "config.ini"));
 
     ManagerRegistration managerRegistration(ManagerRegistration::CLIENT);
 
@@ -58,5 +62,5 @@ int main(int argc, char *argv[])
 
     doorAudioController.bindDoorRingActor(doorRingActor);
 
-    return a.exec();
+    return app.exec();
 }

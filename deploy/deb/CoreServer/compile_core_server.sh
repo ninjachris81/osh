@@ -3,7 +3,7 @@ set -euo pipefail
 
 INSTANCE_NAME="CoreServer"
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RPI_BIN_DIR="$ROOT_DIR/../../build-rpi"
 OUTPUT_DEB_DIR="$ROOT_DIR/../../build-deb"
 RPI_CONF_DIR="$ROOT_DIR/../rpi/instances/${INSTANCE_NAME}/configs"
@@ -17,6 +17,8 @@ if [[ ! -e "$RPI_BIN_DIR" ]]; then
     echo "Required path does not exist: $RPI_BIN_DIR" >&2
     exit 3
 fi
+
+cd ..
 
 sudo rm -rf "$OUTPUT_DEB_DIR/${INSTANCE_NAME}"
 
@@ -37,7 +39,7 @@ declare -A SERVICE_DEPENDENCIES=(
     ["AudioService"]="mpg123"
     ["CoreService"]="postgresql, mosquitto"
     ["DoorCameraService"]="livemedia-utils"
-    ["GPIOInputService"]="oshwiringpi, i2c-tools, libi2c-dev"
+    ["GPIOInputService"]="osh-wiringpi, i2c-tools, libi2c-dev"
     ["RS485EnergyMeterService"]=""
     ["RS485RelayService"]=""
     ["ShutterService"]=""

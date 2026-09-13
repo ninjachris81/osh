@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./deploy/rpi/cross_compile_osh_services.sh <sysroot> [qt-target-root]
+    ./deploy/rpi/cross_compile_osh_services.sh [--clean] <sysroot> [qt-target-root]
 
 Optional variables:
     RPI_QT_SRC_DIR      Qt 6.8.2 source tree (default: $HOME/qt-src)
@@ -13,6 +13,31 @@ Optional variables:
     RPI_BUILD_JOBS      Parallel build jobs (default: 2)
 EOF
 }
+
+CLEAN=false
+POSITIONAL_ARGS=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --clean)
+            CLEAN=true
+            shift
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [[ ${#POSITIONAL_ARGS[@]} -gt 0 ]]; then
+    set -- "${POSITIONAL_ARGS[@]}"
+else
+    set --
+fi
 
 if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
     usage
@@ -32,20 +57,23 @@ RPI_QT_HOST_ROOT="${RPI_QT_HOST_ROOT:-$HOME/qt-6.8.2}"
 RPI_CROSS_PREFIX="aarch64-linux-gnu-"
 RPI_BUILD_DIR="${RPI_BUILD_DIR:-$ROOT_DIR/build-rpi}"
 RPI_QT_BUILD_DIR="${RPI_QT_BUILD_DIR:-$ROOT_DIR/qt-build-rpi}"
-RPI_BUILD_JOBS="${RPI_BUILD_JOBS:-3}"
+RPI_BUILD_JOBS="${RPI_BUILD_JOBS:-4}"
 RPI_QT_TARGET_MKSPEC="${RPI_QT_TARGET_MKSPEC:-linux-aarch64-gnu-g++}"
-RPI_QT_MKSPECS_DIR="${RPI_QT_MKSPECS_DIR:-$RPI_QT_SRC_DIR/qtbase/mkspecs}"
+
+if [[ "$CLEAN" == "true" ]]; then
+    rm -rf "$RPI_BUILD_DIR"
+fi
 
 if [[ -n "${2:-}" ]]; then
     if [[ "$2" == "/usr" ]]; then
-        RPI_QT_ROOT="$RPI_SYSROOT/usr"
+        RPI_QT_ROOT="$RPI_SYSROOT/usr/local/qt6"
     elif [[ "$2" == /* ]]; then
         RPI_QT_ROOT="$2"
     else
         RPI_QT_ROOT="$RPI_SYSROOT/$2"
     fi
 else
-    RPI_QT_ROOT="$RPI_SYSROOT/usr"
+    RPI_QT_ROOT="$RPI_SYSROOT/usr/local/qt6"
 fi
 
 if [[ ! "$RPI_BUILD_JOBS" =~ ^[1-9][0-9]*$ ]]; then
@@ -95,7 +123,6 @@ cmake -S "$ROOT_DIR" -B "$RPI_BUILD_DIR" \
     "-DCMAKE_PREFIX_PATH=${TARGET_QT_PREFIX_PATH}" \
     -DQT_HOST_PATH="$RPI_QT_HOST_ROOT" \
     -DQt6HostInfo_DIR="$RPI_QT_HOST_ROOT/lib/cmake/Qt6HostInfo" \
-    -DQT_MKSPECS_DIR="$RPI_QT_MKSPECS_DIR" \
     -DQT_QMAKE_TARGET_MKSPEC="$RPI_QT_TARGET_MKSPEC" \
     -DQT_GENERATE_SBOM=OFF \
     "${TOOLCHAIN_ARGS[@]}"

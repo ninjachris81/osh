@@ -4,9 +4,9 @@
 #include <QFile>
 #include "identifyable.h"
 
-LocalConfig::LocalConfig(QObject *parent) : QObject(parent)
+LocalConfig::LocalConfig(QString configFile, QObject *parent) : QObject(parent)
 {
-    m_settings = new QSettings("config.ini", QSettings::IniFormat);
+    m_settings = new QSettings(configFile, QSettings::IniFormat);
     qDebug() << "Config file" << m_settings->fileName();
     if (!QFile(m_settings->fileName()).exists()) {
         qDebug() << "Creating new config file";

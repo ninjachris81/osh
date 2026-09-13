@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <QCommandLineParser>
 #include <QDebug>
 
 #include "config/localconfig.h"
@@ -8,9 +9,12 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QCoreApplication app(argc, argv);
+    QCommandLineParser parser;
+    parser.addPositionalArgument("config", "Configuration");
+    parser.process(app);
 
-    LocalConfig config;
+    LocalConfig config(parser.positionalArguments().value(0, "config.ini"));
 
     QString pins = config.getString("pins", "");       // e.g. "3 21 33"
     QList<int> pinList;
@@ -51,5 +55,5 @@ int main(int argc, char *argv[])
     reader->start();
 
 
-    return a.exec();
+    return app.exec();
 }

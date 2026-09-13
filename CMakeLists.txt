@@ -8,33 +8,21 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(OSH_QT_ROOT "D:/Qt2/6.8.3/mingw_64" CACHE PATH "Qt 6 installation used by OSH")
-if(EXISTS "${OSH_QT_ROOT}/lib/cmake/Qt6/Qt6Config.cmake")
-    list(PREPEND CMAKE_PREFIX_PATH "${OSH_QT_ROOT}")
-endif()
-set(OSH_QTMQTT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/qtmqtt-install" CACHE PATH "Installed Qt MQTT module")
-if(EXISTS "${OSH_QTMQTT_ROOT}/lib/cmake/Qt6Mqtt/Qt6MqttConfig.cmake")
-    list(PREPEND CMAKE_PREFIX_PATH "${OSH_QTMQTT_ROOT}")
-    set(Qt6Mqtt_DIR "${OSH_QTMQTT_ROOT}/lib/cmake/Qt6Mqtt" CACHE PATH "Qt MQTT CMake package")
-elseif(CMAKE_LIBRARY_ARCHITECTURE AND EXISTS "${OSH_QTMQTT_ROOT}/lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/Qt6Mqtt/Qt6MqttConfig.cmake")
-    set(Qt6Mqtt_DIR "${OSH_QTMQTT_ROOT}/lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/Qt6Mqtt" CACHE PATH "Qt6Mqtt CMake package")
-endif()
-
 find_package(Qt6 6.8 REQUIRED COMPONENTS
-    Core Gui Multimedia Mqtt Network Qml Quick SerialBus SerialPort Sql
+    Core Multimedia Mqtt Network SerialBus SerialPort Sql
 )
 
 include(cmake/OSHProject.cmake)
 
 add_subdirectory(Core)
-add_subdirectory(CoreProcessorJS)
+#add_subdirectory(CoreProcessorJS)
 add_subdirectory(CoreSerial)
 add_subdirectory(CoreServer)
-add_subdirectory(CoreSimulation)
-add_subdirectory(CoreUI)
+#add_subdirectory(CoreSimulation)
+#add_subdirectory(CoreUI)
 add_subdirectory(PJSIPSupport)
 add_subdirectory(QMqttCommunicationManager)
-add_subdirectory(onviflibs)
+#add_subdirectory(onviflibs)
 
 add_subdirectory(AudioController)
 add_subdirectory(DoorAudioController)
@@ -70,9 +58,9 @@ add_subdirectory(RS232InputService)
 add_subdirectory(RS232WaterMeterService)
 add_subdirectory(RS485EnergyMeterService)
 add_subdirectory(RS485RelayService)
-add_subdirectory(ScriptingTestService)
+#add_subdirectory(ScriptingTestService)
 add_subdirectory(ShutterService)
-add_subdirectory(TestService)
+#add_subdirectory(TestService)
 add_subdirectory(WBB12Service)
 
 add_custom_target(OSHServices)
@@ -91,14 +79,14 @@ add_dependencies(OSHServices
     RS485EnergyMeterService
     RS485RelayService
     ShutterService
-    TestService
+    #TestService
     WBB12Service
 )
 
 if(UNIX)
     install(TARGETS
-        AudioController AudioService Core CoreProcessorJS CoreSerial CoreServer
-        CoreService CoreServiceSimulator CoreSimulation CoreUI DoorAudioController
+        AudioController AudioService Core CoreSerial CoreServer
+        CoreService CoreServiceSimulator DoorAudioController
         DoorAudioService DoorCameraController DoorCameraService DoorUnlockController
         DoorUnlockService GPIOInputController GPIOInputService GPIOInputTest
         GPIOWaterMeterController GPIOWaterMeterService HomeConnectController
@@ -106,12 +94,8 @@ if(UNIX)
         OBISService OnvifController OnvifService PJSIPSupport QMqttCommunicationManager
         RS232InputController RS232InputService RS232WaterMeterController
         RS232WaterMeterService RS485EnergyMeterController RS485EnergyMeterService
-        RS485RelayController RS485RelayService ScriptingTestService ShutterController
-        ShutterService TestService WBB12Controller WBB12Service
-        OnvifAnalyticsLib OnvifDeviceIOLib OnvifDisplayLib OnvifImagingLib OnvifMediaLib
-        OnvifPTZLib OnvifReceiverLib OnvifRecordingControlLib OnvifRecordingSearchLib
-        OnvifReplayControlLib OnvifVideoAnalyticsDeviceLib OnvifDeviceLib
-        OnvifDiscoveryLib OnvifEventLib
+        RS485RelayController RS485RelayService ShutterController
+        ShutterService WBB12Controller WBB12Service
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib

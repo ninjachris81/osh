@@ -1,2 +1,2 @@
-osh_add_qt_project(CoreServiceSimulator QT_MODULES Mqtt Qml Sql)
+osh_add_qt_project(CoreServiceSimulator QT_MODULES Mqtt Sql)
 target_link_libraries(CoreServiceSimulator PRIVATE Core CoreServer CoreSimulation QMqttCommunicationManager)

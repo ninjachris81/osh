@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT      -= gui
-QT      += mqtt qml sql
+QT      += mqtt sql
 
 TARGET = CoreSimulation
 TEMPLATE = lib

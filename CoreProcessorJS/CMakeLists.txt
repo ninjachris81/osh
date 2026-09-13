@@ -1,2 +1,2 @@
-osh_add_qt_project(CoreProcessorJS QT_MODULES Qml Sql)
+osh_add_qt_project(CoreProcessorJS QT_MODULES Sql)
 target_compile_definitions(CoreProcessorJS PRIVATE MAKE_SHARED_LIB)

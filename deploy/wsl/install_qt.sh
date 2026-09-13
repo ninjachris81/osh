@@ -2,25 +2,15 @@
 
 set -e
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
 QT_VERSION="6.8.2"
 INSTALL_PREFIX="$HOME/qt-${QT_VERSION}"
-SRC_DIR="$HOME/qt-src"
-BUILD_DIR="$HOME/qt-build"
-CLEAN_SOURCE=false
+SRC_DIR="$ROOT_DIR/qt6"
+BUILD_DIR="$ROOT_DIR/qt-build"
 BUILD_JOBS="${BUILD_JOBS:-3}"
 
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --clean)
-            CLEAN_SOURCE=true
-            shift
-            ;;
-        *)
-            echo "Unbekannter Parameter: $1"
-            exit 1
-            ;;
-    esac
-done
+cd "$ROOT_DIR"
 
 sudo apt-get update
 sudo apt-get install -y build-essential libgl1-mesa-dev libglu1-mesa-dev \
@@ -32,17 +22,10 @@ cmake ninja-build git python3 libasound2-dev libpulse-dev libswresample-dev \
 linux-headers-generic libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libpq-dev \
 libssl-dev openssl pkg-config libxext-dev
 
-if [ "$CLEAN_SOURCE" = true ] || { [ -d "$SRC_DIR" ] && [ ! -d "$SRC_DIR/.git" ]; }; then
-    echo "Cleaning Qt source code..."
-    rm -rf "$SRC_DIR"
-fi
+cd "$ROOT_DIR"
 
-if [ ! -d "$SRC_DIR" ]; then
-    echo "Cloning Qt source code..."
-    git clone --branch ${QT_VERSION} https://code.qt.io/qt/qt5.git "$SRC_DIR"
-else
-    echo "Using existing Qt source code..."
-fi
+# skip recursive update for qt6 as we will handle it separately
+git submodule update --init qt6
 
 cd "$SRC_DIR"
 
@@ -78,3 +61,29 @@ if [ -f "$INSTALL_PREFIX/bin/qmake" ]; then
 else
     exit 1
 fi
+
+
+cd "$ROOT_DIR"
+
+# Build and install qtmqtt
+git submodule update --init --recursive qtmqtt
+
+rm -rf qtmqtt-build qtmqtt-install
+
+cmake -S qtmqtt -B qtmqtt-build \
+  -G Ninja \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
+  -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"
+
+cmake --build qtmqtt-build --parallel
+cmake --install qtmqtt-build
+
+cmake -S . -B build \
+  -G Ninja \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  -DCMAKE_C_COMPILER=/usr/bin/gcc \
+  -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
+  -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
+  -DQt6Mqtt_DIR="$INSTALL_PREFIX/lib/cmake/Qt6Mqtt"
