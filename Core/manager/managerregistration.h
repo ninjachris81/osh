@@ -31,6 +31,8 @@ public:
 
     void init(LocalConfig *config);
 
+    void start();
+
     QStringList managerNames();
 
     INSTANCE_ROLE instanceRole();

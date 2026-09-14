@@ -70,5 +70,7 @@ int main(int argc, char *argv[])
 
     doorUnlockController.bindActors(doorActor, doorRelayActor);
 
+    managerRegistration.start();
+
     return app.exec();
 }

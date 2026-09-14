@@ -62,5 +62,7 @@ int main(int argc, char *argv[])
 
     doorAudioController.bindDoorRingActor(doorRingActor);
 
+    managerRegistration.start();
+
     return app.exec();
 }

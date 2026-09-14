@@ -27,7 +27,7 @@ void CommunicationManagerBase::init(LocalConfig* config) {
     _init(config);
 }
 
-void CommunicationManagerBase::postInit() {
+void CommunicationManagerBase::start() {
     iDebug() << Q_FUNC_INFO;
 
     QStringListIterator it(managerRegistration()->managerNames());

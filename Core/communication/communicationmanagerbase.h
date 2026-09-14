@@ -22,7 +22,7 @@ public:
 
     quint64 sendMessage(MessageBase &message);
     /*virtual*/ void init(LocalConfig* config) override;
-    /*virtual*/ void postInit() override;
+    /*virtual*/ void start() override;
 
     /*virtual*/ QString id() final;
 

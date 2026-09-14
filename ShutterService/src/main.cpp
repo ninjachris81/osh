@@ -88,5 +88,7 @@ int main(int argc, char *argv[])
         shutterController.bindActor(shutterActor, relayActorUp, relayActorDown);
     }
 
+    managerRegistration.start();
+
     return app.exec();
 }

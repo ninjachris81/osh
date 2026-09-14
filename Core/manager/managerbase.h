@@ -25,7 +25,7 @@ public:
 
     virtual void init(LocalConfig* config) = 0;
 
-    virtual void postInit() {}
+    virtual void start() {}
 
     virtual bool isPriorityManager() {
         return false;

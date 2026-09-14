@@ -30,7 +30,7 @@ void ControllerManager::init(LocalConfig* config) {
     connect(commManager, &CommunicationManagerBase::connected, this, &ControllerManager::onStart);
 }
 
-void ControllerManager::postInit() {
+void ControllerManager::start() {
     iDebug() << Q_FUNC_INFO;
 
     QMapIterator<QString, ControllerBase*> it(m_controllers);

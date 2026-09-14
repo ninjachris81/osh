@@ -69,5 +69,7 @@ int main(int argc, char *argv[])
         obisController.bindValue(value);
     }
 
+    managerRegistration.start();
+
     return app.exec();
 }

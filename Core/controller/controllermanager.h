@@ -21,7 +21,7 @@ public:
 
     /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ void postInit() override;
+    /*virtual*/ void start() override;
 
     /*virtual*/ QString id() override;
 

@@ -71,5 +71,7 @@ int main(int argc, char *argv[])
         inputController.bindValue(value);
     }
 
+    managerRegistration.start();
+
     return app.exec();
 }

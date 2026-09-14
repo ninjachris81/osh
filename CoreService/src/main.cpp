@@ -73,5 +73,7 @@ int main(int argc, char *argv[])
 
     //toggleController.bindManager(&actorManager, &valueManager);
 
+    managerRegistration.start();
+
     return app.exec();
 }

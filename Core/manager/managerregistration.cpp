@@ -71,15 +71,15 @@ void ManagerRegistration::init(LocalConfig* config) {
             it.value()->init(config);
         }
     }
+}
 
-    // last stage: post init
-    iDebug() << "Post init";
+void ManagerRegistration::start() {
+    iDebug() << Q_FUNC_INFO;
 
-    it.toFront();
+    QMapIterator<QString, ManagerBase*> it(m_managers);
     while (it.hasNext()) {
         it.next();
-
-        it.value()->postInit();
+        it.value()->start();
     }
 }
 

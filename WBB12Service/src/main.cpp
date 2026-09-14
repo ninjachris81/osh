@@ -61,5 +61,7 @@ int main(int argc, char *argv[])
 
     wbb12Controller.bindValueManager(&valueManager, &actorManager, datamodelManager.datamodel());
 
+    managerRegistration.start();
+
     return app.exec();
 }

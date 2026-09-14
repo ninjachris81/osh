@@ -56,5 +56,7 @@ int main(int argc, char *argv[])
 
     managerRegistration.init(&config);
 
+    managerRegistration.start();
+
     return app.exec();
 }

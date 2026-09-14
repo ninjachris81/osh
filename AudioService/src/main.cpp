@@ -63,5 +63,7 @@ int main(int argc, char *argv[])
 
     audioController.loadAudioActors(datamodelManager.datamodel(), &valueManager);
 
+    managerRegistration.start();
+
     return app.exec();
 }

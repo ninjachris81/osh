@@ -61,5 +61,7 @@ int main(int argc, char *argv[])
 
     energyMeterController.bindValueManager(&valueManager, datamodelManager.datamodel());
 
+    managerRegistration.start();
+
     return app.exec();
 }

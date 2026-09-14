@@ -81,5 +81,7 @@ int main(int argc, char *argv[])
         relayController.bindActor(actor);
     }
 
+    managerRegistration.start();
+
     return app.exec();
 }

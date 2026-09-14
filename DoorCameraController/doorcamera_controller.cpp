@@ -45,6 +45,8 @@ void DoorCameraController::handleMessage(ControllerMessage *msg) {
 }
 
 void DoorCameraController::bindDoorRingActor(DigitalActor *doorRingActor) {
+    iDebug() << Q_FUNC_INFO << doorRingActor->fullId();
+
     this->m_doorRingActor = doorRingActor;
 }
 

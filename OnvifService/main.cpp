@@ -104,5 +104,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "RUNNING";
 
+    managerRegistration.start();
+
     return app.exec();
 }

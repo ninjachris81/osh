@@ -59,5 +59,7 @@ int main(int argc, char *argv[])
     ValueGroup *actorGroup = datamodelManager.datamodel()->valueGroup(homeConnectController.id());
     Q_ASSERT(actorGroup != nullptr);
 
+    managerRegistration.start();
+
     return app.exec();
 }

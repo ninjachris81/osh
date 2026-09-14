@@ -59,5 +59,7 @@ int main(int argc, char *argv[])
 
     waterLevelController.bindValueManager(&valueManager, datamodelManager.datamodel());
 
+    managerRegistration.start();
+
     return app.exec();
 }

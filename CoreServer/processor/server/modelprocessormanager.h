@@ -33,15 +33,13 @@ public:
 
     /*virtual*/ void init(LocalConfig* config) override;
 
-    /*virtual*/ void postInit() override;
+    /*virtual*/ void start() override;
 
     /*virtual*/ QString id() override;
 
     /*virtual*/ MessageBase::MESSAGE_TYPE getMessageType() override;
 
     /*virtual*/ void handleReceivedMessage(MessageBase* msg) override;
-
-    void start();
 
     void stop();
 

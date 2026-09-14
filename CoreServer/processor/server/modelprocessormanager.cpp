@@ -81,7 +81,7 @@ void ModelProcessorManager::init(LocalConfig* config) {
 
 }
 
-void ModelProcessorManager::postInit() {
+void ModelProcessorManager::start() {
     iDebug() << Q_FUNC_INFO;
 
     m_processorTasks = m_dmManager->datamodel()->processorTasks();
@@ -95,7 +95,7 @@ void ModelProcessorManager::postInit() {
         }
     }
 
-    start();
+    m_scheduleTimer.start();
 }
 
 void ModelProcessorManager::onTriggerScriptTask() {
@@ -121,12 +121,6 @@ MessageBase::MESSAGE_TYPE ModelProcessorManager::getMessageType() {
 
 void ModelProcessorManager::handleReceivedMessage(MessageBase* msg) {
     Q_UNUSED(msg)
-}
-
-void ModelProcessorManager::start() {
-    iDebug() << Q_FUNC_INFO;
-
-    m_scheduleTimer.start();
 }
 
 void ModelProcessorManager::stop() {
