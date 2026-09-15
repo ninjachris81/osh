@@ -59,6 +59,12 @@ EOF
 
 # copy rootfs
 cp -R "$RPI_CONF_DIR/." "${PACKAGE_ROOT}"
+
+# copy apt_update_all.sh script
+mkdir -p "$PACKAGE_ROOT/etc/osh/scripts"
+cp "$ROOT_DIR/$INSTANCE_NAME/apt_update_all.sh" "$PACKAGE_ROOT/etc/osh/scripts"
+cp "$ROOT_DIR/$INSTANCE_NAME/services.sh" "$PACKAGE_ROOT/etc/osh/scripts"
+
 sudo chown -R root:root "$PACKAGE_ROOT"
 
 popd > /dev/null

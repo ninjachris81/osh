@@ -18,21 +18,11 @@ if [[ ! -e "$RPI_BIN_DIR" ]]; then
     exit 3
 fi
 
+source services.sh
+
 cd ..
 
 sudo rm -rf "$OUTPUT_DEB_DIR/${INSTANCE_NAME}"
-
-# Define executables and their versions in an associative array
-declare -A SERVICE_EXECUTABLES=(
-    ["AudioService"]="1.0"
-    ["CoreService"]="1.0"
-    ["DoorCameraService"]="1.0"
-    ["GPIOInputService"]="1.0"
-    ["RS485EnergyMeterService"]="1.0"
-    ["RS485RelayService"]="1.0"
-    ["ShutterService"]="1.0"
-    ["WBB12Service"]="1.0"
-)
 
 # Define service dependencies
 declare -A SERVICE_DEPENDENCIES=(
@@ -68,20 +58,6 @@ declare -A SERVICE_LIBRARIES=(
     ["RS485RelayService"]="Core CoreSerial RS485RelayController QMqttCommunicationManager"
     ["ShutterService"]="Core ShutterController QMqttCommunicationManager"
     ["WBB12Service"]="Core CoreSerial WBB12Controller QMqttCommunicationManager"
-)
-
-# Define services and their versions in an associative array
-declare -A SERVICE_CONFIGURATIONS=(
-    ["AudioService"]="1.0"
-    ["CoreService"]="1.0"
-    ["DoorCameraService"]="1.0"
-    ["GPIOInputService"]="1.0"
-    ["RS485EnergyMeterService"]="1.0"
-    ["RS485RelayService-lights"]="1.0"
-    ["RS485RelayService-shutters"]="1.0"
-    ["ShutterService-eg"]="1.0"
-    ["ShutterService-og"]="1.0"
-    ["WBB12Service"]="1.0"
 )
 
 if [ "${#SERVICE_EXECUTABLES[@]}" -ne "${#SERVICE_DEPENDENCIES[@]}" ]; then

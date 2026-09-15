@@ -35,10 +35,17 @@ OUTPUT_DEB_DIR="$5"
 DEB_FULL_NAME="${INSTANCE_NAME}-${DEB_NAME}-${DEB_VERSION}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGE_ROOT="$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${DEB_FULL_NAME}"
+TARGET_INSTANCE_DIR="/etc/osh/instances/${DEB_NAME}"
 
 if [[ ! -e "$RPI_CONF_DIR" ]]; then
     echo "Required path does not exist: $RPI_CONF_DIR" >&2
     exit 3
+fi
+
+HAS_UDEV_RULES=false
+if [ -d "$RPI_CONF_DIR/etc/udev" ]; then
+    echo "Found udev directory in $RPI_CONF_DIR/etc/udev"
+    HAS_UDEV_RULES=true
 fi
 
 
@@ -66,8 +73,17 @@ if [ "\$1" = "configure" ]; then
     systemctl daemon-reload
     systemctl enable "${DEB_NAME}.service"
     systemctl start "${DEB_NAME}.service"
-    udevadm control --reload-rules
-    udevadm trigger
+
+    HAS_UDEV_RULES=$HAS_UDEV_RULES
+    if [ \$HAS_UDEV_RULES = true ]; then
+        udevadm control --reload-rules
+        udevadm trigger
+    fi
+
+    if [ -f "${TARGET_INSTANCE_DIR}/configure.sh" ]; then
+        echo "Running configure.sh for ${DEB_NAME} instance..."
+        bash "${TARGET_INSTANCE_DIR}/configure.sh"
+    fi
 fi
 exit 0
 EOF
