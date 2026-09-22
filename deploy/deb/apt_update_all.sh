@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source services.sh
+source instance_config.sh
 
 sudo apt update
 

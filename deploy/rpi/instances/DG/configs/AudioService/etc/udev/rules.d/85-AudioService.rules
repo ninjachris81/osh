@@ -1,0 +1,5 @@
+SUBSYSTEM!="sound", GOTO="my_usb_audio_end"
+ACTION!="add", GOTO="my_usb_audio_end"
+
+
+LABEL="my_usb_audio_end"

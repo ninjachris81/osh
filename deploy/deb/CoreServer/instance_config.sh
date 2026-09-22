@@ -1,3 +1,5 @@
+INSTANCE_NAME="CoreServer"
+
 declare -A SERVICE_EXECUTABLES=(
     ["AudioService"]="1.0"
     ["CoreService"]="1.0"

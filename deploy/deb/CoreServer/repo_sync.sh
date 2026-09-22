@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTANCE_NAME="CoreServer"
-
-source services.sh
+source instance_config.sh
 
 for service in "${!SERVICE_EXECUTABLES[@]}"; do
     version="${SERVICE_EXECUTABLES[$service]}"

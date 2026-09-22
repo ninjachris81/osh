@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTANCE_NAME="CoreServer"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "Root directory: $ROOT_DIR"
+echo "Instance name: $INSTANCE_NAME"
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RPI_BIN_DIR="$ROOT_DIR/../../build-rpi"
 OUTPUT_DEB_DIR="$ROOT_DIR/../../build-deb"
 RPI_CONF_DIR="$ROOT_DIR/../rpi/instances/${INSTANCE_NAME}/configs"
@@ -18,62 +19,9 @@ if [[ ! -e "$RPI_BIN_DIR" ]]; then
     exit 3
 fi
 
-source services.sh
-
-cd ..
+source calculate_dependencies.sh
 
 sudo rm -rf "$OUTPUT_DEB_DIR/${INSTANCE_NAME}"
-
-# Define service dependencies
-declare -A SERVICE_DEPENDENCIES=(
-    ["AudioService"]="mpg123"
-    ["CoreService"]="postgresql, mosquitto"
-    ["DoorCameraService"]="livemedia-utils"
-    ["GPIOInputService"]="osh-wiringpi, i2c-tools, libi2c-dev"
-    ["RS485EnergyMeterService"]=""
-    ["RS485RelayService"]=""
-    ["ShutterService"]=""
-    ["WBB12Service"]=""
-)
-
-# Define service scripts
-declare -A SERVICE_SCRIPTS=(
-    ["AudioService"]=""
-    ["CoreService"]=""
-    ["DoorCameraService"]=""
-    ["GPIOInputService"]="raspi-config nonint do_i2c 0"
-    ["RS485EnergyMeterService"]=""
-    ["RS485RelayService"]=""
-    ["ShutterService"]=""
-    ["WBB12Service"]=""
-)
-
-# Define service libraries
-declare -A SERVICE_LIBRARIES=(
-    ["AudioService"]="Core AudioController QMqttCommunicationManager"
-    ["CoreService"]="Core CoreServer QMqttCommunicationManager"
-    ["DoorCameraService"]="Core DoorCameraController QMqttCommunicationManager"
-    ["GPIOInputService"]="Core GPIOInputController QMqttCommunicationManager"
-    ["RS485EnergyMeterService"]="Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager"
-    ["RS485RelayService"]="Core CoreSerial RS485RelayController QMqttCommunicationManager"
-    ["ShutterService"]="Core ShutterController QMqttCommunicationManager"
-    ["WBB12Service"]="Core CoreSerial WBB12Controller QMqttCommunicationManager"
-)
-
-if [ "${#SERVICE_EXECUTABLES[@]}" -ne "${#SERVICE_DEPENDENCIES[@]}" ]; then
-    echo "Mismatch between number of service executables and their dependencies" >&2
-    exit 4
-fi
-
-if [ "${#SERVICE_EXECUTABLES[@]}" -ne "${#SERVICE_SCRIPTS[@]}" ]; then
-    echo "Mismatch between number of service executables and their scripts" >&2
-    exit 4
-fi
-
-if [ "${#SERVICE_EXECUTABLES[@]}" -ne "${#SERVICE_LIBRARIES[@]}" ]; then
-    echo "Mismatch between number of service executables and their libraries" >&2
-    exit 4
-fi
 
 # Create Executable DEB files
 for service in "${!SERVICE_EXECUTABLES[@]}"; do
