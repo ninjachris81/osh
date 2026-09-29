@@ -1,5 +1,7 @@
 SUBSYSTEM!="sound", GOTO="my_usb_audio_end"
 ACTION!="add", GOTO="my_usb_audio_end"
 
+SUBSYSTEM=="sound", KERNELS=="1-1.1.1", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0014", ATTR{id}="USB_Audio_0"
+SUBSYSTEM=="sound", KERNELS=="1-1.1.2", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0014", ATTR{id}="USB_Audio_1"
 
 LABEL="my_usb_audio_end"

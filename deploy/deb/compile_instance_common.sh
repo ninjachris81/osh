@@ -5,7 +5,7 @@ set -euo pipefail
 usage() {
     cat <<'EOF'
 Usage:
-    ./compile_common.sh <instance_name>
+    ./compile_instance_common.sh <instance_name>
 
 Optional variables:
     DEB_EMAIL            Email of the maintainer (default: cbstar@web.de)
@@ -27,14 +27,14 @@ fi
 
 pushd . > /dev/null
 INSTANCE_NAME="$1"
-DEB_NAME="Osh-Common"
+DEB_NAME="Osh-${INSTANCE_NAME}-Common"
 DEB_VERSION="1.0"
 
 DEB_FULL_NAME="${DEB_NAME}-${DEB_VERSION}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DEB_DIR="$ROOT_DIR/../../build-deb"
 PACKAGE_ROOT="$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${DEB_FULL_NAME}"
-RPI_CONF_DIR="$ROOT_DIR/../rpi/instances/Common"
+RPI_CONF_DIR="$ROOT_DIR/../rpi/instances/${INSTANCE_NAME}/configs/Common"
 
 if [[ ! -e "$RPI_CONF_DIR" ]]; then
     echo "Required path does not exist: $RPI_CONF_DIR" >&2
@@ -50,6 +50,7 @@ mkdir -p DEBIAN
 cat <<EOF > DEBIAN/control
 Package: ${DEB_NAME,,}
 Version: ${DEB_VERSION}
+Depends: osh-common
 Section: base
 Priority: optional
 Architecture: arm64
@@ -60,6 +61,10 @@ EOF
 # copy rootfs
 echo "Copying root filesystem from $RPI_CONF_DIR to $PACKAGE_ROOT"
 cp -R "$RPI_CONF_DIR/." "${PACKAGE_ROOT}"
+
+# copy apt_update_all.sh script
+mkdir -p "$PACKAGE_ROOT/etc/osh/scripts"
+cp "$ROOT_DIR/$INSTANCE_NAME/instance_config.sh" "$PACKAGE_ROOT/etc/osh/scripts"
 
 sudo chown -R root:root "$PACKAGE_ROOT"
 

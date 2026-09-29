@@ -32,6 +32,9 @@ DEB_VERSION="$4"
 RPI_CONF_DIR="$1/${DEB_NAME}"
 OUTPUT_DEB_DIR="$5"
 
+DEPENDENCIES="${DEB_NAME%-*}"
+DEPENDENCIES="osh-${DEPENDENCIES,,}"
+
 DEB_FULL_NAME="${INSTANCE_NAME}-${DEB_NAME}-${DEB_VERSION}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGE_ROOT="$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${DEB_FULL_NAME}"
@@ -58,6 +61,7 @@ mkdir -p DEBIAN
 cat <<EOF > DEBIAN/control
 Package: osh-${INSTANCE_NAME,,}-${DEB_NAME,,}
 Version: ${DEB_VERSION}
+Depends: ${DEPENDENCIES}
 Section: base
 Priority: optional
 Architecture: arm64

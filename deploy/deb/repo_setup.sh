@@ -105,18 +105,50 @@ echo "📤 Exporting public GPG key..."
 gpg --armor --export "$KEY_ID" > "$REPO_BASE_DIR/public.gpg.key"
 
 # 6. Generate Self-Signed SSL Certificate
-echo "🔒 Generating Self-Signed SSL Certificate..."
+echo "🔒 Generating Self-Signed SSL Certificate with SAN (IP/Domain support)..."
 SSL_DIR="/etc/nginx/ssl"
 mkdir -p "$SSL_DIR"
 
+# Erzeuge eine temporäre OpenSSL-Konfiguration für die SAN-Erweiterung
+OPENSSL_CONF=$(mktemp)
+cat <<EOF > "$OPENSSL_CONF"
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = DE
+O = My Repo
+CN = $DOMAIN_OR_IP
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+EOF
+
+# Prüfen, ob es sich um eine IP-Adresse oder Domain handelt, und SAN entsprechend befüllen
+if [[ "$DOMAIN_OR_IP" =~ ^[0-8a-fA-F:]+$ ]] || [[ "$DOMAIN_OR_IP" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo "IP.1 = $DOMAIN_OR_IP" >> "$OPENSSL_CONF"
+else
+    echo "DNS.1 = $DOMAIN_OR_IP" >> "$OPENSSL_CONF"
+fi
+
+# Zertifikat mit der SAN-Konfiguration generieren
 openssl req -x509 -nodes -days 3650 -newkey rsa:4096 \
   -keyout "$SSL_DIR/repo.key" \
   -out "$SSL_DIR/repo.crt" \
-  -subj "/CN=$DOMAIN_OR_IP/O=My Repo/C=US"
+  -config "$OPENSSL_CONF"
+
+rm -f "$OPENSSL_CONF"
 
 # Copy the SSL certificate to the public web root so clients can download/trust it
 cp "$SSL_DIR/repo.crt" "$REPO_BASE_DIR/server.crt"
 chown -R www-data:www-data "$REPO_BASE_DIR"
+
 
 # 7. Configure Nginx Virtual Host for HTTPS
 echo "🌐 Configuring Nginx with HTTPS..."
@@ -179,9 +211,9 @@ curl -k -fsSL https://$DOMAIN_OR_IP/server.crt -o /tmp/server.crt
 sudo cp /tmp/server.crt /usr/local/share/ca-certificates/myrepo.crt
 sudo update-ca-certificates
 
-# 2. Download and register the repository GPG key for APT
+# 2. Download and register the repository GPG key for APT (Fix: --batch --yes hinzugefügt)
 sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://$DOMAIN_OR_IP/public.gpg.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/myrepo.gpg
+curl -fsSL https://$DOMAIN_OR_IP/public.gpg.key | sudo gpg --batch --yes --dearmor -o /etc/apt/keyrings/myrepo.gpg
 
 # 3. Add the APT source listing
 echo "deb [signed-by=/etc/apt/keyrings/myrepo.gpg] https://$DOMAIN_OR_IP/ $CODENAME main" | sudo tee /etc/apt/sources.list.d/myrepo.list

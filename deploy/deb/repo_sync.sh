@@ -16,3 +16,4 @@ done
 ./repo_add.sh "Osh-Qt6-6.8.2.deb"
 ./repo_add.sh "Osh-WiringPi-1.0.deb"
 ./repo_add.sh "Osh-Common-1.0.deb"
+./repo_add.sh "Osh-${INSTANCE_NAME}-Common-1.0.deb"

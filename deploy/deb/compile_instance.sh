@@ -57,5 +57,6 @@ for service in "${!SERVICE_CONFIGURATIONS[@]}"; do
 done
 
 ./compile_common.sh "$INSTANCE_NAME"
+./compile_instance_common.sh "$INSTANCE_NAME"
 ./compile_wiringpi.sh "$INSTANCE_NAME"
 ./compile_qt6.sh "$INSTANCE_NAME"
