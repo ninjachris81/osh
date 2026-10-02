@@ -1,5 +1,5 @@
 [Unit]
-Description=OSH Audio Service
+Description=OSH RS232 Input Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
 After=network.target

@@ -34,9 +34,9 @@ DEB_FULL_NAME="${DEB_NAME}-${DEB_VERSION}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DEB_DIR=$(realpath -m "$ROOT_DIR/../../build-deb")
 PACKAGE_ROOT="$OUTPUT_DEB_DIR/${INSTANCE_NAME}/${DEB_FULL_NAME}"
-QT_DIR="/opt/rpi/sysroot/usr/local/qt6/lib"
+QT_DIR="/opt/rpi/sysroot/usr/local/qt6"
 QTMQTT_BUILD_DIR="$ROOT_DIR/../../qtmqtt-build-rpi/lib"
-QT_PACKAGE_ROOT="${PACKAGE_ROOT}/usr/local/qt6/lib"
+QT_PACKAGE_ROOT="${PACKAGE_ROOT}/usr/local/qt6"
 
 if [[ ! -e "$QT_DIR" ]]; then
     echo "Required path does not exist: $QT_DIR" >&2
@@ -63,12 +63,14 @@ EOF
 
 echo "Creating dir ${QT_PACKAGE_ROOT}"
 mkdir -p "${QT_PACKAGE_ROOT}"
+mkdir -p "${QT_PACKAGE_ROOT}/lib"
 echo "📦 Copying Qt6 libraries to package root from $QT_DIR to ${QT_PACKAGE_ROOT}"
-cp -d "$QT_DIR"/libQt6*.so* "${QT_PACKAGE_ROOT}/"
+cp -d "$QT_DIR"/lib/libQt6*.so* "${QT_PACKAGE_ROOT}/lib/"
+cp -a "$QT_DIR"/plugins "${QT_PACKAGE_ROOT}/"
 
 # copy QMqtt
 echo "Copying QMqtt build in $QTMQTT_BUILD_DIR to ${QT_PACKAGE_ROOT}"
-cp -d "$QTMQTT_BUILD_DIR"/libQt6Mqtt.so* "${QT_PACKAGE_ROOT}/"
+cp -d "$QTMQTT_BUILD_DIR"/libQt6Mqtt.so* "${QT_PACKAGE_ROOT}/lib/"
 
 sudo chown -R root:root "$PACKAGE_ROOT"
 

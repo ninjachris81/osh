@@ -1,15 +1,15 @@
 
 # Define all service dependencies
 declare -A ALL_SERVICE_DEPENDENCIES=(
-    ["AudioService"]="mpg123"
-    ["CoreService"]="postgresql, mosquitto"
-    ["DoorCameraService"]="livemedia-utils"
-    ["GPIOInputService"]="osh-wiringpi, i2c-tools, libi2c-dev"
-    ["RS232InputService"]=""
-    ["RS485EnergyMeterService"]=""
-    ["RS485RelayService"]=""
-    ["ShutterService"]=""
-    ["WBB12Service"]=""
+    ["AudioService"]="osh-qt6, postgresql-client, mpg123, libegl1, libfontconfig1, libxkbcommon0, libglx0, libopengl0"
+    ["CoreService"]="osh-qt6, postgresql, mosquitto"
+    ["DoorCameraService"]="osh-qt6, postgresql-client, livemedia-utils"
+    ["GPIOInputService"]="osh-qt6, osh-wiringpi, postgresql-client, i2c-tools, libi2c-dev"
+    ["RS232InputService"]="osh-qt6, postgresql-client"
+    ["RS485EnergyMeterService"]="osh-qt6, postgresql-client"
+    ["RS485RelayService"]="osh-qt6, postgresql-client"
+    ["ShutterService"]="osh-qt6, postgresql-client"
+    ["WBB12Service"]="osh-qt6, postgresql-client"
 )
 
 # Define all service scripts
@@ -31,7 +31,7 @@ declare -A ALL_SERVICE_LIBRARIES=(
     ["CoreService"]="Core CoreServer QMqttCommunicationManager"
     ["DoorCameraService"]="Core DoorCameraController QMqttCommunicationManager"
     ["GPIOInputService"]="Core GPIOInputController QMqttCommunicationManager"
-    ["RS232InputService"]="Core RS232InputController QMqttCommunicationManager"
+    ["RS232InputService"]="Core CoreSerial RS232InputController QMqttCommunicationManager"
     ["RS485EnergyMeterService"]="Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager"
     ["RS485RelayService"]="Core CoreSerial RS485RelayController QMqttCommunicationManager"
     ["ShutterService"]="Core ShutterController QMqttCommunicationManager"
