@@ -1,0 +1,228 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "(gdb) RS485EnergyMeterService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/RS485EnergyMeterService/RS485EnergyMeterService",
+        "args": [
+            "${workspaceFolder}/deploy/wsl/configs/RS485EnergyMeterService/config.ini"
+        ],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    },
+    {
+        "name": "(gdb) CoreService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/CoreService/CoreService",
+        "args": [
+            "${workspaceFolder}/deploy/wsl/configs/CoreService/config.ini"
+        ],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}/build/CoreService",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    },
+    {
+        "name": "(gdb) AudioService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/AudioService/AudioService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) DoorCameraService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/DoorCameraService/DoorCameraService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) DoorUnlockService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/DoorUnlockService/DoorUnlockService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) GPIOInputService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/GPIOInputService/GPIOInputService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) GPIOInputTest",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/GPIOInputTest/GPIOInputTest",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) GPIOWaterMeterService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/GPIOWaterMeterService/GPIOWaterMeterService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) KMTronicRelayService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/KMTronicRelayService/KMTronicRelayService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) OBISService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/OBISService/OBISService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) RS232InputService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/RS232InputService/RS232InputService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) RS232WaterMeterService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/RS232WaterMeterService/RS232WaterMeterService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) RS485RelayService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/RS485RelayService/RS485RelayService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) ShutterService",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/ShutterService/ShutterService",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) WBB12Service",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/WBB12Service/WBB12Service",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    },
+    {
+        "name": "(gdb) SerialTester",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/SerialTester/SerialTester",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb"
+    }
+    ]
+}

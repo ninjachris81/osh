@@ -59,9 +59,14 @@ int main(int argc, char *argv[])
 
     qInfo() << "Init value group" << inputController.id();
     ValueGroup *valueGroupObj = datamodelManager.datamodel()->valueGroup(inputController.id());
-    Q_ASSERT(valueGroup != nullptr);
+    Q_ASSERT(valueGroupObj != nullptr);
 
     quint16 offset = config.getInt(valueGroupObj, "inputValueGroupOffset", 0);
+
+    managerRegistration.start();
+
+    Q_ASSERT(inputController.inputCount() > 0);
+    qInfo() << "Input count:" << inputController.inputCount();
 
     for (quint8 i=offset;i<inputController.inputCount() + offset;i++) {
         qDebug() << "Init value" << valueGroupObj->id() << i;
@@ -70,8 +75,6 @@ int main(int argc, char *argv[])
         valueManager.registerForMaintenance(value);
         inputController.bindValue(value);
     }
-
-    managerRegistration.start();
 
     return app.exec();
 }

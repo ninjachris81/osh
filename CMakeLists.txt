@@ -59,6 +59,7 @@ add_subdirectory(RS232WaterMeterService)
 add_subdirectory(RS485EnergyMeterService)
 add_subdirectory(RS485RelayService)
 #add_subdirectory(ScriptingTestService)
+add_subdirectory(SerialTester)
 add_subdirectory(ShutterService)
 #add_subdirectory(TestService)
 add_subdirectory(WBB12Service)
@@ -81,6 +82,7 @@ add_dependencies(OSHServices
     ShutterService
     #TestService
     WBB12Service
+    SerialTester
 )
 
 if(UNIX)

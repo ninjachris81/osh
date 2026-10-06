@@ -61,19 +61,15 @@ void RS232InputController::onSerialDisconnected() {
 void RS232InputController::onSerialDataReceived(QByteArray data) {
     iDebug() << Q_FUNC_INFO << data;
 
-    if (data.at(data.length()-2) == '\r' && data.at(data.length()-1) == '\n') {
-        data.chop(2);
-    }
-
-    QString msg(data);
+    QString msg = QString::fromUtf8(data).trimmed();
     QStringList tokens = msg.split(',');
     if (tokens.length() == 2) {
         int index = tokens.at(0).toInt();
         bool state= tokens.at(1).toInt() == 1;
-        if (index < inputCount()) {
+        if (index >= 0 && index < inputCount() && index < m_valueMappings.size()) {
             m_valueManager->updateAndPublishValue(m_valueMappings.at(index), state);
         } else {
-            iDebug() << "Index out of range" << index;
+            iWarning() << "Index out of range" << index << "inputCount" << inputCount() << "mappings" << m_valueMappings.size();
         }
     } else {
         iWarning() << "Invalid msg" << msg;

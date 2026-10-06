@@ -9,3 +9,6 @@ git submodule update --init --recursive WiringPi
 
 make -C WiringPi/wiringPi
 sudo make -C WiringPi/wiringPi install
+
+# needed for local runtime
+sudo apt install mosquitto

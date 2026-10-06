@@ -11,6 +11,7 @@ After=network.target
 Type=simple
 Restart=on-failure
 RestartSec=5s
+Environment="LD_LIBRARY_PATH=/usr/local/qt6/lib"
 
 WorkingDirectory=/etc/osh/instances/RS485EnergyMeterService
 

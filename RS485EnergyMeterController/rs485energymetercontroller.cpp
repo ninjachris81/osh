@@ -188,8 +188,8 @@ void RS485EnergyMeterController::_readInput(int reg, RetrieveValue val) {
 
         if (reply->error() == QModbusDevice::NoError) {
             QVariant value = parseValue(reply->result().values(), val.type, val.valueType, val.multiplier, val.twoByte);
-            iDebug() << reg << value;
-            if (!value.isNull()) {
+            iDebug() << reg << value << value.isValid();
+            if (value.isValid()) {
                 ValueBase *v = m_inputMappings.value(reg);
 
                 if (v != nullptr) {

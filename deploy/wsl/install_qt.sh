@@ -20,7 +20,7 @@ libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev \
 libxcb-util-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev \
 cmake ninja-build git python3 libasound2-dev libpulse-dev libswresample-dev \
 linux-headers-generic libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libpq-dev \
-libssl-dev openssl pkg-config libxext-dev
+libssl-dev openssl pkg-config libxext-dev libudev-dev linux-libc-dev
 
 cd "$ROOT_DIR"
 
