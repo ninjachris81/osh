@@ -4,7 +4,7 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "obiscontroller2.h"
+#include "obiscontroller3.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    OBISController2 obisController(&controllerManager, valueGroup);
+    OBISController3 obisController(&controllerManager, valueGroup);
     controllerManager.registerController(&obisController);
 
     managerRegistration.init(&config);
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     ValueGroup *valueGroupObj = datamodelManager.datamodel()->valueGroup(obisController.id());
     Q_ASSERT(valueGroupObj != nullptr);
 
-    for (quint8 i=0;i<OBISController2::SML_INDEX::COUNT;i++) {
+    for (quint8 i=0;i<OBISController3::SML_INDEX::COUNT;i++) {
         DoubleValue* value = static_cast<DoubleValue*>(valueManager.getValue(valueGroupObj, QString::number(i)));
         Q_ASSERT(value != nullptr);
         obisController.bindValue(value);

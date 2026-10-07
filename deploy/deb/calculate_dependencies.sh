@@ -8,6 +8,7 @@ declare -A ALL_SERVICE_DEPENDENCIES=(
     ["RS232InputService"]="osh-qt6, postgresql-client"
     ["RS485EnergyMeterService"]="osh-qt6, postgresql-client"
     ["RS485RelayService"]="osh-qt6, postgresql-client"
+    ["OBISService"]="osh-qt6, postgresql-client, libsml1"
     ["ShutterService"]="osh-qt6, postgresql-client"
     ["WBB12Service"]="osh-qt6, postgresql-client"
 )
@@ -21,6 +22,7 @@ declare -A ALL_SERVICE_SCRIPTS=(
     ["RS232InputService"]=""
     ["RS485EnergyMeterService"]=""
     ["RS485RelayService"]=""
+    ["OBISService"]=""
     ["ShutterService"]=""
     ["WBB12Service"]=""
 )
@@ -34,6 +36,7 @@ declare -A ALL_SERVICE_LIBRARIES=(
     ["RS232InputService"]="Core CoreSerial RS232InputController QMqttCommunicationManager"
     ["RS485EnergyMeterService"]="Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager"
     ["RS485RelayService"]="Core CoreSerial RS485RelayController QMqttCommunicationManager"
+    ["OBISService"]="Core CoreSerial OBISController QMqttCommunicationManager"
     ["ShutterService"]="Core ShutterController QMqttCommunicationManager"
     ["WBB12Service"]="Core CoreSerial WBB12Controller QMqttCommunicationManager"
 )

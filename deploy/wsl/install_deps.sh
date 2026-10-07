@@ -12,3 +12,5 @@ sudo make -C WiringPi/wiringPi install
 
 # needed for local runtime
 sudo apt install mosquitto
+
+git submodule update --init --recursive libsml

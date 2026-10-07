@@ -5,7 +5,7 @@ set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR aarch64)
 
 if(NOT DEFINED CMAKE_SYSROOT OR CMAKE_SYSROOT STREQUAL "")
-  set(CMAKE_SYSROOT /opt/rpi/sysroot2)
+  set(CMAKE_SYSROOT /opt/rpi/sysroot)
 endif()
 set(TARGET_SYSROOT ${CMAKE_SYSROOT})
 

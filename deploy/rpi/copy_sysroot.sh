@@ -16,7 +16,7 @@ EOF
 RPI_REMOTE_HOST="$1"
 RPI_REMOTE_USER="$2"
 
-SYSROOT=/opt/rpi/sysroot2
+SYSROOT=/opt/rpi/sysroot
 
 sudo apt install symlinks
 
