@@ -21,5 +21,6 @@ declare -A SERVICE_CONFIGURATIONS=(
     ["RS485RelayService-shutters"]="1.0"
     ["ShutterService-eg"]="1.0"
     ["ShutterService-og"]="1.0"
+    ["ShutterService-special"]="1.0"
     ["WBB12Service"]="1.0"
 )
