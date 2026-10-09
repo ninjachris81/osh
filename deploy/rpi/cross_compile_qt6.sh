@@ -70,7 +70,6 @@ cd "$RPI_QT_BUILD_DIR"
 
 cmake --build . --parallel "$RPI_BUILD_JOBS"
 sudo "$(command -v cmake)" --install .
-popd >/dev/null
 
 # qtmqtt
 ./cross_compile_qtmqtt.sh "$RPI_SYSROOT"

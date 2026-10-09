@@ -19,34 +19,41 @@ LogCat::LOGCAT ControllerManager::logCat() {
 void ControllerManager::init(LocalConfig* config) {
     iDebug() << Q_FUNC_INFO;
 
-    QMapIterator<QString, ControllerBase*> it(m_controllers);
-    while(it.hasNext()) {
-        it.next();
-        it.value()->setConfig(config);
+    QMapIterator<QString, ControllerBase*> itConfig(m_controllers);
+    while(itConfig.hasNext()) {
+        itConfig.next();
+        itConfig.value()->setConfig(config);
+    }
+
+    QMapIterator<QString, ControllerBase*> itInit(m_controllers);
+    while(itInit.hasNext()) {
+        itInit.next();
+        itInit.value()->init();
     }
 
     REQUIRE_MANAGER(CommunicationManagerBase);
-    CommunicationManagerBase* commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
-    connect(commManager, &CommunicationManagerBase::connected, this, &ControllerManager::onStart);
 }
 
 void ControllerManager::start() {
     iDebug() << Q_FUNC_INFO;
 
-    QMapIterator<QString, ControllerBase*> it(m_controllers);
-    while(it.hasNext()) {
-        it.next();
-        it.value()->init();
+    CommunicationManagerBase* commManager = getManager<CommunicationManagerBase>(CommunicationManagerBase::MANAGER_ID);
+
+    if (commManager->isConnected()) {
+        onStart();
+    } else {
+        iInfo() << "Waiting for communication manager to connect";
     }
+    connect(commManager, &CommunicationManagerBase::connected, this, &ControllerManager::onStart);
 }
 
 void ControllerManager::onStart() {
     iDebug() << Q_FUNC_INFO;
 
-    QMapIterator<QString, ControllerBase*> it(m_controllers);
-    while(it.hasNext()) {
-        it.next();
-        it.value()->start();
+    QMapIterator<QString, ControllerBase*> itStart(m_controllers);
+    while(itStart.hasNext()) {
+        itStart.next();
+        itStart.value()->start();
     }
 }
 

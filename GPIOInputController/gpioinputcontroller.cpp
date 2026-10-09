@@ -68,6 +68,8 @@ void GPIOInputController::init() {
 
         m_i2cSanityChecker.setBus(i2cBus);
         m_i2cSanityChecker.setDevList(devList);
+    } else {
+        iDebug() << "No i2c sanity check configured";
     }
 
 
@@ -76,7 +78,8 @@ void GPIOInputController::init() {
 
     connect(m_reader, &GPIOReaderBase::stateChanged, this, &GPIOInputController::onStateChanged);
     connect(m_reader, &GPIOReaderBase::error, this, &GPIOInputController::onError);
-
+    
+    iDebug() << "GPIOInputController initialized with" << m_inputCount << "inputs";
 }
 
 void GPIOInputController::start() {
