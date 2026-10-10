@@ -1,1 +1,1 @@
-SUBSYSTEM=="tty", KERNELS=="1-1.4.3", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="tty_allSwitches2", MODE="0666", GROUP="dialout", TAG+="systemd"
+SUBSYSTEM=="tty", KERNELS=="1-1.3.4:1.0", SUBSYSTEMS=="usb", SYMLINK+="tty_allSwitches2", MODE="0666", GROUP="dialout"

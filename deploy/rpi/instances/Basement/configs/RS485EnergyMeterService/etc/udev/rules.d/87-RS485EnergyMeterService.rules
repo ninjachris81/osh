@@ -1,0 +1,1 @@
+SUBSYSTEM=="tty", KERNELS=="1-1.3.3:1.0", SUBSYSTEMS=="usb", SYMLINK+="tty_wbb12EnergyMeter", MODE="0666", GROUP="dialout"

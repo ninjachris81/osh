@@ -1,0 +1,1 @@
+SUBSYSTEM=="tty", KERNELS=="1-1.3.2:1.0", SUBSYSTEMS=="usb", SYMLINK+="tty_allRelays1", MODE="0666", GROUP="dialout"
