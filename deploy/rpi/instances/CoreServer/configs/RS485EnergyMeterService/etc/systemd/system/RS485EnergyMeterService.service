@@ -2,7 +2,8 @@
 Description=OSH RS485EnergyMeterService Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
-After=network.target postgresql.service
+After=network.target postgresql.service dev-tty_energyMeter0.device
+BindsTo=dev-tty_energyMeter0.device
 
 [Service]
 ## use 'Type=forking' if the service backgrounds itself
