@@ -12,6 +12,8 @@
 RS485EnergyMeterController::RS485EnergyMeterController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent)
 {
     connect(&m_statusTimer, &QTimer::timeout, this, &RS485EnergyMeterController::retrieveStatus);
+    m_reconnectTimer.setSingleShot(true);
+    connect(&m_reconnectTimer, &QTimer::timeout, this, &RS485EnergyMeterController::onReconnect);
 
 }
 
@@ -21,6 +23,8 @@ void RS485EnergyMeterController::init() {
     m_warnManager = m_manager->getManager<ClientSystemWarningsManager>(ClientSystemWarningsManager::MANAGER_ID);
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
+    m_reconnectInterval = m_config->getInt(this, "reconnect.interval", 5000);
+    m_reconnectTimer.setInterval(m_reconnectInterval);
 
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
@@ -124,11 +128,15 @@ void RS485EnergyMeterController::onStateChanged() {
 
     switch(m_modbusClient.state()) {
     case QModbusClient::ConnectedState:
+        m_reconnectTimer.stop();
         m_statusTimer.start();
         Q_EMIT(controllerConnected());
         break;
     case QModbusClient::UnconnectedState:
         m_statusTimer.stop();
+        if (!m_reconnectTimer.isActive()) {
+            m_reconnectTimer.start();
+        }
         Q_EMIT(controllerDisconnected());
         break;
     default:
@@ -142,7 +150,22 @@ void RS485EnergyMeterController::onErrorOccurred() {
 
     m_warnManager->raiseWarning("RS485 connection disconnected", QtCriticalMsg);
     m_statusTimer.stop();
-    Q_EMIT(controllerDisconnected());
+    if (!m_reconnectTimer.isActive()) {
+        m_reconnectTimer.start();
+        Q_EMIT(controllerDisconnected());
+    }
+    if (m_modbusClient.state() != QModbusClient::UnconnectedState) {
+        m_modbusClient.disconnectDevice();
+    }
+}
+
+void RS485EnergyMeterController::onReconnect() {
+    m_modbusClient.disconnectDevice();
+    iInfo() << "Reconnecting to" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
+    if (!m_modbusClient.connectDevice()) {
+        iWarning() << "Failed to start RS485 connection:" << m_modbusClient.errorString();
+        m_reconnectTimer.start();
+    }
 }
 
 void RS485EnergyMeterController::onDataReceived() {
@@ -156,12 +179,11 @@ void RS485EnergyMeterController::onDataReceived() {
         QModbusResponse response = reply->rawResult();
 
         iDebug() << response.dataSize();
-    } else if (reply->error() == QModbusDevice::ProtocolError) {
-        iWarning() << "Modbus error" << reply->error();
     } else {
         iWarning() << "Modbus error" << reply->error();
+        onErrorOccurred();
     }
-
+    
     reply->deleteLater();
 }
 

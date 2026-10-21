@@ -62,8 +62,9 @@ EOF
 echo "Copying root filesystem from $RPI_CONF_DIR to $PACKAGE_ROOT"
 cp -R "$RPI_CONF_DIR/." "${PACKAGE_ROOT}"
 
-# copy apt_update_all.sh script
+# copy scripts
 mkdir -p "$PACKAGE_ROOT/etc/osh/scripts"
+# copy instance_config.sh
 cp "$ROOT_DIR/$INSTANCE_NAME/instance_config.sh" "$PACKAGE_ROOT/etc/osh/scripts"
 
 sudo chown -R root:root "$PACKAGE_ROOT"

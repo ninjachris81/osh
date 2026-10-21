@@ -68,6 +68,7 @@ add_custom_target(OSHServices)
 add_dependencies(OSHServices
     AudioService
     CoreService
+    DoorAudioService
     DoorCameraService
     DoorUnlockService
     GPIOInputService

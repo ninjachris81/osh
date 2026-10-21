@@ -27,6 +27,7 @@ void KMTronicRelayController::init() {
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 10000));
 
     m_serialClient = new SerialPortClient(m_config->getString(this, "serial.port", "COM1"), QSerialPort::Baud9600, 8);
+    m_serialClient->setRestartTimeout(m_config->getInt(this, "reconnect.interval", 5000));
 
     m_serialClient->setReadBufferSize(8);
     m_serialClient->setLineMode(false);

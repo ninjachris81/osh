@@ -55,6 +55,7 @@ protected slots:
     void onStateChanged();
     void onErrorOccurred();
     void onDataReceived();
+    void onReconnect();
 
     void retrieveStatus();
 
@@ -67,6 +68,8 @@ private:
     ClientSystemWarningsManager* m_warnManager;
     QModbusRtuSerialClient m_modbusClient;
     QTimer m_statusTimer;
+    QTimer m_reconnectTimer;
+    int m_reconnectInterval = 5000;
     int m_slaveId = 1;
     quint8 m_errorCount = 0;
 
@@ -75,4 +78,3 @@ private:
     void processNextCommand();
 
 };
-

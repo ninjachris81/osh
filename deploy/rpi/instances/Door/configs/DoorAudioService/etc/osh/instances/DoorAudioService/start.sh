@@ -3,4 +3,4 @@
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 CONFIG_FILE=$SCRIPT_DIR/config.ini
 
-/etc/osh/scripts/start.sh RS485EnergyMeterService "$CONFIG_FILE"
+/etc/osh/scripts/start.sh DoorAudioService "$CONFIG_FILE"

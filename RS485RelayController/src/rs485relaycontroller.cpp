@@ -9,6 +9,8 @@
 RS485RelayController::RS485RelayController(ControllerManager *manager, QString id, RELAY_MODEL model, int relayCount, QObject *parent) : RelayControllerBase(manager, id, relayCount, parent), m_model(model)
 {
     connect(&m_statusTimer, &QTimer::timeout, this, &RS485RelayController::retrieveStatus);
+    m_reconnectTimer.setSingleShot(true);
+    connect(&m_reconnectTimer, &QTimer::timeout, this, &RS485RelayController::onReconnect);
 }
 
 RS485RelayController::~RS485RelayController() {
@@ -25,6 +27,8 @@ void RS485RelayController::init() {
     m_valueManager = m_manager->getManager<ValueManagerBase>(ValueManagerBase::MANAGER_ID);
 
     m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 20000));
+    m_reconnectInterval = m_config->getInt(this, "reconnect.interval", 5000);
+    m_reconnectTimer.setInterval(m_reconnectInterval);
     m_slaveId = m_config->getInt(this, "slaveId", 1);
 
     m_modbusClient.setConnectionParameter(QModbusDevice::SerialPortNameParameter, m_config->getString(this, "serial.port", "COM1"));
@@ -45,7 +49,6 @@ void RS485RelayController::start() {
     iInfo() << "Connecting on" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
 
     m_modbusClient.connectDevice();
-    m_statusTimer.start();
 }
 
 void RS485RelayController::printRawMessage(quint8 slaveId, const QModbusRequest &req) {
@@ -159,12 +162,14 @@ void RS485RelayController::processNextCommand() {
             setStatus(rIdx, expectedStatus);
             m_valueManager->publishValue(actor(rIdx));
             iDebug() << "Relay" << rIdx << "successfully switched";
+            
+            QTimer::singleShot(80, this, &RS485RelayController::processNextCommand);
         } else {
             iWarning() << "Write failed for relay" << rIdx << "Error:" << reply->errorString();
+            onErrorOccurred();
         }
+        
         reply->deleteLater();
-
-        QTimer::singleShot(80, this, &RS485RelayController::processNextCommand);
     });
 }
 
@@ -187,10 +192,16 @@ void RS485RelayController::onStateChanged() {
 
     switch(m_modbusClient.state()) {
     case QModbusClient::ConnectedState:
+        m_reconnectTimer.stop();
+        m_statusTimer.start();
         Q_EMIT(controllerConnected());
         break;
     case QModbusClient::UnconnectedState:
-        onErrorOccurred();
+        m_statusTimer.stop();
+        if (!m_reconnectTimer.isActive()) {
+            m_reconnectTimer.start();
+            Q_EMIT(controllerDisconnected());
+        }
         break;
     default:
         iDebug() << m_modbusClient.state();
@@ -202,7 +213,24 @@ void RS485RelayController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO << m_modbusClient.errorString();
 
     m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
-    Q_EMIT(controllerDisconnected());
+    m_statusTimer.stop();
+    if (!m_reconnectTimer.isActive()) {
+        m_reconnectTimer.start();
+        Q_EMIT(controllerDisconnected());
+    }
+    if (m_modbusClient.state() != QModbusClient::UnconnectedState) {
+        m_modbusClient.disconnectDevice();
+    }
+}
+
+void RS485RelayController::onReconnect() {
+    m_modbusClient.disconnectDevice();
+
+    iInfo() << "Reconnecting to" << m_modbusClient.connectionParameter(QModbusDevice::SerialPortNameParameter).toString();
+    if (!m_modbusClient.connectDevice()) {
+        iWarning() << "Failed to start relay connection:" << m_modbusClient.errorString();
+        m_reconnectTimer.start();
+    }
 }
 
 void RS485RelayController::onDataReceived() {
@@ -257,8 +285,7 @@ void RS485RelayController::retrieveStatus() {
     QMutexLocker locker(&m_Mutex);
 
     if (m_modbusClient.state() == QModbusClient::UnconnectedState) {
-        iDebug() << "Connecting to modbus";
-        m_modbusClient.connectDevice();
+        iDebug() << "Waiting for relay reconnect";
     } else {
         if (m_currentStatus == RETRIEVING_STATUS) {
             m_warnManager->raiseWarning("No status from relay", QtCriticalMsg);
@@ -276,7 +303,12 @@ void RS485RelayController::retrieveStatus() {
             printRawMessage(m_slaveId, req);
 
             QModbusReply* reply = m_modbusClient.sendRawRequest(req, m_slaveId);
-            connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
+            if (reply) {
+                connect(reply, &QModbusReply::finished, this, &RS485RelayController::onDataReceived);
+            } else {
+                iWarning() << "Failed to enqueue relay status request";
+                setSerialRelayStatus(STATUS_ERROR);
+            }
         }
     }
 }

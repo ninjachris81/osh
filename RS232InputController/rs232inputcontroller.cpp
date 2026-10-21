@@ -25,6 +25,7 @@ void RS232InputController::init() {
     DigitalInputControllerBase::init();
 
     m_serialClient = new SerialPortClient(m_config->getString(this, "serial.port", "COM1"), QSerialPort::Baud9600);
+    m_serialClient->setRestartTimeout(m_config->getInt(this, "reconnect.interval", 5000));
     m_serialClient->setLineMode(true);
 
     Helpers::safeConnect(m_serialClient, &SerialPortClient::connected, this, &RS232InputController::onSerialConnected, SIGNAL(connected()), SLOT(onSerialConnected()));

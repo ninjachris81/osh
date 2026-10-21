@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+
+CONFIG_FILE="/boot/firmware/config.txt"
+
+PARAMS_TO_ADD=(
+    "dtoverlay=disable-wifi"
+    "dtoverlay=disable-bt"
+    "disable_splash=1"
+    "dtparam=sys_led_trigger=none"
+    "dtparam=sys_led_activelow=off"
+    "dtparam=pwr_led_trigger=default-on"
+    "dtparam=pwr_led_activelow=off"
+)
+
+# Helper function to safely add a parameter if it doesn't exist
+add_param_if_missing() {
+    local param="$1"
+    # Search for the exact line (ignoring spaces around the '=' sign)
+    if ! grep -q "^[[:space:]]*${param}[[:space:]]*=" "$CONFIG_FILE"; then
+        echo "$param" >> "$CONFIG_FILE"
+    fi
+}
+
+# Ensure the config file exists before writing to it
+if [ -f "$CONFIG_FILE" ]; then
+    # Add a header section if it is completely missing
+    if ! grep -q "# My Custom Settings" "$CONFIG_FILE"; then
+        echo "\n# My Custom Settings" >> "$CONFIG_FILE"
+    fi
+
+    # Check and append each parameter individually
+    for param in "${PARAMS_TO_ADD[@]}"; do
+        add_param_if_missing "$param"
+    done
+
+fi
+
+exit 0

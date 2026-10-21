@@ -11,7 +11,8 @@ declare -A SERVICE_EXECUTABLES=(
 declare -A SERVICE_CONFIGURATIONS=(
     ["AudioService"]="1.0"
     ["RS232InputService"]="1.0"
-    ["RS485EnergyMeterService"]="1.0"
+    ["RS485EnergyMeterService-acdg"]="1.0"
+    ["RS485EnergyMeterService-wbb12"]="1.0"
     ["RS485RelayService"]="1.0"
     ["OBISService"]="1.0"
 )

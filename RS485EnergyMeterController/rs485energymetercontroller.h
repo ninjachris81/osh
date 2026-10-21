@@ -40,6 +40,7 @@ protected slots:
     void onStateChanged();
     void onErrorOccurred();
     void onDataReceived();
+    void onReconnect();
 
     void retrieveStatus();
 
@@ -52,6 +53,8 @@ private:
     ValueManagerBase* m_valueManager = nullptr;
     QModbusRtuSerialClient m_modbusClient;
     QTimer m_statusTimer;
+    QTimer m_reconnectTimer;
+    int m_reconnectInterval = 5000;
 
     QMap<int, RetrieveValue> m_inputRegisters;
     QMap<int, ValueBase*> m_inputMappings;
@@ -63,4 +66,3 @@ private:
     OrnoWe::OrnoTypes m_type = OrnoWe::WE514;
 
 };
-

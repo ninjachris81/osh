@@ -14,3 +14,5 @@ sudo make -C WiringPi/wiringPi install
 sudo apt install mosquitto
 
 git submodule update --init --recursive libsml
+
+git submodule update --init --recursive pjproject

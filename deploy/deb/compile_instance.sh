@@ -58,5 +58,30 @@ done
 
 ./compile_common.sh "$INSTANCE_NAME"
 ./compile_instance_common.sh "$INSTANCE_NAME"
-./compile_wiringpi.sh "$INSTANCE_NAME"
 ./compile_qt6.sh "$INSTANCE_NAME"
+
+HAS_WIRINGPI=false
+for dependencies in "${SERVICE_DEPENDENCIES[@]}"; do
+    if [[ "$dependencies" =~ (^|,)[[:space:]]*osh-wiringpi[[:space:]]*(,|$) ]]; then
+        HAS_WIRINGPI=true
+        break
+    fi
+done
+
+if [[ "$HAS_WIRINGPI" == true ]]; then
+    echo "WiringPi dependency detected. Compiling WiringPi..."
+    ./compile_wiringpi.sh "$INSTANCE_NAME"
+fi
+
+HAS_PJSUPPORT=false
+for dependencies in "${SERVICE_DEPENDENCIES[@]}"; do
+    if [[ "$dependencies" =~ (^|,)[[:space:]]*osh-pjsupport[[:space:]]*(,|$) ]]; then
+        HAS_PJSUPPORT=true
+        break
+    fi
+done
+
+if [[ "$HAS_PJSUPPORT" == true ]]; then
+    echo "PJSIP Support dependency detected. Compiling PJSIP Support..."
+    ./compile_pjsupport.sh "$INSTANCE_NAME"
+fi
