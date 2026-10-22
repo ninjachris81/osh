@@ -1,4 +1,4 @@
-#include "gpiowatermetercontroller.h"
+#include "watermetercontroller.h"
 
 #include <QDebug>
 #include <QDateTime>
@@ -16,12 +16,12 @@
 #include "datamodel/datamodelmanager.h"
 #include "communication/mqtt/mqttcommunicationmanagerbase.h"
 
-GPIOWaterMeterController::GPIOWaterMeterController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
+WaterMeterController::WaterMeterController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
     //connect(&m_statusTimer, &QTimer::timeout, this, &RS232WaterMeterController::retrieveStatus);
-    connect(&m_flowTimer, &QTimer::timeout, this, &GPIOWaterMeterController::onCalculateFlow);
+    connect(&m_flowTimer, &QTimer::timeout, this, &WaterMeterController::onCalculateFlow);
 }
 
-void GPIOWaterMeterController::init() {
+void WaterMeterController::init() {
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER_X(m_manager, ClientValueManager);
@@ -53,7 +53,7 @@ void GPIOWaterMeterController::init() {
     int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
 
     m_reader = new MCPReader(m_sensorCount, addr, pinBase, pinOffset, false);
-    connect(m_reader, &MCPReader::stateChanged, this, &GPIOWaterMeterController::onStateChanged);
+    connect(m_reader, &MCPReader::stateChanged, this, &WaterMeterController::onStateChanged);
 
     m_flowTimer.setInterval(3000);
 
@@ -62,18 +62,18 @@ void GPIOWaterMeterController::init() {
     bindValueManager(valueManager, datamodelManager->datamodel());
 }
 
-void GPIOWaterMeterController::start() {
+void WaterMeterController::start() {
     iDebug() << Q_FUNC_INFO;
 
     m_reader->start();
     m_flowTimer.start();
 }
 
-void GPIOWaterMeterController::handleMessage(ControllerMessage *msg) {
+void WaterMeterController::handleMessage(ControllerMessage *msg) {
     iDebug() << Q_FUNC_INFO << msg->cmdType();
 }
 
-void GPIOWaterMeterController::bindValueManager(ClientValueManager* valueManager, DatamodelBase* datamodel) {
+void WaterMeterController::bindValueManager(ClientValueManager* valueManager, DatamodelBase* datamodel) {
     iDebug() << Q_FUNC_INFO;
 
     m_valueManager = valueManager;
@@ -107,7 +107,7 @@ void GPIOWaterMeterController::bindValueManager(ClientValueManager* valueManager
     }
 }
 
-void GPIOWaterMeterController::onStateChanged(quint8 index, bool state) {
+void WaterMeterController::onStateChanged(quint8 index, bool state) {
     iInfo() << Q_FUNC_INFO << index << state;
 
     DoubleValue* waterLevel = m_waterLevelMappings.value(index);
@@ -129,7 +129,7 @@ void GPIOWaterMeterController::onStateChanged(quint8 index, bool state) {
     m_flowCounterMutex.unlock();
 }
 
-void GPIOWaterMeterController::onErrorOccurred() {
+void WaterMeterController::onErrorOccurred() {
     iDebug() << Q_FUNC_INFO;
 
     m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
@@ -139,13 +139,13 @@ void GPIOWaterMeterController::onErrorOccurred() {
 
 
 
-void GPIOWaterMeterController::retrieveStatus() {
+void WaterMeterController::retrieveStatus() {
     iDebug() << Q_FUNC_INFO;
 
 }
 
 
-void GPIOWaterMeterController::onCalculateFlow() {
+void WaterMeterController::onCalculateFlow() {
     m_flowCounterMutex.lock();
 
     float buff[m_sensorCount];      // as L/min

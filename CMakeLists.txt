@@ -29,7 +29,7 @@ add_subdirectory(DoorAudioController)
 add_subdirectory(DoorCameraController)
 add_subdirectory(DoorUnlockController)
 add_subdirectory(GPIOInputController)
-add_subdirectory(GPIOWaterMeterController)
+add_subdirectory(WaterMeterController)
 add_subdirectory(HomeConnectController)
 add_subdirectory(KMTronicRelayController)
 add_subdirectory(OBISController)
@@ -49,7 +49,7 @@ add_subdirectory(DoorCameraService)
 add_subdirectory(DoorUnlockService)
 add_subdirectory(GPIOInputService)
 add_subdirectory(GPIOInputTest)
-add_subdirectory(GPIOWaterMeterService)
+add_subdirectory(WaterMeterService)
 add_subdirectory(HomeConnectService)
 add_subdirectory(KMTronicRelayService)
 add_subdirectory(OBISService)
@@ -73,7 +73,7 @@ add_dependencies(OSHServices
     DoorUnlockService
     GPIOInputService
     GPIOInputTest
-    GPIOWaterMeterService
+    WaterMeterService
     KMTronicRelayService
     OBISService
     RS232InputService
@@ -92,7 +92,7 @@ if(UNIX)
         CoreService CoreServiceSimulator DoorAudioController
         DoorAudioService DoorCameraController DoorCameraService DoorUnlockController
         DoorUnlockService GPIOInputController GPIOInputService GPIOInputTest
-        GPIOWaterMeterController GPIOWaterMeterService HomeConnectController
+        WaterMeterController WaterMeterService HomeConnectController
         HomeConnectService KMTronicRelayController KMTronicRelayService OBISController
         OBISService OnvifController OnvifService PJSIPSupport QMqttCommunicationManager
         RS232InputController RS232InputService RS232WaterMeterController

@@ -1,0 +1,2 @@
+osh_add_qt_project(WaterMeterService QT_MODULES Mqtt Sql)
+target_link_libraries(WaterMeterService PRIVATE Core WaterMeterController QMqttCommunicationManager)

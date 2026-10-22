@@ -117,10 +117,10 @@
         "MIMode": "gdb"
     },
     {
-        "name": "(gdb) GPIOWaterMeterService",
+        "name": "(gdb) WaterMeterService",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/GPIOWaterMeterService/GPIOWaterMeterService",
+        "program": "${workspaceFolder}/build/WaterMeterService/WaterMeterService",
         "args": [],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

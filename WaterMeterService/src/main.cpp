@@ -3,7 +3,7 @@
 
 #include "manager/managerregistration.h"
 #include "qmqttcommunicationmanager.h"
-#include "gpiowatermetercontroller.h"
+#include "watermetercontroller.h"
 #include "controller/controllermanager.h"
 #include "device/client/clientdevicemanager.h"
 #include "time/client/clientsystemtimemanager.h"
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    GPIOWaterMeterController waterLevelController(&controllerManager, valueGroup);
+    WaterMeterController waterLevelController(&controllerManager, valueGroup);
     controllerManager.registerController(&waterLevelController);
 
     managerRegistration.init(&config);

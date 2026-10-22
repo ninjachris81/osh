@@ -1,0 +1,3 @@
+osh_add_qt_project(WaterMeterController)
+target_compile_definitions(WaterMeterController PRIVATE MAKE_SHARED_LIB)
+target_link_libraries(WaterMeterController PRIVATE Core PUBLIC GPIOInputController)

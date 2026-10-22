@@ -10,7 +10,7 @@ Targets:
     AudioService CoreService CoreUI KMTronicRelayService RS232InputService
     GPIOInputService ShutterService WBB12Service OBISService RS485RelayService
     RS485EnergyMeterService DoorAudioService DoorUnlockService DoorCameraService
-    GPIOWaterMeterService
+    WaterMeterService
 
 Optional variables:
     OSH_BUILD_DIR       Main build directory (default: build-cmake)
@@ -33,7 +33,7 @@ fi
 
 BUILD_TARGET="$1"
 case "$BUILD_TARGET" in
-    AudioService|CoreService|CoreUI|KMTronicRelayService|RS232InputService|GPIOInputService|ShutterService|WBB12Service|OBISService|RS485RelayService|RS485EnergyMeterService|DoorAudioService|DoorUnlockService|DoorCameraService|GPIOWaterMeterService)
+    AudioService|CoreService|CoreUI|KMTronicRelayService|RS232InputService|GPIOInputService|ShutterService|WBB12Service|OBISService|RS485RelayService|RS485EnergyMeterService|DoorAudioService|DoorUnlockService|DoorCameraService|WaterMeterService)
         ;;
     *)
         echo "Invalid build target: $BUILD_TARGET" >&2
@@ -83,7 +83,7 @@ build_pjproject() {
 }
 
 case "$BUILD_TARGET" in
-    GPIOInputService|DoorUnlockService|GPIOWaterMeterService)
+    GPIOInputService|DoorUnlockService|WaterMeterService)
         build_wiringpi
         ;;
 esac

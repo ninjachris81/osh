@@ -13,12 +13,12 @@
 #include "actor/actormanager.h"
 #include "mcpreader.h"
 
-class SHARED_LIB_EXPORT GPIOWaterMeterController : public ControllerBase
+class SHARED_LIB_EXPORT WaterMeterController : public ControllerBase
 {
     Q_OBJECT
 public:
 
-    explicit GPIOWaterMeterController(ControllerManager* manager, QString id, QObject *parent = nullptr);
+    explicit WaterMeterController(ControllerManager* manager, QString id, QObject *parent = nullptr);
 
     /*virtual*/ void init() override;
 
@@ -62,4 +62,3 @@ private:
 signals:
 
 };
-
