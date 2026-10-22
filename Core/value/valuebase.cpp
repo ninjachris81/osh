@@ -79,7 +79,7 @@ bool ValueBase::updateValue(QVariant newValue, bool emitChange) {
     return isDifferent;
 }
 
-QString ValueBase::getFullId(QString valueGroupId, QString valueId) {
+QString ValueBase::getFullId(const QString &valueGroupId, const QString &valueId) {
     return valueGroupId + VALUE_SEPARATOR + valueId;
 }
 

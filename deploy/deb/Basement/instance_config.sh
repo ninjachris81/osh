@@ -6,6 +6,7 @@ declare -A SERVICE_EXECUTABLES=(
     ["RS485EnergyMeterService"]="1.0"
     ["RS485RelayService"]="1.0"
     ["OBISService"]="1.0"
+    ["WaterMeterService"]="1.0"
 )
 
 declare -A SERVICE_CONFIGURATIONS=(
@@ -15,4 +16,5 @@ declare -A SERVICE_CONFIGURATIONS=(
     ["RS485EnergyMeterService-wbb12"]="1.0"
     ["RS485RelayService"]="1.0"
     ["OBISService"]="1.0"
+    ["WaterMeterService"]="1.0"
 )

@@ -44,7 +44,7 @@ public:
 
     bool persist();
 
-    static QString getFullId(QString valueGroupId, QString valueId);
+    static QString getFullId(const QString &valueGroupId, const QString &valueId);
 
     bool updateValue(QVariant newValue, bool emitChange = true);
 

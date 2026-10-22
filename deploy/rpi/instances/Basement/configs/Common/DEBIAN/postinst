@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 CONFIG_FILE="/boot/firmware/config.txt"
@@ -16,9 +16,10 @@ PARAMS_TO_ADD=(
 # Helper function to safely add a parameter if it doesn't exist
 add_param_if_missing() {
     local param="$1"
-    # Search for the exact line (ignoring spaces around the '=' sign)
-    if ! grep -q "^[[:space:]]*${param}[[:space:]]*=" "$CONFIG_FILE"; then
-        echo "$param" >> "$CONFIG_FILE"
+    local key="${param%%=*}"
+    local value="${param#*=}"
+    if ! grep -Eq "^[[:space:]]*${key}[[:space:]]*=[[:space:]]*${value}[[:space:]]*$" "$CONFIG_FILE"; then
+        printf '%s\n' "$param" >> "$CONFIG_FILE"
     fi
 }
 
@@ -26,7 +27,7 @@ add_param_if_missing() {
 if [ -f "$CONFIG_FILE" ]; then
     # Add a header section if it is completely missing
     if ! grep -q "# My Custom Settings" "$CONFIG_FILE"; then
-        echo "\n# My Custom Settings" >> "$CONFIG_FILE"
+        printf '\n# My Custom Settings\n' >> "$CONFIG_FILE"
     fi
 
     # Check and append each parameter individually

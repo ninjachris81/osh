@@ -11,14 +11,13 @@
 #include "warn/client/clientsystemwarningsmanager.h"
 #include "value/valuemanagerbase.h"
 #include "actor/actormanager.h"
-#include "mcpreader.h"
 
 class SHARED_LIB_EXPORT WaterMeterController : public ControllerBase
 {
     Q_OBJECT
 public:
 
-    explicit WaterMeterController(ControllerManager* manager, QString id, QObject *parent = nullptr);
+    explicit WaterMeterController(ControllerManager* manager, QString id, QString inputSensorGroupId, QString waterFlowValueGroupId, QString waterLevelValueGroupId, QObject *parent = nullptr);
 
     /*virtual*/ void init() override;
 
@@ -27,33 +26,38 @@ public:
     /*virtual*/ void handleMessage(ControllerMessage *msg) override;
 
     void onStateChanged(quint8 index, bool state);
-    void onErrorOccurred();
 
-    void retrieveStatus();
+    void bindValueManager(ClientValueManager *valueManager, DatamodelBase *datamodel);
 
 private slots:
     void onCalculateFlow();
 
 private:
-    void bindValueManager(ClientValueManager *valueManager, DatamodelBase *datamodel);
 
     QMutex m_flowCounterMutex;
     QTimer m_flowTimer;
 
+    QString m_inputSensorGroupId;
     QString m_waterLevelValueGroupId;
     QString m_waterFlowValueGroupId;
 
     ClientSystemWarningsManager* m_warnManager;
     //QTimer m_statusTimer;
-    uint8_t m_sensorCount;
-    uint8_t m_dataOffset;
+    uint8_t m_inputSensorCount;
+    uint8_t m_inputSensorOffset;
+    uint8_t m_waterLevelOffset;
+    uint8_t m_waterFlowOffset;
     float m_stepAmountML;
-    GPIOReaderBase* m_reader = nullptr;
+    uint64_t m_startedAtMs;
+    uint16_t m_initialLevelTimeoutMs{5000};
 
+    QList<BooleanValue*> m_inputSensorMappings;
     QList<DoubleValue*> m_waterLevelMappings;
     QList<DoubleValue*> m_waterFlowMappings;
+    QList<bool> m_waterLevelInitialized;
 
     ValueManagerBase* m_valueManager = nullptr;
+    ValueGroup *m_inputSensorGroup;
     ValueGroup *m_waterLevelValueGroup;
     ValueGroup *m_waterFlowValueGroup;
 

@@ -30,13 +30,16 @@ int main(int argc, char *argv[])
     QMqttCommunicationManager commManager;
     ControllerManager controllerManager;
     ClientDeviceDiscoveryManager clientManager("WaterMeterService");
-    QString valueGroup = config.getString(&clientManager, "inputValueGroupId", "waterLevels0");
+    QStringList valueGroups;
+    valueGroups << config.getString(&clientManager, "inputSensorGroupId", "");
+    valueGroups << config.getString(&clientManager, "waterFlowValueGroupId", "");
+    valueGroups << config.getString(&clientManager, "waterLevelValueGroupId", "");
 
     ClientSystemtimeManager systimeManager;
     ClientSystemWarningsManager syswarnManager;
     ClientValueManager valueManager;
     DatabaseManager databaseManager;
-    DatamodelManager datamodelManager(false, false, false, true, false, false, false, QStringList(), QStringList() << valueGroup);
+    DatamodelManager datamodelManager(false, false, false, true, false, false, false, QStringList(), valueGroups);
     LogManager logManager;
 
     managerRegistration.registerManager(&commManager);
@@ -49,10 +52,12 @@ int main(int argc, char *argv[])
     managerRegistration.registerManager(&datamodelManager);
     managerRegistration.registerManager(&logManager);
 
-    WaterMeterController waterLevelController(&controllerManager, valueGroup);
+    WaterMeterController waterLevelController(&controllerManager, valueGroups.at(2), valueGroups.at(0), valueGroups.at(1), valueGroups.at(2));
     controllerManager.registerController(&waterLevelController);
 
     managerRegistration.init(&config);
+
+    waterLevelController.bindValueManager(&valueManager, datamodelManager.datamodel());
 
     managerRegistration.start();
 

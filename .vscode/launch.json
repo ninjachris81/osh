@@ -121,7 +121,9 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/WaterMeterService/WaterMeterService",
-        "args": [],
+        "args": [
+            "${workspaceFolder}/deploy/wsl/configs/WaterMeterService/config.ini"
+        ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],

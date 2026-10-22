@@ -16,12 +16,13 @@
 #include "datamodel/datamodelmanager.h"
 #include "communication/mqtt/mqttcommunicationmanagerbase.h"
 
-WaterMeterController::WaterMeterController(ControllerManager *manager, QString id, QObject *parent) : ControllerBase(manager, id, parent) {
-    //connect(&m_statusTimer, &QTimer::timeout, this, &RS232WaterMeterController::retrieveStatus);
+WaterMeterController::WaterMeterController(ControllerManager *manager, QString id, QString inputSensorGroupId, QString waterFlowValueGroupId, QString waterLevelValueGroupId, QObject *parent) : ControllerBase(manager, id, parent), 
+m_inputSensorGroupId(inputSensorGroupId), m_waterFlowValueGroupId(waterFlowValueGroupId), m_waterLevelValueGroupId(waterLevelValueGroupId)
+{
     connect(&m_flowTimer, &QTimer::timeout, this, &WaterMeterController::onCalculateFlow);
 }
 
-void WaterMeterController::init() {
+void WaterMeterController::init(){
     iDebug() << Q_FUNC_INFO;
 
     REQUIRE_MANAGER_X(m_manager, ClientValueManager);
@@ -36,36 +37,28 @@ void WaterMeterController::init() {
     REQUIRE_MANAGER_X(m_manager, MqttCommunicationManagerBase);
     MqttCommunicationManagerBase *commManager = m_manager->getManager<MqttCommunicationManagerBase>(MqttCommunicationManagerBase::MANAGER_ID);
 
-    m_waterLevelValueGroupId = m_config->getString(this, "waterLevelValueGroupId", m_id);
-    m_waterFlowValueGroupId = m_config->getString(this, "waterFlowValueGroupId", m_id);
-
     commManager->setCustomChannels(QStringList() << MQTT_MESSAGE_TYPE_ST);
-    commManager->setCustomValueGroups(QStringList() << m_waterLevelValueGroupId << m_waterFlowValueGroupId);
+    commManager->setCustomValueGroups(QStringList() <<  m_inputSensorGroupId << m_waterLevelValueGroupId << m_waterFlowValueGroupId);
 
     //m_statusTimer.setInterval(m_config->getInt(this, "status.interval", 20000));
 
-    m_sensorCount = m_config->getInt(this, "inputCount", 4);
-    m_dataOffset = m_config->getInt(this, "inputOffset", 0);
+    m_inputSensorCount = m_config->getInt(this, "inputSensorCount", 4);
+
+    m_inputSensorOffset = m_config->getInt(this, "inputSensorOffset", 0);
+    m_waterLevelOffset = m_config->getInt(this, "waterLevelOffset", 0);
+    m_waterFlowOffset = m_config->getInt(this, "waterFlowOffset", 0);
     m_stepAmountML = m_config->getInt(this, "stepMl", 250);
-
-    int pinBase = m_config->getInt(this, "mcp.pinBase", 65);
-    int addr = m_config->getInt(this, "mcp.addr", 0x20);
-    int pinOffset = m_config->getInt(this, "mcp.pinOffset", 0);
-
-    m_reader = new MCPReader(m_sensorCount, addr, pinBase, pinOffset, false);
-    connect(m_reader, &MCPReader::stateChanged, this, &WaterMeterController::onStateChanged);
 
     m_flowTimer.setInterval(3000);
 
-    m_waterFlows.clear();
+    m_startedAtMs = QDateTime::currentMSecsSinceEpoch();
 
-    bindValueManager(valueManager, datamodelManager->datamodel());
+    m_waterFlows.clear();
 }
 
 void WaterMeterController::start() {
     iDebug() << Q_FUNC_INFO;
 
-    m_reader->start();
     m_flowTimer.start();
 }
 
@@ -78,6 +71,10 @@ void WaterMeterController::bindValueManager(ClientValueManager* valueManager, Da
 
     m_valueManager = valueManager;
 
+    iInfo() << "Getting value group" << m_inputSensorGroupId;
+    m_inputSensorGroup = datamodel->valueGroup(m_inputSensorGroupId);
+    Q_ASSERT(m_inputSensorGroup != nullptr);
+
     iInfo() << "Getting value group" << m_waterFlowValueGroupId;
     m_waterFlowValueGroup = datamodel->valueGroup(m_waterFlowValueGroupId);
     Q_ASSERT(m_waterFlowValueGroup != nullptr);
@@ -86,22 +83,37 @@ void WaterMeterController::bindValueManager(ClientValueManager* valueManager, Da
     m_waterLevelValueGroup = datamodel->valueGroup(m_waterLevelValueGroupId);
     Q_ASSERT(m_waterLevelValueGroup != nullptr);
 
-    for (quint8 i = 0; i<m_sensorCount;i++) {
-        DoubleValue* waterFlow = static_cast<DoubleValue*>(m_valueManager->getValue(m_waterFlowValueGroup, QString::number(i + m_dataOffset)));
-        DoubleValue* waterLevel = static_cast<DoubleValue*>(m_valueManager->getValue(m_waterLevelValueGroup, QString::number(i + m_dataOffset)));
-        if (waterFlow == nullptr || waterLevel == nullptr) {
-            iWarning() << "Value not in datamodel" << i << waterFlow << waterLevel;
+    for (quint8 i = 0; i<m_inputSensorCount;i++) {
+        BooleanValue* inputSensor = static_cast<BooleanValue*>(m_valueManager->getValue(m_inputSensorGroup, QString::number(i + m_inputSensorOffset)));
+        DoubleValue* waterFlow = static_cast<DoubleValue*>(m_valueManager->getValue(m_waterFlowValueGroup, QString::number(i + m_waterFlowOffset)));
+        DoubleValue* waterLevel = static_cast<DoubleValue*>(m_valueManager->getValue(m_waterLevelValueGroup, QString::number(i + m_waterLevelOffset)));
+        if (inputSensor == nullptr || waterFlow == nullptr || waterLevel == nullptr) {
+            iWarning() << "Value not in datamodel" << i << inputSensor << waterFlow << waterLevel;
+            Q_ASSERT(inputSensor != nullptr);
             Q_ASSERT(waterFlow != nullptr);
             Q_ASSERT(waterLevel != nullptr);
         }
 
         waterLevel->withAlwaysEmit(true);
+        inputSensor->withAlwaysEmit(false);
 
+        m_inputSensorMappings.append(inputSensor);
         m_waterFlowMappings.append(waterFlow);
         m_waterLevelMappings.append(waterLevel);
+        m_waterLevelInitialized.append(false);
 
+        valueManager->registerForNotification(inputSensor);
         valueManager->registerForNotification(waterFlow);
         valueManager->registerForNotification(waterLevel);
+
+        connect(inputSensor, &BooleanValue::valueChanged, this, [this, i]() {
+            onStateChanged(i, static_cast<BooleanValue*>(sender())->rawValue().toBool());
+        });
+
+        connect(waterLevel, &DoubleValue::valueChanged, this, [this, i]() {
+            iDebug() << "Water level changed" << i << static_cast<DoubleValue*>(sender())->rawValue();
+            m_waterLevelInitialized[i] = true;
+        });
 
         m_waterFlows.append(0);
     }
@@ -110,11 +122,16 @@ void WaterMeterController::bindValueManager(ClientValueManager* valueManager, Da
 void WaterMeterController::onStateChanged(quint8 index, bool state) {
     iInfo() << Q_FUNC_INFO << index << state;
 
+    if (!m_waterLevelInitialized[index] && QDateTime::currentMSecsSinceEpoch() - m_startedAtMs < m_initialLevelTimeoutMs) {
+        iWarning() << "Water level not initialized yet - ignoring input";
+        return;
+    }
+
     DoubleValue* waterLevel = m_waterLevelMappings.value(index);
 
     if (waterLevel != nullptr) {
         if (waterLevel->rawValue().isNull()) {
-            iWarning() << "No initial water level - setting 0";
+            iWarning() << "No initial water level - assuming 0";
             waterLevel->updateValue(0.0, false);
         } else {
             iInfo() << "Resuming at water level" << waterLevel->rawValue();
@@ -129,35 +146,19 @@ void WaterMeterController::onStateChanged(quint8 index, bool state) {
     m_flowCounterMutex.unlock();
 }
 
-void WaterMeterController::onErrorOccurred() {
-    iDebug() << Q_FUNC_INFO;
-
-    m_warnManager->raiseWarning("Relay connection disconnected", QtCriticalMsg);
-    m_flowTimer.stop();
-    Q_EMIT(controllerDisconnected());
-}
-
-
-
-void WaterMeterController::retrieveStatus() {
-    iDebug() << Q_FUNC_INFO;
-
-}
-
-
 void WaterMeterController::onCalculateFlow() {
     m_flowCounterMutex.lock();
 
-    float buff[m_sensorCount];      // as L/min
+    float buff[m_inputSensorCount];      // as L/min
 
-    for (quint8 i = 0; i<m_sensorCount;i++) {
+    for (quint8 i = 0; i<m_inputSensorCount;i++) {
         buff[i] = (m_stepAmountML * m_waterFlows[i] / 1000 / 2) * 20;       // 20 = 60 / interval
         m_waterFlows[i] = 0;
     }
 
     m_flowCounterMutex.unlock();
 
-    for (quint8 i = 0; i<m_sensorCount;i++) {
+    for (quint8 i = 0; i<m_inputSensorCount;i++) {
         DoubleValue* waterFlow = m_waterFlowMappings.value(i);
 
         iDebug() << i << buff[i];
