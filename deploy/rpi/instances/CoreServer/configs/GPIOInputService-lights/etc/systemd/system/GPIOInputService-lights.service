@@ -1,5 +1,5 @@
 [Unit]
-Description=OSH GPIO Service
+Description=OSH GPIO lights Service
 ## make sure we only start the service after network is up
 Wants=network-online.target
 After=network.target
@@ -12,15 +12,15 @@ Type=simple
 Restart=on-failure
 RestartSec=5s
 
-WorkingDirectory=/etc/osh/instances/GPIOInputService
+WorkingDirectory=/etc/osh/instances/GPIOInputService-lights
 
 #User=root
 
 ## here we can set custom environment variables
-ExecStart=/etc/osh/instances/GPIOInputService/start.sh
+ExecStart=/etc/osh/instances/GPIOInputService-lights/start.sh
 
 # Useful during debugging; remove it once the service is working
-#StandardOutput=file:/var/log/osh_gpio_input_service.log
+#StandardOutput=file:/var/log/osh_gpio_input_service_lights.log
 #StandardError=syslog
 
 [Install]
