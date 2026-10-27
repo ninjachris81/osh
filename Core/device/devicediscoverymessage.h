@@ -19,7 +19,7 @@ public:
         HasErrors,
     };
 
-    explicit DeviceDiscoveryMessage(QString deviceId, QString serviceId, quint64 upTime, DeviceHealthState healthState, QObject *parent = nullptr);
+    explicit DeviceDiscoveryMessage(QString deviceId, QString serviceId, quint64 upTime, DeviceHealthState healthState, QString deviceName, QObject *parent = nullptr);
 
     /*virtual*/ MESSAGE_TYPE getMessageType() override;
 
@@ -37,11 +37,14 @@ public:
 
     DeviceHealthState healthState();
 
+    QString deviceName();
+
 protected:
     QString m_deviceId;
     QString m_serviceId;
     quint64 m_upTime;
     DeviceHealthState m_healthState = Unknown;
+    QString m_deviceName;
 
 signals:
 

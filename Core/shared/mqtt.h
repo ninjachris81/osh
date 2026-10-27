@@ -72,6 +72,7 @@
 #define MQTT_SENDER_DEVICE_ID_ATTR "s"
 #define MQTT_TS "t"
 #define MQTT_HEALTH_STATE_ATTR "h"
+#define MQTT_DEVICE_NAME_ATTR "d"
 
 #define MQTT_JSON_MAX_LENGTH 256
 

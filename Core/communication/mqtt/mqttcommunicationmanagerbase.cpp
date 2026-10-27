@@ -103,14 +103,21 @@ MessageBase* MqttCommunicationManagerBase::getMessage(QStringList levels, QByteA
         case MessageBase::MESSAGE_TYPE_DEVICE_DISCOVERY: {
             QVariant ddVal = value.value(MQTT_SINGLE_VALUE_ATTR);
             QVariant healthVal = value.value(MQTT_HEALTH_STATE_ATTR);
+            QVariant deviceVal = value.value(MQTT_DEVICE_NAME_ATTR);
+
             if (ddVal.isValid() && ddVal.canConvert(QVariant::ULongLong)) {
                 DeviceDiscoveryMessage::DeviceHealthState healthState = DeviceDiscoveryMessage::Unknown;
+                QString deviceName = "";
 
                 if (healthVal.isValid() && healthVal.canConvert(QVariant::UInt)) {
                     healthState = static_cast<DeviceDiscoveryMessage::DeviceHealthState>(healthVal.toUInt());
                 }
 
-                msg = new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong(), healthState);
+                if (deviceVal.isValid() && deviceVal.canConvert(QVariant::String)) {
+                    deviceName = deviceVal.toString();
+                }
+
+                msg = new DeviceDiscoveryMessage(firstLevelPath.first(), firstLevelPath.at(1), ddVal.toULongLong(), healthState, deviceName);
                 break;
             } else {
                 iWarning() << "Invalid payload value" << value << messageType;

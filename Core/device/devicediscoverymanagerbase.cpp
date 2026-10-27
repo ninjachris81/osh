@@ -1,6 +1,7 @@
 #include "devicediscoverymanagerbase.h"
 
 #include <QDebug>
+#include <QHostInfo>
 
 #include "communication/communicationmanagerbase.h"
 #include "device/devicediscoverymessage.h"
@@ -37,6 +38,8 @@ void DeviceDiscoveryManagerBase::init(LocalConfig *config) {
 
     connect(m_commManager, &CommunicationManagerBase::connected, this, &DeviceDiscoveryManagerBase::startDDBroadcast);
     connect(m_commManager, &CommunicationManagerBase::disconnected, this, &DeviceDiscoveryManagerBase::stopDDBroadcast);
+
+    m_deviceName = QHostInfo::localHostName();
 }
 
 ClientDevice* DeviceDiscoveryManagerBase::device() {
@@ -66,6 +69,6 @@ void DeviceDiscoveryManagerBase::stopDDBroadcast() {
 void DeviceDiscoveryManagerBase::sendDDBroadcast() {
     iDebug() << Q_FUNC_INFO;
 
-    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId(), QDateTime::currentMSecsSinceEpoch() - m_startedTime, m_healthState);
+    DeviceDiscoveryMessage message(m_device->id(), m_device->serviceId(), QDateTime::currentMSecsSinceEpoch() - m_startedTime, m_healthState, m_deviceName);
     m_commManager->sendMessage(message);
 }

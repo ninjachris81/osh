@@ -37,6 +37,7 @@ private:
     CommunicationManagerBase* m_commManager;
     qint64 m_startedTime;
     DeviceDiscoveryMessage::DeviceHealthState m_healthState = DeviceDiscoveryMessage::Healthy;
+    QString m_deviceName;
 
 private slots:
     void startDDBroadcast();
