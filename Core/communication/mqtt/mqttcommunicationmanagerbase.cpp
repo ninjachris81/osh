@@ -305,6 +305,7 @@ QByteArray MqttCommunicationManagerBase::serializePayload(MessageBase &message) 
         QVariantMap map;
         map.insert(MQTT_SINGLE_VALUE_ATTR, ddMessage->upTime());
         map.insert(MQTT_HEALTH_STATE_ATTR, ddMessage->healthState());
+        map.insert(MQTT_DEVICE_NAME_ATTR, ddMessage->deviceName());
         return serializeJSONValue(map);
     }
     case MessageBase::MESSAGE_TYPE_CONTROLLER: {
