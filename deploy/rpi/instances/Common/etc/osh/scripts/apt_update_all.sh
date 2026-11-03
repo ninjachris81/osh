@@ -16,5 +16,6 @@ for service in "${!SERVICE_CONFIGURATIONS[@]}"; do
     PACKAGE_NAME="osh-${INSTANCE_NAME,,}-${service,,}"
     echo "Updating configuration package $PACKAGE_NAME for $service"
     sudo apt purge -y "$PACKAGE_NAME"
+    sudo apt autoremove -y
     sudo apt install -y "$PACKAGE_NAME"
 done
