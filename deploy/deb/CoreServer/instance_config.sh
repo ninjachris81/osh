@@ -9,6 +9,7 @@ declare -A SERVICE_EXECUTABLES=(
     ["RS485RelayService"]="1.0"
     ["ShutterService"]="1.0"
     ["WBB12Service"]="1.0"
+    ["CameraThumbnailsService"]="1.0"
 )
 
 declare -A SERVICE_CONFIGURATIONS=(
@@ -24,4 +25,5 @@ declare -A SERVICE_CONFIGURATIONS=(
     ["ShutterService-og"]="1.0"
     ["ShutterService-special"]="1.0"
     ["WBB12Service"]="1.0"
+    ["CameraThumbnailsService"]="1.0"
 )

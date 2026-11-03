@@ -14,6 +14,7 @@ declare -A ALL_SERVICE_DEPENDENCIES=(
     ["ShutterService"]="osh-qt6, postgresql-client"
     ["WaterMeterService"]="osh-qt6, postgresql-client"
     ["WBB12Service"]="osh-qt6, postgresql-client"
+    ["CameraThumbnailsService"]="ffmpeg, imagemagick"
 )
 
 # Define all service scripts
@@ -31,6 +32,7 @@ declare -A ALL_SERVICE_SCRIPTS=(
     ["ShutterService"]=""
     ["WaterMeterService"]=""
     ["WBB12Service"]=""
+    ["CameraThumbnailsService"]=""
 )
 
 # Define all service libraries
@@ -48,6 +50,7 @@ declare -A ALL_SERVICE_LIBRARIES=(
     ["ShutterService"]="Core ShutterController QMqttCommunicationManager"
     ["WaterMeterService"]="Core WaterMeterController QMqttCommunicationManager"
     ["WBB12Service"]="Core CoreSerial WBB12Controller QMqttCommunicationManager"
+    ["CameraThumbnailsService"]=""
 )
 
 declare -A SERVICE_DEPENDENCIES

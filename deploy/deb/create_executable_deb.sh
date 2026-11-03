@@ -79,8 +79,13 @@ fi
 # copy executable
 SERVICE_DIR="$PACKAGE_ROOT/etc/osh/${DEB_NAME}"
 mkdir -p "${SERVICE_DIR}"
-cp "$RPI_BIN_DIR/${DEB_NAME}/${DEB_NAME}" "${SERVICE_DIR}/${DEB_NAME}"
-chmod +x "${SERVICE_DIR}/${DEB_NAME}"
+if [[ ! -f "$RPI_BIN_DIR/${DEB_NAME}/${DEB_NAME}" ]]; then
+    echo "Executable not found: $RPI_BIN_DIR/${DEB_NAME}/${DEB_NAME}"
+else
+    echo "Copying executable $DEB_NAME"
+    cp "$RPI_BIN_DIR/${DEB_NAME}/${DEB_NAME}" "${SERVICE_DIR}/${DEB_NAME}"
+    chmod +x "${SERVICE_DIR}/${DEB_NAME}"
+fi
 
 # copy libraries
 for lib in "${DEB_LIBRARIES[@]}"; do

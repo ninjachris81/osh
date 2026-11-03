@@ -1,0 +1,7 @@
+[Unit]
+Description=OSH Check Thumbnails
+
+[Service]
+Type=oneshot
+WorkingDirectory=/etc/osh/instances/CameraThumbnailsService
+ExecStart=/bin/bash /etc/osh/instances/CameraThumbnailsService/checkAllThumbnails.sh
