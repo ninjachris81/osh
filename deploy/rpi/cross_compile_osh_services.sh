@@ -57,6 +57,7 @@ RPI_QT_HOST_ROOT="${RPI_QT_HOST_ROOT:-$HOME/qt-6.8.2}"
 RPI_CROSS_PREFIX="aarch64-linux-gnu-"
 RPI_BUILD_DIR="${RPI_BUILD_DIR:-$ROOT_DIR/build-rpi}"
 RPI_QT_BUILD_DIR="${RPI_QT_BUILD_DIR:-$ROOT_DIR/qt-build-rpi}"
+RPI_PJSUPPORT_BUILD_DIR="${RPI_PJSUPPORT_BUILD_DIR:-$ROOT_DIR/build-rpi-pjsupport}"
 RPI_BUILD_JOBS="${RPI_BUILD_JOBS:-4}"
 RPI_QT_TARGET_MKSPEC="${RPI_QT_TARGET_MKSPEC:-linux-aarch64-gnu-g++}"
 
@@ -96,6 +97,19 @@ for compiler in "$CROSS_C_COMPILER" "$CROSS_CXX_COMPILER"; do
     fi
 done
 
+PJPROJECT_REV="$(git -C "$ROOT_DIR/pjproject" rev-parse --verify HEAD 2>/dev/null || true)"
+PJPROJECT_BUILD_DIR="$RPI_PJSUPPORT_BUILD_DIR/pjproject-$PJPROJECT_REV"
+if [[ -z "$PJPROJECT_REV" || ! -f "$PJPROJECT_BUILD_DIR/pjsip/lib/libpjsip.so" ||
+      ! -f "$PJPROJECT_BUILD_DIR/pjlib/include/pj/compat/os_auto.h" ]]; then
+    if [[ -f "$RPI_PJSUPPORT_BUILD_DIR/pjsip/lib/libpjsip.so" &&
+          -f "$RPI_PJSUPPORT_BUILD_DIR/pjlib/include/pj/compat/os_auto.h" ]]; then
+        PJPROJECT_BUILD_DIR="$RPI_PJSUPPORT_BUILD_DIR"
+    else
+        echo "AArch64 PJProject is missing. Run ./deploy/rpi/cross_compile_pjsupport.sh $RPI_SYSROOT first." >&2
+        exit 3
+    fi
+fi
+
 TARGET_QT_PREFIX_PATH="${RPI_QT_ROOT};${RPI_QT_HOST_ROOT}"
 
 TOOLCHAIN_ARGS=(
@@ -121,6 +135,7 @@ cmake -S "$ROOT_DIR" -B "$RPI_BUILD_DIR" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     "-DCMAKE_PREFIX_PATH=${TARGET_QT_PREFIX_PATH}" \
+    "-DPJPROJECT_DIR=$PJPROJECT_BUILD_DIR" \
     -DQT_HOST_PATH="$RPI_QT_HOST_ROOT" \
     -DQt6HostInfo_DIR="$RPI_QT_HOST_ROOT/lib/cmake/Qt6HostInfo" \
     -DQT_QMAKE_TARGET_MKSPEC="$RPI_QT_TARGET_MKSPEC" \

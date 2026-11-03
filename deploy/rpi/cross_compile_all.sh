@@ -6,10 +6,11 @@ usage() {
 Usage:
     ./deploy/rpi/cross_compile_all.sh <sysroot> [qt-target-root]
 
-Runs the three cross-compile steps in order:
+Runs the cross-compile steps in order:
   1) WiringPi
   2) Qt6 + qtmqtt
-  3) OSHServices
+  3) PJSIP support
+  4) OSHServices
 EOF
 }
 
@@ -32,13 +33,16 @@ sudo apt-get install -y \
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "[1/3] Building WiringPi"
+echo "[1/4] Building WiringPi"
 "$SCRIPTDIR/cross_compile_wiringpi.sh" "$@"
 
-echo "[2/3] Building Qt6 and qtmqtt"
+echo "[2/4] Building Qt6 and qtmqtt"
 "$SCRIPTDIR/cross_compile_qt6.sh" "$@"
 
-echo "[3/3] Building OSHServices"
+echo "[3/4] Building PJSIP support"
+"$SCRIPTDIR/cross_compile_pjsupport.sh" "$1"
+
+echo "[4/4] Building OSHServices"
 "$SCRIPTDIR/cross_compile_osh_services.sh" "$@"
 
 echo "All cross-builds completed."

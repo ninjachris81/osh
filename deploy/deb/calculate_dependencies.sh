@@ -3,13 +3,16 @@
 declare -A ALL_SERVICE_DEPENDENCIES=(
     ["AudioService"]="osh-qt6, postgresql-client, mpg123, libegl1, libfontconfig1, libxkbcommon0, libglx0, libopengl0"
     ["CoreService"]="osh-qt6, postgresql, mosquitto"
+    ["DoorAudioService"]="osh-qt6, postgresql-client, osh-pjsupport"
     ["DoorCameraService"]="osh-qt6, postgresql-client, livemedia-utils"
+    ["DoorUnlockService"]="osh-qt6, postgresql-client"
     ["GPIOInputService"]="osh-qt6, osh-wiringpi, postgresql-client, i2c-tools, libi2c-dev"
     ["RS232InputService"]="osh-qt6, postgresql-client"
     ["RS485EnergyMeterService"]="osh-qt6, postgresql-client"
     ["RS485RelayService"]="osh-qt6, postgresql-client"
     ["OBISService"]="osh-qt6, postgresql-client, libsml1"
     ["ShutterService"]="osh-qt6, postgresql-client"
+    ["WaterMeterService"]="osh-qt6, postgresql-client"
     ["WBB12Service"]="osh-qt6, postgresql-client"
 )
 
@@ -17,13 +20,16 @@ declare -A ALL_SERVICE_DEPENDENCIES=(
 declare -A ALL_SERVICE_SCRIPTS=(
     ["AudioService"]=""
     ["CoreService"]=""
+    ["DoorAudioService"]=""
     ["DoorCameraService"]=""
+    ["DoorUnlockService"]=""
     ["GPIOInputService"]="raspi-config nonint do_i2c 0"
     ["RS232InputService"]=""
     ["RS485EnergyMeterService"]=""
     ["RS485RelayService"]=""
     ["OBISService"]=""
     ["ShutterService"]=""
+    ["WaterMeterService"]=""
     ["WBB12Service"]=""
 )
 
@@ -31,13 +37,16 @@ declare -A ALL_SERVICE_SCRIPTS=(
 declare -A ALL_SERVICE_LIBRARIES=(
     ["AudioService"]="Core AudioController QMqttCommunicationManager"
     ["CoreService"]="Core CoreServer QMqttCommunicationManager"
+    ["DoorAudioService"]="Core DoorAudioController QMqttCommunicationManager PJSIPSupport"
     ["DoorCameraService"]="Core DoorCameraController QMqttCommunicationManager"
+    ["DoorUnlockService"]="Core DoorUnlockController QMqttCommunicationManager"
     ["GPIOInputService"]="Core GPIOInputController QMqttCommunicationManager"
     ["RS232InputService"]="Core CoreSerial RS232InputController QMqttCommunicationManager"
     ["RS485EnergyMeterService"]="Core CoreSerial RS485EnergyMeterController QMqttCommunicationManager"
     ["RS485RelayService"]="Core CoreSerial RS485RelayController QMqttCommunicationManager"
     ["OBISService"]="Core CoreSerial OBISController QMqttCommunicationManager"
     ["ShutterService"]="Core ShutterController QMqttCommunicationManager"
+    ["WaterMeterService"]="Core WaterMeterController QMqttCommunicationManager"
     ["WBB12Service"]="Core CoreSerial WBB12Controller QMqttCommunicationManager"
 )
 
