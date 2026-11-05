@@ -3,10 +3,14 @@
 #include <QDebug>
 
 I2CSanityChecker::I2CSanityChecker(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, m_i2cDetectExec("/usr/sbin/i2cdetect")
 {
     connect(&m_Timer, &QTimer::timeout, this, &I2CSanityChecker::onCheckBusses);
     m_Timer.setInterval(I2C_CHECK_INTERVAL);
+}
+
+void I2CSanityChecker::setI2cDetectExec(QString i2cDetectExec) {
+    this->m_i2cDetectExec = i2cDetectExec;
 }
 
 void I2CSanityChecker::setBus(int i2cBus) {
@@ -25,7 +29,7 @@ void I2CSanityChecker::start() {
 
 void I2CSanityChecker::onCheckBusses() {
     QProcess proc;
-    proc.setProgram("/usr/sbin/i2cdetect");
+    proc.setProgram(m_i2cDetectExec);
     QStringList args;
 
     args << "-y";

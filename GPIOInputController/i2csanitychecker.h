@@ -14,6 +14,7 @@ public:
     explicit I2CSanityChecker(QObject *parent = nullptr);
 
 
+    void setI2cDetectExec(QString i2cDetectExec);
     void setBus(int i2cBus);
     void setDevList(QList<int> devList);
 
@@ -23,6 +24,7 @@ private slots:
     void onCheckBusses();
 
 private:
+    QString m_i2cDetectExec;
     QTimer m_Timer;
     int m_i2cBus;
     QList<int> m_devList;

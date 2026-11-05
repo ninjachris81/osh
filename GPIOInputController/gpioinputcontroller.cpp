@@ -67,6 +67,7 @@ void GPIOInputController::init() {
             iInfo() << "Adding to checklist" << s;
         }
 
+        m_i2cSanityChecker.setI2cDetectExec(m_config->getString(this, "i2cCheck.exec", "/usr/sbin/i2cdetect"));
         m_i2cSanityChecker.setBus(i2cBus);
         m_i2cSanityChecker.setDevList(devList);
     } else {
