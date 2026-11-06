@@ -44,6 +44,7 @@
 #define VALUE_TYPE_AUDIO_VOLUME     61
 #define VALUE_TYPE_ALARM_SOUND      62
 #define VALUE_TYPE_SOUND_URL        63
+#define VALUE_TYPE_SOUND_CURRENT_TITLE 64
 
 #define VALUE_TYPE_DOOR             70
 
