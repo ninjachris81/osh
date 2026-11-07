@@ -85,7 +85,7 @@ QVariant NativeProcessorTask::run() {
             break;
         case NFT_INIT_TRIGGER_CMD_ON_VALUE:
             m_lastResult = m_basicScripts->initTriggerCmdOnValue(m_nativeParams.at(0).toString(), m_nativeParams.at(1), m_nativeParams.at(2).toString(), m_nativeParams.at(3).toInt(), m_nativeParams.at(4).toInt());
-            break;            
+            break;
         case NFT_INIT_FOLLOW_ACTOR:
             m_lastResult = m_basicScripts->initFollowActor(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt());
             break;
@@ -94,6 +94,12 @@ QVariant NativeProcessorTask::run() {
             break;
         case NFT_STOP_TIMER:
             m_lastResult = m_basicScripts->stopTimer(m_nativeParams.at(0).toString());
+            break;
+        case NFT_INIT_MAP_CMD:
+            m_lastResult = m_basicScripts->initMapCmd(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString(), m_nativeParams.at(2).toInt(), m_nativeParams.at(3).toInt());
+            break;
+        case NFT_INIT_TURN_ON_WHILE_TIMER_ACTIVE:
+            m_lastResult = m_basicScripts->initTurnOnWhileTimerActive(m_nativeParams.at(0).toString(), m_nativeParams.at(1).toString());
             break;
         default:
             iWarning() << "Unhandled script function" << m_nativeFunction;
@@ -177,6 +183,14 @@ QList<QVariant::Type> NativeProcessorTask::paramTypeList(NativeProcessorTask::Na
         return QList<QVariant::Type>() << QVariant::String << QVariant::UserType << QVariant::String << QVariant::Int << QVariant::Int;
     case NativeProcessorTask::NFT_INIT_FOLLOW_ACTOR:
         return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int;
+    case NativeProcessorTask::NFT_START_TIMER:
+        return QList<QVariant::Type>() << QVariant::String;
+    case NativeProcessorTask::NFT_STOP_TIMER:
+        return QList<QVariant::Type>() << QVariant::String;
+    case NativeProcessorTask::NFT_INIT_MAP_CMD:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String << QVariant::Int << QVariant::Int;
+    case NativeProcessorTask::NFT_INIT_TURN_ON_WHILE_TIMER_ACTIVE:
+        return QList<QVariant::Type>() << QVariant::String << QVariant::String;
     default:
         return QList<QVariant::Type>();
     }

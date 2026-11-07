@@ -13,14 +13,26 @@ public:
     explicit TimerActor();
     TimerActor(ValueGroup *valueGroup, QString id, VALUE_TYPE valueType, QObject *parent = nullptr);
 
-    /*virtual*/ bool cmdSupported(ACTOR_CMDS cmd);
+    bool cmdSupported(ACTOR_CMDS cmd) override;
 
-    /*virtual*/ QVariant _updateValue(QVariant newValue);
+    QVariant _updateValue(QVariant newValue) override;
 
-    /*virtual*/ bool isAsync();
+    bool isAsync() override;
+
+    bool isRunning();
+
+    void updateTimeLeft();
+
+private:
+    void startTimer();
+    void stopTimer();
+
+    quint64 calculateMsLeft();
 
 protected:
-    /*virtual*/ void _triggerCmd(ACTOR_CMDS cmd);
+    quint64 m_startTime = 0;
+    bool m_isRunning = false;
+    void _triggerCmd(ACTOR_CMDS cmd) override;
 
 };
 

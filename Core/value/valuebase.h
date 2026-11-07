@@ -15,7 +15,7 @@ using namespace value;
 
 class ValueManagerBase;
 
-class SHARED_LIB_EXPORT ValueBase : public QObject, public Identifyable /*, public MetaInfoSupport*/
+class SHARED_LIB_EXPORT ValueBase : public QObject, public Identifyable
 {
 Q_OBJECT
 

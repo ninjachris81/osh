@@ -94,6 +94,35 @@ void BasicScripts::initTriggerCmdOnValue_valueChanged() {
     }
 }
 
+bool BasicScripts::initMapCmd(QString sourceActorId, QString triggerActorId, int sourceCmd, int triggerCmd) {
+    iInfo() << Q_FUNC_INFO;
+
+    ActorBase *sourceActor = m_datamodel->actor(sourceActorId);
+    Q_ASSERT(sourceActor != nullptr);
+
+    ActorBase *triggerActor = m_datamodel->actor(triggerActorId);
+    Q_ASSERT(triggerActor != nullptr);
+
+    m_localStorage->set("initMapCmd", "triggerCmd", sourceActor->fullId(), triggerCmd);
+    m_localStorage->setObject("initMapCmd", "triggerActor", sourceActor->fullId(), triggerActor);
+
+    Helpers::safeConnect(sourceActor, &ActorBase::cmdTriggered, this, &BasicScripts::initMapCmd_cmdTriggered, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(initMapCmd_cmdTriggered(ACTOR_CMDS)));
+
+    return true;
+}
+
+void BasicScripts::initMapCmd_cmdTriggered(ACTOR_CMDS cmd) {
+    iDebug() << Q_FUNC_INFO;
+
+    ActorBase* sourceActor = static_cast<ActorBase*>(sender());
+    ActorBase *triggerActor = static_cast<ActorBase*>(m_localStorage->getObject("initMapCmd", "triggerActor", sourceActor->fullId()));
+    int triggerCmd = m_localStorage->get("initMapCmd", "triggerCmd", sourceActor->fullId()).toInt();
+
+    if (static_cast<int>(cmd) == triggerCmd) {
+        publishCmd(triggerActor, static_cast<ACTOR_CMDS>(triggerCmd), "initMapCmd_cmdTriggered");
+    }
+}
+
 bool BasicScripts::initFollowActor(QString actorSourceId, QString triggerActorId, int followMode) {
     iInfo() << Q_FUNC_INFO;
 
@@ -147,4 +176,33 @@ bool BasicScripts::stopTimer(QString timerActorId) {
 
     timerActor->triggerCmd(actor::ACTOR_CMDS::ACTOR_CMD_STOP, "Timer stop");
     return true;
+}
+
+bool BasicScripts::initTurnOnWhileTimerActive(QString timerActorId, QString actorId) {
+    iInfo() << Q_FUNC_INFO;
+
+    TimerActor* timerActor = static_cast<TimerActor*>(m_datamodel->actor(timerActorId));
+    Q_ASSERT(timerActor != nullptr);
+
+    DigitalActor *actor = static_cast<DigitalActor*>(m_datamodel->actor(actorId));
+    Q_ASSERT(actor != nullptr);
+
+    m_localStorage->setObject("initTurnOnWhileTimerActive", "actor", timerActor->fullId(), actor);
+
+    Helpers::safeConnect(timerActor, &ActorBase::cmdTriggered, this, &BasicScripts::initTurnOnWhileTimerActive_timerCmdTriggered, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(initTurnOnWhileTimerActive_timerCmdTriggered(ACTOR_CMDS)));
+
+    return true;
+}
+
+void BasicScripts::initTurnOnWhileTimerActive_timerCmdTriggered(ACTOR_CMDS cmd) {
+    iDebug() << Q_FUNC_INFO;
+
+    TimerActor* timerActor = static_cast<TimerActor*>(sender());
+    DigitalActor *actor = static_cast<DigitalActor*>(m_localStorage->getObject("initTurnOnWhileTimerActive", "actor", timerActor->fullId()));
+
+    if (cmd == ACTOR_CMDS::ACTOR_CMD_START) {
+        publishCmd(actor, ACTOR_CMDS::ACTOR_CMD_ON, "initTurnOnWhileTimerActive_timerCmdTriggered");
+    } else if (cmd == ACTOR_CMDS::ACTOR_CMD_STOP) {
+        publishCmd(actor, ACTOR_CMDS::ACTOR_CMD_OFF, "initTurnOnWhileTimerActive_timerCmdTriggered");
+    }
 }

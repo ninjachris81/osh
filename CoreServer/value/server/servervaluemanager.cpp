@@ -8,6 +8,7 @@
 
 #include "macros.h"
 #include "helpers.h"
+#include "actor/timeractor.h"
 
 QLatin1String ServerValueManager::VALUE_PREFIX = QLatin1String("values");
 
@@ -65,6 +66,12 @@ void ServerValueManager::checkValues() {
 
         if (it.value()->isValid() && it.value()->valueTimeout() > ValueBase::VT_NONE && QDateTime::currentMSecsSinceEpoch() - it.value()->lastUpdate() > it.value()->valueTimeout()) {
             invalidateValue((it.value()));
+        }
+
+        auto* timerActor = qobject_cast<TimerActor*>(it.value());
+        if (timerActor != nullptr && timerActor->isRunning()) {
+            timerActor->updateTimeLeft();
+            publishValue(timerActor);
         }
     }
 }

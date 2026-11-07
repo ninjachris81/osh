@@ -48,6 +48,8 @@ public:
         NFT_INIT_FOLLOW_ACTOR =                 12,
         NFT_START_TIMER =                       13,
         NFT_STOP_TIMER =                        14,
+        NFT_INIT_MAP_CMD =                      15,
+        NFT_INIT_TURN_ON_WHILE_TIMER_ACTIVE =   16,
     };
 
     NativeProcessorTask();

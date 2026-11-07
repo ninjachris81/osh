@@ -39,13 +39,62 @@ void TimerActor::_triggerCmd(ACTOR_CMDS cmd) {
 
     switch(cmd) {
     case ACTOR_CMDS::ACTOR_CMD_START:
-        updateValue(QDateTime::currentMSecsSinceEpoch(), true);
+        startTimer();
         break;
     case ACTOR_CMDS::ACTOR_CMD_STOP:
-        invalidate();
+        stopTimer();
         break;
     default:
         iWarning() << "Cmd not supported" << cmd;
         break;
     }
+}
+
+void TimerActor::startTimer() {
+    if (valueTimeout() == ValueBase::VT_NONE) {
+        iWarning() << "TimerActor" << fullId() << "has no timeout set, cannot start";
+        return;
+    }
+
+    m_startTime = QDateTime::currentMSecsSinceEpoch();
+    m_isRunning = true;
+    updateValue(calculateMsLeft(), true);
+}
+
+void TimerActor::updateTimeLeft() {
+    if (!m_isRunning) {
+        return;
+    }
+
+    quint64 secondsLeft = calculateMsLeft();
+    if (secondsLeft <= 0) {
+        stopTimer();
+    } else {
+        updateValue(secondsLeft, true);
+    }
+}
+
+quint64 TimerActor::calculateMsLeft() {
+    if (!m_isRunning) {
+        return 0;
+    }
+
+    quint64 elapsed = QDateTime::currentMSecsSinceEpoch() - m_startTime;
+    quint64 timeout = valueTimeout();
+    if (elapsed >= timeout) {
+        return 0;
+    } else {
+        return (timeout - elapsed);
+    }
+}
+
+void TimerActor::stopTimer() {
+    m_isRunning = false;
+    m_startTime = 0;
+    invalidate();
+    emit cmdTriggered(ACTOR_CMDS::ACTOR_CMD_STOP);
+}
+
+bool TimerActor::isRunning() {
+    return m_isRunning;
 }
