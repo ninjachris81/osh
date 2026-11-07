@@ -37,6 +37,10 @@ private slots:
     void initFollowActor_cmdTriggered(ACTOR_CMDS cmd);
     void initFollowActor_valueChanged();
     void initTurnOnWhileTimerActive_timerCmdTriggered(ACTOR_CMDS cmd);
+    void initTurnOnWhileTimerActive_valueChanged();
+
+private:
+    QList<ActorBase*> m_ignoreFollowActors;
 
 signals:
 

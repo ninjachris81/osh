@@ -151,6 +151,12 @@ void BasicScripts::initFollowActor_cmdTriggered(ACTOR_CMDS cmd) {
     ActorBase* sourceActor = static_cast<ActorBase*>(sender());
     ActorBase *triggerActor = static_cast<AudioPlaybackActor*>(m_localStorage->getObject("initFollowActor", "triggerActorId", sourceActor->fullId()));
 
+    // pauses follow actor if it is in the ignore list
+    if (m_ignoreFollowActors.contains(triggerActor)) {
+        iInfo() << "Ignoring follow actor" << triggerActor->fullId();
+        return;
+    }
+
     publishCmd(triggerActor, static_cast<ACTOR_CMDS>(cmd), "initFollowActor");
 }
 
@@ -190,6 +196,7 @@ bool BasicScripts::initTurnOnWhileTimerActive(QString timerActorId, QString acto
     m_localStorage->setObject("initTurnOnWhileTimerActive", "actor", timerActor->fullId(), actor);
 
     Helpers::safeConnect(timerActor, &ActorBase::cmdTriggered, this, &BasicScripts::initTurnOnWhileTimerActive_timerCmdTriggered, SIGNAL(cmdTriggered(ACTOR_CMDS)), SLOT(initTurnOnWhileTimerActive_timerCmdTriggered(ACTOR_CMDS)));
+    Helpers::safeConnect(timerActor, &ActorBase::valueChanged, this, &BasicScripts::initTurnOnWhileTimerActive_valueChanged, SIGNAL(valueChanged()), SLOT(initTurnOnWhileTimerActive_valueChanged()));
 
     return true;
 }
@@ -201,8 +208,19 @@ void BasicScripts::initTurnOnWhileTimerActive_timerCmdTriggered(ACTOR_CMDS cmd) 
     DigitalActor *actor = static_cast<DigitalActor*>(m_localStorage->getObject("initTurnOnWhileTimerActive", "actor", timerActor->fullId()));
 
     if (cmd == ACTOR_CMDS::ACTOR_CMD_START) {
+        m_ignoreFollowActors.append(actor);
         publishCmd(actor, ACTOR_CMDS::ACTOR_CMD_ON, "initTurnOnWhileTimerActive_timerCmdTriggered");
     } else if (cmd == ACTOR_CMDS::ACTOR_CMD_STOP) {
+        m_ignoreFollowActors.removeAll(actor);
         publishCmd(actor, ACTOR_CMDS::ACTOR_CMD_OFF, "initTurnOnWhileTimerActive_timerCmdTriggered");
     }
+}
+
+void BasicScripts::initTurnOnWhileTimerActive_valueChanged() {
+    iDebug() << Q_FUNC_INFO;
+
+    TimerActor* timerActor = static_cast<TimerActor*>(sender());
+    DigitalActor *actor = static_cast<DigitalActor*>(m_localStorage->getObject("initTurnOnWhileTimerActive", "actor", timerActor->fullId()));
+
+    publishCmd(actor, ACTOR_CMDS::ACTOR_CMD_ON, "initTurnOnWhileTimerActive_valueChanged");
 }
