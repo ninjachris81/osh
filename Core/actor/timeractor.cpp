@@ -91,8 +91,8 @@ quint64 TimerActor::calculateMsLeft() {
 void TimerActor::stopTimer() {
     m_isRunning = false;
     m_startTime = 0;
-    invalidate();
     emit cmdTriggered(ACTOR_CMDS::ACTOR_CMD_STOP);
+    // invalidation happens in ServerValueManager::checkValues() when the value is checked and the timer is not running anymore
 }
 
 bool TimerActor::isRunning() {

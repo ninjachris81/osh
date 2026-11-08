@@ -69,9 +69,13 @@ void ServerValueManager::checkValues() {
         }
 
         auto* timerActor = qobject_cast<TimerActor*>(it.value());
-        if (timerActor != nullptr && timerActor->isRunning()) {
-            timerActor->updateTimeLeft();
-            publishValue(timerActor);
+        if (timerActor != nullptr) {
+            if (timerActor->isRunning()) {
+                timerActor->updateTimeLeft();
+                publishValue(timerActor);
+            } else if (!timerActor->isRunning() && timerActor->rawValue().toInt() > 0) {
+                invalidateValue(timerActor);
+            }
         }
     }
 }
